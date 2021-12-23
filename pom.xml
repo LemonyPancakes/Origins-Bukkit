@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.lemonypancakes</groupId>
+    <groupId>me.lemonypancakes.originsbukkit</groupId>
     <artifactId>originsbukkit</artifactId>
-    <version>Build 2-BETA</version>
+    <version>Build 2-RELEASE</version>
     <modules>
         <module>v1_17_R1</module>
         <module>v1_18_R1</module>

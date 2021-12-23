@@ -15,19 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package me.lemonypancakes.originsbukkit.listeners.items;
+package me.lemonypancakes.originsbukkit.listeners.events;
 
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
+import me.lemonypancakes.originsbukkit.listeners.events.player.AsyncPlayerFluidInteract;
+import me.lemonypancakes.originsbukkit.listeners.events.player.AsyncPlayerJoin;
 
 /**
- * The type Item listener handler.
+ * The type Custom event listener handler.
  *
  * @author LemonyPancakes
  */
-public class ItemListenerHandler {
+public class CustomEventListenerHandler {
 
     private final ListenerHandler listenerHandler;
-    private OrbOfOriginListener orbOfOriginListener;
+    private AsyncPlayerFluidInteract asyncPlayerFluidInteract;
+    private AsyncPlayerJoin asyncPlayerJoin;
 
     /**
      * Gets listener handler.
@@ -39,20 +42,29 @@ public class ItemListenerHandler {
     }
 
     /**
-     * Gets origin ball listener.
+     * Gets async player fluid interact.
      *
-     * @return the origin ball listener
+     * @return the async player fluid interact
      */
-    public OrbOfOriginListener getOriginBallListener() {
-        return orbOfOriginListener;
+    public AsyncPlayerFluidInteract getAsyncPlayerFluidInteract() {
+        return asyncPlayerFluidInteract;
     }
 
     /**
-     * Instantiates a new Item listener handler.
+     * Gets async player join.
+     *
+     * @return the async player join
+     */
+    public AsyncPlayerJoin getAsyncPlayerJoin() {
+        return asyncPlayerJoin;
+    }
+
+    /**
+     * Instantiates a new Custom event listener handler.
      *
      * @param listenerHandler the listener handler
      */
-    public ItemListenerHandler(ListenerHandler listenerHandler) {
+    public CustomEventListenerHandler(ListenerHandler listenerHandler) {
         this.listenerHandler = listenerHandler;
         init();
     }
@@ -61,6 +73,9 @@ public class ItemListenerHandler {
      * Init.
      */
     private void init() {
-        orbOfOriginListener = new OrbOfOriginListener(this);
+        asyncPlayerFluidInteract
+                = new AsyncPlayerFluidInteract(this);
+        asyncPlayerJoin
+                = new AsyncPlayerJoin(this);
     }
 }

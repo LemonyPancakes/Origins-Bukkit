@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.origins;
 
-import me.lemonypancakes.originsbukkit.api.events.OriginChangeEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginInitiateEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.util.Origin;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Config;
@@ -45,6 +45,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +54,7 @@ import java.util.Objects;
 /**
  * The type Avian.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Avian extends Origin implements Listener {
 
@@ -172,7 +173,7 @@ public class Avian extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void avianJoin(PlayerOriginInitiateEvent event) {
+    private void avianJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
         String origin = event.getOrigin();
 
@@ -187,12 +188,20 @@ public class Avian extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void onOriginChange(OriginChangeEvent event) {
+    private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
         String oldOrigin = event.getOldOrigin();
 
         if (Objects.equals(oldOrigin, Origins.AVIAN.toString())) {
-            player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                }
+            }.runTask(getOriginListenerHandler()
+                    .getListenerHandler()
+                    .getPlugin());
         }
     }
 
@@ -206,12 +215,20 @@ public class Avian extends Origin implements Listener {
         String playerOrigin = originPlayer.getOrigin();
 
         if (Objects.equals(playerOrigin, Origins.AVIAN.toString())) {
-            player.addPotionEffect(new PotionEffect(
-                    PotionEffectType.SLOW_FALLING,
-                    Integer.MAX_VALUE,
-                    0,
-                    false,
-                    false));
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.addPotionEffect(new PotionEffect(
+                            PotionEffectType.SLOW_FALLING,
+                            Integer.MAX_VALUE,
+                            0,
+                            false,
+                            false));
+                }
+            }.runTask(getOriginListenerHandler()
+                    .getListenerHandler()
+                    .getPlugin());
         }
     }
 

@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.origins;
 
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginInitiateEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.util.Origin;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Config;
@@ -46,7 +46,7 @@ import java.util.*;
 /**
  * The type Blazeborn.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Blazeborn extends Origin implements Listener {
 
@@ -169,7 +169,7 @@ public class Blazeborn extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void blazebornJoin(PlayerOriginInitiateEvent event) {
+    private void blazebornJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
         String origin = event.getOrigin();
         OriginPlayer originPlayer = new OriginPlayer(player);
@@ -253,7 +253,7 @@ public class Blazeborn extends Origin implements Listener {
         }.runTask(getOriginListenerHandler()
                 .getListenerHandler()
                 .getPlugin());
-     }
+    }
 
     /**
      * Register blazeborn air enter listener.
@@ -487,17 +487,33 @@ public class Blazeborn extends Origin implements Listener {
      * @param player   the player
      */
     private void teleportPlayer(Location location, Player player) {
-        if (isSafeLocation(location)) {
-            player.teleport(location);
-        } else {
-            Location newLocation = location.subtract(0, 1, 0);
-            if (newLocation.getY() != 0) {
-                teleportPlayer(newLocation, player);
-            } else {
-                Location generateNewLocation = randomNetherCoordinatesGenerator(location);
-                teleportPlayer(generateNewLocation, player);
+        new BukkitRunnable() {
+            Location loc = location;
+
+            @Override
+            public void run() {
+                if (isSafeLocation(loc)) {
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            player.teleport(loc);
+                        }
+                    }.runTask(getOriginListenerHandler()
+                            .getListenerHandler()
+                            .getPlugin());
+                    cancel();
+                } else {
+                    Location newLocation = loc.subtract(0, 1, 0);
+
+                    if (newLocation.getY() == 0) {
+                        loc = randomNetherCoordinatesGenerator(loc);
+                    }
+                }
             }
-        }
+        }.runTaskTimerAsynchronously(getOriginListenerHandler()
+                .getListenerHandler()
+                .getPlugin(), 0L, 1L);
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import me.lemonypancakes.originsbukkit.api.events.OriginChangeEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
 import me.lemonypancakes.originsbukkit.api.util.Origin;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Config;
@@ -54,7 +54,7 @@ import java.util.Objects;
 /**
  * The type Feline.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Feline extends Origin implements Listener {
 
@@ -188,13 +188,21 @@ public class Feline extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void onOriginChange(OriginChangeEvent event) {
+    private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
         String oldOrigin = event.getOldOrigin();
 
         if (Objects.equals(oldOrigin, Origins.FELINE.toString())) {
-            player.removePotionEffect(PotionEffectType.JUMP);
-            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.removePotionEffect(PotionEffectType.JUMP);
+                    player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                }
+            }.runTask(getOriginListenerHandler()
+                    .getListenerHandler()
+                    .getPlugin());
         }
     }
 

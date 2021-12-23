@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 package me.lemonypancakes.originsbukkit.listeners;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
+import me.lemonypancakes.originsbukkit.listeners.events.CustomEventListenerHandler;
 import me.lemonypancakes.originsbukkit.listeners.items.ItemListenerHandler;
 import me.lemonypancakes.originsbukkit.listeners.keys.KeyListener;
 import me.lemonypancakes.originsbukkit.listeners.origins.OriginListenerHandler;
@@ -27,11 +28,12 @@ import me.lemonypancakes.originsbukkit.listeners.playerchecks.PlayerOriginChecke
 /**
  * The type Listener handler.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class ListenerHandler {
 
     private final OriginsBukkit plugin;
+    private CustomEventListenerHandler customEventListenerHandler;
     private OriginListenerHandler originListenerHandler;
     private ItemListenerHandler itemListenerHandler;
     private NoOriginPlayerRestrict noOriginPlayerRestrict;
@@ -45,6 +47,15 @@ public class ListenerHandler {
      */
     public OriginsBukkit getPlugin() {
         return plugin;
+    }
+
+    /**
+     * Gets custom event listener handler.
+     *
+     * @return the custom event listener handler
+     */
+    public CustomEventListenerHandler getCustomEventListenerHandler() {
+        return customEventListenerHandler;
     }
 
     /**
@@ -106,6 +117,7 @@ public class ListenerHandler {
      * Init.
      */
     private void init() {
+        customEventListenerHandler = new CustomEventListenerHandler(this);
         originListenerHandler = new OriginListenerHandler(this);
         itemListenerHandler = new ItemListenerHandler(this);
         noOriginPlayerRestrict = new NoOriginPlayerRestrict(this);

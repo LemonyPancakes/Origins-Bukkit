@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
@@ -31,7 +32,7 @@ import java.util.Set;
 /**
  * The type Ghost factory.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class GhostFactory {
 
@@ -141,10 +142,29 @@ public class GhostFactory {
 
         if (isGhost) {
             ghosts.add(player.getName());
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 255, false, false));
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.addPotionEffect(
+                            new PotionEffect(
+                                    PotionEffectType.INVISIBILITY,
+                                    Integer.MAX_VALUE,
+                                    255,
+                                    false,
+                                    false
+                            ));
+                }
+            }.runTask(getUtilHandler().getPlugin());
         } else {
             ghosts.remove(player.getName());
-            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.removePotionEffect(PotionEffectType.INVISIBILITY);
+                }
+            }.runTask(getUtilHandler().getPlugin());
         }
     }
 

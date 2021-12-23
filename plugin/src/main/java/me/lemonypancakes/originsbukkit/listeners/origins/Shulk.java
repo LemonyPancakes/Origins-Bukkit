@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,9 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
-import me.lemonypancakes.originsbukkit.api.events.OriginChangeEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginAbilityUseEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginInitiateEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginAbilityUseEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.util.Origin;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Config;
@@ -64,7 +64,7 @@ import java.util.*;
 /**
  * The type Shulk.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Shulk extends Origin implements Listener {
 
@@ -208,7 +208,7 @@ public class Shulk extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void shulkJoin(PlayerOriginInitiateEvent event) {
+    private void shulkJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
         String origin = event.getOrigin();
@@ -248,7 +248,7 @@ public class Shulk extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void onOriginChange(OriginChangeEvent event) {
+    private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
         AttributeInstance genericArmorAttribute = player.getAttribute(Attribute.GENERIC_ARMOR);
         String oldOrigin = event.getOldOrigin();
@@ -270,7 +270,7 @@ public class Shulk extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void shulkAbilityUse(PlayerOriginAbilityUseEvent event) {
+    private void shulkAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
         String origin = event.getOrigin();
 
@@ -360,7 +360,15 @@ public class Shulk extends Origin implements Listener {
         if (!shulkInventoryViewers.contains(player)) {
             shulkInventoryViewers.add(player);
         }
-        player.openInventory(inv);
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                player.openInventory(inv);
+            }
+        }.runTask(getOriginListenerHandler()
+                .getListenerHandler()
+                .getPlugin());
     }
 
     /**

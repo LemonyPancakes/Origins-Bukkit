@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 package me.lemonypancakes.originsbukkit.storage.data;
 
 import com.google.gson.Gson;
-import me.lemonypancakes.originsbukkit.api.events.OriginChangeEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
 import me.lemonypancakes.originsbukkit.storage.StorageHandler;
 import me.lemonypancakes.originsbukkit.storage.wrappers.OriginsPlayerDataWrapper;
 import me.lemonypancakes.originsbukkit.util.ChatUtils;
@@ -35,7 +35,7 @@ import java.util.UUID;
 /**
  * The type Origins player data.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class OriginsPlayerData {
 
@@ -124,8 +124,14 @@ public class OriginsPlayerData {
             String newOrigin = originsPlayerDataWrapper.getOrigin();
 
             getOriginsPlayerData().add(originsPlayerDataWrapper);
-            OriginChangeEvent originChangeEvent = new OriginChangeEvent(player, null, newOrigin);
-            Bukkit.getPluginManager().callEvent(originChangeEvent);
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    AsyncPlayerOriginChangeEvent asyncPlayerOriginChangeEvent = new AsyncPlayerOriginChangeEvent(player, null, newOrigin);
+                    Bukkit.getPluginManager().callEvent(asyncPlayerOriginChangeEvent);
+                }
+            }.runTaskAsynchronously(getStorageHandler().getPlugin());
             try {
                 saveOriginsPlayerData();
             } catch (IOException event) {
@@ -182,8 +188,14 @@ public class OriginsPlayerData {
 
                     originsPlayerDataWrapper.setPlayerName(newOriginsPlayerDataWrapper.getPlayerName());
                     originsPlayerDataWrapper.setOrigin(newOriginsPlayerDataWrapper.getOrigin());
-                    OriginChangeEvent originChangeEvent = new OriginChangeEvent(player, oldOrigin, newOriginsPlayerDataWrapper.getOrigin());
-                    Bukkit.getPluginManager().callEvent(originChangeEvent);
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            AsyncPlayerOriginChangeEvent asyncPlayerOriginChangeEvent = new AsyncPlayerOriginChangeEvent(player, oldOrigin, newOriginsPlayerDataWrapper.getOrigin());
+                            Bukkit.getPluginManager().callEvent(asyncPlayerOriginChangeEvent);
+                        }
+                    }.runTaskAsynchronously(getStorageHandler().getPlugin());
                     try {
                         saveOriginsPlayerData();
                     } catch (IOException event) {
@@ -208,8 +220,14 @@ public class OriginsPlayerData {
                     String oldOrigin = originsPlayerDataWrapper.getOrigin();
 
                     getOriginsPlayerData().remove(originsPlayerDataWrapper);
-                    OriginChangeEvent originChangeEvent = new OriginChangeEvent(player, oldOrigin, null);
-                    Bukkit.getPluginManager().callEvent(originChangeEvent);
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            AsyncPlayerOriginChangeEvent asyncPlayerOriginChangeEvent = new AsyncPlayerOriginChangeEvent(player, oldOrigin, null);
+                            Bukkit.getPluginManager().callEvent(asyncPlayerOriginChangeEvent);
+                        }
+                    }.runTaskAsynchronously(getStorageHandler().getPlugin());
                     break;
                 }
             }
@@ -281,6 +299,8 @@ public class OriginsPlayerData {
                     }
                     setOriginsPlayerDataLoaded(true);
                     ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Player data loaded.");
+                } else {
+                    setOriginsPlayerDataLoaded(true);
                 }
             }
         }.runTaskAsynchronously(getStorageHandler().getPlugin());

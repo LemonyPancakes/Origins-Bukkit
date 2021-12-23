@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * The type No origin player restrict.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class NoOriginPlayerRestrict implements Listener {
 

@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.origins;
 
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginAbilityUseEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginInitiateEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginAbilityUseEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.util.Origin;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Config;
@@ -47,7 +47,7 @@ import java.util.*;
 /**
  * The type Enderian.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Enderian extends Origin implements Listener {
 
@@ -172,7 +172,7 @@ public class Enderian extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void enderianJoin(PlayerOriginInitiateEvent event) {
+    private void enderianJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
         String origin = event.getOrigin();
 
@@ -188,7 +188,7 @@ public class Enderian extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void enderianAbilityUse(PlayerOriginAbilityUseEvent event) {
+    private void enderianAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
         String origin = event.getOrigin();
 
@@ -335,10 +335,10 @@ public class Enderian extends Origin implements Listener {
                     if (player.isOnline()) {
                         world.spawnParticle(Particle.PORTAL, location.add(0, 1, 0), 10);
                     } else {
-                        this.cancel();
+                        cancel();
                     }
                 } else {
-                    this.cancel();
+                    cancel();
                 }
             }
         }.runTaskTimerAsynchronously(getOriginListenerHandler()
@@ -364,14 +364,30 @@ public class Enderian extends Origin implements Listener {
                         .toString()
                         .replace("%seconds_left%", String.valueOf(secondsLeft)));
             } else {
-                player.launchProjectile(EnderPearl.class);
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.launchProjectile(EnderPearl.class);
+                    }
+                }.runTask(getOriginListenerHandler()
+                        .getListenerHandler()
+                        .getPlugin());
                 COOLDOWN.put(playerUUID, System.currentTimeMillis());
                 ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                         .toString()
                         .replace("%player_current_origin%", playerOrigin));
             }
         } else {
-            player.launchProjectile(EnderPearl.class);
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.launchProjectile(EnderPearl.class);
+                }
+            }.runTask(getOriginListenerHandler()
+                    .getListenerHandler()
+                    .getPlugin());
             COOLDOWN.put(playerUUID, System.currentTimeMillis());
             ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                     .toString()

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>originsbukkit</artifactId>
-        <groupId>me.lemonypancakes</groupId>
-        <version>Build 2-BETA</version>
+        <groupId>me.lemonypancakes.originsbukkit</groupId>
+        <version>Build 2-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -70,7 +70,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.lemonypancakes</groupId>
+            <groupId>me.lemonypancakes.originsbukkit</groupId>
             <artifactId>plugin</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>

@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.origins;
 
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginAbilityUseEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginInitiateEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginAbilityUseEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.util.Origin;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Config;
@@ -40,7 +40,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -58,7 +57,7 @@ import java.util.UUID;
 /**
  * The type Elytrian.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Elytrian extends Origin implements Listener {
 
@@ -238,7 +237,7 @@ public class Elytrian extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void elytrianJoin(PlayerOriginInitiateEvent event) {
+    private void elytrianJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
         OriginPlayer originPlayer = new OriginPlayer(player);
         UUID playerUUID = player.getUniqueId();
@@ -273,7 +272,7 @@ public class Elytrian extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void elytrianAbilityUse(PlayerOriginAbilityUseEvent event) {
+    private void elytrianAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
         String origin = event.getOrigin();
 
@@ -430,25 +429,6 @@ public class Elytrian extends Origin implements Listener {
 
                     event.setDamage(baseDamage + halfBaseDamage);
                 }
-            }
-        }
-    }
-
-    /**
-     * Elytrian check player.
-     *
-     * @param event the event
-     */
-    @EventHandler
-    private void elytrianCheckPlayer(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        OriginPlayer originPlayer = new OriginPlayer(player);
-        String playerOrigin = originPlayer.getOrigin();
-        ItemStack prevChestplate = player.getInventory().getChestplate();
-
-        if (!Objects.equals(playerOrigin, Origins.ELYTRIAN.toString())) {
-            if (prevChestplate != null && prevChestplate.equals(getElytra())) {
-                player.getInventory().setChestplate(new ItemStack(Material.AIR));
             }
         }
     }

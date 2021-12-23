@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ import java.util.*;
 /**
  * The type Origins bukkit.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public final class OriginsBukkit extends JavaPlugin {
 
@@ -309,7 +309,14 @@ public final class OriginsBukkit extends JavaPlugin {
      */
     private void startMetrics() {
         int serviceId = 13236;
-        Metrics metrics = new Metrics(this, serviceId);
+
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                Metrics metrics = new Metrics(getPlugin(), serviceId);
+            }
+        }.runTaskAsynchronously(this);
     }
 
     /**
@@ -359,10 +366,6 @@ public final class OriginsBukkit extends JavaPlugin {
     private void closeAllPlayerInventory() {
         if (getListenerHandler() != null) {
             getListenerHandler().getPlayerOriginChecker().closeAllOriginPickerGui();
-            getListenerHandler().getOriginListenerHandler().getMerling().getMerlingBossbarMap().forEach((key, value) -> {
-                value.removeAll();
-                value.setVisible(false);
-            });
 
             for (Player player : getListenerHandler().getOriginListenerHandler().getShulk().getShulkInventoryViewers()) {
                 UUID playerUUID = player.getUniqueId();

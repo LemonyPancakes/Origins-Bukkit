@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,35 +15,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package me.lemonypancakes.originsbukkit.api.events;
+package me.lemonypancakes.originsbukkit.api.events.player;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
+
 /**
- * The type Origin change event.
+ * The type Async player join event.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
-public class OriginChangeEvent extends Event {
+public class AsyncPlayerJoinEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
-    private final String oldOrigin;
-    private final String newOrigin;
 
     /**
-     * Instantiates a new Origin change event.
+     * Instantiates a new Async player join event.
      *
-     * @param player    the player
-     * @param oldOrigin the old origin
-     * @param newOrigin the new origin
+     * @param player the player
      */
-    public OriginChangeEvent(Player player, String oldOrigin, String newOrigin) {
+    public AsyncPlayerJoinEvent(Player player) {
+        super(true);
         this.player = player;
-        this.oldOrigin = oldOrigin;
-        this.newOrigin = newOrigin;
     }
 
     /**
@@ -51,6 +48,7 @@ public class OriginChangeEvent extends Event {
      *
      * @return the handlers
      */
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
@@ -71,24 +69,6 @@ public class OriginChangeEvent extends Event {
      * @return the player
      */
     public Player getPlayer() {
-        return this.player;
-    }
-
-    /**
-     * Gets new origin.
-     *
-     * @return the new origin
-     */
-    public String getNewOrigin() {
-        return this.newOrigin;
-    }
-
-    /**
-     * Gets old origin.
-     *
-     * @return the old origin
-     */
-    public String getOldOrigin() {
-        return this.oldOrigin;
+        return player;
     }
 }

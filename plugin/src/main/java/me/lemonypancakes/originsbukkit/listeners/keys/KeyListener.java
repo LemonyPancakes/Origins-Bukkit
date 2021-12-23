@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.keys;
 
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginAbilityUseEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginAbilityUseEvent;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import org.bukkit.Bukkit;
@@ -25,13 +25,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
 
 /**
  * The type Key listener.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class KeyListener implements Listener {
 
@@ -82,8 +83,14 @@ public class KeyListener implements Listener {
             if (getListenerHandler().getPlugin().getOrigins().containsKey(playerOrigin)) {
                 getListenerHandler().getPlugin().getOrigins().forEach((key, value) -> {
                     if (Objects.equals(key, playerOrigin)) {
-                        PlayerOriginAbilityUseEvent playerOriginAbilityUseEvent = new PlayerOriginAbilityUseEvent(player, key);
-                        Bukkit.getPluginManager().callEvent(playerOriginAbilityUseEvent);
+                        new BukkitRunnable() {
+
+                            @Override
+                            public void run() {
+                                AsyncPlayerOriginAbilityUseEvent asyncPlayerOriginAbilityUseEvent = new AsyncPlayerOriginAbilityUseEvent(player, key);
+                                Bukkit.getPluginManager().callEvent(asyncPlayerOriginAbilityUseEvent);
+                            }
+                        }.runTaskAsynchronously(getListenerHandler().getPlugin());
                         event.setCancelled(true);
                     }
                 });

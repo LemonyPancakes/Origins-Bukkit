@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginAbilityUseEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginInitiateEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginAbilityUseEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.util.Origin;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Config;
@@ -42,7 +42,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -55,7 +54,7 @@ import java.util.UUID;
 /**
  * The type Phantom.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Phantom extends Origin implements Listener {
 
@@ -177,7 +176,7 @@ public class Phantom extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void phantomJoin(PlayerOriginInitiateEvent event) {
+    private void phantomJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
         OriginPlayer originPlayer = new OriginPlayer(player);
         String origin = event.getOrigin();
@@ -199,10 +198,38 @@ public class Phantom extends Origin implements Listener {
                 player.setAllowFlight(true);
                 player.setFlying(true);
             }
-            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 255, false, false));
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.addPotionEffect(
+                            new PotionEffect(
+                                    PotionEffectType.INVISIBILITY,
+                                    Integer.MAX_VALUE, 255,
+                                    false,
+                                    false
+                            ));
+                }
+            }.runTask(getOriginListenerHandler()
+                    .getListenerHandler()
+                    .getPlugin());
             phantomPlayers.add(player);
         } else {
-            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            getOriginListenerHandler()
+                    .getListenerHandler()
+                    .getPlugin()
+                    .getUtilHandler()
+                    .getGhostFactory()
+                    .addPlayer(player);
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    player.removePotionEffect(PotionEffectType.INVISIBILITY);
+                }
+            }.runTask(getOriginListenerHandler()
+                    .getListenerHandler()
+                    .getPlugin());
             player.setInvisible(false);
         }
     }
@@ -213,7 +240,7 @@ public class Phantom extends Origin implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void phantomAbilityUse(PlayerOriginAbilityUseEvent event) {
+    private void phantomAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
         String origin = event.getOrigin();
 
@@ -339,27 +366,6 @@ public class Phantom extends Origin implements Listener {
                 }
                 event.setFoodLevel(event.getFoodLevel() - 2);
             }
-        }
-    }
-
-    /**
-     * On non phantom join.
-     *
-     * @param event the event
-     */
-    @EventHandler
-    private void onNonPhantomJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        OriginPlayer originPlayer = new OriginPlayer(player);
-        String playerOrigin = originPlayer.getOrigin();
-
-        if (!Objects.equals(playerOrigin, Origins.PHANTOM.toString())) {
-            getOriginListenerHandler()
-                    .getListenerHandler()
-                    .getPlugin()
-                    .getUtilHandler()
-                    .getGhostFactory()
-                    .addPlayer(player);
         }
     }
 

@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -256,9 +256,7 @@ public enum Lang {
     PLAYER_ORIGIN_ABILITY_USE("Lang.Player.Messages.Info.Player-Origin-Ability-Use",
             "&aYou used your %player_current_origin% ability."),
     PLAYER_ORIGIN_ABILITY_COOLDOWN("Lang.Player.Messages.Error.Player-Origin-Ability-Cooldown",
-            "&cThis ability is on cool-down (%seconds_left% seconds)."),
-    MERLING_BOSSBAR_AIR_BREATHING_TIMER_TITLE("Lang.Origins.Merling.Bossbar.Air-Breathing-Timer-Title", "Air Breathing - %time-left%"),
-    MERLING_BOSSBAR_DROWNING_TITLE("Lang.Origins.Merling.Bossbar.Drowning-Title", "&cWarning: You're Drowning!");
+            "&cThis ability is on cool-down (%seconds_left% seconds).");
 
     private static YamlConfiguration LANG;
     private final String Path;

@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 SwagPannekaker
+ * Copyright (C) 2021 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,9 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.playerchecks;
 
-import me.lemonypancakes.originsbukkit.api.events.OriginChangeEvent;
-import me.lemonypancakes.originsbukkit.api.events.PlayerOriginInitiateEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerJoinEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
+import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
@@ -37,7 +38,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -51,7 +51,7 @@ import java.util.UUID;
 /**
  * The type Player origin checker.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class PlayerOriginChecker implements Listener {
 
@@ -96,10 +96,10 @@ public class PlayerOriginChecker implements Listener {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         checkPlayerOriginData(player);
                     }
-                    this.cancel();
+                    cancel();
                 }
             }
-        }.runTaskTimer(getListenerHandler().getPlugin(), 0L, 5L);
+        }.runTaskTimerAsynchronously(getListenerHandler().getPlugin(), 0L, 1L);
     }
 
     /**
@@ -108,24 +108,10 @@ public class PlayerOriginChecker implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void onPlayerOriginCheck(PlayerJoinEvent event) {
+    private void onPlayerOriginCheck(AsyncPlayerJoinEvent event) {
         Player player = event.getPlayer();
-        OriginPlayer originPlayer = new OriginPlayer(player);
-        OriginsPlayerDataWrapper originsPlayerDataWrapper = originPlayer.findOriginsPlayerData();
 
-        if (originsPlayerDataWrapper == null) {
-            getListenerHandler().getNoOriginPlayerRestrict().restrictPlayerMovement(player);
-
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    openOriginPickerGui(player);
-                }
-            }.runTaskLater(getListenerHandler().getPlugin(), 30L);
-        } else {
-            initiatePlayerOrigin(player);
-        }
+        checkPlayerOriginData(player);
     }
 
     /**
@@ -134,16 +120,28 @@ public class PlayerOriginChecker implements Listener {
      * @param player the player
      */
     public void checkPlayerOriginData(Player player) {
-        OriginPlayer originPlayer = new OriginPlayer(player);
-        OriginsPlayerDataWrapper originsPlayerDataWrapper = originPlayer.findOriginsPlayerData();
+        new BukkitRunnable() {
 
-        resetPlayer(player);
-        if (originsPlayerDataWrapper == null) {
-            openOriginPickerGui(player);
-            getListenerHandler().getNoOriginPlayerRestrict().restrictPlayerMovement(player);
-        } else {
-            initiatePlayerOrigin(player);
-        }
+            @Override
+            public void run() {
+                OriginPlayer originPlayer = new OriginPlayer(player);
+                OriginsPlayerDataWrapper originsPlayerDataWrapper = originPlayer.findOriginsPlayerData();
+
+                resetPlayer(player);
+                if (originsPlayerDataWrapper == null) {
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            openOriginPickerGui(player);
+                            getListenerHandler().getNoOriginPlayerRestrict().restrictPlayerMovement(player);
+                        }
+                    }.runTask(getListenerHandler().getPlugin());
+                } else {
+                    initiatePlayerOrigin(player);
+                }
+            }
+        }.runTaskLaterAsynchronously(getListenerHandler().getPlugin(), 4L);
     }
 
     /**
@@ -152,34 +150,40 @@ public class PlayerOriginChecker implements Listener {
      * @param player the player
      */
     public void initiatePlayerOrigin(Player player) {
-        UUID playerUUID = player.getUniqueId();
-        OriginPlayer originPlayer = new OriginPlayer(player);
-        String playerOrigin = originPlayer.getOrigin();
-        OriginsPlayerDataWrapper originsPlayerDataWrapper = originPlayer.findOriginsPlayerData();
+        new BukkitRunnable() {
 
-        resetPlayer(player);
-        if (originsPlayerDataWrapper != null) {
-            if (getListenerHandler().getPlugin().getOrigins().containsKey(playerOrigin)) {
-                getListenerHandler().getPlugin().getOrigins().forEach((key, value) -> {
-                    if (Objects.equals(key, playerOrigin)) {
-                        AttributeInstance genericMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            @Override
+            public void run() {
+                UUID playerUUID = player.getUniqueId();
+                OriginPlayer originPlayer = new OriginPlayer(player);
+                String playerOrigin = originPlayer.getOrigin();
+                OriginsPlayerDataWrapper originsPlayerDataWrapper = originPlayer.findOriginsPlayerData();
 
-                        if (genericMaxHealth != null) {
-                            genericMaxHealth.setBaseValue(value.getMaxHealth());
-                        }
-                        player.setHealthScale(value.getMaxHealth());
-                        player.setWalkSpeed(value.getWalkSpeed());
-                        player.setFlySpeed(value.getFlySpeed());
-                        PlayerOriginInitiateEvent playerOriginInitiateEvent = new PlayerOriginInitiateEvent(player, key);
-                        Bukkit.getPluginManager().callEvent(playerOriginInitiateEvent);
+                resetPlayer(player);
+                if (originsPlayerDataWrapper != null) {
+                    if (getListenerHandler().getPlugin().getOrigins().containsKey(playerOrigin)) {
+                        getListenerHandler().getPlugin().getOrigins().forEach((key, value) -> {
+                            if (Objects.equals(key, playerOrigin)) {
+                                AttributeInstance genericMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+
+                                if (genericMaxHealth != null) {
+                                    genericMaxHealth.setBaseValue(value.getMaxHealth());
+                                }
+                                player.setHealthScale(value.getMaxHealth());
+                                player.setWalkSpeed(value.getWalkSpeed());
+                                player.setFlySpeed(value.getFlySpeed());
+                                AsyncPlayerOriginInitiateEvent asyncPlayerOriginInitiateEvent = new AsyncPlayerOriginInitiateEvent(player, key);
+                                Bukkit.getPluginManager().callEvent(asyncPlayerOriginInitiateEvent);
+                            }
+                        });
+                    } else {
+                        ChatUtils.sendPlayerMessage(player, "&cYour origin (" + playerOrigin + ") doesn't exist so we pruned your player data.");
+                        getListenerHandler().getPlugin().getStorageHandler().getOriginsPlayerData().deleteOriginsPlayerData(playerUUID);
+                        checkPlayerOriginData(player);
                     }
-                });
-            } else {
-                ChatUtils.sendPlayerMessage(player, "&cYour origin (" + playerOrigin + ") doesn't exist so we pruned your player data.");
-                getListenerHandler().getPlugin().getStorageHandler().getOriginsPlayerData().deleteOriginsPlayerData(playerUUID);
-                checkPlayerOriginData(player);
+                }
             }
-        }
+        }.runTaskAsynchronously(getListenerHandler().getPlugin());
     }
 
     /**
@@ -355,7 +359,6 @@ public class PlayerOriginChecker implements Listener {
 
         if (originsPlayerDataWrapper == null) {
             if (getListenerHandler().getPlugin().getOriginsInventoryGUI().contains(inventory)) {
-
                 new BukkitRunnable() {
 
                     @Override
@@ -376,7 +379,7 @@ public class PlayerOriginChecker implements Listener {
      * @param event the event
      */
     @EventHandler
-    private void nullOrigin(OriginChangeEvent event) {
+    private void nullOrigin(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
         String newOrigin = event.getNewOrigin();
 

@@ -4,6 +4,7 @@ main: me.lemonypancakes.originsbukkit.OriginsBukkit
 softdepend:
   - ProtocolLib
   - PancakeLibCore
+  - PacketWrapper
 api-version: 1.17
 authors: [ LemonyPancakes ]
 description: Origins for Bukkit and forks of Bukkit.

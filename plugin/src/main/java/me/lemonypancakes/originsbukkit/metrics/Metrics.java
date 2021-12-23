@@ -26,7 +26,7 @@ import java.util.zip.GZIPOutputStream;
 /**
  * The type Metrics.
  *
- * @author SwagPannekaker
+ * @author LemonyPancakes
  */
 public class Metrics {
 
@@ -148,7 +148,7 @@ public class Metrics {
     /**
      * The type Metrics base.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class MetricsBase {
 
@@ -395,7 +395,7 @@ public class Metrics {
     /**
      * The type Advanced bar chart.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class AdvancedBarChart extends CustomChart {
 
@@ -447,7 +447,7 @@ public class Metrics {
     /**
      * The type Simple bar chart.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class SimpleBarChart extends CustomChart {
 
@@ -489,7 +489,7 @@ public class Metrics {
     /**
      * The type Multi line chart.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class MultiLineChart extends CustomChart {
 
@@ -541,7 +541,7 @@ public class Metrics {
     /**
      * The type Advanced pie.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class AdvancedPie extends CustomChart {
 
@@ -593,7 +593,7 @@ public class Metrics {
     /**
      * The type Custom chart.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public abstract static class CustomChart {
 
@@ -652,7 +652,7 @@ public class Metrics {
     /**
      * The type Single line chart.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class SingleLineChart extends CustomChart {
 
@@ -690,7 +690,7 @@ public class Metrics {
     /**
      * The type Simple pie.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class SimplePie extends CustomChart {
 
@@ -728,7 +728,7 @@ public class Metrics {
     /**
      * The type Drilldown pie.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class DrilldownPie extends CustomChart {
 
@@ -784,7 +784,7 @@ public class Metrics {
     /**
      * The type Json object builder.
      *
-     * @author SwagPannekaker
+     * @author LemonyPancakes
      */
     public static class JsonObjectBuilder {
 
@@ -975,7 +975,7 @@ public class Metrics {
         /**
          * The type Json object.
          *
-         * @author SwagPannekaker
+         * @author LemonyPancakes
          */
         public static class JsonObject {
 
