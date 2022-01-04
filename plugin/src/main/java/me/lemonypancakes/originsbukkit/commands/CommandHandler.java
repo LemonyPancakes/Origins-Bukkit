@@ -20,47 +20,24 @@ package me.lemonypancakes.originsbukkit.commands;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.commands.maincommand.MainCommand;
 
-/**
- * The type Command handler.
- *
- * @author LemonyPancakes
- */
 public class CommandHandler {
 
     private final OriginsBukkit plugin;
     private MainCommand mainCommand;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets main command.
-     *
-     * @return the main command
-     */
     public MainCommand getMainCommand() {
         return mainCommand;
     }
 
-    /**
-     * Instantiates a new Command handler.
-     *
-     * @param plugin the plugin
-     */
     public CommandHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         mainCommand = new MainCommand(this);
     }

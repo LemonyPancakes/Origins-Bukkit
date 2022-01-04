@@ -19,80 +19,38 @@ package me.lemonypancakes.originsbukkit.storage.wrappers;
 
 import java.util.UUID;
 
-/**
- * The type Elytrian claustrophobia timer data wrapper.
- *
- * @author LemonyPancakes
- */
 public class ElytrianClaustrophobiaTimerDataWrapper {
 
     private UUID playerUUID;
     private int timerTimeLeft;
     private int claustrophobiaTimeLeft;
 
-    /**
-     * Instantiates a new Elytrian claustrophobia timer data wrapper.
-     *
-     * @param playerUUID             the player uuid
-     * @param timerTimeLeft          the timer time left
-     * @param claustrophobiaTimeLeft the claustrophobia time left
-     */
     public ElytrianClaustrophobiaTimerDataWrapper(UUID playerUUID, int timerTimeLeft, int claustrophobiaTimeLeft) {
         this.playerUUID = playerUUID;
         this.timerTimeLeft = timerTimeLeft;
         this.claustrophobiaTimeLeft = claustrophobiaTimeLeft;
     }
 
-    /**
-     * Gets player uuid.
-     *
-     * @return the player uuid
-     */
     public UUID getPlayerUUID() {
         return playerUUID;
     }
 
-    /**
-     * Sets player uuid.
-     *
-     * @param playerUUID the player uuid
-     */
     public void setPlayerUUID(UUID playerUUID) {
         this.playerUUID = playerUUID;
     }
 
-    /**
-     * Gets timer time left.
-     *
-     * @return the timer time left
-     */
     public int getTimerTimeLeft() {
         return timerTimeLeft;
     }
 
-    /**
-     * Sets timer time left.
-     *
-     * @param timerTimeLeft the timer time left
-     */
     public void setTimerTimeLeft(int timerTimeLeft) {
         this.timerTimeLeft = timerTimeLeft;
     }
 
-    /**
-     * Gets claustrophobia time left.
-     *
-     * @return the claustrophobia time left
-     */
     public int getClaustrophobiaTimeLeft() {
         return claustrophobiaTimeLeft;
     }
 
-    /**
-     * Sets claustrophobia time left.
-     *
-     * @param claustrophobiaTimeLeft the claustrophobia time left
-     */
     public void setClaustrophobiaTimeLeft(int claustrophobiaTimeLeft) {
         this.claustrophobiaTimeLeft = claustrophobiaTimeLeft;
     }

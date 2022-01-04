@@ -31,57 +31,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * The type Async player join.
- *
- * @author LemonyPancakes
- */
 public class AsyncPlayerJoin implements Listener {
 
     private final CustomEventListenerHandler customEventListenerHandler;
     private final Map<UUID, BukkitTask> players = new HashMap<>();
     private static final int MAX_ATTEMPTS = 1200;
 
-    /**
-     * Gets custom event listener handler.
-     *
-     * @return the custom event listener handler
-     */
     public CustomEventListenerHandler getCustomEventListenerHandler() {
         return customEventListenerHandler;
     }
 
-    /**
-     * Gets players.
-     *
-     * @return the players
-     */
     public Map<UUID, BukkitTask> getPlayers() {
         return players;
     }
 
-    /**
-     * Gets max attempts.
-     *
-     * @return the max attempts
-     */
     public static int getMaxAttempts() {
         return MAX_ATTEMPTS;
     }
 
-    /**
-     * Instantiates a new Async player join.
-     *
-     * @param customEventListenerHandler the custom event listener handler
-     */
     public AsyncPlayerJoin(CustomEventListenerHandler customEventListenerHandler) {
         this.customEventListenerHandler = customEventListenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         Bukkit.getPluginManager().registerEvents(
                 this, getCustomEventListenerHandler()
@@ -89,11 +61,6 @@ public class AsyncPlayerJoin implements Listener {
                         .getPlugin());
     }
 
-    /**
-     * Async player join event.
-     *
-     * @param event the event
-     */
     @EventHandler
     public void asyncPlayerJoinEvent(AsyncPlayerPreLoginEvent event) {
         if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {

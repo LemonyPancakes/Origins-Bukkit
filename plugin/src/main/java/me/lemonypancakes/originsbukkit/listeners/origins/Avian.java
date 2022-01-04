@@ -25,7 +25,7 @@ import me.lemonypancakes.originsbukkit.enums.Config;
 import me.lemonypancakes.originsbukkit.enums.Impact;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Origins;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
@@ -51,29 +51,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * The type Avian.
- *
- * @author LemonyPancakes
- */
 public class Avian extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Instantiates a new Avian.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Avian(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_AVIAN_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_AVIAN_WALK_SPEED.toFloat(),
@@ -82,79 +67,41 @@ public class Avian extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Avian";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.LOW;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.FEATHER;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.AVIAN_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.AVIAN_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -167,11 +114,6 @@ public class Avian extends Origin implements Listener {
         registerOrigin(this);
     }
 
-    /**
-     * Avian join.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void avianJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
@@ -182,11 +124,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * On origin change.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
@@ -205,11 +142,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Avian slow falling.
-     *
-     * @param player the player
-     */
     private void avianSlowFalling(Player player) {
         OriginPlayer originPlayer = new OriginPlayer(player);
         String playerOrigin = originPlayer.getOrigin();
@@ -232,11 +164,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * On avian slow falling toggle.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onAvianSlowFallingToggle(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
@@ -272,11 +199,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * On avian slow falling elytra toggle.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onAvianSlowFallingElytraToggle(EntityToggleGlideEvent event) {
         Entity entity = event.getEntity();
@@ -316,11 +238,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * On avian sleep.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onAvianSleep(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
@@ -337,11 +254,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * On avian bed respawn point set.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onAvianBedRespawnPointSet(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -359,11 +271,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * On avian egg lay.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onAvianEggLay(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();
@@ -378,7 +285,7 @@ public class Avian extends Origin implements Listener {
             if (getWorldTime == 0) {
                 if (playerInventory.firstEmpty() == -1) {
                     world.dropItem(location, new ItemStack(Material.EGG, 1));
-                    ChatUtils.sendPlayerMessage(player, "&cYour inventory was full, so we dropped your egg on the ground.");
+                    Message.sendPlayerMessage(player, "&cYour inventory was full, so we dropped your egg on the ground.");
                 } else {
                     playerInventory.addItem(new ItemStack(Material.EGG, 1));
                 }
@@ -387,11 +294,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Avian anti slow falling effect remove.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void avianAntiSlowFallingEffectRemove(EntityPotionEffectEvent event) {
         Entity entity = event.getEntity();
@@ -413,11 +315,6 @@ public class Avian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Avian eating disabilities.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void avianEatingDisabilities(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();

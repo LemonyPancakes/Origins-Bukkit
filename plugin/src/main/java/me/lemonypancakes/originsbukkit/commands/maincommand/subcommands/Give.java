@@ -19,7 +19,7 @@ package me.lemonypancakes.originsbukkit.commands.maincommand.subcommands;
 
 import me.lemonypancakes.originsbukkit.commands.maincommand.MainCommand;
 import me.lemonypancakes.originsbukkit.enums.Permissions;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -29,48 +29,25 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The type Give.
- *
- * @author LemonyPancakes
- */
 public class Give {
 
     private final MainCommand mainCommand;
 
-    /**
-     * Gets main command.
-     *
-     * @return the main command
-     */
     public MainCommand getMainCommand() {
         return mainCommand;
     }
 
-    /**
-     * Instantiates a new Give.
-     *
-     * @param mainCommand the main command
-     */
     public Give(MainCommand mainCommand) {
         this.mainCommand = mainCommand;
     }
 
-    /**
-     * Give sub command.
-     *
-     * @param sender  the sender
-     * @param command the command
-     * @param label   the label
-     * @param args    the args
-     */
     public void GiveSubCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             if (sender.hasPermission(Permissions.GIVE.toString())) {
                 if (args.length == 1) {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cNot enough arguments. Usage: /origins give <player>" + " <item>");
+                    Message.sendCommandSenderMessage(sender, "&cNot enough arguments. Usage: /origins give <player>" + " <item>");
                 } else if (args.length == 2) {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cNot Enough Arguments. Usage: /origins give " + args[1] + " <item>");
+                    Message.sendCommandSenderMessage(sender, "&cNot Enough Arguments. Usage: /origins give " + args[1] + " <item>");
                 } else if (args.length == 3) {
                     Player target = Bukkit.getPlayer(args[1]);
 
@@ -92,7 +69,7 @@ public class Give {
                                 break;
                         }
                     } else {
-                        ChatUtils.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
+                        Message.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
                     }
                 } else if (args.length == 4) {
                     Player target = Bukkit.getPlayer(args[1]);
@@ -118,20 +95,20 @@ public class Give {
                                     break;
                             }
                         } catch (IllegalArgumentException e) {
-                            ChatUtils.sendCommandSenderMessage(sender, "&cAmount must be a number.");
+                            Message.sendCommandSenderMessage(sender, "&cAmount must be a number.");
                         }
                     } else {
-                        ChatUtils.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
+                        Message.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cToo many arguments. Usage: /origins give <player> <item> <amount>");
+                    Message.sendCommandSenderMessage(sender, "&cToo many arguments. Usage: /origins give <player> <item> <amount>");
                 }
             }
         } else {
             if (args.length == 1) {
-                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not enough arguments. Usage: /origins give <player>" + " <item>");
+                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not enough arguments. Usage: /origins give <player>" + " <item>");
             } else if (args.length == 2) {
-                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not Enough Arguments. Usage: /origins give " + args[1] + " <item>");
+                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not Enough Arguments. Usage: /origins give " + args[1] + " <item>");
             } else if (args.length == 3) {
                 Player target = Bukkit.getPlayer(args[1]);
 
@@ -153,7 +130,7 @@ public class Give {
                             break;
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
+                    Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
                 }
             } else if (args.length == 4) {
                 Player target = Bukkit.getPlayer(args[1]);
@@ -179,27 +156,17 @@ public class Give {
                                 break;
                         }
                     } catch (IllegalArgumentException e) {
-                        ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Amount must be a number.");
+                        Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Amount must be a number.");
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
+                    Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Too many arguments. Usage: /origins give <player> <item> <amount>");
+                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Too many arguments. Usage: /origins give <player> <item> <amount>");
             }
         }
     }
 
-    /**
-     * Give sub command tab complete list.
-     *
-     * @param sender  the sender
-     * @param command the command
-     * @param alias   the alias
-     * @param args    the args
-     *
-     * @return the list
-     */
     public List<String> GiveSubCommandTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> empty = new ArrayList<>();
 

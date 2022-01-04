@@ -19,47 +19,24 @@ package me.lemonypancakes.originsbukkit.listeners.items;
 
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 
-/**
- * The type Item listener handler.
- *
- * @author LemonyPancakes
- */
 public class ItemListenerHandler {
 
     private final ListenerHandler listenerHandler;
     private OrbOfOriginListener orbOfOriginListener;
 
-    /**
-     * Gets listener handler.
-     *
-     * @return the listener handler
-     */
     public ListenerHandler getListenerHandler() {
         return listenerHandler;
     }
 
-    /**
-     * Gets origin ball listener.
-     *
-     * @return the origin ball listener
-     */
     public OrbOfOriginListener getOriginBallListener() {
         return orbOfOriginListener;
     }
 
-    /**
-     * Instantiates a new Item listener handler.
-     *
-     * @param listenerHandler the listener handler
-     */
     public ItemListenerHandler(ListenerHandler listenerHandler) {
         this.listenerHandler = listenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         orbOfOriginListener = new OrbOfOriginListener(this);
     }

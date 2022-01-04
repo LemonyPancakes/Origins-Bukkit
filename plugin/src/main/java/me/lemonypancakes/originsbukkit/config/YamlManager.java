@@ -32,11 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 
-/**
- * The type Yaml manager.
- *
- * @author LemonyPancakes
- */
 public class YamlManager {
 
     private final OriginsBukkit plugin;
@@ -47,12 +42,6 @@ public class YamlManager {
     private FileConfiguration file;
     private File loc;
 
-    /**
-     * Instantiates a new Yaml manager.
-     *
-     * @param plugin the plugin
-     * @param name   the name
-     */
     public YamlManager(OriginsBukkit plugin, String name) {
         this.plugin = plugin;
         this.internalName = name;
@@ -62,13 +51,6 @@ public class YamlManager {
         load();
     }
 
-    /**
-     * Instantiates a new Yaml manager.
-     *
-     * @param plugin   the plugin
-     * @param name     the name
-     * @param location the location
-     */
     public YamlManager(OriginsBukkit plugin, String name, String location) {
         this.plugin = plugin;
         this.internalName = name;
@@ -78,14 +60,6 @@ public class YamlManager {
         load();
     }
 
-    /**
-     * Instantiates a new Yaml manager.
-     *
-     * @param plugin   the plugin
-     * @param name     the name
-     * @param location the location
-     * @param newName  the new name
-     */
     public YamlManager(OriginsBukkit plugin, String name, String location, String newName) {
         this.plugin = plugin;
         this.internalName = name;
@@ -95,15 +69,6 @@ public class YamlManager {
         load();
     }
 
-    /**
-     * Instantiates a new Yaml manager.
-     *
-     * @param plugin      the plugin
-     * @param name        the name
-     * @param location    the location
-     * @param newName     the new name
-     * @param newLocation the new location
-     */
     public YamlManager(OriginsBukkit plugin, String name, String location, String newName, String newLocation) {
         this.plugin = plugin;
         this.internalName = name;
@@ -113,13 +78,6 @@ public class YamlManager {
         load();
     }
 
-    /**
-     * Is readable boolean.
-     *
-     * @param file the file
-     *
-     * @return the boolean
-     */
     public static boolean isReadable(File file) {
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
         try {
@@ -132,11 +90,6 @@ public class YamlManager {
         }
     }
 
-    /**
-     * Add comments.
-     *
-     * @param comments the comments
-     */
     public void addComments(Map<Integer, String> comments) {
         save(true);
         //load all data from file
@@ -194,12 +147,6 @@ public class YamlManager {
         }
     }
 
-    /**
-     * Add comment.
-     *
-     * @param comment the comment
-     * @param line    the line
-     */
     public void addComment(String comment, int line) {
         save(true);
         if (!comment.startsWith("#"))
@@ -248,11 +195,6 @@ public class YamlManager {
         }
     }
 
-    /**
-     * Add comment.
-     *
-     * @param comment the comment
-     */
     public void addComment(String comment) {
         save(true);
         if (!comment.startsWith("#"))
@@ -299,20 +241,10 @@ public class YamlManager {
         }
     }
 
-    /**
-     * Gets file.
-     *
-     * @return the file
-     */
     public FileConfiguration getFile() {
         return this.file;
     }
 
-    /**
-     * Save.
-     *
-     * @param preserveComments the preserve comments
-     */
     public void save(boolean preserveComments) {
         if (preserveComments) {
             saveCommented(this.loc);
@@ -324,12 +256,6 @@ public class YamlManager {
         }
     }
 
-    /**
-     * Save.
-     *
-     * @param location         the location
-     * @param preserveComments the preserve comments
-     */
     public void save(File location, boolean preserveComments) {
         if (preserveComments) {
             saveCommented(location);
@@ -341,16 +267,10 @@ public class YamlManager {
         }
     }
 
-    /**
-     * Reload.
-     */
     public void reload() {
         load();
     }
 
-    /**
-     * Load from plugin.
-     */
     public void loadFromPlugin() {
         if (!plugin.getDataFolder().exists())
             plugin.getDataFolder().mkdir();
@@ -381,18 +301,10 @@ public class YamlManager {
         file = YamlConfiguration.loadConfiguration(loc);
     }
 
-    /**
-     * Gets loc.
-     *
-     * @return the loc
-     */
     public File getLoc() {
         return loc;
     }
 
-    /**
-     * Load.
-     */
     private void load() {
         if (!plugin.getDataFolder().exists())
             plugin.getDataFolder().mkdir();
@@ -426,11 +338,6 @@ public class YamlManager {
         file = YamlConfiguration.loadConfiguration(loc);
     }
 
-    /**
-     * Save commented.
-     *
-     * @param location the location
-     */
     private void saveCommented(File location) {
         //load all comments
         FileInputStream stream = null;

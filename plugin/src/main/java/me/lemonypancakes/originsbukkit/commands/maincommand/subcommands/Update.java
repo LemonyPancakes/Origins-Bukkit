@@ -21,7 +21,7 @@ import me.lemonypancakes.originsbukkit.commands.maincommand.MainCommand;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Permissions;
 import me.lemonypancakes.originsbukkit.storage.wrappers.OriginsPlayerDataWrapper;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,48 +31,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Update.
- *
- * @author LemonyPancakes
- */
 public class Update {
 
     private final MainCommand mainCommand;
 
-    /**
-     * Gets main command.
-     *
-     * @return the main command
-     */
     public MainCommand getMainCommand() {
         return mainCommand;
     }
 
-    /**
-     * Instantiates a new Update.
-     *
-     * @param mainCommand the main command
-     */
     public Update(MainCommand mainCommand) {
         this.mainCommand = mainCommand;
     }
 
-    /**
-     * Update sub command.
-     *
-     * @param sender  the sender
-     * @param command the command
-     * @param label   the label
-     * @param args    the args
-     */
     public void UpdateSubCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             if (sender.hasPermission(Permissions.UPDATE.toString())) {
                 if (args.length == 1) {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cNot Enough Arguments. Usage: /origins update <player> <new origin>");
+                    Message.sendCommandSenderMessage(sender, "&cNot Enough Arguments. Usage: /origins update <player> <new origin>");
                 } else if (args.length == 2) {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cNot Enough Arguments. Usage: /origins update " + args[1] + " <new origin>");
+                    Message.sendCommandSenderMessage(sender, "&cNot Enough Arguments. Usage: /origins update " + args[1] + " <new origin>");
                 } else if (args.length == 3) {
                     Player target = Bukkit.getPlayer(args[1]);
                     String origin = args[2];
@@ -87,30 +64,30 @@ public class Update {
                                 if (!getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().getPlayerOrigin(playerUUID).equals(origin)) {
                                     getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().updateOriginsPlayerData(playerUUID, new OriginsPlayerDataWrapper(playerUUID, playerName, origin));
                                     getMainCommand().getCommandHandler().getPlugin().getListenerHandler().getPlayerOriginChecker().checkPlayerOriginData(target);
-                                    ChatUtils.sendCommandSenderMessage(sender, "&aChanged " + playerName + "'s origin to " + origin);
+                                    Message.sendCommandSenderMessage(sender, "&aChanged " + playerName + "'s origin to " + origin);
                                 } else {
-                                    ChatUtils.sendCommandSenderMessage(sender, "&cNothing changed. Player's origin is already " + origin);
+                                    Message.sendCommandSenderMessage(sender, "&cNothing changed. Player's origin is already " + origin);
                                 }
                             } else {
-                                ChatUtils.sendCommandSenderMessage(sender, "&cCannot find " + playerName + "'s data");
+                                Message.sendCommandSenderMessage(sender, "&cCannot find " + playerName + "'s data");
                             }
                         } else {
-                            ChatUtils.sendCommandSenderMessage(sender, "&cCannot find the origins " + args[2]);
+                            Message.sendCommandSenderMessage(sender, "&cCannot find the origins " + args[2]);
                         }
                     } else {
-                        ChatUtils.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
+                        Message.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cToo many arguments. Usage: /origins update <player> <new origin>");
+                    Message.sendCommandSenderMessage(sender, "&cToo many arguments. Usage: /origins update <player> <new origin>");
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(sender, Lang.NO_PERMISSION_COMMAND.toString());
+                Message.sendCommandSenderMessage(sender, Lang.NO_PERMISSION_COMMAND.toString());
             }
         } else {
             if (args.length == 1) {
-                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not Enough Arguments. Usage: /origins update <player> <new origin>");
+                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not Enough Arguments. Usage: /origins update <player> <new origin>");
             } else if (args.length == 2) {
-                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not Enough Arguments. Usage: /origins update " + args[1] + " <new origin>");
+                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Not Enough Arguments. Usage: /origins update " + args[1] + " <new origin>");
             } else if (args.length == 3) {
                 Player target = Bukkit.getPlayer(args[1]);
                 String origin = args[2];
@@ -125,35 +102,25 @@ public class Update {
                             if (!getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().getPlayerOrigin(playerUUID).equals(origin)) {
                                 getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().updateOriginsPlayerData(playerUUID, new OriginsPlayerDataWrapper(playerUUID, playerName, origin));
                                 getMainCommand().getCommandHandler().getPlugin().getListenerHandler().getPlayerOriginChecker().checkPlayerOriginData(target);
-                                ChatUtils.sendCommandSenderMessage(sender, "&a[Origins-Bukkit] Changed " + playerName + "'s origin to " + origin);
+                                Message.sendCommandSenderMessage(sender, "&a[Origins-Bukkit] Changed " + playerName + "'s origin to " + origin);
                             } else {
-                                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Nothing changed. Player's origin is already " + origin);
+                                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Nothing changed. Player's origin is already " + origin);
                             }
                         } else {
-                            ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Cannot find " + playerName + "'s data");
+                            Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Cannot find " + playerName + "'s data");
                         }
                     } else {
-                        ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Cannot find the origins " + args[2]);
+                        Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Cannot find the origins " + args[2]);
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
+                    Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Too many arguments. Usage: /origins update <player> <new origin>");
+                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Too many arguments. Usage: /origins update <player> <new origin>");
             }
         }
     }
 
-    /**
-     * Update sub command tab complete list.
-     *
-     * @param sender  the sender
-     * @param command the command
-     * @param alias   the alias
-     * @param args    the args
-     *
-     * @return the list
-     */
     public List<String> UpdateSubCommandTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> empty = new ArrayList<>();
 

@@ -21,7 +21,7 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.enums.Config;
 import me.lemonypancakes.originsbukkit.enums.Lang;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -31,11 +31,6 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * The type Config handler.
- *
- * @author LemonyPancakes
- */
 public class ConfigHandler {
 
     private final OriginsBukkit plugin;
@@ -44,93 +39,54 @@ public class ConfigHandler {
     private YamlConfiguration LANG;
     private File LANG_FILE;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets config.
-     *
-     * @return the config
-     */
     public YamlConfiguration getConfig() {
         return CONFIG;
     }
 
-    /**
-     * Gets config file.
-     *
-     * @return the config file
-     */
     public File getConfigFile() {
         return CONFIG_FILE;
     }
 
-    /**
-     * Gets lang.
-     *
-     * @return the lang
-     */
     public YamlConfiguration getLang() {
         return LANG;
     }
 
-    /**
-     * Gets lang file.
-     *
-     * @return the lang file
-     */
     public File getLangFile() {
         return LANG_FILE;
     }
 
-    /**
-     * Instantiates a new Config handler.
-     *
-     * @param plugin the plugin
-     */
     public ConfigHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         loadConfigurationFiles();
     }
 
-    /**
-     * Load configuration files.
-     */
     public void loadConfigurationFiles() {
         if (!getPlugin().getDataFolder().exists()) {
             getPlugin().getDataFolder().mkdir();
         }
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] Loading files...");
+        Message.sendConsoleMessage("&3[Origins-Bukkit] Loading files...");
         try {
             loadConfig();
             loadLang();
         } catch (Exception event) {
             event.printStackTrace();
-            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] There was an error loading the files.");
+            Message.sendConsoleMessage("&c[Origins-Bukkit] There was an error loading the files.");
         }
-        ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Successfully loaded the files.");
+        Message.sendConsoleMessage("&a[Origins-Bukkit] Successfully loaded the files.");
     }
 
-    /**
-     * Load config.
-     */
     public void loadConfig() {
         File configFile = new File(getPlugin().getDataFolder(), "config.yml");
         if (!configFile.exists()) {
-            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] The config.yml file was not found. Creating one...");
+            Message.sendConsoleMessage("&3[Origins-Bukkit] The config.yml file was not found. Creating one...");
             try {
                 configFile.createNewFile();
                 InputStream defaultConfigStream = getPlugin().getResource("config.yml");
@@ -143,12 +99,12 @@ public class ConfigHandler {
                         event.printStackTrace();
                     }
                     Config.setFile(defaultConfig);
-                    ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Successfully created the config.yml file");
+                    Message.sendConsoleMessage("&a[Origins-Bukkit] Successfully created the config.yml file");
                 }
             } catch (IOException event) {
                 event.printStackTrace();
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Couldn't create config file.");
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] This is a fatal error. Now disabling.");
+                Message.sendConsoleMessage("&c[Origins-Bukkit] Couldn't create config file.");
+                Message.sendConsoleMessage("&c[Origins-Bukkit] This is a fatal error. Now disabling.");
                 getPlugin().disablePlugin();
             }
         }
@@ -165,8 +121,8 @@ public class ConfigHandler {
             yamlConfiguration.save(getConfigFile());
         } catch (IOException event) {
             event.printStackTrace();
-            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Failed to save lang.yml.");
-            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] this stack trace to <your name>.");
+            Message.sendConsoleMessage("&c[Origins-Bukkit] Failed to save lang.yml.");
+            Message.sendConsoleMessage("&c[Origins-Bukkit] this stack trace to <your name>.");
         }
         try {
             ConfigUpdater.update(getPlugin(), "config.yml", configFile, Collections.singletonList("Config.Recipes.Orb-Of-Origin.Ingredients"));
@@ -176,13 +132,10 @@ public class ConfigHandler {
         YamlConfiguration.loadConfiguration(configFile);
     }
 
-    /**
-     * Load lang.
-     */
     public void loadLang() {
         File langFile = new File(getPlugin().getDataFolder(), "lang.yml");
         if (!langFile.exists()) {
-            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] The lang.yml file was not found. Creating one...");
+            Message.sendConsoleMessage("&3[Origins-Bukkit] The lang.yml file was not found. Creating one...");
             try {
                 langFile.createNewFile();
                 InputStream defaultConfigStream = getPlugin().getResource("lang.yml");
@@ -195,12 +148,12 @@ public class ConfigHandler {
                         event.printStackTrace();
                     }
                     Lang.setFile(defaultConfig);
-                    ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Successfully created the lang.yml file");
+                    Message.sendConsoleMessage("&a[Origins-Bukkit] Successfully created the lang.yml file");
                 }
             } catch (IOException event) {
                 event.printStackTrace();
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Couldn't create language file.");
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] This is a fatal error. Now disabling.");
+                Message.sendConsoleMessage("&c[Origins-Bukkit] Couldn't create language file.");
+                Message.sendConsoleMessage("&c[Origins-Bukkit] This is a fatal error. Now disabling.");
                 getPlugin().disablePlugin();
             }
         }
@@ -217,8 +170,8 @@ public class ConfigHandler {
             yamlConfiguration.save(getLangFile());
         } catch (IOException event) {
             event.printStackTrace();
-            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Failed to save lang.yml.");
-            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] this stack trace to <your name>.");
+            Message.sendConsoleMessage("&c[Origins-Bukkit] Failed to save lang.yml.");
+            Message.sendConsoleMessage("&c[Origins-Bukkit] this stack trace to <your name>.");
         }
         try {
             ConfigUpdater.update(getPlugin(), "lang.yml", langFile, (List<String>) null);
@@ -228,9 +181,6 @@ public class ConfigHandler {
         YamlConfiguration.loadConfiguration(langFile);
     }
 
-    /**
-     * Reload files.
-     */
     public void reloadFiles() {
         if (!getPlugin().getDataFolder().exists()) {
             getPlugin().getDataFolder().mkdir();

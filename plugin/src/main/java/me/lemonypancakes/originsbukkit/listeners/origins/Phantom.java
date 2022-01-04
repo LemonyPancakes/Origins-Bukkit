@@ -31,7 +31,7 @@ import me.lemonypancakes.originsbukkit.enums.Impact;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Origins;
 import me.lemonypancakes.originsbukkit.storage.wrappers.PhantomAbilityToggleDataWrapper;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -51,30 +51,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The type Phantom.
- *
- * @author LemonyPancakes
- */
 public class Phantom extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
     private final List<Player> phantomPlayers = new ArrayList<>();
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Instantiates a new Phantom.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Phantom(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_PHANTOM_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_PHANTOM_WALK_SPEED.toFloat(),
@@ -83,79 +68,41 @@ public class Phantom extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Phantom";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.HIGH;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.PHANTOM_MEMBRANE;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.PHANTOM_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.PHANTOM_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -170,11 +117,6 @@ public class Phantom extends Origin implements Listener {
         registerPhantomInvisibilityPotionPacketListener();
     }
 
-    /**
-     * Phantom join.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void phantomJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
@@ -234,11 +176,6 @@ public class Phantom extends Origin implements Listener {
         }
     }
 
-    /**
-     * Phantom ability use.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void phantomAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
@@ -249,9 +186,6 @@ public class Phantom extends Origin implements Listener {
         }
     }
 
-    /**
-     * Register phantom sunlight damage listener.
-     */
     private void registerPhantomSunlightDamageListener() {
 
         new BukkitRunnable() {
@@ -286,11 +220,6 @@ public class Phantom extends Origin implements Listener {
                 .getPlugin(), Config.ORIGINS_BLAZEBORN_WATER_DAMAGE_DELAY.toLong(), Config.ORIGINS_BLAZEBORN_WATER_DAMAGE_PERIOD_DELAY.toLong());
     }
 
-    /**
-     * Phantom switch toggle ability.
-     *
-     * @param player the player
-     */
     private void phantomSwitchToggleAbility(Player player) {
         UUID playerUUID = player.getUniqueId();
         OriginPlayer originPlayer = new OriginPlayer(player);
@@ -299,7 +228,7 @@ public class Phantom extends Origin implements Listener {
         if (originPlayer.findPhantomAbilityToggleData() == null) {
             if (!(player.getFoodLevel() < 4)) {
                 originPlayer.createPhantomAbilityToggleData(true);
-                ChatUtils.sendPlayerMessage(player, "&7Ability Toggled &aON");
+                Message.sendPlayerMessage(player, "&7Ability Toggled &aON");
                 getOriginListenerHandler()
                         .getListenerHandler()
                         .getPlugin()
@@ -314,7 +243,7 @@ public class Phantom extends Origin implements Listener {
             if (isToggled) {
                 originPlayer.updatePhantomAbilityToggleData(
                         new PhantomAbilityToggleDataWrapper(playerUUID, false));
-                ChatUtils.sendPlayerMessage(player, "&7Ability Toggled &cOFF");
+                Message.sendPlayerMessage(player, "&7Ability Toggled &cOFF");
                 getOriginListenerHandler()
                         .getListenerHandler()
                         .getPlugin()
@@ -337,19 +266,14 @@ public class Phantom extends Origin implements Listener {
                     player.setAllowFlight(true);
                     player.setFlying(true);
                     player.setFlySpeed(0.05f);
-                    ChatUtils.sendPlayerMessage(player, "&7Ability Toggled &aON");
+                    Message.sendPlayerMessage(player, "&7Ability Toggled &aON");
                 } else {
-                    ChatUtils.sendPlayerMessage(player, "&cCannot use ability because your hunger level is less than 4 levels.");
+                    Message.sendPlayerMessage(player, "&cCannot use ability because your hunger level is less than 4 levels.");
                 }
             }
         }
     }
 
-    /**
-     * Phantom fast exhaustion.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void phantomFastExhaustion(FoodLevelChangeEvent event) {
         HumanEntity humanEntity = event.getEntity();
@@ -362,18 +286,13 @@ public class Phantom extends Origin implements Listener {
             if (isToggled) {
                 if (player.getFoodLevel() < 4) {
                     phantomSwitchToggleAbility(player);
-                    ChatUtils.sendPlayerMessage(player, "&cToggled your ability because your hunger level is less than 4 levels");
+                    Message.sendPlayerMessage(player, "&cToggled your ability because your hunger level is less than 4 levels");
                 }
                 event.setFoodLevel(event.getFoodLevel() - 2);
             }
         }
     }
 
-    /**
-     * Phantom anti invisibility effect remove.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void phantomAntiInvisibilityEffectRemove(EntityPotionEffectEvent event) {
         Entity entity = event.getEntity();
@@ -395,11 +314,6 @@ public class Phantom extends Origin implements Listener {
         }
     }
 
-    /**
-     * Anti non phantom invisibility potion.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void antiNonPhantomInvisibilityPotion(EntityPotionEffectEvent event) {
         Entity entity = event.getEntity();
@@ -420,9 +334,6 @@ public class Phantom extends Origin implements Listener {
         }
     }
 
-    /**
-     * Register phantom invisibility potion packet listener.
-     */
     private void registerPhantomInvisibilityPotionPacketListener() {
         getOriginListenerHandler().getListenerHandler().getPlugin().getProtocolManager().addPacketListener(
                 new PacketAdapter(getOriginListenerHandler().getListenerHandler().getPlugin(), ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_EFFECT) {

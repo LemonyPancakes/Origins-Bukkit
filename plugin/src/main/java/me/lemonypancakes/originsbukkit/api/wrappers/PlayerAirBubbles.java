@@ -27,49 +27,24 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The type Player air bubbles.
- *
- * @author LemonyPancakes
- */
 public class PlayerAirBubbles extends BukkitRunnable {
 
     private final OriginsBukkit plugin;
     private final WrappedDataWatcher.WrappedDataWatcherObject ADDRESS;
     private final Player player;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets address.
-     *
-     * @return the address
-     */
     public WrappedDataWatcher.WrappedDataWatcherObject getAddress() {
         return ADDRESS;
     }
 
-    /**
-     * Gets player.
-     *
-     * @return the player
-     */
     public Player getPlayer() {
         return player;
     }
 
-    /**
-     * Instantiates a new Player air bubbles.
-     *
-     * @param player the player
-     */
     public PlayerAirBubbles(Player player) {
         this.player = player;
         this.plugin = OriginsBukkit.getPlugin();
@@ -81,9 +56,6 @@ public class PlayerAirBubbles extends BukkitRunnable {
         runTaskTimerAsynchronously(getPlugin(), 0, 1);
     }
 
-    /**
-     * Run.
-     */
     @Override
     public void run() {
         if (getPlayer().isOnline()) {

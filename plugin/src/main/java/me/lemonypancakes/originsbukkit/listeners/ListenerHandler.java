@@ -25,11 +25,6 @@ import me.lemonypancakes.originsbukkit.listeners.origins.OriginListenerHandler;
 import me.lemonypancakes.originsbukkit.listeners.playerchecks.NoOriginPlayerRestrict;
 import me.lemonypancakes.originsbukkit.listeners.playerchecks.PlayerOriginChecker;
 
-/**
- * The type Listener handler.
- *
- * @author LemonyPancakes
- */
 public class ListenerHandler {
 
     private final OriginsBukkit plugin;
@@ -40,82 +35,39 @@ public class ListenerHandler {
     private PlayerOriginChecker playerOriginChecker;
     private KeyListener keyListener;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets custom event listener handler.
-     *
-     * @return the custom event listener handler
-     */
     public CustomEventListenerHandler getCustomEventListenerHandler() {
         return customEventListenerHandler;
     }
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Gets item listener handler.
-     *
-     * @return the item listener handler
-     */
     public ItemListenerHandler getItemListenerHandler() {
         return itemListenerHandler;
     }
 
-    /**
-     * Gets no origin player restrict.
-     *
-     * @return the no origin player restrict
-     */
     public NoOriginPlayerRestrict getNoOriginPlayerRestrict() {
         return noOriginPlayerRestrict;
     }
 
-    /**
-     * Gets player origin checker.
-     *
-     * @return the player origin checker
-     */
     public PlayerOriginChecker getPlayerOriginChecker() {
         return playerOriginChecker;
     }
 
-    /**
-     * Gets key listener.
-     *
-     * @return the key listener
-     */
     public KeyListener getKeyListener() {
         return keyListener;
     }
 
-    /**
-     * Instantiates a new Listener handler.
-     *
-     * @param plugin the plugin
-     */
     public ListenerHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         customEventListenerHandler = new CustomEventListenerHandler(this);
         originListenerHandler = new OriginListenerHandler(this);

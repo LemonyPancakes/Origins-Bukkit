@@ -22,49 +22,24 @@ import me.lemonypancakes.originsbukkit.nms.mobs.NMSMobHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-/**
- * The type Nms handler.
- *
- * @author LemonyPancakes
- */
 public class NMSHandler {
 
     private final OriginsBukkit plugin;
     private NMSMobHandler nmsMobHandler;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public Plugin getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets nms mob handler.
-     *
-     * @return the nms mob handler
-     */
     public NMSMobHandler getNMSMobHandler() {
         return nmsMobHandler;
     }
 
-    /**
-     * Instantiates a new Nms handler.
-     *
-     * @param plugin the plugin
-     */
     public NMSHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
         init();
     }
 
-    /**
-     * Gets nms server version.
-     *
-     * @return the nms server version
-     */
     public String getNMSServerVersion() {
         return Bukkit.getServer()
                 .getClass()
@@ -74,11 +49,6 @@ public class NMSHandler {
                 .split(",")[3];
     }
 
-    /**
-     * Gets nms package name.
-     *
-     * @return the nms package name
-     */
     public String getNMSPackageName() {
         return Bukkit.getServer()
                 .getClass()
@@ -86,9 +56,6 @@ public class NMSHandler {
                 .getName();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         nmsMobHandler = new NMSMobHandler(this);
     }

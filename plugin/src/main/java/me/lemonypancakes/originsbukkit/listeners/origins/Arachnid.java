@@ -31,7 +31,7 @@ import me.lemonypancakes.originsbukkit.enums.Impact;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Origins;
 import me.lemonypancakes.originsbukkit.storage.wrappers.ArachnidAbilityToggleDataWrapper;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -56,31 +56,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-/**
- * The type Arachnid.
- *
- * @author LemonyPancakes
- */
 public class Arachnid extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
     private final Map<UUID, Long> COOLDOWN = new HashMap<>();
     private final int COOLDOWNTIME = Config.ORIGINS_ARACHNID_ABILITY_SPIDER_WEB_COOLDOWN.toInt();
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Instantiates a new Arachnid.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Arachnid(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_ARACHNID_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_ARACHNID_WALK_SPEED.toFloat(),
@@ -89,79 +74,41 @@ public class Arachnid extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Arachnid";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.LOW;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.COBWEB;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.ARACHNID_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.ARACHNID_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -175,11 +122,6 @@ public class Arachnid extends Origin implements Listener {
         registerArachnidCobwebMovePacketListener();
     }
 
-    /**
-     * On origin change.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
@@ -206,11 +148,6 @@ public class Arachnid extends Origin implements Listener {
         }
     }
 
-    /**
-     * Arachnid ability use.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void arachnidAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
@@ -221,11 +158,6 @@ public class Arachnid extends Origin implements Listener {
         }
     }
 
-    /**
-     * On arachnid climb toggle.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onArachnidClimbToggle(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
@@ -244,11 +176,6 @@ public class Arachnid extends Origin implements Listener {
         }
     }
 
-    /**
-     * On arachnid attack.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onArachnidAttack(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
@@ -271,14 +198,14 @@ public class Arachnid extends Origin implements Listener {
                         long secondsLeft = ((COOLDOWN.get(playerUUID) / 1000) + COOLDOWNTIME - (System.currentTimeMillis() / 1000));
 
                         if (secondsLeft > 0) {
-                            ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_COOLDOWN
+                            Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_COOLDOWN
                                     .toString()
                                     .replace("%seconds_left%", String.valueOf(secondsLeft)));
                         } else {
                             removeArachnidCobwebs(material1, block1);
                             block1.setType(Material.COBWEB);
                             COOLDOWN.put(playerUUID, System.currentTimeMillis());
-                            ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
+                            Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                                     .toString()
                                     .replace("%player_current_origin%", playerOrigin));
                         }
@@ -286,7 +213,7 @@ public class Arachnid extends Origin implements Listener {
                         removeArachnidCobwebs(material1, block1);
                         block1.setType(Material.COBWEB);
                         COOLDOWN.put(playerUUID, System.currentTimeMillis());
-                        ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
+                        Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                                 .toString()
                                 .replace("%player_current_origin%", playerOrigin));
                     }
@@ -295,11 +222,6 @@ public class Arachnid extends Origin implements Listener {
         }
     }
 
-    /**
-     * On arachnid bane of arthropods damage.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onArachnidBaneOfArthropodsDamage(EntityDamageByEntityEvent event) {
         Entity target = event.getEntity();
@@ -328,11 +250,6 @@ public class Arachnid extends Origin implements Listener {
         }
     }
 
-    /**
-     * Arachnid climb.
-     *
-     * @param player the player
-     */
     private void arachnidClimb(Player player) {
 
         new BukkitRunnable() {
@@ -370,11 +287,6 @@ public class Arachnid extends Origin implements Listener {
                 .getPlugin(), 0L, 1L);
     }
 
-    /**
-     * Arachnid climb toggle ability.
-     *
-     * @param player the player
-     */
     private void arachnidClimbToggleAbility(Player player) {
         UUID playerUUID = player.getUniqueId();
         OriginPlayer originPlayer = new OriginPlayer(player);
@@ -383,26 +295,23 @@ public class Arachnid extends Origin implements Listener {
 
         if (originPlayer.findArachnidAbilityToggleData() == null) {
             originPlayer.createArachnidAbilityToggleData(false);
-            ChatUtils.sendPlayerMessage(player, "&7Ability Toggled &cOFF");
+            Message.sendPlayerMessage(player, "&7Ability Toggled &cOFF");
         } else {
             if (originPlayer.getArachnidAbilityToggleData()) {
                 originPlayer.updateArachnidAbilityToggleData(
                         new ArachnidAbilityToggleDataWrapper(playerUUID, false));
-                ChatUtils.sendPlayerMessage(player, "&7Ability Toggled &cOFF");
+                Message.sendPlayerMessage(player, "&7Ability Toggled &cOFF");
             } else {
                 originPlayer.updateArachnidAbilityToggleData(
                         new ArachnidAbilityToggleDataWrapper(playerUUID, true));
                 if (nextToWall(player) && !block.isLiquid()) {
                     arachnidClimb(player);
                 }
-                ChatUtils.sendPlayerMessage(player, "&7Ability Toggled &aON");
+                Message.sendPlayerMessage(player, "&7Ability Toggled &aON");
             }
         }
     }
 
-    /**
-     * Register arachnid cobweb move packet listener.
-     */
     private void registerArachnidCobwebMovePacketListener() {
         getOriginListenerHandler().getListenerHandler().getPlugin().getProtocolManager().addPacketListener(
                 new PacketAdapter(getOriginListenerHandler().getListenerHandler().getPlugin(), ListenerPriority.NORMAL, PacketType.Play.Client.POSITION) {
@@ -454,13 +363,6 @@ public class Arachnid extends Origin implements Listener {
         });
     }
 
-    /**
-     * Next to wall boolean.
-     *
-     * @param player the player
-     *
-     * @return the boolean
-     */
     private boolean nextToWall(Player player) {
         World world = player.getWorld();
         double locX = player.getLocation().getX();
@@ -483,13 +385,6 @@ public class Arachnid extends Origin implements Listener {
         return zn.getBlock().getType().isSolid();
     }
 
-    /**
-     * Next to cobweb boolean.
-     *
-     * @param player the player
-     *
-     * @return the boolean
-     */
     private boolean nextToCobweb(Player player) {
         World world = player.getWorld();
         double locX = player.getLocation().getX();
@@ -512,12 +407,6 @@ public class Arachnid extends Origin implements Listener {
         return zn.getBlock().getType() == Material.COBWEB;
     }
 
-    /**
-     * Remove arachnid cobwebs.
-     *
-     * @param material the material
-     * @param block    the block
-     */
     private void removeArachnidCobwebs(Material material, Block block) {
 
         new BukkitRunnable() {
@@ -531,11 +420,6 @@ public class Arachnid extends Origin implements Listener {
                 .getPlugin(), 20L * 10);
     }
 
-    /**
-     * Arachnid crafting.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void arachnidCrafting(PrepareItemCraftEvent event) {
         HumanEntity humanEntity = event.getView().getPlayer();
@@ -559,11 +443,6 @@ public class Arachnid extends Origin implements Listener {
         }
     }
 
-    /**
-     * Arachnid eating disabilities.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void arachnidEatingDisabilities(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();

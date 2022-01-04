@@ -24,7 +24,8 @@ import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import me.lemonypancakes.originsbukkit.storage.wrappers.OriginsPlayerDataWrapper;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
+import me.lemonypancakes.originsbukkit.util.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -48,38 +49,20 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The type Player origin checker.
- *
- * @author LemonyPancakes
- */
 public class PlayerOriginChecker implements Listener {
 
     private final ListenerHandler listenerHandler;
     private final Map<UUID, Integer> originPickerGUIViewers = new HashMap<>();
 
-    /**
-     * Gets listener handler.
-     *
-     * @return the listener handler
-     */
     public ListenerHandler getListenerHandler() {
         return listenerHandler;
     }
 
-    /**
-     * Instantiates a new Player origin checker.
-     *
-     * @param listenerHandler the listener handler
-     */
     public PlayerOriginChecker(ListenerHandler listenerHandler) {
         this.listenerHandler = listenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getListenerHandler()
                 .getPlugin()
@@ -102,23 +85,22 @@ public class PlayerOriginChecker implements Listener {
         }.runTaskTimerAsynchronously(getListenerHandler().getPlugin(), 0L, 1L);
     }
 
-    /**
-     * On player origin check.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onPlayerOriginCheck(AsyncPlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         checkPlayerOriginData(player);
+        Storage.getPowersData().forEach((key, value) -> {
+            if (value.getCondition() != null) {
+                if (value.getCondition().test(player)) {
+                    value.getAction().accept(player);
+                }
+            } else {
+                value.getAction().accept(player);
+            }
+        });
     }
 
-    /**
-     * Check player origin data.
-     *
-     * @param player the player
-     */
     public void checkPlayerOriginData(Player player) {
         new BukkitRunnable() {
 
@@ -144,11 +126,6 @@ public class PlayerOriginChecker implements Listener {
         }.runTaskLaterAsynchronously(getListenerHandler().getPlugin(), 4L);
     }
 
-    /**
-     * Initiate player origin.
-     *
-     * @param player the player
-     */
     public void initiatePlayerOrigin(Player player) {
         new BukkitRunnable() {
 
@@ -177,7 +154,7 @@ public class PlayerOriginChecker implements Listener {
                             }
                         });
                     } else {
-                        ChatUtils.sendPlayerMessage(player, "&cYour origin (" + playerOrigin + ") doesn't exist so we pruned your player data.");
+                        Message.sendPlayerMessage(player, "&cYour origin (" + playerOrigin + ") doesn't exist so we pruned your player data.");
                         getListenerHandler().getPlugin().getStorageHandler().getOriginsPlayerData().deleteOriginsPlayerData(playerUUID);
                         checkPlayerOriginData(player);
                     }
@@ -186,30 +163,27 @@ public class PlayerOriginChecker implements Listener {
         }.runTaskAsynchronously(getListenerHandler().getPlugin());
     }
 
-    /**
-     * Origin picker gui.
-     */
     public void originPickerGui() {
         if (!getListenerHandler().getPlugin().getOriginsInventoryGUI().isEmpty()) {
             for (Inventory inv : getListenerHandler().getPlugin().getOriginsInventoryGUI()) {
                 ItemStack previous = new ItemStack(Material.ARROW, 1);
                 ItemMeta previousMeta = previous.getItemMeta();
                 if (previousMeta != null) {
-                    previousMeta.setDisplayName(ChatUtils.format("&6Previous Page"));
+                    previousMeta.setDisplayName(Message.format("&6Previous Page"));
                     previous.setItemMeta(previousMeta);
                 }
 
                 ItemStack close = new ItemStack(Material.BARRIER, 1);
                 ItemMeta closeMeta = close.getItemMeta();
                 if (closeMeta != null) {
-                    closeMeta.setDisplayName(ChatUtils.format("&cQuit Game"));
+                    closeMeta.setDisplayName(Message.format("&cQuit Game"));
                     close.setItemMeta(closeMeta);
                 }
 
                 ItemStack next = new ItemStack(Material.ARROW, 1);
                 ItemMeta nextMeta = next.getItemMeta();
                 if (nextMeta != null) {
-                    nextMeta.setDisplayName(ChatUtils.format("&6Next Page"));
+                    nextMeta.setDisplayName(Message.format("&6Next Page"));
                     next.setItemMeta(nextMeta);
                 }
 
@@ -220,11 +194,6 @@ public class PlayerOriginChecker implements Listener {
         }
     }
 
-    /**
-     * Open origin picker gui.
-     *
-     * @param humanEntity the human entity
-     */
     public void openOriginPickerGui(HumanEntity humanEntity) {
         UUID playerUUID = humanEntity.getUniqueId();
 
@@ -232,11 +201,6 @@ public class PlayerOriginChecker implements Listener {
         originPickerGUIViewers.put(playerUUID, 0);
     }
 
-    /**
-     * On origin picker gui click.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onOriginPickerGuiClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
@@ -286,12 +250,6 @@ public class PlayerOriginChecker implements Listener {
         }
     }
 
-    /**
-     * Execute origin picker gui origin option.
-     *
-     * @param player the player
-     * @param origin the origin
-     */
     private void executeOriginPickerGuiOriginOption(Player player, String origin) {
         UUID playerUUID = player.getUniqueId();
         OriginPlayer originPlayer = new OriginPlayer(player);
@@ -305,22 +263,19 @@ public class PlayerOriginChecker implements Listener {
             player.closeInventory();
             getListenerHandler().getNoOriginPlayerRestrict().unrestrictPlayerMovement(player);
         } else if (Objects.equals(origin, playerOrigin)) {
-            ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ALREADY_SELECTED
+            Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ALREADY_SELECTED
                     .toString()
                     .replace("%player_current_origin%", playerOrigin));
         } else {
             getListenerHandler().getPlugin().getStorageHandler().getOriginsPlayerData().updateOriginsPlayerData(playerUUID, new OriginsPlayerDataWrapper(playerUUID, player.getName(), origin));
             initiatePlayerOrigin(player);
             player.closeInventory();
-            ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_UPDATE
+            Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_UPDATE
                     .toString()
                     .replace("%player_selected_origin%", playerOrigin));
         }
     }
 
-    /**
-     * Close all origin picker gui.
-     */
     public void closeAllOriginPickerGui() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             UUID playerUUID = player.getUniqueId();
@@ -331,11 +286,6 @@ public class PlayerOriginChecker implements Listener {
         }
     }
 
-    /**
-     * On inventory click.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onInventoryClick(InventoryDragEvent event) {
         if (getListenerHandler().getPlugin().getOriginsInventoryGUI().contains(event.getInventory())) {
@@ -343,11 +293,6 @@ public class PlayerOriginChecker implements Listener {
         }
     }
 
-    /**
-     * On inventory close.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity humanEntity = event.getPlayer();
@@ -373,11 +318,6 @@ public class PlayerOriginChecker implements Listener {
         }
     }
 
-    /**
-     * Null origin.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void nullOrigin(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
@@ -388,11 +328,6 @@ public class PlayerOriginChecker implements Listener {
         }
     }
 
-    /**
-     * Reset player.
-     *
-     * @param player the player
-     */
     private void resetPlayer(Player player) {
         GameMode gameMode = player.getGameMode();
         AttributeInstance genericArmor = player.getAttribute(Attribute.GENERIC_ARMOR);

@@ -29,37 +29,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
 
-/**
- * The type Key listener.
- *
- * @author LemonyPancakes
- */
 public class KeyListener implements Listener {
 
     private final ListenerHandler listenerHandler;
 
-    /**
-     * Gets listener handler.
-     *
-     * @return the listener handler
-     */
     public ListenerHandler getListenerHandler() {
         return listenerHandler;
     }
 
-    /**
-     * Instantiates a new Key listener.
-     *
-     * @param listenerHandler the listener handler
-     */
     public KeyListener(ListenerHandler listenerHandler) {
         this.listenerHandler = listenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getListenerHandler()
                 .getPlugin()
@@ -68,11 +50,6 @@ public class KeyListener implements Listener {
                 .registerEvents(this, getListenerHandler().getPlugin());
     }
 
-    /**
-     * On ability use.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onAbilityUse(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();

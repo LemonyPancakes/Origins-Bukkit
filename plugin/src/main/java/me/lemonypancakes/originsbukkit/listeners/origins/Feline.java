@@ -51,39 +51,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * The type Feline.
- *
- * @author LemonyPancakes
- */
 public class Feline extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
     private final List<Material> materialList = new ArrayList<>();
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Gets material list.
-     *
-     * @return the material list
-     */
     public List<Material> getMaterialList() {
         return materialList;
     }
 
-    /**
-     * Instantiates a new Feline.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Feline(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_FELINE_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_FELINE_WALK_SPEED.toFloat(),
@@ -92,79 +72,41 @@ public class Feline extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Feline";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.MEDIUM;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.ORANGE_WOOL;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.FELINE_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.FELINE_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -182,11 +124,6 @@ public class Feline extends Origin implements Listener {
         }
     }
 
-    /**
-     * On origin change.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
@@ -206,11 +143,6 @@ public class Feline extends Origin implements Listener {
         }
     }
 
-    /**
-     * Feline fall damage immunity.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void felineFallDamageImmunity(EntityDamageEvent event) {
         Entity entity = event.getEntity();
@@ -229,11 +161,6 @@ public class Feline extends Origin implements Listener {
         }
     }
 
-    /**
-     * Feline block break.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void felineBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
@@ -254,13 +181,6 @@ public class Feline extends Origin implements Listener {
         }
     }
 
-    /**
-     * Block get adjacent boolean.
-     *
-     * @param block the block
-     *
-     * @return the boolean
-     */
     private boolean blockGetAdjacent(Block block) {
         int start = 0;
         Block blockEast = block.getRelative(BlockFace.EAST);
@@ -291,11 +211,6 @@ public class Feline extends Origin implements Listener {
         return start > Config.ORIGINS_FELINE_WEAK_ARMS_MIN_ADJACENT_BLOCKS.toInt();
     }
 
-    /**
-     * Feline sprint jump.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void felineSprintJump(PlayerToggleSprintEvent event) {
         Player player = event.getPlayer();
@@ -311,11 +226,6 @@ public class Feline extends Origin implements Listener {
         }
     }
 
-    /**
-     * Feline creeper spawn event.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void felineCreeperSpawnEvent(CreatureSpawnEvent event) {
         Entity entity = event.getEntity();
@@ -342,11 +252,6 @@ public class Feline extends Origin implements Listener {
         }
     }
 
-    /**
-     * Feline creeper aggro event.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void felineCreeperAggroEvent(EntityTargetLivingEntityEvent event) {
         Entity entity = event.getEntity();
@@ -373,9 +278,6 @@ public class Feline extends Origin implements Listener {
         }
     }
 
-    /**
-     * Register feline move packet listener.
-     */
     private void registerFelineMovePacketListener() {
         getOriginListenerHandler().getListenerHandler().getPlugin().getProtocolManager().addPacketListener(
                 new PacketAdapter(getOriginListenerHandler().getListenerHandler().getPlugin(), ListenerPriority.NORMAL, PacketType.Play.Client.POSITION) {

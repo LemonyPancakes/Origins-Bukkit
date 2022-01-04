@@ -61,49 +61,24 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * The type Shulk.
- *
- * @author LemonyPancakes
- */
 public class Shulk extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
     private final List<Player> shulkInventoryViewers = new ArrayList<>();
     private final List<Material> materialList = new ArrayList<>();
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Gets material list.
-     *
-     * @return the material list
-     */
     public List<Material> getMaterialList() {
         return materialList;
     }
 
-    /**
-     * Gets shulk inventory viewers.
-     *
-     * @return the shulk inventory viewers
-     */
     public List<Player> getShulkInventoryViewers() {
         return shulkInventoryViewers;
     }
 
-    /**
-     * Instantiates a new Shulk.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Shulk(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_SHULK_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_SHULK_WALK_SPEED.toFloat(),
@@ -112,79 +87,41 @@ public class Shulk extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Shulk";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.LOW;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.SHULKER_SHELL;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.SHULK_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.SHULK_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -202,11 +139,6 @@ public class Shulk extends Origin implements Listener {
         }
     }
 
-    /**
-     * Shulk join.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void shulkJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
@@ -242,11 +174,6 @@ public class Shulk extends Origin implements Listener {
         }
     }
 
-    /**
-     * On origin change.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
@@ -264,11 +191,6 @@ public class Shulk extends Origin implements Listener {
         }
     }
 
-    /**
-     * Shulk ability use.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void shulkAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
@@ -279,11 +201,6 @@ public class Shulk extends Origin implements Listener {
         }
     }
 
-    /**
-     * Shulk shield disability.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void shulkShieldDisability(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -316,11 +233,6 @@ public class Shulk extends Origin implements Listener {
         }
     }
 
-    /**
-     * Shulk fast exhaustion.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void shulkFastExhaustion(FoodLevelChangeEvent event) {
         HumanEntity humanEntity = event.getEntity();
@@ -333,11 +245,6 @@ public class Shulk extends Origin implements Listener {
         }
     }
 
-    /**
-     * Shulk inventory ability.
-     *
-     * @param player the player
-     */
     private void shulkInventoryAbility(Player player) {
         UUID playerUUID = player.getUniqueId();
         Inventory inv = Bukkit.createInventory(player, InventoryType.DROPPER, player.getName() + "'s Vault");
@@ -371,11 +278,6 @@ public class Shulk extends Origin implements Listener {
                 .getPlugin());
     }
 
-    /**
-     * On shulk custom inventory close.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onShulkCustomInventoryClose(InventoryCloseEvent event) {
         HumanEntity humanEntity = event.getPlayer();
@@ -411,39 +313,33 @@ public class Shulk extends Origin implements Listener {
         }
     }
 
-    /**
-     * Shulk block break.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void shulkBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        OriginPlayer originPlayer = new OriginPlayer(player);
-        String playerOrigin = originPlayer.getOrigin();
-        Block block = event.getBlock();
-        Material material = block.getType();
-        Material mainHandItemType = player.getInventory().getItemInMainHand().getType();
-        List<Material> tools = Arrays.asList(
-                Material.WOODEN_PICKAXE,
-                Material.STONE_PICKAXE,
-                Material.IRON_PICKAXE,
-                Material.GOLDEN_PICKAXE,
-                Material.DIAMOND_PICKAXE,
-                Material.NETHERITE_PICKAXE);
+        if (!event.isCancelled()) {
+            Player player = event.getPlayer();
+            OriginPlayer originPlayer = new OriginPlayer(player);
+            String playerOrigin = originPlayer.getOrigin();
+            Block block = event.getBlock();
+            Material material = block.getType();
+            Material mainHandItemType = player.getInventory().getItemInMainHand().getType();
+            List<Material> tools = Arrays.asList(
+                    Material.WOODEN_PICKAXE,
+                    Material.STONE_PICKAXE,
+                    Material.IRON_PICKAXE,
+                    Material.GOLDEN_PICKAXE,
+                    Material.DIAMOND_PICKAXE,
+                    Material.NETHERITE_PICKAXE);
 
-        if (Objects.equals(playerOrigin, Origins.SHULK.toString())) {
-            if (!tools.contains(mainHandItemType)) {
-                if (getMaterialList().contains(material)) {
-                    block.breakNaturally();
+            if (Objects.equals(playerOrigin, Origins.SHULK.toString())) {
+                if (!tools.contains(mainHandItemType)) {
+                    if (getMaterialList().contains(material)) {
+                        block.breakNaturally();
+                    }
                 }
             }
         }
     }
 
-    /**
-     * Register shulk block digging packet listener.
-     */
     private void registerShulkBlockDiggingPacketListener() {
         getOriginListenerHandler().getListenerHandler().getPlugin().getProtocolManager().addPacketListener(
                 new PacketAdapter(getOriginListenerHandler().getListenerHandler().getPlugin(), ListenerPriority.NORMAL, PacketType.Play.Client.BLOCK_DIG) {

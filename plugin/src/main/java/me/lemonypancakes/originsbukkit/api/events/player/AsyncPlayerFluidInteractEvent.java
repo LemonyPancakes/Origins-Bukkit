@@ -24,63 +24,32 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
-/**
- * The type Async player fluid interact event.
- *
- * @author LemonyPancakes
- */
 public class AsyncPlayerFluidInteractEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
     private final AsyncPlayerFluidInteract.FluidType fluidType;
 
-    /**
-     * Instantiates a new Async player fluid interact event.
-     *
-     * @param player    the player
-     * @param fluidType the fluid type
-     */
     public AsyncPlayerFluidInteractEvent(Player player, AsyncPlayerFluidInteract.FluidType fluidType) {
         super(true);
         this.player = player;
         this.fluidType = fluidType;
     }
 
-    /**
-     * Gets handlers.
-     *
-     * @return the handlers
-     */
     @Nonnull
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }
 
-    /**
-     * Gets handler list.
-     *
-     * @return the handler list
-     */
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
-    /**
-     * Gets player.
-     *
-     * @return the player
-     */
     public Player getPlayer() {
         return player;
     }
 
-    /**
-     * Gets fluid type.
-     *
-     * @return the fluid type
-     */
     public AsyncPlayerFluidInteract.FluidType getFluidType() {
         return fluidType;
     }

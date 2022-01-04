@@ -30,59 +30,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * The type Shulk player storage data.
- *
- * @author LemonyPancakes
- */
 public class ShulkPlayerStorageData {
 
     private final StorageHandler storageHandler;
     private Map<UUID, ItemStack[]> shulkPlayerStorageData = new HashMap<>();
 
-    /**
-     * Gets storage handler.
-     *
-     * @return the storage handler
-     */
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }
 
-    /**
-     * Gets shulk player storage data.
-     *
-     * @return the shulk player storage data
-     */
     public Map<UUID, ItemStack[]> getShulkPlayerStorageData() {
         return shulkPlayerStorageData;
     }
 
-    /**
-     * Sets shulk player storage data.
-     *
-     * @param shulkPlayerStorageData the shulk player storage data
-     */
     public void setShulkPlayerStorageData(Map<UUID, ItemStack[]> shulkPlayerStorageData) {
         this.shulkPlayerStorageData = shulkPlayerStorageData;
     }
 
-    /**
-     * Instantiates a new Shulk player storage data.
-     *
-     * @param storageHandler the storage handler
-     */
     public ShulkPlayerStorageData(StorageHandler storageHandler) {
         this.storageHandler = storageHandler;
     }
 
-    /**
-     * Save shulk player storage data.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @throws IOException the io exception
-     */
     public void saveShulkPlayerStorageData(UUID playerUUID) throws IOException {
 
         new BukkitRunnable() {
@@ -118,13 +86,6 @@ public class ShulkPlayerStorageData {
         }.runTaskAsynchronously(getStorageHandler().getPlugin());
     }
 
-    /**
-     * Load shulk player storage data.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @throws IOException the io exception
-     */
     public void loadShulkPlayerStorageData(UUID playerUUID) throws IOException {
 
         new BukkitRunnable() {

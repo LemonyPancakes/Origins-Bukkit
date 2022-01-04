@@ -19,57 +19,29 @@ package me.lemonypancakes.originsbukkit.util;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 
-/**
- * The type Util handler.
- *
- * @author LemonyPancakes
- */
 public class UtilHandler {
 
     private final OriginsBukkit plugin;
     private GhostFactory ghostFactory;
     private GhostMaker ghostMaker;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets ghost factory.
-     *
-     * @return the ghost factory
-     */
     public GhostFactory getGhostFactory() {
         return ghostFactory;
     }
 
-    /**
-     * Gets ghost maker.
-     *
-     * @return the ghost maker
-     */
     public GhostMaker getGhostMaker() {
         return ghostMaker;
     }
 
-    /**
-     * Instantiates a new Util handler.
-     *
-     * @param plugin the plugin
-     */
     public UtilHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         ghostFactory = new GhostFactory(this);
         ghostMaker = new GhostMaker(this);

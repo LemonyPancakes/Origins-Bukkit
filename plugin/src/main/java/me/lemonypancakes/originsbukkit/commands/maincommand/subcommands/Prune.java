@@ -20,7 +20,7 @@ package me.lemonypancakes.originsbukkit.commands.maincommand.subcommands;
 import me.lemonypancakes.originsbukkit.commands.maincommand.MainCommand;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Permissions;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -30,46 +30,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Prune.
- *
- * @author LemonyPancakes
- */
 public class Prune {
 
     private final MainCommand mainCommand;
 
-    /**
-     * Gets main command.
-     *
-     * @return the main command
-     */
     public MainCommand getMainCommand() {
         return mainCommand;
     }
 
-    /**
-     * Instantiates a new Prune.
-     *
-     * @param mainCommand the main command
-     */
     public Prune(MainCommand mainCommand) {
         this.mainCommand = mainCommand;
     }
 
-    /**
-     * Prune sub command.
-     *
-     * @param sender  the sender
-     * @param command the command
-     * @param label   the label
-     * @param args    the args
-     */
     public void PruneSubCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
             if (sender.hasPermission(Permissions.PRUNE.toString())) {
                 if (args.length == 1) {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cNot enough arguments. Usage: /origins prune <player>");
+                    Message.sendCommandSenderMessage(sender, "&cNot enough arguments. Usage: /origins prune <player>");
                 } else if (args.length == 2) {
                     Player target = Bukkit.getPlayer(args[1]);
 
@@ -80,22 +57,22 @@ public class Prune {
                         if (getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().findOriginsPlayerData(playerUUID) != null) {
                             getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().deleteOriginsPlayerData(playerUUID);
                             getMainCommand().getCommandHandler().getPlugin().getListenerHandler().getPlayerOriginChecker().checkPlayerOriginData(target);
-                            ChatUtils.sendCommandSenderMessage(sender, "&aSuccessfully pruned " + playerName + "'s data");
+                            Message.sendCommandSenderMessage(sender, "&aSuccessfully pruned " + playerName + "'s data");
                         } else {
-                            ChatUtils.sendCommandSenderMessage(sender, "&cCannot find " + playerName + "'s data");
+                            Message.sendCommandSenderMessage(sender, "&cCannot find " + playerName + "'s data");
                         }
                     } else {
-                        ChatUtils.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
+                        Message.sendCommandSenderMessage(sender, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(sender, "&cToo many arguments. Usage: /origins prune <player>");
+                    Message.sendCommandSenderMessage(sender, "&cToo many arguments. Usage: /origins prune <player>");
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(sender, Lang.NO_PERMISSION_COMMAND.toString());
+                Message.sendCommandSenderMessage(sender, Lang.NO_PERMISSION_COMMAND.toString());
             }
         } else {
             if (args.length == 1) {
-                ChatUtils.sendCommandSenderMessage(sender, "&cNot enough arguments. Usage: /origins prune <player>");
+                Message.sendCommandSenderMessage(sender, "&cNot enough arguments. Usage: /origins prune <player>");
             } else if (args.length == 2) {
                 Player target = Bukkit.getPlayer(args[1]);
 
@@ -106,29 +83,19 @@ public class Prune {
                     if (getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().findOriginsPlayerData(playerUUID) != null) {
                         getMainCommand().getCommandHandler().getPlugin().getStorageHandler().getOriginsPlayerData().deleteOriginsPlayerData(playerUUID);
                         getMainCommand().getCommandHandler().getPlugin().getListenerHandler().getPlayerOriginChecker().checkPlayerOriginData(target);
-                        ChatUtils.sendCommandSenderMessage(sender, "&a[Origins-Bukkit] Successfully pruned " + playerName + "'s data");
+                        Message.sendCommandSenderMessage(sender, "&a[Origins-Bukkit] Successfully pruned " + playerName + "'s data");
                     } else {
-                        ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Cannot find " + playerName + "'s data");
+                        Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Cannot find " + playerName + "'s data");
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
+                    Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Player " + args[1] + " not found. Player must be online to do this.");
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Too many arguments. Usage: /origins prune <player>");
+                Message.sendCommandSenderMessage(sender, "&c[Origins-Bukkit] Too many arguments. Usage: /origins prune <player>");
             }
         }
     }
 
-    /**
-     * Prune sub command tab complete list.
-     *
-     * @param sender  the sender
-     * @param command the command
-     * @param alias   the alias
-     * @param args    the args
-     *
-     * @return the list
-     */
     public List<String> PruneSubCommandTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> empty = new ArrayList<>();
 

@@ -17,9 +17,6 @@
  */
 package me.lemonypancakes.originsbukkit.enums;
 
-/**
- * The enum Origins.
- */
 public enum Origins {
     HUMAN("Human"),
     ENDERIAN("Enderian"),
@@ -34,30 +31,15 @@ public enum Origins {
 
     private final Object value;
 
-    /**
-     * Instantiates a new Origins.
-     *
-     * @param value the value
-     */
     Origins(final Object value) {
         this.value = value;
     }
 
-    /**
-     * To string string.
-     *
-     * @return the string
-     */
     @Override
     public String toString() {
         return (String) this.value;
     }
 
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
     public Object getValue() {
         return this.value;
     }

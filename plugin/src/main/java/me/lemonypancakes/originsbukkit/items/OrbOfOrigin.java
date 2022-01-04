@@ -18,7 +18,7 @@
 package me.lemonypancakes.originsbukkit.items;
 
 import me.lemonypancakes.originsbukkit.enums.Config;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -31,57 +31,29 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * The type Orb of origin.
- *
- * @author LemonyPancakes
- */
 public class OrbOfOrigin {
 
     private final ItemHandler itemHandler;
     private ItemStack originBall;
     private ShapedRecipe originBallRecipe;
 
-    /**
-     * Gets item handler.
-     *
-     * @return the item handler
-     */
     public ItemHandler getItemHandler() {
         return this.itemHandler;
     }
 
-    /**
-     * Gets item stack.
-     *
-     * @return the item stack
-     */
     public ItemStack getItemStack() {
         return this.originBall;
     }
 
-    /**
-     * Gets recipe.
-     *
-     * @return the recipe
-     */
     public ShapedRecipe getRecipe() {
         return this.originBallRecipe;
     }
 
-    /**
-     * Instantiates a new Orb of origin.
-     *
-     * @param itemHandler the item handler
-     */
     public OrbOfOrigin(ItemHandler itemHandler) {
         this.itemHandler = itemHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         ItemStack itemStack = new ItemStack(Material.MAGMA_CREAM);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -89,7 +61,7 @@ public class OrbOfOrigin {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemMeta.setUnbreakable(true);
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-            itemMeta.setDisplayName(ChatUtils.format("&bOrb Of Origin"));
+            itemMeta.setDisplayName(Message.format("&bOrb Of Origin"));
             itemStack.setItemMeta(itemMeta);
         }
 

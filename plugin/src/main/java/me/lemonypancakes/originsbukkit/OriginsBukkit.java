@@ -19,21 +19,20 @@ package me.lemonypancakes.originsbukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import me.lemonypancakes.originsbukkit.api.util.Origin;
+import me.lemonypancakes.originsbukkit.api.util.Loader;
+import me.lemonypancakes.originsbukkit.api.util.Registry;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.commands.CommandHandler;
 import me.lemonypancakes.originsbukkit.config.ConfigHandler;
 import me.lemonypancakes.originsbukkit.enums.Config;
+import me.lemonypancakes.originsbukkit.factory.Actions;
 import me.lemonypancakes.originsbukkit.items.ItemHandler;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import me.lemonypancakes.originsbukkit.metrics.Metrics;
 import me.lemonypancakes.originsbukkit.nms.NMSHandler;
 import me.lemonypancakes.originsbukkit.storage.StorageHandler;
 import me.lemonypancakes.originsbukkit.storage.wrappers.OriginsPlayerDataWrapper;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
-import me.lemonypancakes.originsbukkit.util.ServerVersionChecker;
-import me.lemonypancakes.originsbukkit.util.UpdateChecker;
-import me.lemonypancakes.originsbukkit.util.UtilHandler;
+import me.lemonypancakes.originsbukkit.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -50,15 +49,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * The type Origins bukkit.
- *
- * @author LemonyPancakes
- */
 public final class OriginsBukkit extends JavaPlugin {
 
     private static OriginsBukkit plugin;
-    private final Map<String, Origin> origins = new HashMap<>();
+    private final Map<String, me.lemonypancakes.originsbukkit.api.util.Origin> origins = new HashMap<>();
     private final List<String> originsList = new ArrayList<>();
     private final List<Inventory> originsInventoryGUI = new ArrayList<>();
     private ServerVersionChecker serverVersionChecker;
@@ -71,153 +65,85 @@ public final class OriginsBukkit extends JavaPlugin {
     private ListenerHandler listenerHandler;
     private CommandHandler commandHandler;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
+    public static final String KEY = "origins-bukkit";
+
     public static OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets origins.
-     *
-     * @return the origins
-     */
-    public Map<String, Origin> getOrigins() {
+    public Map<String, me.lemonypancakes.originsbukkit.api.util.Origin> getOrigins() {
         return origins;
     }
 
-    /**
-     * Gets origins list.
-     *
-     * @return the origins list
-     */
     public List<String> getOriginsList() {
         return originsList;
     }
 
-    /**
-     * Gets origins inventory gui.
-     *
-     * @return the origins inventory gui
-     */
     public List<Inventory> getOriginsInventoryGUI() {
         return originsInventoryGUI;
     }
 
-    /**
-     * Gets server version checker.
-     *
-     * @return the server version checker
-     */
     public ServerVersionChecker getServerVersionChecker() {
         return serverVersionChecker;
     }
 
-    /**
-     * Gets item handler.
-     *
-     * @return the item handler
-     */
     public ItemHandler getItemHandler() {
         return itemHandler;
     }
 
-    /**
-     * Gets storage handler.
-     *
-     * @return the storage handler
-     */
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }
 
-    /**
-     * Gets util handler.
-     *
-     * @return the util handler
-     */
     public UtilHandler getUtilHandler() {
         return utilHandler;
     }
 
-    /**
-     * Gets nms handler.
-     *
-     * @return the nms handler
-     */
     public NMSHandler getNMSHandler() {
         return nmsHandler;
     }
 
-    /**
-     * Gets protocol manager.
-     *
-     * @return the protocol manager
-     */
     public ProtocolManager getProtocolManager() {
         return protocolManager;
     }
 
-    /**
-     * Gets config handler.
-     *
-     * @return the config handler
-     */
     public ConfigHandler getConfigHandler() {
         return configHandler;
     }
 
-    /**
-     * Gets listener handler.
-     *
-     * @return the listener handler
-     */
     public ListenerHandler getListenerHandler() {
         return listenerHandler;
     }
 
-    /**
-     * Gets command handler.
-     *
-     * @return the command handler
-     */
     public CommandHandler getCommandHandler() {
         return commandHandler;
     }
 
-    /**
-     * On enable.
-     */
     @Override
     public void onEnable() {
         plugin = this;
         serverVersionChecker = new ServerVersionChecker(this);
 
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &4   ___       _       _                 ____        _    _    _ _");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &c  / _ \\ _ __(_) __ _(_)_ __  ___      | __ ) _   _| | _| | _(_) |_");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &6 | | | | '__| |/ _` | | '_ \\/ __|_____|  _ \\| | | | |/ / |/ / | __|");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &e | |_| | |  | | (_| | | | | \\__ \\_____| |_) | |_| |   <|   <| | |_");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit]");
+        Message.sendConsoleMessage("&3[Origins-Bukkit] &4   ___       _       _                 ____        _    _    _ _");
+        Message.sendConsoleMessage("&3[Origins-Bukkit] &c  / _ \\ _ __(_) __ _(_)_ __  ___      | __ ) _   _| | _| | _(_) |_");
+        Message.sendConsoleMessage("&3[Origins-Bukkit] &6 | | | | '__| |/ _` | | '_ \\/ __|_____|  _ \\| | | | |/ / |/ / | __|");
+        Message.sendConsoleMessage("&3[Origins-Bukkit] &e | |_| | |  | | (_| | | | | \\__ \\_____| |_) | |_| |   <|   <| | |_");
+        Message.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
+        Message.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
+        Message.sendConsoleMessage("&3[Origins-Bukkit]");
         checkServerCompatibility();
         checkServerDependencies();
+        Actions.register();
 
         if (isEnabled()) {
             protocolManager = ProtocolLibrary.getProtocolManager();
 
             init();
 
-            ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
+            Message.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
         }
     }
 
-    /**
-     * On disable.
-     */
     @Override
     public void onDisable() {
         unregisterRecipes();
@@ -232,36 +158,30 @@ public final class OriginsBukkit extends JavaPlugin {
             }
         }
 
-        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
+        Message.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
     }
 
-    /**
-     * Check server compatibility.
-     */
     private void checkServerCompatibility() {
         getServerVersionChecker().checkServerSoftwareCompatibility();
         getServerVersionChecker().checkServerVersionCompatibility();
     }
 
-    /**
-     * Check server dependencies.
-     */
     private void checkServerDependencies() {
         if (isEnabled()) {
-            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] Checking dependencies...");
+            Message.sendConsoleMessage("&3[Origins-Bukkit] Checking dependencies...");
         }
         if (isEnabled()) {
             Plugin protocolLib = Bukkit.getServer().getPluginManager().getPlugin("ProtocolLib");
 
             if (protocolLib != null) {
                 if (protocolLib.isEnabled()) {
-                    ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] ProtocolLib found! Hooking...");
+                    Message.sendConsoleMessage("&a[Origins-Bukkit] ProtocolLib found! Hooking...");
                 } else {
-                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] ProtocolLib seems to be disabled. Safely disabling plugin...");
+                    Message.sendConsoleMessage("&c[Origins-Bukkit] ProtocolLib seems to be disabled. Safely disabling plugin...");
                     disablePlugin();
                 }
             } else {
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (ProtocolLib). Safely disabling plugin...");
+                Message.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (ProtocolLib). Safely disabling plugin...");
                 disablePlugin();
             }
         }
@@ -270,30 +190,78 @@ public final class OriginsBukkit extends JavaPlugin {
 
             if (pancakeLibCore != null) {
                 if (pancakeLibCore.isEnabled()) {
-                    ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] PancakeLibCore found! Hooking...");
+                    Message.sendConsoleMessage("&a[Origins-Bukkit] PancakeLibCore found! Hooking...");
                 } else {
-                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] PancakeLibCore seems to be disabled. Safely disabling plugin...");
+                    Message.sendConsoleMessage("&c[Origins-Bukkit] PancakeLibCore seems to be disabled. Safely disabling plugin...");
                     disablePlugin();
                 }
             } else {
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (PancakeLibCore). Safely disabling plugin...");
+                Message.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (PancakeLibCore). Safely disabling plugin...");
                 disablePlugin();
             }
         }
     }
 
-    /**
-     * Init.
-     */
     private void init() {
+        String s = File.separator;
+        File file = new File(
+                this.getDataFolder().getAbsolutePath()
+                        + s + ".originpacks"
+        );
+        File[] packs = file.listFiles();
+        if (packs != null) {
+            for (File pack : packs) {
+                if (pack.isDirectory()) {
+                    File packJson = new File(
+                            pack.getAbsolutePath()
+                                    + s + "origin_pack.json"
+                    );
+                    File[] origins = new File(
+                            pack.getAbsolutePath()
+                                    + s + "origins")
+                            .listFiles();
+                    File[] powers = new File(
+                            pack.getAbsolutePath()
+                                    + s + "powers")
+                            .listFiles();
+
+                    if (origins != null) {
+                        for (File origin : origins) {
+                            Registry.register(
+                                    Loader.loadOriginFromFile(
+                                            origin,
+                                            pack.getName()
+                                    )
+                            );
+                        }
+                    }
+                    if (powers != null) {
+                        for (File power : powers) {
+                            Registry.register(
+                                    Loader.loadPowerFromFile(
+                                            power,
+                                            pack.getName()
+                                    )
+                            );
+                        }
+                    }
+                }
+            }
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage("ORIGINS: " + Storage.getOriginsData());
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage("POWERS: " + Storage.getPowersData());
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage("ACTIONS: " + Storage.getActionsData());
+            Bukkit.broadcastMessage("");
+            Bukkit.broadcastMessage("CONDITIONS: " + Storage.getConditionsData());
+            Bukkit.broadcastMessage("");
+        }
         load();
         startMetrics();
         checkUpdates();
     }
 
-    /**
-     * Load.
-     */
     private void load() {
         configHandler = new ConfigHandler(this);
         utilHandler = new UtilHandler(this);
@@ -304,9 +272,6 @@ public final class OriginsBukkit extends JavaPlugin {
         itemHandler = new ItemHandler(this);
     }
 
-    /**
-     * Start metrics.
-     */
     private void startMetrics() {
         int serviceId = 13236;
 
@@ -319,9 +284,6 @@ public final class OriginsBukkit extends JavaPlugin {
         }.runTaskAsynchronously(this);
     }
 
-    /**
-     * Check updates.
-     */
     private void checkUpdates() {
         UpdateChecker updateChecker = new UpdateChecker(this, 97926);
         boolean checkUpdate = Config.NOTIFICATIONS_UPDATES.toBoolean();
@@ -332,15 +294,15 @@ public final class OriginsBukkit extends JavaPlugin {
             @Override
             public void run(){
                 if (checkUpdate) {
-                    ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] Checking for updates...");
+                    Message.sendConsoleMessage("&3[Origins-Bukkit] Checking for updates...");
 
                     try {
                         if (updateChecker.checkForUpdates()) {
-                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] A new update is available!");
-                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Running on &c" + pluginVersion + " &6while latest is &a" + updateChecker.getLatestVersion() + "&6.");
-                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] &e&n" + updateChecker.getResourceURL());
+                            Message.sendConsoleMessage("&6[Origins-Bukkit] A new update is available!");
+                            Message.sendConsoleMessage("&6[Origins-Bukkit] Running on &c" + pluginVersion + " &6while latest is &a" + updateChecker.getLatestVersion() + "&6.");
+                            Message.sendConsoleMessage("&6[Origins-Bukkit] &e&n" + updateChecker.getResourceURL());
                         } else {
-                            ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] No updates found.");
+                            Message.sendConsoleMessage("&a[Origins-Bukkit] No updates found.");
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -350,19 +312,13 @@ public final class OriginsBukkit extends JavaPlugin {
         }.runTaskLaterAsynchronously(this, 20 * 10);
     }
 
-    /**
-     * Unregister recipes.
-     */
     private void unregisterRecipes() {
         getServer().removeRecipe(NamespacedKey.minecraft("orb_of_origin"));
         getServer().removeRecipe(NamespacedKey.minecraft("arachnid_cobweb"));
 
-        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Unregistered all item recipes.");
+        Message.sendConsoleMessage("&c[Origins-Bukkit] Unregistered all item recipes.");
     }
 
-    /**
-     * Close all player inventory.
-     */
     private void closeAllPlayerInventory() {
         if (getListenerHandler() != null) {
             getListenerHandler().getPlayerOriginChecker().closeAllOriginPickerGui();
@@ -405,9 +361,6 @@ public final class OriginsBukkit extends JavaPlugin {
         }
     }
 
-    /**
-     * Disable plugin.
-     */
     public void disablePlugin() {
         setEnabled(false);
     }

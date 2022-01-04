@@ -43,31 +43,16 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-/**
- * The type Blazeborn.
- *
- * @author LemonyPancakes
- */
 public class Blazeborn extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
     private final List<Player> blazebornPlayersInWater = new ArrayList<>();
     private final List<Player> blazebornPlayersInAir = new ArrayList<>();
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Instantiates a new Blazeborn.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Blazeborn(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_BLAZEBORN_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_BLAZEBORN_WALK_SPEED.toFloat(),
@@ -76,79 +61,41 @@ public class Blazeborn extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Blazeborn";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.HIGH;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.BLAZE_POWDER;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.BLAZEBORN_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.BLAZEBORN_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -163,11 +110,6 @@ public class Blazeborn extends Origin implements Listener {
         registerBlazebornAirEnterListener();
     }
 
-    /**
-     * Blazeborn join.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void blazebornJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
@@ -185,9 +127,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Register blazeborn water damage listener.
-     */
     private void registerBlazebornWaterDamageListener() {
 
         new BukkitRunnable() {
@@ -236,12 +175,6 @@ public class Blazeborn extends Origin implements Listener {
                 .getPlugin(), Config.ORIGINS_BLAZEBORN_WATER_DAMAGE_DELAY.toLong(), Config.ORIGINS_BLAZEBORN_WATER_DAMAGE_PERIOD_DELAY.toLong());
     }
 
-    /**
-     * Damage blazeborn.
-     *
-     * @param player the player
-     * @param amount the amount
-     */
     private void damageBlazeborn(Player player, double amount) {
 
         new BukkitRunnable() {
@@ -255,9 +188,6 @@ public class Blazeborn extends Origin implements Listener {
                 .getPlugin());
     }
 
-    /**
-     * Register blazeborn air enter listener.
-     */
     private void registerBlazebornAirEnterListener() {
 
         new BukkitRunnable() {
@@ -303,11 +233,6 @@ public class Blazeborn extends Origin implements Listener {
                 .getPlugin(), 0L, 5L);
     }
 
-    /**
-     * Blazeborn flame particles.
-     *
-     * @param player the player
-     */
     private void blazebornFlameParticles(Player player) {
 
         new BukkitRunnable() {
@@ -334,11 +259,6 @@ public class Blazeborn extends Origin implements Listener {
                 .getPlugin(), 0L, 20L);
     }
 
-    /**
-     * Blazeborn burning wrath.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void blazebornBurningWrath(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
@@ -357,11 +277,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Blazeborn snow ball damage.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void blazebornSnowBallDamage(EntityDamageByEntityEvent event) {
         Entity target = event.getEntity();
@@ -379,11 +294,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Blazeborn damage immunities.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void blazebornDamageImmunities(EntityDamageEvent event) {
         Entity entity = event.getEntity();
@@ -405,11 +315,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Blazeborn potion drinking damage.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void blazebornPotionDrinkingDamage(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
@@ -425,11 +330,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Blazeborn splash potion damage.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void blazebornSplashPotionDamage(PotionSplashEvent event) {
         Collection<LivingEntity> livingEntities = event.getAffectedEntities();
@@ -447,11 +347,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Blazeborn respawn.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void blazebornRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
@@ -468,11 +363,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Blazeborn nether spawn.
-     *
-     * @param player the player
-     */
     private void blazebornNetherSpawn(Player player) {
         Location playerLocation = player.getLocation();
         Location location = randomNetherCoordinatesGenerator(playerLocation);
@@ -480,12 +370,6 @@ public class Blazeborn extends Origin implements Listener {
         teleportPlayer(location, player);
     }
 
-    /**
-     * Teleport player.
-     *
-     * @param location the location
-     * @param player   the player
-     */
     private void teleportPlayer(Location location, Player player) {
         new BukkitRunnable() {
             Location loc = location;
@@ -516,12 +400,6 @@ public class Blazeborn extends Origin implements Listener {
                 .getPlugin(), 0L, 1L);
     }
 
-    /**
-     * Find safe location.
-     *
-     * @param location the location
-     * @param event    the event
-     */
     private void findSafeLocation(Location location, PlayerRespawnEvent event) {
         if (isSafeLocation(location)) {
             event.setRespawnLocation(location);
@@ -536,13 +414,6 @@ public class Blazeborn extends Origin implements Listener {
         }
     }
 
-    /**
-     * Random nether coordinates generator location.
-     *
-     * @param location the location
-     *
-     * @return the location
-     */
     private Location randomNetherCoordinatesGenerator(Location location) {
         Location randomLocation = new Location(Bukkit.getWorld(Config.WORLDS_NETHER.toString()),
                 location.getX(), location.getY(), location.getZ());
@@ -557,13 +428,6 @@ public class Blazeborn extends Origin implements Listener {
         return randomLocation;
     }
 
-    /**
-     * Is safe location boolean.
-     *
-     * @param location the location
-     *
-     * @return the boolean
-     */
     private boolean isSafeLocation(Location location) {
         Block ground = location.getBlock().getRelative(BlockFace.DOWN);
         Block head = location.getBlock().getRelative(BlockFace.UP);

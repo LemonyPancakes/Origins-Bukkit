@@ -28,56 +28,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Blazeborn nether spawn data.
- *
- * @author LemonyPancakes
- */
 public class BlazebornNetherSpawnData {
 
     private final StorageHandler storageHandler;
     private List<BlazebornNetherSpawnDataWrapper> blazebornNetherSpawnDataWrappers = new ArrayList<>();
 
-    /**
-     * Gets storage handler.
-     *
-     * @return the storage handler
-     */
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }
 
-    /**
-     * Gets blazeborn nether spawn data wrappers.
-     *
-     * @return the blazeborn nether spawn data wrappers
-     */
     public List<BlazebornNetherSpawnDataWrapper> getBlazebornNetherSpawnDataWrappers() {
         return blazebornNetherSpawnDataWrappers;
     }
 
-    /**
-     * Sets blazeborn nether spawn data wrappers.
-     *
-     * @param blazebornNetherSpawnDataWrappers the blazeborn nether spawn data wrappers
-     */
     public void setBlazebornNetherSpawnDataWrappers(List<BlazebornNetherSpawnDataWrapper> blazebornNetherSpawnDataWrappers) {
         this.blazebornNetherSpawnDataWrappers = blazebornNetherSpawnDataWrappers;
     }
 
-    /**
-     * Instantiates a new Blazeborn nether spawn data.
-     *
-     * @param storageHandler the storage handler
-     */
     public BlazebornNetherSpawnData(StorageHandler storageHandler) {
         this.storageHandler = storageHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         try {
             loadBlazebornNetherSpawnData();
@@ -86,12 +58,6 @@ public class BlazebornNetherSpawnData {
         }
     }
 
-    /**
-     * Create blazeborn nether spawn data.
-     *
-     * @param playerUUID the player uuid
-     * @param firstTime  the first time
-     */
     public void createBlazebornNetherSpawnData(UUID playerUUID, boolean firstTime) {
         if (findBlazebornNetherSpawnData(playerUUID) == null) {
             BlazebornNetherSpawnDataWrapper blazebornNetherSpawnDataWrapper = new BlazebornNetherSpawnDataWrapper(playerUUID, firstTime);
@@ -104,13 +70,6 @@ public class BlazebornNetherSpawnData {
         }
     }
 
-    /**
-     * Find blazeborn nether spawn data blazeborn nether spawn data wrapper.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the blazeborn nether spawn data wrapper
-     */
     public BlazebornNetherSpawnDataWrapper findBlazebornNetherSpawnData(UUID playerUUID) {
         for (BlazebornNetherSpawnDataWrapper blazebornNetherSpawnDataWrapper : getBlazebornNetherSpawnDataWrappers()) {
             if (blazebornNetherSpawnDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -120,13 +79,6 @@ public class BlazebornNetherSpawnData {
         return null;
     }
 
-    /**
-     * Gets blazeborn nether spawn data.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the blazeborn nether spawn data
-     */
     public boolean getBlazebornNetherSpawnData(UUID playerUUID) {
         for (BlazebornNetherSpawnDataWrapper blazebornNetherSpawnDataWrapper : getBlazebornNetherSpawnDataWrappers()) {
             if (blazebornNetherSpawnDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -136,12 +88,6 @@ public class BlazebornNetherSpawnData {
         return false;
     }
 
-    /**
-     * Update blazeborn nether spawn data.
-     *
-     * @param playerUUID                         the player uuid
-     * @param newBlazebornNetherSpawnDataWrapper the new blazeborn nether spawn data wrapper
-     */
     public void updateBlazebornNetherSpawnData(UUID playerUUID, BlazebornNetherSpawnDataWrapper newBlazebornNetherSpawnDataWrapper) {
         if (findBlazebornNetherSpawnData(playerUUID) != null) {
             for (BlazebornNetherSpawnDataWrapper blazebornNetherSpawnDataWrapper : getBlazebornNetherSpawnDataWrappers()) {
@@ -157,11 +103,6 @@ public class BlazebornNetherSpawnData {
         }
     }
 
-    /**
-     * Delete blazeborn nether spawn data.
-     *
-     * @param playerUUID the player uuid
-     */
     public void deleteBlazebornNetherSpawnData(UUID playerUUID) {
         if (findBlazebornNetherSpawnData(playerUUID) != null) {
             for (BlazebornNetherSpawnDataWrapper blazebornNetherSpawnDataWrapper : getBlazebornNetherSpawnDataWrappers()) {
@@ -178,11 +119,6 @@ public class BlazebornNetherSpawnData {
         }
     }
 
-    /**
-     * Save blazeborn nether spawn data.
-     *
-     * @throws IOException the io exception
-     */
     public void saveBlazebornNetherSpawnData() throws IOException {
 
         new BukkitRunnable() {
@@ -208,11 +144,6 @@ public class BlazebornNetherSpawnData {
         }.runTaskAsynchronously(getStorageHandler().getPlugin());
     }
 
-    /**
-     * Load blazeborn nether spawn data.
-     *
-     * @throws IOException the io exception
-     */
     public void loadBlazebornNetherSpawnData() throws IOException {
 
         new BukkitRunnable() {

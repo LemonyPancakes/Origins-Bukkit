@@ -54,11 +54,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-/**
- * The type Merling.
- *
- * @author LemonyPancakes
- */
 public class Merling extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
@@ -68,65 +63,30 @@ public class Merling extends Origin implements Listener {
     private final List<UUID> merlingWaterBreathing = new ArrayList<>();
     private final List<UUID> merlingAirDamage = new ArrayList<>();
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Gets merling air breathing.
-     *
-     * @return the merling air breathing
-     */
     public Map<UUID, Integer> getMerlingAirBreathing() {
         return merlingAirBreathing;
     }
 
-    /**
-     * Gets merling air ticks.
-     *
-     * @return the merling air ticks
-     */
     public Map<UUID, Integer> getMerlingAirTicks() {
         return merlingAirTicks;
     }
 
-    /**
-     * Gets merling air bubbles.
-     *
-     * @return the merling air bubbles
-     */
     public Map<UUID, PlayerAirBubbles> getMerlingAirBubbles() {
         return merlingAirBubbles;
     }
 
-    /**
-     * Gets merling water breathing.
-     *
-     * @return the merling water breathing
-     */
     public List<UUID> getMerlingWaterBreathing() {
         return merlingWaterBreathing;
     }
 
-    /**
-     * Gets merling air damage.
-     *
-     * @return the merling air damage
-     */
     public List<UUID> getMerlingAirDamage() {
         return merlingAirDamage;
     }
 
-    /**
-     * Instantiates a new Merling.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Merling(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_MERLING_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_MERLING_WALK_SPEED.toFloat(),
@@ -135,79 +95,41 @@ public class Merling extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Merling";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.HIGH;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.COD;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.MERLING_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.MERLING_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -225,11 +147,6 @@ public class Merling extends Origin implements Listener {
         registerMerlingMovePacketListener();
     }
 
-    /**
-     * Merling join.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void merlingJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
@@ -258,11 +175,6 @@ public class Merling extends Origin implements Listener {
         }
     }
 
-    /**
-     * On origin change.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onOriginChange(AsyncPlayerOriginChangeEvent event) {
         Player player = event.getPlayer();
@@ -281,11 +193,6 @@ public class Merling extends Origin implements Listener {
         }
     }
 
-    /**
-     * Merling underwater breathing.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void merlingUnderwaterBreathing(EntityDamageEvent event) {
         Entity entity = event.getEntity();
@@ -307,25 +214,10 @@ public class Merling extends Origin implements Listener {
         }
     }
 
-    /**
-     * Calculate percentage double.
-     *
-     * @param obtained the obtained
-     * @param total    the total
-     *
-     * @return the double
-     */
     private double calculatePercentage(double obtained, double total) {
         return obtained * 100 / total;
     }
 
-    /**
-     * Switch air ticks int.
-     *
-     * @param percentage the percentage
-     *
-     * @return the int
-     */
     private int switchAirTicks(double percentage) {
         if (percentage <= 100 && percentage > 90) {
             return 273;
@@ -353,9 +245,6 @@ public class Merling extends Origin implements Listener {
         return -27;
     }
 
-    /**
-     * Register air breathing listener.
-     */
     private void registerAirBreathingListener() {
 
         new BukkitRunnable() {
@@ -479,9 +368,6 @@ public class Merling extends Origin implements Listener {
                 .getPlugin(), 0L, 20L);
     }
 
-    /**
-     * Register water breathing listener.
-     */
     private void registerWaterBreathingListener() {
 
         new BukkitRunnable() {
@@ -557,9 +443,6 @@ public class Merling extends Origin implements Listener {
                 .getPlugin(), 0L, 5L);
     }
 
-    /**
-     * Register merling air damage listener.
-     */
     private void registerMerlingAirDamageListener() {
 
         new BukkitRunnable() {
@@ -626,12 +509,6 @@ public class Merling extends Origin implements Listener {
                 .getPlugin(), Config.ORIGINS_MERLING_AIR_BREATHING_DAMAGE_DELAY.toLong(), Config.ORIGINS_MERLING_AIR_BREATHING_DAMAGE_PERIOD_DELAY.toLong());
     }
 
-    /**
-     * Damage merling.
-     *
-     * @param player the player
-     * @param amount the amount
-     */
     private void damageMerling(Player player, double amount) {
 
         new BukkitRunnable() {
@@ -645,11 +522,6 @@ public class Merling extends Origin implements Listener {
                 .getPlugin());
     }
 
-    /**
-     * On merling impaling damage.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void onMerlingImpalingDamage(EntityDamageByEntityEvent event) {
         Entity target = event.getEntity();
@@ -678,9 +550,6 @@ public class Merling extends Origin implements Listener {
         }
     }
 
-    /**
-     * Register merling block digging packet listener.
-     */
     private void registerMerlingBlockDiggingPacketListener() {
         getOriginListenerHandler().getListenerHandler().getPlugin().getProtocolManager().addPacketListener(
                 new PacketAdapter(getOriginListenerHandler().getListenerHandler().getPlugin(), ListenerPriority.NORMAL, PacketType.Play.Client.BLOCK_DIG) {
@@ -727,9 +596,6 @@ public class Merling extends Origin implements Listener {
         });
     }
 
-    /**
-     * Register merling move packet listener.
-     */
     private void registerMerlingMovePacketListener() {
         getOriginListenerHandler().getListenerHandler().getPlugin().getProtocolManager().addPacketListener(
                 new PacketAdapter(getOriginListenerHandler().getListenerHandler().getPlugin(), ListenerPriority.NORMAL, PacketType.Play.Client.POSITION) {

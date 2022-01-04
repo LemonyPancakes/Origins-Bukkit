@@ -28,37 +28,19 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-/**
- * The type Orb of origin listener.
- *
- * @author LemonyPancakes
- */
 public class OrbOfOriginListener implements Listener {
 
     private final ItemListenerHandler itemListenerHandler;
 
-    /**
-     * Gets item listener handler.
-     *
-     * @return the item listener handler
-     */
     public ItemListenerHandler getItemListenerHandler() {
         return itemListenerHandler;
     }
 
-    /**
-     * Instantiates a new Orb of origin listener.
-     *
-     * @param itemListenerHandler the item listener handler
-     */
     public OrbOfOriginListener(ItemListenerHandler itemListenerHandler) {
         this.itemListenerHandler = itemListenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getItemListenerHandler()
                 .getListenerHandler()
@@ -70,11 +52,6 @@ public class OrbOfOriginListener implements Listener {
                         .getPlugin());
     }
 
-    /**
-     * Player right click.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void playerRightClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();

@@ -26,11 +26,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Objects;
 
-/**
- * The type Update checker.
- *
- * @author LemonyPancakes
- */
 public class UpdateChecker {
 
     private final OriginsBukkit plugin;
@@ -38,12 +33,6 @@ public class UpdateChecker {
     private URL checkURL;
     private String newVersion = "";
 
-    /**
-     * Instantiates a new Update checker.
-     *
-     * @param plugin    the plugin
-     * @param projectID the project id
-     */
     public UpdateChecker(OriginsBukkit plugin, int projectID){
         this.plugin = plugin;
         this.newVersion = plugin.getDescription().getVersion();
@@ -55,49 +44,22 @@ public class UpdateChecker {
         }
     }
 
-    /**
-     * Gets project id.
-     *
-     * @return the project id
-     */
     public int getProjectID() {
         return projectID;
     }
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets latest version.
-     *
-     * @return the latest version
-     */
     public String getLatestVersion() {
         return newVersion;
     }
 
-    /**
-     * Gets resource url.
-     *
-     * @return the resource url
-     */
     public String getResourceURL() {
         return "https://www.spigotmc.org/resources/" + projectID;
     }
 
-    /**
-     * Check for updates boolean.
-     *
-     * @return the boolean
-     *
-     * @throws Exception the exception
-     */
     public boolean checkForUpdates() throws Exception {
         URLConnection con = checkURL.openConnection();
         this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();

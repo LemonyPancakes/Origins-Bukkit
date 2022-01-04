@@ -17,12 +17,9 @@
  */
 package me.lemonypancakes.originsbukkit.enums;
 
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-/**
- * The enum Lang.
- */
 public enum Lang {
     HUMAN_TITLE("Lang.Origins.Human.Title", "&fHuman"),
     HUMAN_DESCRIPTION("Lang.Origins.Human.Description",
@@ -262,115 +259,53 @@ public enum Lang {
     private final String Path;
     private final Object defaultValue;
 
-    /**
-     * Instantiates a new Lang.
-     *
-     * @param Path         the path
-     * @param defaultValue the default value
-     */
     Lang(final String Path, final Object defaultValue) {
         this.Path = Path;
         this.defaultValue = defaultValue;
     }
 
-    /**
-     * Instantiates a new Lang.
-     *
-     * @param Path         the path
-     * @param defaultValue the default value
-     */
     Lang(final String Path, final String... defaultValue) {
         this.Path = Path;
         this.defaultValue = defaultValue;
     }
 
-    /**
-     * Sets file.
-     *
-     * @param lang the lang
-     */
     public static void setFile(YamlConfiguration lang) {
         LANG = lang;
     }
 
-    /**
-     * To string string.
-     *
-     * @return the string
-     */
     @Override
     public String toString() {
-        return ChatUtils.format(LANG.getString(this.Path, (String) this.defaultValue));
+        return Message.format(LANG.getString(this.Path, (String) this.defaultValue));
     }
 
-    /**
-     * To string list string [ ].
-     *
-     * @return the string [ ]
-     */
     public String[] toStringList() {
-        return ChatUtils.formatList(LANG.getStringList(this.Path).toArray(new String[0]));
+        return Message.formatList(LANG.getStringList(this.Path).toArray(new String[0]));
     }
 
-    /**
-     * To boolean boolean.
-     *
-     * @return the boolean
-     */
     public boolean toBoolean() {
         return LANG.getBoolean(this.Path);
     }
 
-    /**
-     * To long long.
-     *
-     * @return the long
-     */
     public long toLong() {
         return LANG.getLong(this.Path);
     }
 
-    /**
-     * To double double.
-     *
-     * @return the double
-     */
     public double toDouble() {
         return LANG.getDouble(this.Path);
     }
 
-    /**
-     * To int int.
-     *
-     * @return the int
-     */
     public int toInt() {
         return LANG.getInt(this.Path);
     }
 
-    /**
-     * Gets default value.
-     *
-     * @return the default value
-     */
     public Object getDefaultValue() {
         return this.defaultValue;
     }
 
-    /**
-     * Get default string list value string [ ].
-     *
-     * @return the string [ ]
-     */
     public String[] getDefaultStringListValue() {
         return (String[]) this.defaultValue;
     }
 
-    /**
-     * Gets path.
-     *
-     * @return the path
-     */
     public String getPath() {
         return this.Path;
     }

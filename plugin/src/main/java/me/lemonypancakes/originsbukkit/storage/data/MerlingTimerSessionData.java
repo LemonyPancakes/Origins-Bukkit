@@ -28,56 +28,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Merling timer session data.
- *
- * @author LemonyPancakes
- */
 public class MerlingTimerSessionData {
 
     private final StorageHandler storageHandler;
     private List<MerlingTimerSessionDataWrapper> merlingTimerSessionDataWrappers = new ArrayList<>();
 
-    /**
-     * Gets storage handler.
-     *
-     * @return the storage handler
-     */
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }
 
-    /**
-     * Gets merling timer session data.
-     *
-     * @return the merling timer session data
-     */
     public List<MerlingTimerSessionDataWrapper> getMerlingTimerSessionData() {
         return merlingTimerSessionDataWrappers;
     }
 
-    /**
-     * Sets merling timer session data.
-     *
-     * @param merlingTimerSessionDataWrappers the merling timer session data wrappers
-     */
     public void setMerlingTimerSessionData(List<MerlingTimerSessionDataWrapper> merlingTimerSessionDataWrappers) {
         this.merlingTimerSessionDataWrappers = merlingTimerSessionDataWrappers;
     }
 
-    /**
-     * Instantiates a new Merling timer session data.
-     *
-     * @param storageHandler the storage handler
-     */
     public MerlingTimerSessionData(StorageHandler storageHandler) {
         this.storageHandler = storageHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         try {
             loadMerlingTimerSessionData();
@@ -86,12 +58,6 @@ public class MerlingTimerSessionData {
         }
     }
 
-    /**
-     * Create merling timer session data.
-     *
-     * @param playerUUID the player uuid
-     * @param timeLeft   the time left
-     */
     public void createMerlingTimerSessionData(UUID playerUUID, int timeLeft) {
         if (findMerlingTimerSessionData(playerUUID) == null) {
             MerlingTimerSessionDataWrapper merlingTimerSessionDataWrapper = new MerlingTimerSessionDataWrapper(playerUUID, timeLeft);
@@ -104,13 +70,6 @@ public class MerlingTimerSessionData {
         }
     }
 
-    /**
-     * Find merling timer session data merling timer session data wrapper.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the merling timer session data wrapper
-     */
     public MerlingTimerSessionDataWrapper findMerlingTimerSessionData(UUID playerUUID) {
         for (MerlingTimerSessionDataWrapper merlingTimerSessionDataWrapper : getMerlingTimerSessionData()) {
             if (merlingTimerSessionDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -120,13 +79,6 @@ public class MerlingTimerSessionData {
         return null;
     }
 
-    /**
-     * Gets merling timer session data time left.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the merling timer session data time left
-     */
     public int getMerlingTimerSessionDataTimeLeft(UUID playerUUID) {
         for (MerlingTimerSessionDataWrapper merlingTimerSessionDataWrapper : getMerlingTimerSessionData()) {
             if (merlingTimerSessionDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -136,12 +88,6 @@ public class MerlingTimerSessionData {
         return 0;
     }
 
-    /**
-     * Update merling timer session data.
-     *
-     * @param playerUUID                        the player uuid
-     * @param newMerlingTimerSessionDataWrapper the new merling timer session data wrapper
-     */
     public void updateMerlingTimerSessionData(UUID playerUUID, MerlingTimerSessionDataWrapper newMerlingTimerSessionDataWrapper) {
         if (findMerlingTimerSessionData(playerUUID) != null) {
             for (MerlingTimerSessionDataWrapper merlingTimerSessionDataWrapper : getMerlingTimerSessionData()) {
@@ -157,11 +103,6 @@ public class MerlingTimerSessionData {
         }
     }
 
-    /**
-     * Delete merling timer session data.
-     *
-     * @param playerUUID the player uuid
-     */
     public void deleteMerlingTimerSessionData(UUID playerUUID) {
         if (findMerlingTimerSessionData(playerUUID) != null) {
             for (MerlingTimerSessionDataWrapper merlingTimerSessionDataWrapper : getMerlingTimerSessionData()) {
@@ -178,11 +119,6 @@ public class MerlingTimerSessionData {
         }
     }
 
-    /**
-     * Save merling timer session data.
-     *
-     * @throws IOException the io exception
-     */
     public void saveMerlingTimerSessionData() throws IOException {
 
         new BukkitRunnable() {
@@ -208,11 +144,6 @@ public class MerlingTimerSessionData {
         }.runTaskAsynchronously(getStorageHandler().getPlugin());
     }
 
-    /**
-     * Load merling timer session data.
-     *
-     * @throws IOException the io exception
-     */
     public void loadMerlingTimerSessionData() throws IOException {
 
         new BukkitRunnable() {

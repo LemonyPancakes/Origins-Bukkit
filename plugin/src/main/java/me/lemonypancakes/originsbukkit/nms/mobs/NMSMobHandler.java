@@ -20,47 +20,24 @@ package me.lemonypancakes.originsbukkit.nms.mobs;
 import me.lemonypancakes.originsbukkit.api.internal.ModifiedCreeper;
 import me.lemonypancakes.originsbukkit.nms.NMSHandler;
 
-/**
- * The type Nms mob handler.
- *
- * @author LemonyPancakes
- */
 public class NMSMobHandler {
 
     private final NMSHandler nmsHandler;
     private ModifiedCreeper modifiedCreeper;
 
-    /**
-     * Gets nms handler.
-     *
-     * @return the nms handler
-     */
     public NMSHandler getNMSHandler() {
         return nmsHandler;
     }
 
-    /**
-     * Gets modified creeper.
-     *
-     * @return the modified creeper
-     */
     public ModifiedCreeper getModifiedCreeper() {
         return modifiedCreeper;
     }
 
-    /**
-     * Instantiates a new Nms mob handler.
-     *
-     * @param nmsHandler the nms handler
-     */
     public NMSMobHandler(NMSHandler nmsHandler) {
         this.nmsHandler = nmsHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         String packageName = getNMSHandler().getNMSPackageName();
         String version = packageName.substring(packageName.lastIndexOf('.') + 1);

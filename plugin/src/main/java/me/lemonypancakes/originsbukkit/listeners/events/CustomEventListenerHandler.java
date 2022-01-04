@@ -21,57 +21,29 @@ import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import me.lemonypancakes.originsbukkit.listeners.events.player.AsyncPlayerFluidInteract;
 import me.lemonypancakes.originsbukkit.listeners.events.player.AsyncPlayerJoin;
 
-/**
- * The type Custom event listener handler.
- *
- * @author LemonyPancakes
- */
 public class CustomEventListenerHandler {
 
     private final ListenerHandler listenerHandler;
     private AsyncPlayerFluidInteract asyncPlayerFluidInteract;
     private AsyncPlayerJoin asyncPlayerJoin;
 
-    /**
-     * Gets listener handler.
-     *
-     * @return the listener handler
-     */
     public ListenerHandler getListenerHandler() {
         return listenerHandler;
     }
 
-    /**
-     * Gets async player fluid interact.
-     *
-     * @return the async player fluid interact
-     */
     public AsyncPlayerFluidInteract getAsyncPlayerFluidInteract() {
         return asyncPlayerFluidInteract;
     }
 
-    /**
-     * Gets async player join.
-     *
-     * @return the async player join
-     */
     public AsyncPlayerJoin getAsyncPlayerJoin() {
         return asyncPlayerJoin;
     }
 
-    /**
-     * Instantiates a new Custom event listener handler.
-     *
-     * @param listenerHandler the listener handler
-     */
     public CustomEventListenerHandler(ListenerHandler listenerHandler) {
         this.listenerHandler = listenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         asyncPlayerFluidInteract
                 = new AsyncPlayerFluidInteract(this);

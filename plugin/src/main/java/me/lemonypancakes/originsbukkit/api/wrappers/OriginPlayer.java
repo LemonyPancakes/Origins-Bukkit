@@ -21,39 +21,19 @@ import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.storage.wrappers.*;
 import org.bukkit.entity.Player;
 
-/**
- * The type Origin player.
- *
- * @author LemonyPancakes
- */
 @SuppressWarnings("unused")
 public class OriginPlayer {
 
     private final Player player;
 
-    /**
-     * Instantiates a new Origin player.
-     *
-     * @param player the player
-     */
     public OriginPlayer(Player player) {
         this.player = player;
     }
 
-    /**
-     * Gets player.
-     *
-     * @return the player
-     */
     public Player getPlayer() {
         return player;
     }
 
-    /**
-     * Create origins player data.
-     *
-     * @param origin the origin
-     */
     public void createOriginsPlayerData(String origin) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -64,11 +44,6 @@ public class OriginPlayer {
                         origin);
     }
 
-    /**
-     * Find origins player data origins player data wrapper.
-     *
-     * @return the origins player data wrapper
-     */
     public OriginsPlayerDataWrapper findOriginsPlayerData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -76,11 +51,6 @@ public class OriginPlayer {
                 .findOriginsPlayerData(player.getUniqueId());
     }
 
-    /**
-     * Gets origin.
-     *
-     * @return the origin
-     */
     public String getOrigin() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -88,11 +58,6 @@ public class OriginPlayer {
                 .getPlayerOrigin(player.getUniqueId());
     }
 
-    /**
-     * Update origins player data.
-     *
-     * @param newOriginsPlayerDataWrapper the new origins player data wrapper
-     */
     public void updateOriginsPlayerData(OriginsPlayerDataWrapper newOriginsPlayerDataWrapper) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -104,9 +69,6 @@ public class OriginPlayer {
                                 newOriginsPlayerDataWrapper.getOrigin()));
     }
 
-    /**
-     * Delete origins player data.
-     */
     public void deleteOriginsPlayerData() {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -114,11 +76,6 @@ public class OriginPlayer {
                 .deleteOriginsPlayerData(player.getUniqueId());
     }
 
-    /**
-     * Create arachnid ability toggle data.
-     *
-     * @param isToggled the is toggled
-     */
     public void createArachnidAbilityToggleData(boolean isToggled) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -128,11 +85,6 @@ public class OriginPlayer {
                         isToggled);
     }
 
-    /**
-     * Find arachnid ability toggle data arachnid ability toggle data wrapper.
-     *
-     * @return the arachnid ability toggle data wrapper
-     */
     public ArachnidAbilityToggleDataWrapper findArachnidAbilityToggleData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -140,11 +92,6 @@ public class OriginPlayer {
                 .findArachnidAbilityToggleData(player.getUniqueId());
     }
 
-    /**
-     * Gets arachnid ability toggle data.
-     *
-     * @return the arachnid ability toggle data
-     */
     public boolean getArachnidAbilityToggleData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -152,11 +99,6 @@ public class OriginPlayer {
                 .getArachnidAbilityToggleData(player.getUniqueId());
     }
 
-    /**
-     * Update arachnid ability toggle data.
-     *
-     * @param newArachnidAbilityToggleDataWrapper the new arachnid ability toggle data wrapper
-     */
     public void updateArachnidAbilityToggleData(ArachnidAbilityToggleDataWrapper newArachnidAbilityToggleDataWrapper) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -167,9 +109,6 @@ public class OriginPlayer {
                                 newArachnidAbilityToggleDataWrapper.isToggled()));
     }
 
-    /**
-     * Delete arachnid ability toggle data.
-     */
     public void deleteArachnidAbilityToggleData() {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -177,11 +116,6 @@ public class OriginPlayer {
                 .deleteArachnidAbilityToggleData(player.getUniqueId());
     }
 
-    /**
-     * Create merling timer session data.
-     *
-     * @param timeLeft the time left
-     */
     public void createMerlingTimerSessionData(int timeLeft) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -191,11 +125,6 @@ public class OriginPlayer {
                         timeLeft);
     }
 
-    /**
-     * Find merling timer session data merling timer session data wrapper.
-     *
-     * @return the merling timer session data wrapper
-     */
     public MerlingTimerSessionDataWrapper findMerlingTimerSessionData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -203,11 +132,6 @@ public class OriginPlayer {
                 .findMerlingTimerSessionData(player.getUniqueId());
     }
 
-    /**
-     * Gets merling timer session data time left.
-     *
-     * @return the merling timer session data time left
-     */
     public int getMerlingTimerSessionDataTimeLeft() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -215,11 +139,6 @@ public class OriginPlayer {
                 .getMerlingTimerSessionDataTimeLeft(player.getUniqueId());
     }
 
-    /**
-     * Update merling timer session data.
-     *
-     * @param newMerlingTimerSessionDataWrapper the new merling timer session data wrapper
-     */
     public void updateMerlingTimerSessionData(MerlingTimerSessionDataWrapper newMerlingTimerSessionDataWrapper) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -230,9 +149,6 @@ public class OriginPlayer {
                                 newMerlingTimerSessionDataWrapper.getTimeLeft()));
     }
 
-    /**
-     * Delete merling timer session data.
-     */
     public void deleteMerlingTimerSessionData() {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -240,11 +156,6 @@ public class OriginPlayer {
                 .deleteMerlingTimerSessionData(player.getUniqueId());
     }
 
-    /**
-     * Create phantom ability toggle data.
-     *
-     * @param isToggled the is toggled
-     */
     public void createPhantomAbilityToggleData(boolean isToggled) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -254,11 +165,6 @@ public class OriginPlayer {
                         isToggled);
     }
 
-    /**
-     * Find phantom ability toggle data phantom ability toggle data wrapper.
-     *
-     * @return the phantom ability toggle data wrapper
-     */
     public PhantomAbilityToggleDataWrapper findPhantomAbilityToggleData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -266,11 +172,6 @@ public class OriginPlayer {
                 .findPhantomAbilityToggleData(player.getUniqueId());
     }
 
-    /**
-     * Gets phantom ability toggle data.
-     *
-     * @return the phantom ability toggle data
-     */
     public boolean getPhantomAbilityToggleData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -278,11 +179,6 @@ public class OriginPlayer {
                 .getPhantomAbilityToggleData(player.getUniqueId());
     }
 
-    /**
-     * Update phantom ability toggle data.
-     *
-     * @param newPhantomAbilityToggleDataWrapper the new phantom ability toggle data wrapper
-     */
     public void updatePhantomAbilityToggleData(PhantomAbilityToggleDataWrapper newPhantomAbilityToggleDataWrapper) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -293,9 +189,6 @@ public class OriginPlayer {
                                 newPhantomAbilityToggleDataWrapper.isToggled()));
     }
 
-    /**
-     * Delete phantom ability toggle data.
-     */
     public void deletePhantomAbilityToggleData() {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -303,11 +196,6 @@ public class OriginPlayer {
                 .deletePhantomAbilityToggleData(player.getUniqueId());
     }
 
-    /**
-     * Create blazeborn nether spawn data.
-     *
-     * @param firstTime the first time
-     */
     public void createBlazebornNetherSpawnData(boolean firstTime) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -317,11 +205,6 @@ public class OriginPlayer {
                         firstTime);
     }
 
-    /**
-     * Find blazeborn nether spawn data blazeborn nether spawn data wrapper.
-     *
-     * @return the blazeborn nether spawn data wrapper
-     */
     public BlazebornNetherSpawnDataWrapper findBlazebornNetherSpawnData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -329,11 +212,6 @@ public class OriginPlayer {
                 .findBlazebornNetherSpawnData(player.getUniqueId());
     }
 
-    /**
-     * Gets blazeborn nether spawn data.
-     *
-     * @return the blazeborn nether spawn data
-     */
     public boolean getBlazebornNetherSpawnData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -341,11 +219,6 @@ public class OriginPlayer {
                 .getBlazebornNetherSpawnData(player.getUniqueId());
     }
 
-    /**
-     * Update blazeborn nether spawn data.
-     *
-     * @param newBlazebornNetherSpawnDataWrapper the new blazeborn nether spawn data wrapper
-     */
     public void updateBlazebornNetherSpawnData(BlazebornNetherSpawnDataWrapper newBlazebornNetherSpawnDataWrapper) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -356,9 +229,6 @@ public class OriginPlayer {
                                 newBlazebornNetherSpawnDataWrapper.isFirstTime()));
     }
 
-    /**
-     * Delete blazeborn nether spawn data.
-     */
     public void deleteBlazebornNetherSpawnData() {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -366,12 +236,6 @@ public class OriginPlayer {
                 .deleteBlazebornNetherSpawnData(player.getUniqueId());
     }
 
-    /**
-     * Create elytrian claustrophobia timer data.
-     *
-     * @param timerTimeLeft          the timer time left
-     * @param claustrophobiaTimeLeft the claustrophobia time left
-     */
     public void createElytrianClaustrophobiaTimerData(int timerTimeLeft, int claustrophobiaTimeLeft) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -382,11 +246,6 @@ public class OriginPlayer {
                         claustrophobiaTimeLeft);
     }
 
-    /**
-     * Find elytrian claustrophobia timer data elytrian claustrophobia timer data wrapper.
-     *
-     * @return the elytrian claustrophobia timer data wrapper
-     */
     public ElytrianClaustrophobiaTimerDataWrapper findElytrianClaustrophobiaTimerData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -394,11 +253,6 @@ public class OriginPlayer {
                 .findElytrianClaustrophobiaTimerData(player.getUniqueId());
     }
 
-    /**
-     * Gets elytrian claustrophobia timer data.
-     *
-     * @return the elytrian claustrophobia timer data
-     */
     public int getElytrianClaustrophobiaTimerData() {
         return OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -406,11 +260,6 @@ public class OriginPlayer {
                 .getElytrianClaustrophobiaTimerData(player.getUniqueId());
     }
 
-    /**
-     * Update elytrian claustrophobia timer data.
-     *
-     * @param newElytrianClaustrophobiaTimerDataWrapper the new elytrian claustrophobia timer data wrapper
-     */
     public void updateElytrianClaustrophobiaTimerData(ElytrianClaustrophobiaTimerDataWrapper newElytrianClaustrophobiaTimerDataWrapper) {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
@@ -422,9 +271,6 @@ public class OriginPlayer {
                         newElytrianClaustrophobiaTimerDataWrapper.getClaustrophobiaTimeLeft()));
     }
 
-    /**
-     * Delete elytrian claustrophobia timer data.
-     */
     public void deleteElytrianClaustrophobiaTimerData() {
         OriginsBukkit.getPlugin()
                 .getStorageHandler()

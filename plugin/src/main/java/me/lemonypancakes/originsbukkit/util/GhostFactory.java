@@ -29,11 +29,6 @@ import org.bukkit.scoreboard.Team;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * The type Ghost factory.
- *
- * @author LemonyPancakes
- */
 public class GhostFactory {
 
     private final UtilHandler utilHandler;
@@ -42,35 +37,19 @@ public class GhostFactory {
     private Team ghostTeam;
     private final Set<String> ghosts = new HashSet<String>();
 
-    /**
-     * Gets util handler.
-     *
-     * @return the util handler
-     */
     public UtilHandler getUtilHandler() {
         return utilHandler;
     }
 
-    /**
-     * Instantiates a new Ghost factory.
-     *
-     * @param utilHandler the util handler
-     */
     public GhostFactory(UtilHandler utilHandler) {
         this.utilHandler = utilHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         createGetTeam();
     }
 
-    /**
-     * Create get team.
-     */
     private void createGetTeam() {
         ScoreboardManager scoreboardManager = getUtilHandler().getPlugin().getServer().getScoreboardManager();
 
@@ -86,9 +65,6 @@ public class GhostFactory {
         }
     }
 
-    /**
-     * Clear members.
-     */
     public void clearMembers() {
         if (ghostTeam != null) {
             for (OfflinePlayer player : getMembers()) {
@@ -97,45 +73,20 @@ public class GhostFactory {
         }
     }
 
-    /**
-     * Add player.
-     *
-     * @param player the player
-     */
     public void addPlayer(Player player) {
         if (!ghostTeam.hasPlayer(player)) {
             ghostTeam.addPlayer(player);
         }
     }
 
-    /**
-     * Is ghost boolean.
-     *
-     * @param player the player
-     *
-     * @return the boolean
-     */
     public boolean isGhost(Player player) {
         return player != null && hasPlayer(player) && ghosts.contains(player.getName());
     }
 
-    /**
-     * Has player boolean.
-     *
-     * @param player the player
-     *
-     * @return the boolean
-     */
     public boolean hasPlayer(Player player) {
         return ghostTeam.hasPlayer(player);
     }
 
-    /**
-     * Sets ghost.
-     *
-     * @param player  the player
-     * @param isGhost the is ghost
-     */
     public void setGhost(Player player, boolean isGhost) {
         if (!hasPlayer(player))
             addPlayer(player);
@@ -168,20 +119,10 @@ public class GhostFactory {
         }
     }
 
-    /**
-     * Remove player.
-     *
-     * @param player the player
-     */
     public void removePlayer(Player player) {
         ghostTeam.removePlayer(player);
     }
 
-    /**
-     * Get ghosts offline player [ ].
-     *
-     * @return the offline player [ ]
-     */
     public OfflinePlayer[] getGhosts() {
         Set<OfflinePlayer> players = new HashSet<OfflinePlayer>(ghostTeam.getPlayers());
 
@@ -189,22 +130,10 @@ public class GhostFactory {
         return toArray(players);
     }
 
-    /**
-     * Get members offline player [ ].
-     *
-     * @return the offline player [ ]
-     */
     public OfflinePlayer[] getMembers() {
         return toArray(ghostTeam.getPlayers());
     }
 
-    /**
-     * To array offline player [ ].
-     *
-     * @param players the players
-     *
-     * @return the offline player [ ]
-     */
     private OfflinePlayer[] toArray(Set<OfflinePlayer> players) {
         if (players != null) {
             return players.toArray(new OfflinePlayer[0]);

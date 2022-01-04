@@ -17,9 +17,6 @@
  */
 package me.lemonypancakes.originsbukkit.enums;
 
-/**
- * The enum Permissions.
- */
 public enum Permissions {
     ADMIN("origins.admin"),
     USER("origins.user"),
@@ -30,30 +27,15 @@ public enum Permissions {
 
     private final Object value;
 
-    /**
-     * Instantiates a new Permissions.
-     *
-     * @param value the value
-     */
     Permissions(final Object value) {
         this.value = value;
     }
 
-    /**
-     * To string string.
-     *
-     * @return the string
-     */
     @Override
     public String toString() {
         return (String) this.value;
     }
 
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
     public Object getValue() {
         return this.value;
     }

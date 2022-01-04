@@ -28,56 +28,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Arachnid ability toggle data.
- *
- * @author LemonyPancakes
- */
 public class ArachnidAbilityToggleData {
 
     private final StorageHandler storageHandler;
     private List<ArachnidAbilityToggleDataWrapper> arachnidAbilityToggleDataWrappers = new ArrayList<>();
 
-    /**
-     * Gets arachnid ability toggle data.
-     *
-     * @return the arachnid ability toggle data
-     */
     public List<ArachnidAbilityToggleDataWrapper> getArachnidAbilityToggleData() {
         return arachnidAbilityToggleDataWrappers;
     }
 
-    /**
-     * Sets arachnid ability toggle data.
-     *
-     * @param arachnidAbilityToggleDataWrappers the arachnid ability toggle data wrappers
-     */
     public void setArachnidAbilityToggleData(List<ArachnidAbilityToggleDataWrapper> arachnidAbilityToggleDataWrappers) {
         this.arachnidAbilityToggleDataWrappers = arachnidAbilityToggleDataWrappers;
     }
 
-    /**
-     * Gets storage handler.
-     *
-     * @return the storage handler
-     */
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }
 
-    /**
-     * Instantiates a new Arachnid ability toggle data.
-     *
-     * @param storageHandler the storage handler
-     */
     public ArachnidAbilityToggleData(StorageHandler storageHandler) {
         this.storageHandler = storageHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         try {
             loadArachnidAbilityToggleData();
@@ -86,12 +58,6 @@ public class ArachnidAbilityToggleData {
         }
     }
 
-    /**
-     * Create arachnid ability toggle data.
-     *
-     * @param playerUUID the player uuid
-     * @param isToggled  the is toggled
-     */
     public void createArachnidAbilityToggleData(UUID playerUUID, boolean isToggled) {
         if (findArachnidAbilityToggleData(playerUUID) == null) {
             ArachnidAbilityToggleDataWrapper arachnidAbilityToggleDataWrapper = new ArachnidAbilityToggleDataWrapper(playerUUID, isToggled);
@@ -104,13 +70,6 @@ public class ArachnidAbilityToggleData {
         }
     }
 
-    /**
-     * Find arachnid ability toggle data arachnid ability toggle data wrapper.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the arachnid ability toggle data wrapper
-     */
     public ArachnidAbilityToggleDataWrapper findArachnidAbilityToggleData(UUID playerUUID) {
         for (ArachnidAbilityToggleDataWrapper arachnidAbilityToggleDataWrapper : getArachnidAbilityToggleData()) {
             if (arachnidAbilityToggleDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -120,13 +79,6 @@ public class ArachnidAbilityToggleData {
         return null;
     }
 
-    /**
-     * Gets arachnid ability toggle data.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the arachnid ability toggle data
-     */
     public boolean getArachnidAbilityToggleData(UUID playerUUID) {
         for (ArachnidAbilityToggleDataWrapper arachnidAbilityToggleDataWrapper : getArachnidAbilityToggleData()) {
             if (arachnidAbilityToggleDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -136,12 +88,6 @@ public class ArachnidAbilityToggleData {
         return false;
     }
 
-    /**
-     * Update arachnid ability toggle data.
-     *
-     * @param playerUUID                          the player uuid
-     * @param newArachnidAbilityToggleDataWrapper the new arachnid ability toggle data wrapper
-     */
     public void updateArachnidAbilityToggleData(UUID playerUUID, ArachnidAbilityToggleDataWrapper newArachnidAbilityToggleDataWrapper) {
         if (findArachnidAbilityToggleData(playerUUID) != null) {
             for (ArachnidAbilityToggleDataWrapper arachnidAbilityToggleDataWrapper : getArachnidAbilityToggleData()) {
@@ -157,11 +103,6 @@ public class ArachnidAbilityToggleData {
         }
     }
 
-    /**
-     * Delete arachnid ability toggle data.
-     *
-     * @param playerUUID the player uuid
-     */
     public void deleteArachnidAbilityToggleData(UUID playerUUID) {
         if (findArachnidAbilityToggleData(playerUUID) != null) {
             for (ArachnidAbilityToggleDataWrapper arachnidAbilityToggleDataWrapper : getArachnidAbilityToggleData()) {
@@ -178,11 +119,6 @@ public class ArachnidAbilityToggleData {
         }
     }
 
-    /**
-     * Save arachnid ability toggle data.
-     *
-     * @throws IOException the io exception
-     */
     public void saveArachnidAbilityToggleData() throws IOException {
 
         new BukkitRunnable() {
@@ -208,11 +144,6 @@ public class ArachnidAbilityToggleData {
         }.runTaskAsynchronously(getStorageHandler().getPlugin());
     }
 
-    /**
-     * Load arachnid ability toggle data.
-     *
-     * @throws IOException the io exception
-     */
     public void loadArachnidAbilityToggleData() throws IOException {
 
         new BukkitRunnable() {

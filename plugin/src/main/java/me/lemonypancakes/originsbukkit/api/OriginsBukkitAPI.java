@@ -23,61 +23,24 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-/**
- * The type Origins bukkit api.
- *
- * @author LemonyPancakes
- */
 public class OriginsBukkitAPI {
 
-    /**
-     * Gets player origin.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the player origin
-     */
     public String getPlayerOrigin(UUID playerUUID) {
         return OriginsBukkit.getPlugin().getStorageHandler().getOriginsPlayerData().getPlayerOrigin(playerUUID);
     }
 
-    /**
-     * Create origins player data.
-     *
-     * @param playerUUID the player uuid
-     * @param player     the player
-     * @param origin     the origin
-     */
     public void createOriginsPlayerData(UUID playerUUID, Player player, String origin) {
         OriginsBukkit.getPlugin().getStorageHandler().getOriginsPlayerData().createOriginsPlayerData(playerUUID, player, origin);
     }
 
-    /**
-     * Find origins player data origins player data wrapper.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the origins player data wrapper
-     */
     public OriginsPlayerDataWrapper findOriginsPlayerData(UUID playerUUID) {
         return OriginsBukkit.getPlugin().getStorageHandler().getOriginsPlayerData().findOriginsPlayerData(playerUUID);
     }
 
-    /**
-     * Delete origins player data.
-     *
-     * @param playerUUID the player uuid
-     */
     public void deleteOriginsPlayerData(UUID playerUUID) {
         OriginsBukkit.getPlugin().getStorageHandler().getOriginsPlayerData().deleteOriginsPlayerData(playerUUID);
     }
 
-    /**
-     * Update origins player data.
-     *
-     * @param playerUUID                  the player uuid
-     * @param newOriginsPlayerDataWrapper the new origins player data wrapper
-     */
     public void updateOriginsPlayerData(UUID playerUUID, OriginsPlayerDataWrapper newOriginsPlayerDataWrapper) {
         OriginsBukkit.getPlugin().getStorageHandler().getOriginsPlayerData().updateOriginsPlayerData(playerUUID, newOriginsPlayerDataWrapper);
     }

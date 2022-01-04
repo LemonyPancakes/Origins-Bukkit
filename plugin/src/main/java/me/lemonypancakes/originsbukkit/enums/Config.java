@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.enums;
 
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -27,9 +27,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.Arrays;
 import java.util.Collections;
 
-/**
- * The enum Config.
- */
 public enum Config {
     NOTIFICATIONS_UPDATES("Config.Notifications.Updates", true),
     WORLDS_OVERWORLD("Config.Worlds.Overworld", "world"),
@@ -95,160 +92,73 @@ public enum Config {
     private final String Path;
     private final Object defaultValue;
 
-    /**
-     * Instantiates a new Config.
-     *
-     * @param Path         the path
-     * @param defaultValue the default value
-     */
     Config(final String Path, final Object defaultValue) {
         this.Path = Path;
         this.defaultValue = defaultValue;
     }
 
-    /**
-     * Instantiates a new Config.
-     *
-     * @param Path         the path
-     * @param defaultValue the default value
-     */
     Config(final String Path, final String... defaultValue) {
         this.Path = Path;
         this.defaultValue = defaultValue;
     }
 
-    /**
-     * Sets file.
-     *
-     * @param config the config
-     */
     public static void setFile(YamlConfiguration config) {
         CONFIG = config;
     }
 
-    /**
-     * To string string.
-     *
-     * @return the string
-     */
     @Override
     public String toString() {
-        return ChatUtils.format(CONFIG.getString(this.Path, (String) this.defaultValue));
+        return Message.format(CONFIG.getString(this.Path, (String) this.defaultValue));
     }
 
-    /**
-     * To string list string [ ].
-     *
-     * @return the string [ ]
-     */
     public String[] toStringList() {
-        return ChatUtils.formatList(CONFIG.getStringList(this.Path).toArray(new String[0]));
+        return Message.formatList(CONFIG.getStringList(this.Path).toArray(new String[0]));
     }
 
-    /**
-     * To boolean boolean.
-     *
-     * @return the boolean
-     */
     public boolean toBoolean() {
         return CONFIG.getBoolean(this.Path);
     }
 
-    /**
-     * To long long.
-     *
-     * @return the long
-     */
     public long toLong() {
         return CONFIG.getLong(this.Path);
     }
 
-    /**
-     * To double double.
-     *
-     * @return the double
-     */
     public double toDouble() {
         return CONFIG.getDouble(this.Path);
     }
 
-    /**
-     * To int int.
-     *
-     * @return the int
-     */
     public int toInt() {
         return CONFIG.getInt(this.Path);
     }
 
-    /**
-     * To float float.
-     *
-     * @return the float
-     */
     public float toFloat() {
         return (float) CONFIG.getDouble(this.Path);
     }
 
-    /**
-     * To bar color bar color.
-     *
-     * @return the bar color
-     */
     public BarColor toBarColor() {
         return BarColor.valueOf(CONFIG.getString(this.Path));
     }
 
-    /**
-     * To bar style bar style.
-     *
-     * @return the bar style
-     */
     public BarStyle toBarStyle() {
         return BarStyle.valueOf(CONFIG.getString(this.Path));
     }
 
-    /**
-     * To material material.
-     *
-     * @return the material
-     */
     public Material toMaterial() {
         return Material.valueOf(CONFIG.getString(this.Path));
     }
 
-    /**
-     * Gets configuration section.
-     *
-     * @return the configuration section
-     */
     public ConfigurationSection getConfigurationSection() {
         return CONFIG.getConfigurationSection(this.Path);
     }
 
-    /**
-     * Gets default value.
-     *
-     * @return the default value
-     */
     public Object getDefaultValue() {
         return this.defaultValue;
     }
 
-    /**
-     * Get default string list value string [ ].
-     *
-     * @return the string [ ]
-     */
     public String[] getDefaultStringListValue() {
         return (String[]) this.defaultValue;
     }
 
-    /**
-     * Gets path.
-     *
-     * @return the path
-     */
     public String getPath() {
         return this.Path;
     }

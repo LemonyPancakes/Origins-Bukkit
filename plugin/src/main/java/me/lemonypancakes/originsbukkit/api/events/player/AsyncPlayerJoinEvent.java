@@ -23,51 +23,26 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
-/**
- * The type Async player join event.
- *
- * @author LemonyPancakes
- */
 public class AsyncPlayerJoinEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
 
-    /**
-     * Instantiates a new Async player join event.
-     *
-     * @param player the player
-     */
     public AsyncPlayerJoinEvent(Player player) {
         super(true);
         this.player = player;
     }
 
-    /**
-     * Gets handlers.
-     *
-     * @return the handlers
-     */
     @Nonnull
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }
 
-    /**
-     * Gets handler list.
-     *
-     * @return the handler list
-     */
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
-    /**
-     * Gets player.
-     *
-     * @return the player
-     */
     public Player getPlayer() {
         return player;
     }

@@ -19,7 +19,7 @@ package me.lemonypancakes.originsbukkit.api.util;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.enums.Impact;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -33,62 +33,30 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * The type Origin.
- *
- * @author LemonyPancakes
- */
 public abstract class Origin implements OriginInterface {
 
     private final double maxHealth;
     private final float walkSpeed;
     private final float flySpeed;
 
-    /**
-     * Instantiates a new Origin.
-     *
-     * @param maxHealth the max health
-     * @param walkSpeed the walk speed
-     * @param flySpeed  the fly speed
-     */
     public Origin(double maxHealth, float walkSpeed, float flySpeed) {
         this.maxHealth = maxHealth;
         this.walkSpeed = walkSpeed;
         this.flySpeed = flySpeed;
     }
 
-    /**
-     * Gets max health.
-     *
-     * @return the max health
-     */
     public double getMaxHealth() {
         return this.maxHealth;
     }
 
-    /**
-     * Gets walk speed.
-     *
-     * @return the walk speed
-     */
     public float getWalkSpeed() {
         return this.walkSpeed;
     }
 
-    /**
-     * Gets fly speed.
-     *
-     * @return the fly speed
-     */
     public float getFlySpeed() {
         return this.flySpeed;
     }
 
-    /**
-     * Register origin.
-     *
-     * @param origin the origin
-     */
     public void registerOrigin(Origin origin) {
         String originIdentifier = getOriginIdentifier();
         Impact originImpact = getImpact();
@@ -107,7 +75,7 @@ public abstract class Origin implements OriginInterface {
                                     if (!OriginsBukkit.getPlugin().getOrigins().containsKey(originIdentifier)) {
                                         OriginsBukkit.getPlugin().getOrigins().put(originIdentifier, origin);
                                         OriginsBukkit.getPlugin().getOriginsList().add(originIdentifier);
-                                        Inventory inventory = Bukkit.createInventory(null, 54, ChatUtils.format("&0Choose your Origin."));
+                                        Inventory inventory = Bukkit.createInventory(null, 54, Message.format("&0Choose your Origin."));
                                         inventory.setItem(22, createGuiItem(originIcon, 1,
                                                 originTitle,
                                                 originDescription));
@@ -116,7 +84,7 @@ public abstract class Origin implements OriginInterface {
                                                 ItemStack none = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                                                 ItemMeta noneMeta = none.getItemMeta();
                                                 if (noneMeta != null) {
-                                                    noneMeta.setDisplayName(ChatUtils.format("&fImpact: &7None"));
+                                                    noneMeta.setDisplayName(Message.format("&fImpact: &7None"));
                                                     none.setItemMeta(noneMeta);
                                                 }
                                                 inventory.setItem(6, none);
@@ -127,13 +95,13 @@ public abstract class Origin implements OriginInterface {
                                                 ItemStack low = new ItemStack(Material.LIME_CONCRETE, 1);
                                                 ItemMeta lowMeta = low.getItemMeta();
                                                 if (lowMeta != null) {
-                                                    lowMeta.setDisplayName(ChatUtils.format("&fImpact: &aLow"));
+                                                    lowMeta.setDisplayName(Message.format("&fImpact: &aLow"));
                                                     low.setItemMeta(lowMeta);
                                                 }
                                                 ItemStack low1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                                                 ItemMeta lowMeta1 = low1.getItemMeta();
                                                 if (lowMeta1 != null) {
-                                                    lowMeta1.setDisplayName(ChatUtils.format("&fImpact: &aLow"));
+                                                    lowMeta1.setDisplayName(Message.format("&fImpact: &aLow"));
                                                     low1.setItemMeta(lowMeta);
                                                 }
                                                 inventory.setItem(6, low);
@@ -144,13 +112,13 @@ public abstract class Origin implements OriginInterface {
                                                 ItemStack medium = new ItemStack(Material.YELLOW_CONCRETE, 1);
                                                 ItemMeta mediumMeta = medium.getItemMeta();
                                                 if (mediumMeta != null) {
-                                                    mediumMeta.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
+                                                    mediumMeta.setDisplayName(Message.format("&fImpact: &eMedium"));
                                                     medium.setItemMeta(mediumMeta);
                                                 }
                                                 ItemStack medium1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                                                 ItemMeta mediumMeta1 = medium1.getItemMeta();
                                                 if (mediumMeta1 != null) {
-                                                    mediumMeta1.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
+                                                    mediumMeta1.setDisplayName(Message.format("&fImpact: &eMedium"));
                                                     medium1.setItemMeta(mediumMeta);
                                                 }
                                                 inventory.setItem(6, medium);
@@ -161,7 +129,7 @@ public abstract class Origin implements OriginInterface {
                                                 ItemStack high = new ItemStack(Material.RED_CONCRETE, 1);
                                                 ItemMeta highMeta = high.getItemMeta();
                                                 if (highMeta != null) {
-                                                    highMeta.setDisplayName(ChatUtils.format("&fImpact: &cHigh"));
+                                                    highMeta.setDisplayName(Message.format("&fImpact: &cHigh"));
                                                     high.setItemMeta(highMeta);
                                                 }
                                                 inventory.setItem(6, high);
@@ -179,43 +147,33 @@ public abstract class Origin implements OriginInterface {
                                                 }
                                             }
                                         }.runTaskAsynchronously(OriginsBukkit.getPlugin());
-                                        ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Successfully registered &6" + originIdentifier + "&a origin by &e" + originAuthor);
+                                        Message.sendConsoleMessage("&a[Origins-Bukkit] Successfully registered &6" + originIdentifier + "&a origin by &e" + originAuthor);
                                     } else {
-                                        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The origin &e\"" + originIdentifier + "\"&c has already been registered. Ignoring it... Please restart the server if you've updated or made changes to the extension for changes to take full effect.");
+                                        Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The origin &e\"" + originIdentifier + "\"&c has already been registered. Ignoring it... Please restart the server if you've updated or made changes to the extension for changes to take full effect.");
                                     }
                                 } else {
-                                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The impact of the origin &e\"" + originIdentifier + "\"&c cannot be null. Please contact the author (" + originAuthor + ") of this origin.");
+                                    Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The impact of the origin &e\"" + originIdentifier + "\"&c cannot be null. Please contact the author (" + originAuthor + ") of this origin.");
                                 }
                             } else {
-                                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The icon of the origin &e\"" + originIdentifier + "\"&c cannot be set to air. Please contact the author (" + originAuthor + ") of this origin.");
+                                Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The icon of the origin &e\"" + originIdentifier + "\"&c cannot be set to air. Please contact the author (" + originAuthor + ") of this origin.");
                             }
                         } else {
-                            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The icon of the origin &e\"" + originIdentifier + "\"&c cannot be null. Please contact the author (" + originAuthor + ") of this origin.");
+                            Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The icon of the origin &e\"" + originIdentifier + "\"&c cannot be null. Please contact the author (" + originAuthor + ") of this origin.");
                         }
                     } else {
-                        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The author of the origin &e\"" + originIdentifier + "\"&c contains character(s) that are not allowed.");
+                        Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The author of the origin &e\"" + originIdentifier + "\"&c contains character(s) that are not allowed.");
                     }
                 } else {
-                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The author of the origin &e\"" + originIdentifier + "\"&c cannot be null.");
+                    Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The author of the origin &e\"" + originIdentifier + "\"&c cannot be null.");
                 }
             } else {
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The unique identifier of the origin &e\"" + originIdentifier + "\"&c contains character(s) that are not allowed. Please contact the author (" + originAuthor + ") of this origin.");
+                Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The unique identifier of the origin &e\"" + originIdentifier + "\"&c contains character(s) that are not allowed. Please contact the author (" + originAuthor + ") of this origin.");
             }
         } else {
-            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The unique identifier of the origin &e\"" + originIdentifier + "\"&c cannot be null. Please contact the author (" + originAuthor + ") of this origin.");
+            Message.sendConsoleMessage("&c[Origins-Bukkit] Error registering origin. The unique identifier of the origin &e\"" + originIdentifier + "\"&c cannot be null. Please contact the author (" + originAuthor + ") of this origin.");
         }
     }
 
-    /**
-     * Create gui item item stack.
-     *
-     * @param material the material
-     * @param amount   the amount
-     * @param itemName the item name
-     * @param itemLore the item lore
-     *
-     * @return the item stack
-     */
     ItemStack createGuiItem(Material material, Integer amount, String itemName, String... itemLore) {
         ItemStack itemStack = new ItemStack(material, amount);
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -233,13 +191,6 @@ public abstract class Origin implements OriginInterface {
         return itemStack;
     }
 
-    /**
-     * Contains special chars boolean.
-     *
-     * @param toExamine the to examine
-     *
-     * @return the boolean
-     */
     private boolean containsSpecialChars(String toExamine) {
         Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
         Matcher matcher = pattern.matcher(toExamine);

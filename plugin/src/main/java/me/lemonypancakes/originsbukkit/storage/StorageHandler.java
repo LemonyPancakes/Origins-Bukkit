@@ -20,11 +20,6 @@ package me.lemonypancakes.originsbukkit.storage;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.storage.data.*;
 
-/**
- * The type Storage handler.
- *
- * @author LemonyPancakes
- */
 public class StorageHandler {
 
     private final OriginsBukkit plugin;
@@ -36,91 +31,43 @@ public class StorageHandler {
     private BlazebornNetherSpawnData blazebornNetherSpawnData;
     private ElytrianClaustrophobiaTimerData elytrianClaustrophobiaTimerData;
 
-    /**
-     * Gets plugin.
-     *
-     * @return the plugin
-     */
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    /**
-     * Gets arachnid ability toggle data.
-     *
-     * @return the arachnid ability toggle data
-     */
     public ArachnidAbilityToggleData getArachnidAbilityToggleData() {
         return arachnidAbilityToggleData;
     }
 
-    /**
-     * Gets merling timer session data.
-     *
-     * @return the merling timer session data
-     */
     public MerlingTimerSessionData getMerlingTimerSessionData() {
         return merlingTimerSessionData;
     }
 
-    /**
-     * Gets origins player data.
-     *
-     * @return the origins player data
-     */
     public OriginsPlayerData getOriginsPlayerData() {
         return originsPlayerData;
     }
 
-    /**
-     * Gets phantom ability toggle data.
-     *
-     * @return the phantom ability toggle data
-     */
     public PhantomAbilityToggleData getPhantomAbilityToggleData() {
         return phantomAbilityToggleData;
     }
 
-    /**
-     * Gets shulk player storage data.
-     *
-     * @return the shulk player storage data
-     */
     public ShulkPlayerStorageData getShulkPlayerStorageData() {
         return shulkPlayerStorageData;
     }
 
-    /**
-     * Gets blazeborn nether spawn data.
-     *
-     * @return the blazeborn nether spawn data
-     */
     public BlazebornNetherSpawnData getBlazebornNetherSpawnData() {
         return blazebornNetherSpawnData;
     }
 
-    /**
-     * Gets elytrian claustrophobia timer data.
-     *
-     * @return the elytrian claustrophobia timer data
-     */
     public ElytrianClaustrophobiaTimerData getElytrianClaustrophobiaTimerData() {
         return elytrianClaustrophobiaTimerData;
     }
 
-    /**
-     * Instantiates a new Storage handler.
-     *
-     * @param plugin the plugin
-     */
     public StorageHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         arachnidAbilityToggleData = new ArachnidAbilityToggleData(this);
         merlingTimerSessionData = new MerlingTimerSessionData(this);

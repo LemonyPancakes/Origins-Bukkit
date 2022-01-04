@@ -26,7 +26,7 @@ import me.lemonypancakes.originsbukkit.enums.Impact;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Origins;
 import me.lemonypancakes.originsbukkit.storage.wrappers.ElytrianClaustrophobiaTimerDataWrapper;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -54,11 +54,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The type Elytrian.
- *
- * @author LemonyPancakes
- */
 public class Elytrian extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
@@ -68,74 +63,34 @@ public class Elytrian extends Origin implements Listener {
     private final Map<UUID, Integer> claustrophibiaEffects = new HashMap<>();
     private static ItemStack elytra;
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Gets cooldown.
-     *
-     * @return the cooldown
-     */
     public Map<UUID, Long> getCOOLDOWN() {
         return COOLDOWN;
     }
 
-    /**
-     * Gets cooldowntime.
-     *
-     * @return the cooldowntime
-     */
     public int getCOOLDOWNTIME() {
         return COOLDOWNTIME;
     }
 
-    /**
-     * Gets claustrophobia.
-     *
-     * @return the claustrophobia
-     */
     public Map<UUID, Integer> getClaustrophobia() {
         return claustrophobia;
     }
 
-    /**
-     * Gets claustrophibia effects.
-     *
-     * @return the claustrophibia effects
-     */
     public Map<UUID, Integer> getClaustrophibiaEffects() {
         return claustrophibiaEffects;
     }
 
-    /**
-     * Gets elytra.
-     *
-     * @return the elytra
-     */
     public static ItemStack getElytra() {
         return elytra;
     }
 
-    /**
-     * Sets elytra.
-     *
-     * @param elytra the elytra
-     */
     public static void setElytra(ItemStack elytra) {
         Elytrian.elytra = elytra;
     }
 
-    /**
-     * Instantiates a new Elytrian.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Elytrian(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_ELYTRIAN_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_ELYTRIAN_WALK_SPEED.toFloat(),
@@ -144,79 +99,41 @@ public class Elytrian extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Elytrian";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.LOW;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.ELYTRA;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.ELYTRIAN_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.ELYTRIAN_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -231,11 +148,6 @@ public class Elytrian extends Origin implements Listener {
         createElytra();
     }
 
-    /**
-     * Elytrian join.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void elytrianJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
@@ -266,11 +178,6 @@ public class Elytrian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Elytrian ability use.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void elytrianAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
@@ -281,14 +188,11 @@ public class Elytrian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Create elytra.
-     */
     private void createElytra() {
         ItemStack itemStack = new ItemStack(Material.ELYTRA, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.setDisplayName(ChatUtils.format("&dElytra"));
+            itemMeta.setDisplayName(Message.format("&dElytra"));
             itemMeta.setUnbreakable(true);
             itemMeta.addEnchant(Enchantment.BINDING_CURSE, 1, false);
             itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -298,11 +202,6 @@ public class Elytrian extends Origin implements Listener {
         setElytra(itemStack);
     }
 
-    /**
-     * Elytrian elytra.
-     *
-     * @param player the player
-     */
     private void elytrianElytra(Player player) {
         OriginPlayer originPlayer = new OriginPlayer(player);
         String playerOrigin = originPlayer.getOrigin();
@@ -323,11 +222,6 @@ public class Elytrian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Elytrian armor equip.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void elytrianArmorEquip(InventoryClickEvent event) {
         HumanEntity humanEntity = event.getWhoClicked();
@@ -342,18 +236,13 @@ public class Elytrian extends Origin implements Listener {
             if (clickedSlot == 6) {
                 if (clickedItemStack != null && clickedItemStack.isSimilar(getElytra())) {
                     if (cursorItemStack != null && cursorItemStack.getItemMeta() != null) {
-                        ChatUtils.sendPlayerMessage(player, "&dpeek-a-boo!");
+                        Message.sendPlayerMessage(player, "&dpeek-a-boo!");
                     }
                 }
             }
         }
     }
 
-    /**
-     * Elytrian launch into air.
-     *
-     * @param player the player
-     */
     private void elytrianLaunchIntoAir(Player player) {
         UUID playerUUID = player.getUniqueId();
         OriginPlayer originPlayer = new OriginPlayer(player);
@@ -363,30 +252,25 @@ public class Elytrian extends Origin implements Listener {
             long secondsLeft = ((getCOOLDOWN().get(playerUUID) / 1000) + getCOOLDOWNTIME() - (System.currentTimeMillis() / 1000));
 
             if (secondsLeft > 0) {
-                ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_COOLDOWN
+                Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_COOLDOWN
                         .toString()
                         .replace("%seconds_left%", String.valueOf(secondsLeft)));
             } else {
                 player.setVelocity(new Vector(0, Config.ORIGINS_ELYTRIAN_ABILITY_Y_VELOCITY.toDouble(), 0));
                 getCOOLDOWN().put(playerUUID, System.currentTimeMillis());
-                ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
+                Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                         .toString()
                         .replace("%player_current_origin%", playerOrigin));
             }
         } else {
             player.setVelocity(new Vector(0, Config.ORIGINS_ELYTRIAN_ABILITY_Y_VELOCITY.toDouble(), 0));
             getCOOLDOWN().put(playerUUID, System.currentTimeMillis());
-            ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
+            Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                     .toString()
                     .replace("%player_current_origin%", playerOrigin));
         }
     }
 
-    /**
-     * Elytrian aerial combatant.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void elytrianAerialCombatant(EntityDamageByEntityEvent event) {
         Entity damager = event.getDamager();
@@ -406,11 +290,6 @@ public class Elytrian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Elytrian brittle bones.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void elytrianBrittleBones(EntityDamageEvent event) {
         Entity entity = event.getEntity();
@@ -433,9 +312,6 @@ public class Elytrian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Register claustrophobia listener.
-     */
     private void registerClaustrophobiaListener() {
 
         new BukkitRunnable() {
@@ -553,13 +429,6 @@ public class Elytrian extends Origin implements Listener {
                 .getPlugin(), 0L, 20L);
     }
 
-    /**
-     * Sync add potion effect.
-     *
-     * @param player           the player
-     * @param potionEffectType the potion effect type
-     * @param time             the time
-     */
     private void syncAddPotionEffect(Player player, PotionEffectType potionEffectType, int time) {
 
         new BukkitRunnable() {

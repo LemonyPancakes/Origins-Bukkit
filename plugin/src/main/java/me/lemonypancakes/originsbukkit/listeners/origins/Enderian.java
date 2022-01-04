@@ -25,7 +25,7 @@ import me.lemonypancakes.originsbukkit.enums.Config;
 import me.lemonypancakes.originsbukkit.enums.Impact;
 import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Origins;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -44,33 +44,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-/**
- * The type Enderian.
- *
- * @author LemonyPancakes
- */
 public class Enderian extends Origin implements Listener {
 
     private final OriginListenerHandler originListenerHandler;
     private final List<Player> enderianPlayersInWater = new ArrayList<>();
     private final List<Player> enderianPlayersInAir = new ArrayList<>();
+    private final List<Integer> enderPearls = new ArrayList<>();
     private final Map<UUID, Long> COOLDOWN = new HashMap<>();
     private final int COOLDOWNTIME = Config.ORIGINS_ENDERIAN_ABILITY_COOLDOWN.toInt();
 
-    /**
-     * Gets origin listener handler.
-     *
-     * @return the origin listener handler
-     */
     public OriginListenerHandler getOriginListenerHandler() {
         return originListenerHandler;
     }
 
-    /**
-     * Instantiates a new Enderian.
-     *
-     * @param originListenerHandler the origin listener handler
-     */
     public Enderian(OriginListenerHandler originListenerHandler) {
         super(Config.ORIGINS_ENDERIAN_MAX_HEALTH.toDouble(),
                 Config.ORIGINS_ENDERIAN_WALK_SPEED.toFloat(),
@@ -79,79 +65,41 @@ public class Enderian extends Origin implements Listener {
         init();
     }
 
-    /**
-     * Gets origin identifier.
-     *
-     * @return the origin identifier
-     */
     @Override
     public String getOriginIdentifier() {
         return "Enderian";
     }
 
-    /**
-     * Gets impact.
-     *
-     * @return the impact
-     */
     @Override
     public Impact getImpact() {
         return Impact.MEDIUM;
     }
 
-    /**
-     * Gets author.
-     *
-     * @return the author
-     */
     @Override
     public String getAuthor() {
         return "LemonyPancakes";
     }
 
-    /**
-     * Gets origin icon.
-     *
-     * @return the origin icon
-     */
     @Override
     public Material getOriginIcon() {
         return Material.ENDER_PEARL;
     }
 
-    /**
-     * Is origin icon glowing boolean.
-     *
-     * @return the boolean
-     */
     @Override
     public boolean isOriginIconGlowing() {
         return false;
     }
 
-    /**
-     * Gets origin title.
-     *
-     * @return the origin title
-     */
     @Override
     public String getOriginTitle() {
         return Lang.ENDERIAN_TITLE.toString();
     }
 
-    /**
-     * Get origin description string [ ].
-     *
-     * @return the string [ ]
-     */
     @Override
     public String[] getOriginDescription() {
         return Lang.ENDERIAN_DESCRIPTION.toStringList();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         getOriginListenerHandler()
                 .getListenerHandler()
@@ -166,11 +114,6 @@ public class Enderian extends Origin implements Listener {
         registerEnderianAirEnterListener();
     }
 
-    /**
-     * Enderian join.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void enderianJoin(AsyncPlayerOriginInitiateEvent event) {
         Player player = event.getPlayer();
@@ -182,11 +125,6 @@ public class Enderian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Enderian ability use.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void enderianAbilityUse(AsyncPlayerOriginAbilityUseEvent event) {
         Player player = event.getPlayer();
@@ -197,9 +135,6 @@ public class Enderian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Register enderian water damage listener.
-     */
     private void registerEnderianWaterDamageListener() {
 
         new BukkitRunnable() {
@@ -248,12 +183,6 @@ public class Enderian extends Origin implements Listener {
                 .getPlugin(), Config.ORIGINS_ENDERIAN_WATER_DAMAGE_DELAY.toLong(), Config.ORIGINS_ENDERIAN_WATER_DAMAGE_PERIOD_DELAY.toLong());
     }
 
-    /**
-     * Damage enderian.
-     *
-     * @param player the player
-     * @param amount the amount
-     */
     private void damageEnderian(Player player, double amount) {
 
         new BukkitRunnable() {
@@ -267,9 +196,6 @@ public class Enderian extends Origin implements Listener {
                 .getPlugin());
     }
 
-    /**
-     * Register enderian air enter listener.
-     */
     private void registerEnderianAirEnterListener() {
 
         new BukkitRunnable() {
@@ -315,11 +241,6 @@ public class Enderian extends Origin implements Listener {
                 .getPlugin(), 0L, 5L);
     }
 
-    /**
-     * Enderian ender particles.
-     *
-     * @param player the player
-     */
     private void enderianEnderParticles(Player player) {
 
         new BukkitRunnable() {
@@ -346,11 +267,6 @@ public class Enderian extends Origin implements Listener {
                 .getPlugin(), 0L, 20L);
     }
 
-    /**
-     * Enderian ender pearl throw.
-     *
-     * @param player the player
-     */
     private void enderianEnderPearlThrow(Player player) {
         UUID playerUUID = player.getUniqueId();
         OriginPlayer originPlayer = new OriginPlayer(player);
@@ -360,7 +276,7 @@ public class Enderian extends Origin implements Listener {
             long secondsLeft = ((COOLDOWN.get(playerUUID) / 1000) + COOLDOWNTIME - (System.currentTimeMillis() / 1000));
 
             if (secondsLeft > 0) {
-                ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_COOLDOWN
+                Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_COOLDOWN
                         .toString()
                         .replace("%seconds_left%", String.valueOf(secondsLeft)));
             } else {
@@ -368,13 +284,14 @@ public class Enderian extends Origin implements Listener {
 
                     @Override
                     public void run() {
-                        player.launchProjectile(EnderPearl.class);
+                        EnderPearl enderPearl = player.launchProjectile(EnderPearl.class);
+                        enderPearls.add(enderPearl.getEntityId());
                     }
                 }.runTask(getOriginListenerHandler()
                         .getListenerHandler()
                         .getPlugin());
                 COOLDOWN.put(playerUUID, System.currentTimeMillis());
-                ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
+                Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                         .toString()
                         .replace("%player_current_origin%", playerOrigin));
             }
@@ -383,47 +300,42 @@ public class Enderian extends Origin implements Listener {
 
                 @Override
                 public void run() {
-                    player.launchProjectile(EnderPearl.class);
+                    EnderPearl enderPearl = player.launchProjectile(EnderPearl.class);
+                    enderPearls.add(enderPearl.getEntityId());
                 }
             }.runTask(getOriginListenerHandler()
                     .getListenerHandler()
                     .getPlugin());
             COOLDOWN.put(playerUUID, System.currentTimeMillis());
-            ChatUtils.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
+            Message.sendPlayerMessage(player, Lang.PLAYER_ORIGIN_ABILITY_USE
                     .toString()
                     .replace("%player_current_origin%", playerOrigin));
         }
     }
 
-    /**
-     * Enderian ender pearl damage immunity.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void enderianEnderPearlDamageImmunity(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         OriginPlayer originPlayer = new OriginPlayer(player);
         String playerOrigin = originPlayer.getOrigin();
-        PlayerTeleportEvent.TeleportCause teleportCause = event.getCause();
-        Location getTo = event.getTo();
 
         if (Objects.equals(playerOrigin, Origins.ENDERIAN.toString())) {
+            PlayerTeleportEvent.TeleportCause teleportCause = event.getCause();
+
             if (teleportCause == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
-                event.setCancelled(true);
-                player.setNoDamageTicks(1);
-                if (getTo != null) {
-                    player.teleport(getTo);
+                if (!event.isCancelled()) {
+                    Location getTo = event.getTo();
+
+                    event.setCancelled(true);
+
+                    if (getTo != null) {
+                        player.teleport(getTo);
+                    }
                 }
             }
         }
     }
 
-    /**
-     * Enderian pumpkin pie eating disability.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void enderianPumpkinPieEatingDisability(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
@@ -438,11 +350,6 @@ public class Enderian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Enderian potion drinking damage.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void enderianPotionDrinkingDamage(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
@@ -458,11 +365,6 @@ public class Enderian extends Origin implements Listener {
         }
     }
 
-    /**
-     * Enderian splash potion damage.
-     *
-     * @param event the event
-     */
     @EventHandler
     private void enderianSplashPotionDamage(PotionSplashEvent event) {
         Collection<LivingEntity> livingEntities = event.getAffectedEntities();

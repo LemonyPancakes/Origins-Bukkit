@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
 import me.lemonypancakes.originsbukkit.storage.StorageHandler;
 import me.lemonypancakes.originsbukkit.storage.wrappers.OriginsPlayerDataWrapper;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -32,75 +32,37 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Origins player data.
- *
- * @author LemonyPancakes
- */
 public class OriginsPlayerData {
 
     private final StorageHandler storageHandler;
     private List<OriginsPlayerDataWrapper> originsPlayerDataWrappers = new ArrayList<>();
     private boolean isOriginsPlayerDataLoaded = false;
 
-    /**
-     * Gets storage handler.
-     *
-     * @return the storage handler
-     */
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }
 
-    /**
-     * Gets origins player data.
-     *
-     * @return the origins player data
-     */
     public List<OriginsPlayerDataWrapper> getOriginsPlayerData() {
         return originsPlayerDataWrappers;
     }
 
-    /**
-     * Sets origins player data.
-     *
-     * @param originsPlayerDatumWrappers the origins player datum wrappers
-     */
     public void setOriginsPlayerData(List<OriginsPlayerDataWrapper> originsPlayerDatumWrappers) {
         this.originsPlayerDataWrappers = originsPlayerDatumWrappers;
     }
 
-    /**
-     * Is origins player data loaded boolean.
-     *
-     * @return the boolean
-     */
     public boolean isOriginsPlayerDataLoaded() {
         return isOriginsPlayerDataLoaded;
     }
 
-    /**
-     * Sets origins player data loaded.
-     *
-     * @param originsPlayerDataLoaded the origins player data loaded
-     */
     public void setOriginsPlayerDataLoaded(boolean originsPlayerDataLoaded) {
         isOriginsPlayerDataLoaded = originsPlayerDataLoaded;
     }
 
-    /**
-     * Instantiates a new Origins player data.
-     *
-     * @param storageHandler the storage handler
-     */
     public OriginsPlayerData(StorageHandler storageHandler) {
         this.storageHandler = storageHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         try {
             loadOriginsPlayerData();
@@ -109,13 +71,6 @@ public class OriginsPlayerData {
         }
     }
 
-    /**
-     * Create origins player data.
-     *
-     * @param playerUUID the player uuid
-     * @param player     the player
-     * @param origin     the origin
-     */
     public void createOriginsPlayerData(UUID playerUUID, Player player, String origin) {
         String playerName = player.getName();
 
@@ -140,13 +95,6 @@ public class OriginsPlayerData {
         }
     }
 
-    /**
-     * Find origins player data origins player data wrapper.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the origins player data wrapper
-     */
     public OriginsPlayerDataWrapper findOriginsPlayerData(UUID playerUUID) {
         for (OriginsPlayerDataWrapper originsPlayerDataWrapper : getOriginsPlayerData()) {
             if (originsPlayerDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -156,13 +104,6 @@ public class OriginsPlayerData {
         return null;
     }
 
-    /**
-     * Gets player origin.
-     *
-     * @param playerUUID the player uuid
-     *
-     * @return the player origin
-     */
     public String getPlayerOrigin(UUID playerUUID) {
         for (OriginsPlayerDataWrapper originsPlayerDataWrapper : getOriginsPlayerData()) {
             if (originsPlayerDataWrapper.getPlayerUUID().equals(playerUUID)) {
@@ -172,12 +113,6 @@ public class OriginsPlayerData {
         return null;
     }
 
-    /**
-     * Update origins player data.
-     *
-     * @param playerUUID                  the player uuid
-     * @param newOriginsPlayerDataWrapper the new origins player data wrapper
-     */
     public void updateOriginsPlayerData(UUID playerUUID, OriginsPlayerDataWrapper newOriginsPlayerDataWrapper) {
         Player player = Bukkit.getPlayer(playerUUID);
 
@@ -206,11 +141,6 @@ public class OriginsPlayerData {
         }
     }
 
-    /**
-     * Delete origins player data.
-     *
-     * @param playerUUID the player uuid
-     */
     public void deleteOriginsPlayerData(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
 
@@ -239,11 +169,6 @@ public class OriginsPlayerData {
         }
     }
 
-    /**
-     * Save origins player data.
-     *
-     * @throws IOException the io exception
-     */
     public void saveOriginsPlayerData() throws IOException {
 
         new BukkitRunnable() {
@@ -269,11 +194,6 @@ public class OriginsPlayerData {
         }.runTaskAsynchronously(getStorageHandler().getPlugin());
     }
 
-    /**
-     * Load origins player data.
-     *
-     * @throws IOException the io exception
-     */
     public void loadOriginsPlayerData() throws IOException {
 
         new BukkitRunnable() {
@@ -288,7 +208,7 @@ public class OriginsPlayerData {
                     file.getParentFile().mkdirs();
                 }
                 if (file.exists()) {
-                    ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] Loading player data...");
+                    Message.sendConsoleMessage("&3[Origins-Bukkit] Loading player data...");
 
                     try {
                         Reader reader = new FileReader(file);
@@ -298,7 +218,7 @@ public class OriginsPlayerData {
                         event.printStackTrace();
                     }
                     setOriginsPlayerDataLoaded(true);
-                    ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Player data loaded.");
+                    Message.sendConsoleMessage("&a[Origins-Bukkit] Player data loaded.");
                 } else {
                     setOriginsPlayerDataLoaded(true);
                 }

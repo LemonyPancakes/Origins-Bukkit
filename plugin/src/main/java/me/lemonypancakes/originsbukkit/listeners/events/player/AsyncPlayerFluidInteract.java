@@ -30,54 +30,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * The type Async player fluid interact.
- *
- * @author LemonyPancakes
- */
 public class AsyncPlayerFluidInteract {
 
     private final CustomEventListenerHandler customEventListenerHandler;
     private final Map<UUID, Boolean> players = new HashMap<>();
 
-    /**
-     * Gets custom event listener handler.
-     *
-     * @return the custom event listener handler
-     */
     public CustomEventListenerHandler getCustomEventListenerHandler() {
         return customEventListenerHandler;
     }
 
-    /**
-     * Gets players.
-     *
-     * @return the players
-     */
     public Map<UUID, Boolean> getPlayers() {
         return players;
     }
 
-    /**
-     * Instantiates a new Async player fluid interact.
-     *
-     * @param customEventListenerHandler the custom event listener handler
-     */
     public AsyncPlayerFluidInteract(CustomEventListenerHandler customEventListenerHandler) {
         this.customEventListenerHandler = customEventListenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         registerCustomListener();
     }
 
-    /**
-     * Register custom listener.
-     */
     private void registerCustomListener() {
         new BukkitRunnable() {
 
@@ -121,9 +95,6 @@ public class AsyncPlayerFluidInteract {
                         .getPlugin(), 0L, 1L);
     }
 
-    /**
-     * The enum Fluid type.
-     */
     public enum FluidType {
         WATER,
         LAVA

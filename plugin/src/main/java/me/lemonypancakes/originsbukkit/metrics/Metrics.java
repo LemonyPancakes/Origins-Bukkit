@@ -23,23 +23,12 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
-/**
- * The type Metrics.
- *
- * @author LemonyPancakes
- */
 public class Metrics {
 
     private final Plugin plugin;
 
     private final MetricsBase metricsBase;
 
-    /**
-     * Instantiates a new Metrics.
-     *
-     * @param plugin    the plugin
-     * @param serviceId the service id
-     */
     public Metrics(JavaPlugin plugin, int serviceId) {
         this.plugin = plugin;
         // Get the config file
@@ -90,20 +79,10 @@ public class Metrics {
                         logResponseStatusText);
     }
 
-    /**
-     * Add custom chart.
-     *
-     * @param chart the chart
-     */
     public void addCustomChart(CustomChart chart) {
         metricsBase.addCustomChart(chart);
     }
 
-    /**
-     * Append platform data.
-     *
-     * @param builder the builder
-     */
     private void appendPlatformData(JsonObjectBuilder builder) {
         builder.appendField("playerAmount", getPlayerAmount());
         builder.appendField("onlineMode", Bukkit.getOnlineMode() ? 1 : 0);
@@ -116,20 +95,10 @@ public class Metrics {
         builder.appendField("coreCount", Runtime.getRuntime().availableProcessors());
     }
 
-    /**
-     * Append service data.
-     *
-     * @param builder the builder
-     */
     private void appendServiceData(JsonObjectBuilder builder) {
         builder.appendField("pluginVersion", plugin.getDescription().getVersion());
     }
 
-    /**
-     * Gets player amount.
-     *
-     * @return the player amount
-     */
     private int getPlayerAmount() {
         try {
             // Around MC 1.8 the return type was changed from an array to a collection,
@@ -145,11 +114,6 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Metrics base.
-     *
-     * @author LemonyPancakes
-     */
     public static class MetricsBase {
 
         public static final String METRICS_VERSION = "2.2.1";
@@ -187,23 +151,6 @@ public class Metrics {
 
         private final boolean enabled;
 
-        /**
-         * Instantiates a new Metrics base.
-         *
-         * @param platform                    the platform
-         * @param serverUuid                  the server uuid
-         * @param serviceId                   the service id
-         * @param enabled                     the enabled
-         * @param appendPlatformDataConsumer  the append platform data consumer
-         * @param appendServiceDataConsumer   the append service data consumer
-         * @param submitTaskConsumer          the submit task consumer
-         * @param checkServiceEnabledSupplier the check service enabled supplier
-         * @param errorLogger                 the error logger
-         * @param infoLogger                  the info logger
-         * @param logErrors                   the log errors
-         * @param logSentData                 the log sent data
-         * @param logResponseStatusText       the log response status text
-         */
         public MetricsBase(
                 String platform,
                 String serverUuid,
@@ -237,15 +184,6 @@ public class Metrics {
             }
         }
 
-        /**
-         * Compress byte [ ].
-         *
-         * @param str the str
-         *
-         * @return the byte [ ]
-         *
-         * @throws IOException the io exception
-         */
         private static byte[] compress(final String str) throws IOException {
             if (str == null) {
                 return null;
@@ -257,18 +195,10 @@ public class Metrics {
             return outputStream.toByteArray();
         }
 
-        /**
-         * Add custom chart.
-         *
-         * @param chart the chart
-         */
         public void addCustomChart(CustomChart chart) {
             this.customCharts.add(chart);
         }
 
-        /**
-         * Start submitting.
-         */
         private void startSubmitting() {
             final Runnable submitTask =
                     () -> {
@@ -297,9 +227,6 @@ public class Metrics {
                     submitTask, initialDelay + secondDelay, 1000 * 60 * 30, TimeUnit.MILLISECONDS);
         }
 
-        /**
-         * Submit data.
-         */
         private void submitData() {
             final JsonObjectBuilder baseJsonBuilder = new JsonObjectBuilder();
             appendPlatformDataConsumer.accept(baseJsonBuilder);
@@ -330,13 +257,6 @@ public class Metrics {
                     });
         }
 
-        /**
-         * Send data.
-         *
-         * @param data the data
-         *
-         * @throws Exception the exception
-         */
         private void sendData(JsonObjectBuilder.JsonObject data) throws Exception {
             if (logSentData) {
                 infoLogger.accept("Sent bStats metrics data: " + data.toString());
@@ -369,9 +289,6 @@ public class Metrics {
             }
         }
 
-        /**
-         * Check relocation.
-         */
         private void checkRelocation() {
             // You can use the property to disable the check in your test environment
             if (System.getProperty("bstats.relocatecheck") == null
@@ -392,33 +309,15 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Advanced bar chart.
-     *
-     * @author LemonyPancakes
-     */
     public static class AdvancedBarChart extends CustomChart {
 
         private final Callable<Map<String, int[]>> callable;
 
-        /**
-         * Instantiates a new Advanced bar chart.
-         *
-         * @param chartId  the chart id
-         * @param callable the callable
-         */
         public AdvancedBarChart(String chartId, Callable<Map<String, int[]>> callable) {
             super(chartId);
             this.callable = callable;
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         @Override
         protected JsonObjectBuilder.JsonObject getChartData() throws Exception {
             JsonObjectBuilder valuesBuilder = new JsonObjectBuilder();
@@ -444,33 +343,15 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Simple bar chart.
-     *
-     * @author LemonyPancakes
-     */
     public static class SimpleBarChart extends CustomChart {
 
         private final Callable<Map<String, Integer>> callable;
 
-        /**
-         * Instantiates a new Simple bar chart.
-         *
-         * @param chartId  the chart id
-         * @param callable the callable
-         */
         public SimpleBarChart(String chartId, Callable<Map<String, Integer>> callable) {
             super(chartId);
             this.callable = callable;
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         @Override
         protected JsonObjectBuilder.JsonObject getChartData() throws Exception {
             JsonObjectBuilder valuesBuilder = new JsonObjectBuilder();
@@ -486,33 +367,15 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Multi line chart.
-     *
-     * @author LemonyPancakes
-     */
     public static class MultiLineChart extends CustomChart {
 
         private final Callable<Map<String, Integer>> callable;
 
-        /**
-         * Instantiates a new Multi line chart.
-         *
-         * @param chartId  the chart id
-         * @param callable the callable
-         */
         public MultiLineChart(String chartId, Callable<Map<String, Integer>> callable) {
             super(chartId);
             this.callable = callable;
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         @Override
         protected JsonObjectBuilder.JsonObject getChartData() throws Exception {
             JsonObjectBuilder valuesBuilder = new JsonObjectBuilder();
@@ -538,33 +401,15 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Advanced pie.
-     *
-     * @author LemonyPancakes
-     */
     public static class AdvancedPie extends CustomChart {
 
         private final Callable<Map<String, Integer>> callable;
 
-        /**
-         * Instantiates a new Advanced pie.
-         *
-         * @param chartId  the chart id
-         * @param callable the callable
-         */
         public AdvancedPie(String chartId, Callable<Map<String, Integer>> callable) {
             super(chartId);
             this.callable = callable;
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         @Override
         protected JsonObjectBuilder.JsonObject getChartData() throws Exception {
             JsonObjectBuilder valuesBuilder = new JsonObjectBuilder();
@@ -590,20 +435,10 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Custom chart.
-     *
-     * @author LemonyPancakes
-     */
     public abstract static class CustomChart {
 
         private final String chartId;
 
-        /**
-         * Instantiates a new Custom chart.
-         *
-         * @param chartId the chart id
-         */
         protected CustomChart(String chartId) {
             if (chartId == null) {
                 throw new IllegalArgumentException("chartId must not be null");
@@ -611,14 +446,6 @@ public class Metrics {
             this.chartId = chartId;
         }
 
-        /**
-         * Gets request json object.
-         *
-         * @param errorLogger the error logger
-         * @param logErrors   the log errors
-         *
-         * @return the request json object
-         */
         public JsonObjectBuilder.JsonObject getRequestJsonObject(
                 BiConsumer<String, Throwable> errorLogger, boolean logErrors) {
             JsonObjectBuilder builder = new JsonObjectBuilder();
@@ -639,43 +466,18 @@ public class Metrics {
             return builder.build();
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         protected abstract JsonObjectBuilder.JsonObject getChartData() throws Exception;
     }
 
-    /**
-     * The type Single line chart.
-     *
-     * @author LemonyPancakes
-     */
     public static class SingleLineChart extends CustomChart {
 
         private final Callable<Integer> callable;
 
-        /**
-         * Instantiates a new Single line chart.
-         *
-         * @param chartId  the chart id
-         * @param callable the callable
-         */
         public SingleLineChart(String chartId, Callable<Integer> callable) {
             super(chartId);
             this.callable = callable;
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         @Override
         protected JsonObjectBuilder.JsonObject getChartData() throws Exception {
             int value = callable.call();
@@ -687,33 +489,15 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Simple pie.
-     *
-     * @author LemonyPancakes
-     */
     public static class SimplePie extends CustomChart {
 
         private final Callable<String> callable;
 
-        /**
-         * Instantiates a new Simple pie.
-         *
-         * @param chartId  the chart id
-         * @param callable the callable
-         */
         public SimplePie(String chartId, Callable<String> callable) {
             super(chartId);
             this.callable = callable;
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         @Override
         protected JsonObjectBuilder.JsonObject getChartData() throws Exception {
             String value = callable.call();
@@ -725,33 +509,15 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Drilldown pie.
-     *
-     * @author LemonyPancakes
-     */
     public static class DrilldownPie extends CustomChart {
 
         private final Callable<Map<String, Map<String, Integer>>> callable;
 
-        /**
-         * Instantiates a new Drilldown pie.
-         *
-         * @param chartId  the chart id
-         * @param callable the callable
-         */
         public DrilldownPie(String chartId, Callable<Map<String, Map<String, Integer>>> callable) {
             super(chartId);
             this.callable = callable;
         }
 
-        /**
-         * Gets chart data.
-         *
-         * @return the chart data
-         *
-         * @throws Exception the exception
-         */
         @Override
         public JsonObjectBuilder.JsonObject getChartData() throws Exception {
             JsonObjectBuilder valuesBuilder = new JsonObjectBuilder();
@@ -781,31 +547,16 @@ public class Metrics {
         }
     }
 
-    /**
-     * The type Json object builder.
-     *
-     * @author LemonyPancakes
-     */
     public static class JsonObjectBuilder {
 
         private StringBuilder builder = new StringBuilder();
 
         private boolean hasAtLeastOneField = false;
 
-        /**
-         * Instantiates a new Json object builder.
-         */
         public JsonObjectBuilder() {
             builder.append("{");
         }
 
-        /**
-         * Escape string.
-         *
-         * @param value the value
-         *
-         * @return the string
-         */
         private static String escape(String value) {
             final StringBuilder builder = new StringBuilder();
             for (int i = 0; i < value.length(); i++) {
@@ -825,26 +576,11 @@ public class Metrics {
             return builder.toString();
         }
 
-        /**
-         * Append null json object builder.
-         *
-         * @param key the key
-         *
-         * @return the json object builder
-         */
         public JsonObjectBuilder appendNull(String key) {
             appendFieldUnescaped(key, "null");
             return this;
         }
 
-        /**
-         * Append field json object builder.
-         *
-         * @param key   the key
-         * @param value the value
-         *
-         * @return the json object builder
-         */
         public JsonObjectBuilder appendField(String key, String value) {
             if (value == null) {
                 throw new IllegalArgumentException("JSON value must not be null");
@@ -853,27 +589,11 @@ public class Metrics {
             return this;
         }
 
-        /**
-         * Append field json object builder.
-         *
-         * @param key   the key
-         * @param value the value
-         *
-         * @return the json object builder
-         */
         public JsonObjectBuilder appendField(String key, int value) {
             appendFieldUnescaped(key, String.valueOf(value));
             return this;
         }
 
-        /**
-         * Append field json object builder.
-         *
-         * @param key    the key
-         * @param object the object
-         *
-         * @return the json object builder
-         */
         public JsonObjectBuilder appendField(String key, JsonObject object) {
             if (object == null) {
                 throw new IllegalArgumentException("JSON object must not be null");
@@ -882,14 +602,6 @@ public class Metrics {
             return this;
         }
 
-        /**
-         * Append field json object builder.
-         *
-         * @param key    the key
-         * @param values the values
-         *
-         * @return the json object builder
-         */
         public JsonObjectBuilder appendField(String key, String[] values) {
             if (values == null) {
                 throw new IllegalArgumentException("JSON values must not be null");
@@ -902,14 +614,6 @@ public class Metrics {
             return this;
         }
 
-        /**
-         * Append field json object builder.
-         *
-         * @param key    the key
-         * @param values the values
-         *
-         * @return the json object builder
-         */
         public JsonObjectBuilder appendField(String key, int[] values) {
             if (values == null) {
                 throw new IllegalArgumentException("JSON values must not be null");
@@ -920,14 +624,6 @@ public class Metrics {
             return this;
         }
 
-        /**
-         * Append field json object builder.
-         *
-         * @param key    the key
-         * @param values the values
-         *
-         * @return the json object builder
-         */
         public JsonObjectBuilder appendField(String key, JsonObject[] values) {
             if (values == null) {
                 throw new IllegalArgumentException("JSON values must not be null");
@@ -938,12 +634,6 @@ public class Metrics {
             return this;
         }
 
-        /**
-         * Append field unescaped.
-         *
-         * @param key          the key
-         * @param escapedValue the escaped value
-         */
         private void appendFieldUnescaped(String key, String escapedValue) {
             if (builder == null) {
                 throw new IllegalStateException("JSON has already been built");
@@ -958,11 +648,6 @@ public class Metrics {
             hasAtLeastOneField = true;
         }
 
-        /**
-         * Build json object.
-         *
-         * @return the json object
-         */
         public JsonObject build() {
             if (builder == null) {
                 throw new IllegalStateException("JSON has already been built");
@@ -972,29 +657,14 @@ public class Metrics {
             return object;
         }
 
-        /**
-         * The type Json object.
-         *
-         * @author LemonyPancakes
-         */
         public static class JsonObject {
 
             private final String value;
 
-            /**
-             * Instantiates a new Json object.
-             *
-             * @param value the value
-             */
             private JsonObject(String value) {
                 this.value = value;
             }
 
-            /**
-             * To string string.
-             *
-             * @return the string
-             */
             @Override
             public String toString() {
                 return value;

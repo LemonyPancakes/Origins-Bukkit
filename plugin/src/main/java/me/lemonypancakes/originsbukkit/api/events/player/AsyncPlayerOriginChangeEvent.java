@@ -23,11 +23,6 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
-/**
- * The type Async player origin change event.
- *
- * @author LemonyPancakes
- */
 public class AsyncPlayerOriginChangeEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -35,13 +30,6 @@ public class AsyncPlayerOriginChangeEvent extends Event {
     private final String oldOrigin;
     private final String newOrigin;
 
-    /**
-     * Instantiates a new Async player origin change event.
-     *
-     * @param player    the player
-     * @param oldOrigin the old origin
-     * @param newOrigin the new origin
-     */
     public AsyncPlayerOriginChangeEvent(Player player, String oldOrigin, String newOrigin) {
         super(true);
         this.player = player;
@@ -49,49 +37,24 @@ public class AsyncPlayerOriginChangeEvent extends Event {
         this.newOrigin = newOrigin;
     }
 
-    /**
-     * Gets handlers.
-     *
-     * @return the handlers
-     */
     @Nonnull
     @Override
     public HandlerList getHandlers() {
         return HANDLERS;
     }
 
-    /**
-     * Gets handler list.
-     *
-     * @return the handler list
-     */
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 
-    /**
-     * Gets player.
-     *
-     * @return the player
-     */
     public Player getPlayer() {
         return this.player;
     }
 
-    /**
-     * Gets new origin.
-     *
-     * @return the new origin
-     */
     public String getNewOrigin() {
         return this.newOrigin;
     }
 
-    /**
-     * Gets old origin.
-     *
-     * @return the old origin
-     */
     public String getOldOrigin() {
         return this.oldOrigin;
     }

@@ -19,11 +19,6 @@ package me.lemonypancakes.originsbukkit.listeners.origins;
 
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 
-/**
- * The type Origin listener handler.
- *
- * @author LemonyPancakes
- */
 public class OriginListenerHandler {
     
     private final ListenerHandler listenerHandler;
@@ -38,118 +33,55 @@ public class OriginListenerHandler {
     private Phantom phantom;
     private Blazeborn blazeborn;
 
-    /**
-     * Gets listener handler.
-     *
-     * @return the listener handler
-     */
     public ListenerHandler getListenerHandler() {
         return listenerHandler;
     }
 
-    /**
-     * Gets human.
-     *
-     * @return the human
-     */
     public Human getHuman() {
         return human;
     }
 
-    /**
-     * Gets avian.
-     *
-     * @return the avian
-     */
     public Avian getAvian() {
         return avian;
     }
 
-    /**
-     * Gets arachnid.
-     *
-     * @return the arachnid
-     */
     public Arachnid getArachnid() {
         return arachnid;
     }
 
-    /**
-     * Gets elytrian.
-     *
-     * @return the elytrian
-     */
     public Elytrian getElytrian() {
         return elytrian;
     }
 
-    /**
-     * Gets shulk.
-     *
-     * @return the shulk
-     */
     public Shulk getShulk() {
         return shulk;
     }
 
-    /**
-     * Gets feline.
-     *
-     * @return the feline
-     */
     public Feline getFeline() {
         return feline;
     }
 
-    /**
-     * Gets enderian.
-     *
-     * @return the enderian
-     */
     public Enderian getEnderian() {
         return enderian;
     }
 
-    /**
-     * Gets merling.
-     *
-     * @return the merling
-     */
     public Merling getMerling() {
         return merling;
     }
 
-    /**
-     * Gets phantom.
-     *
-     * @return the phantom
-     */
     public Phantom getPhantom() {
         return phantom;
     }
 
-    /**
-     * Gets blazeborn.
-     *
-     * @return the blazeborn
-     */
     public Blazeborn getBlazeborn() {
         return blazeborn;
     }
 
-    /**
-     * Instantiates a new Origin listener handler.
-     *
-     * @param listenerHandler the listener handler
-     */
     public OriginListenerHandler(ListenerHandler listenerHandler) {
         this.listenerHandler = listenerHandler;
         init();
     }
 
-    /**
-     * Init.
-     */
     private void init() {
         human = new Human(this);
         avian = new Avian(this);
