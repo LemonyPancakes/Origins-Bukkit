@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class OriginContainer implements Origin {
 
     private Identifier identifier;

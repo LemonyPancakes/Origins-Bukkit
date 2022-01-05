@@ -1,18 +1,23 @@
 package me.lemonypancakes.originsbukkit.api.data.container;
 
 import com.google.gson.JsonObject;
+import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.type.Action;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
+import org.bukkit.Bukkit;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 public class ActionContainer<T> implements Action<T> {
 
     private Identifier identifier;
     private JsonObject jsonObject;
     private BiConsumer<JsonObject, T> biConsumer;
+
+    private boolean isAsync;
 
     public ActionContainer(Identifier identifier,
                           JsonObject jsonObject,
@@ -20,19 +25,32 @@ public class ActionContainer<T> implements Action<T> {
         this.identifier = identifier;
         this.jsonObject = jsonObject;
         this.biConsumer = biConsumer;
+        if (jsonObject != null && jsonObject.has("async")) {
+            this.isAsync = jsonObject.get("async").getAsBoolean();
+        } else {
+            this.isAsync = false;
+        }
     }
 
     public ActionContainer(Identifier identifier,
                            JsonObject jsonObject) {
         this.identifier = identifier;
         this.jsonObject = jsonObject;
+        if (jsonObject != null && jsonObject.has("async")) {
+            this.isAsync = jsonObject.get("async").getAsBoolean();
+        } else {
+            this.isAsync = false;
+        }
     }
 
     public ActionContainer(Identifier identifier) {
         this.identifier = identifier;
+        this.isAsync = false;
     }
 
-    public ActionContainer() {}
+    public ActionContainer() {
+        this.isAsync = false;
+    }
 
     @Override
     public Identifier getIdentifier() {
@@ -52,6 +70,11 @@ public class ActionContainer<T> implements Action<T> {
     @Override
     public void setJsonObject(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
+        if (jsonObject != null && jsonObject.has("async")) {
+            this.isAsync = jsonObject.get("async").getAsBoolean();
+        } else {
+            this.isAsync = false;
+        }
     }
 
     @Override
@@ -66,9 +89,27 @@ public class ActionContainer<T> implements Action<T> {
 
     @Override
     public void accept(T t) {
-        getBiConsumer().accept(
-                getJsonObject(),
-                t);
+        if (!this.isAsync) {
+            Bukkit.getScheduler()
+                    .runTask(
+                            OriginsBukkit.getPlugin()
+                            , bukkitTask ->
+                                    getBiConsumer().accept(
+                                            getJsonObject(),
+                                            t
+                                    )
+                    );
+        } else {
+            Bukkit.getScheduler()
+                    .runTaskAsynchronously(
+                            OriginsBukkit.getPlugin()
+                            , bukkitTask ->
+                                    getBiConsumer().accept(
+                                            getJsonObject(),
+                                            t
+                                    )
+                    );
+        }
     }
 
     @Override

@@ -22,8 +22,8 @@ public class ConditionContainer<T> implements Condition<T> {
         this.identifier = identifier;
         this.jsonObject = jsonObject;
         this.biPredicate = biPredicate;
-        if (jsonObject != null && jsonObject.has("is_inverted")) {
-            this.isInverted = jsonObject.get("is_inverted").getAsBoolean();
+        if (jsonObject != null && jsonObject.has("inverted")) {
+            this.isInverted = jsonObject.get("inverted").getAsBoolean();
         } else {
             this.isInverted = false;
         }
@@ -33,8 +33,8 @@ public class ConditionContainer<T> implements Condition<T> {
                               JsonObject jsonObject) {
         this.identifier = identifier;
         this.jsonObject = jsonObject;
-        if (jsonObject != null && jsonObject.has("is_inverted")) {
-            this.isInverted = jsonObject.get("is_inverted").getAsBoolean();
+        if (jsonObject != null && jsonObject.has("inverted")) {
+            this.isInverted = jsonObject.get("inverted").getAsBoolean();
         } else {
             this.isInverted = false;
         }
@@ -67,8 +67,8 @@ public class ConditionContainer<T> implements Condition<T> {
     @Override
     public void setJsonObject(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
-        if (jsonObject != null && jsonObject.has("is_inverted")) {
-            this.isInverted = jsonObject.get("is_inverted").getAsBoolean();
+        if (jsonObject != null && jsonObject.has("inverted")) {
+            this.isInverted = jsonObject.get("inverted").getAsBoolean();
         } else {
             this.isInverted = false;
         }

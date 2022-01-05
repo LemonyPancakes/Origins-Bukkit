@@ -1,6 +1,7 @@
-package me.lemonypancakes.originsbukkit.factory;
+package me.lemonypancakes.originsbukkit.factory.action;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ActionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
@@ -17,13 +18,25 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
-public final class Actions {
+public final class PlayerActions {
 
     public static void register() {
-        registerPlayerActions();
-    }
+        Registry.register(
+                new ActionContainer<Player>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "action/player/send_message"
+                        ),
+                        null,
+                        (data, player) -> {
+                            if (data.has("message")) {
+                                String message = data.get("message").getAsString();
 
-    private static void registerPlayerActions() {
+                                if (message != null) {
+                                    player.sendMessage(message);
+                                }
+                            }
+                        })
+        );
         Registry.register(
                 new ActionContainer<Player>(
                         new IdentifierContainer(
@@ -77,22 +90,210 @@ public final class Actions {
         Registry.register(
                 new ActionContainer<Player>(
                         new IdentifierContainer(
+                                OriginsBukkit.KEY, "action/player/add_potion_effect"
+                        ),
+                        null,
+                        (data, player) -> {
+                            if (data.has("effect")) {
+                                JsonObject effect
+                                        = new Gson().fromJson(
+                                        data.get(
+                                                "effect"
+                                        ),
+                                        JsonObject.class
+                                );
+
+                                if (effect != null) {
+                                    PotionEffectType potionEffectType = null;
+                                    Integer duration = null;
+                                    Integer amplifier = null;
+                                    Boolean ambient = null;
+                                    Boolean particles = null;
+                                    Boolean icon = null;
+
+                                    if (effect.has("type")) {
+                                        potionEffectType
+                                                = PotionEffectType.getByName(
+                                                effect.get(
+                                                        "type"
+                                                ).getAsString()
+                                        );
+                                    }
+                                    if (effect.has("duration")) {
+                                        duration = effect.get("duration").getAsInt();
+                                    }
+                                    if (effect.has("amplifier")) {
+                                        amplifier = effect.get("amplifier").getAsInt();
+                                    }
+                                    if (effect.has("ambient")) {
+                                        ambient = effect.get("ambient").getAsBoolean();
+                                    }
+                                    if (effect.has("particles")) {
+                                        particles = effect.get("particles").getAsBoolean();
+                                    }
+                                    if (effect.has("icon")) {
+                                        icon = effect.get("icon").getAsBoolean();
+                                    }
+
+                                    if (potionEffectType != null
+                                            && duration != null
+                                            && amplifier != null
+                                            && ambient != null
+                                            && particles != null
+                                            && icon != null) {
+                                        player.addPotionEffect(
+                                                new PotionEffect(
+                                                        potionEffectType,
+                                                        duration,
+                                                        amplifier,
+                                                        ambient,
+                                                        particles,
+                                                        icon
+                                                )
+                                        );
+                                    } else if (potionEffectType != null
+                                            && duration != null
+                                            && amplifier != null
+                                            && ambient != null
+                                            && particles != null) {
+                                        player.addPotionEffect(
+                                                new PotionEffect(
+                                                        potionEffectType,
+                                                        duration,
+                                                        amplifier,
+                                                        ambient,
+                                                        particles
+                                                )
+                                        );
+                                    } else if (potionEffectType != null
+                                            && duration != null
+                                            && amplifier != null
+                                            && ambient != null) {
+                                        player.addPotionEffect(
+                                                new PotionEffect(
+                                                        potionEffectType,
+                                                        duration,
+                                                        amplifier,
+                                                        ambient
+                                                )
+                                        );
+                                    } else if (potionEffectType != null
+                                            && duration != null
+                                            && amplifier != null) {
+                                        player.addPotionEffect(
+                                                new PotionEffect(
+                                                        potionEffectType,
+                                                        duration,
+                                                        amplifier
+                                                )
+                                        );
+                                    }
+                                }
+                            }
+                        })
+        );
+        Registry.register(
+                new ActionContainer<Player>(
+                        new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/add_potion_effects"
                         ),
                         null,
                         (data, player) -> {
                             if (data.has("effects")) {
-                                PotionEffect[] potionEffects
+                                JsonObject[] effects
                                         = new Gson().fromJson(
                                         data.get(
                                                 "effects"
                                         ),
-                                        PotionEffect[].class
+                                        JsonObject[].class
                                 );
 
-                                if (potionEffects != null) {
-                                    for (PotionEffect potionEffect : potionEffects) {
-                                        player.addPotionEffect(potionEffect);
+                                if (effects != null) {
+                                    for (JsonObject effect : effects) {
+                                        PotionEffectType potionEffectType = null;
+                                        Integer duration = null;
+                                        Integer amplifier = null;
+                                        Boolean ambient = null;
+                                        Boolean particles = null;
+                                        Boolean icon = null;
+
+                                        if (effect.has("type")) {
+                                            potionEffectType
+                                                    = PotionEffectType.getByName(
+                                                    effect.get(
+                                                            "type"
+                                                    ).getAsString()
+                                            );
+                                        }
+                                        if (effect.has("duration")) {
+                                            duration = effect.get("duration").getAsInt();
+                                        }
+                                        if (effect.has("amplifier")) {
+                                            amplifier = effect.get("amplifier").getAsInt();
+                                        }
+                                        if (effect.has("ambient")) {
+                                            ambient = effect.get("ambient").getAsBoolean();
+                                        }
+                                        if (effect.has("particles")) {
+                                            particles = effect.get("particles").getAsBoolean();
+                                        }
+                                        if (effect.has("icon")) {
+                                            icon = effect.get("icon").getAsBoolean();
+                                        }
+
+                                        if (potionEffectType != null
+                                                && duration != null
+                                                && amplifier != null
+                                                && ambient != null
+                                                && particles != null
+                                                && icon != null) {
+                                            player.addPotionEffect(
+                                                    new PotionEffect(
+                                                            potionEffectType,
+                                                            duration,
+                                                            amplifier,
+                                                            ambient,
+                                                            particles,
+                                                            icon
+                                                    )
+                                            );
+                                        } else if (potionEffectType != null
+                                                && duration != null
+                                                && amplifier != null
+                                                && ambient != null
+                                                && particles != null) {
+                                            player.addPotionEffect(
+                                                    new PotionEffect(
+                                                            potionEffectType,
+                                                            duration,
+                                                            amplifier,
+                                                            ambient,
+                                                            particles
+                                                    )
+                                            );
+                                        } else if (potionEffectType != null
+                                                && duration != null
+                                                && amplifier != null
+                                                && ambient != null) {
+                                            player.addPotionEffect(
+                                                    new PotionEffect(
+                                                            potionEffectType,
+                                                            duration,
+                                                            amplifier,
+                                                            ambient
+                                                    )
+                                            );
+                                        } else if (potionEffectType != null
+                                                && duration != null
+                                                && amplifier != null) {
+                                            player.addPotionEffect(
+                                                    new PotionEffect(
+                                                            potionEffectType,
+                                                            duration,
+                                                            amplifier
+                                                    )
+                                            );
+                                        }
                                     }
                                 }
                             }
@@ -230,9 +431,9 @@ public final class Actions {
                             if (data.has("location")) {
                                 Location location
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "location"
-                                                ),
+                                        data.get(
+                                                "location"
+                                        ),
                                         Location.class
                                 );
 
@@ -348,9 +549,9 @@ public final class Actions {
                             if (data.has("weather_type")) {
                                 WeatherType weatherType
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "weather_type"
-                                                ),
+                                        data.get(
+                                                "weather_type"
+                                        ),
                                         WeatherType.class
                                 );
 
@@ -386,9 +587,9 @@ public final class Actions {
                             if (data.has("scoreboard")) {
                                 Scoreboard scoreboard
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "scoreboard"
-                                                ),
+                                        data.get(
+                                                "scoreboard"
+                                        ),
                                         Scoreboard.class
                                 );
 
@@ -674,9 +875,9 @@ public final class Actions {
                             if (data.has("mode")) {
                                 GameMode mode
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "mode"
-                                                ),
+                                        data.get(
+                                                "mode"
+                                        ),
                                         GameMode.class
                                 );
 
@@ -766,9 +967,9 @@ public final class Actions {
                             if (data.has("holder")) {
                                 Entity holder
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "holder"
-                                                ),
+                                        data.get(
+                                                "holder"
+                                        ),
                                         Entity.class
                                 );
 
@@ -979,7 +1180,7 @@ public final class Actions {
                             if (data.has("velocity")) {
                                 Vector velocity
                                         = new Gson().fromJson(
-                                                data.get("velocity"),
+                                        data.get("velocity"),
                                         Vector.class
                                 );
 
@@ -1027,9 +1228,9 @@ public final class Actions {
                             if (data.has("attributes")) {
                                 Attribute[] attributes
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "attributes"
-                                                ),
+                                        data.get(
+                                                "attributes"
+                                        ),
                                         Attribute[].class
                                 );
 

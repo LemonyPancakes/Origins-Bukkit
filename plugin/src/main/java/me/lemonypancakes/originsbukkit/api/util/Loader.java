@@ -3,9 +3,11 @@ package me.lemonypancakes.originsbukkit.api.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import me.lemonypancakes.originsbukkit.api.data.container.ActionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.OriginContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.PowerContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Action;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import me.lemonypancakes.originsbukkit.api.data.type.Origin;
 import me.lemonypancakes.originsbukkit.api.data.type.Power;
@@ -289,13 +291,14 @@ public final class Loader {
             if (jsonObject.has("power")) {
                 JsonObject powerSection = jsonObject.getAsJsonObject("power");
 
+                power.setJsonObject(powerSection);
                 if (powerSection != null) {
-                    if (powerSection.has("action")) {
-                        JsonObject actionSection = powerSection.getAsJsonObject("action");
+                    if (powerSection.has("action") && !powerSection.has("actions")) {
+                        JsonObject action = powerSection.getAsJsonObject("action");
 
-                        if (actionSection != null) {
-                            if (actionSection.has("type")) {
-                                String actionTypeString = actionSection.get("type").getAsString();
+                        if (action != null) {
+                            if (action.has("type")) {
+                                String actionTypeString = action.get("type").getAsString();
 
                                 if (actionTypeString != null) {
                                     Identifier actionTypeIdentifier = new IdentifierContainer(
@@ -305,12 +308,57 @@ public final class Loader {
 
                                     Storage.getActionsData().forEach((key, value) -> {
                                         if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                            power.setAction(value);
-                                            power.getAction().setJsonObject(actionSection);
+                                            Action<?> actionBuff = new ActionContainer<>(
+                                                    key,
+                                                    action,
+                                                    value.getBiConsumer()
+                                            );
+                                            power.setActions(new Action<?>[]{actionBuff});
                                         }
                                     });
                                 }
                             }
+                        }
+                    } else if (powerSection.has("actions") && !powerSection.has("action")) {
+                        JsonObject[] actions
+                                = new Gson().fromJson(
+                                powerSection.get(
+                                        "actions"
+                                ),
+                                JsonObject[].class
+                        );
+                        List<Action<?>> actionList = new ArrayList<>();
+
+                        if (actions != null) {
+                            for (JsonObject action : actions) {
+                                if (action.has("type")) {
+                                    String actionTypeString = action.get("type").getAsString();
+
+                                    if (actionTypeString != null) {
+                                        Identifier actionTypeIdentifier = new IdentifierContainer(
+                                                actionTypeString.split(":")[0],
+                                                actionTypeString.split(":")[1]
+                                        );
+
+                                        Storage.getActionsData().forEach((key, value) -> {
+                                            if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
+                                                Action<?> actionBuff
+                                                        = new ActionContainer<>(
+                                                        key,
+                                                        action,
+                                                        value.getBiConsumer()
+                                                );
+                                                actionList.add(actionBuff);
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                            power.setActions(
+                                    actionList.toArray(
+                                            new Action<?>[0]
+                                    )
+                            );
                         }
                     }
                     if (powerSection.has("condition")) {

@@ -25,7 +25,8 @@ import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.commands.CommandHandler;
 import me.lemonypancakes.originsbukkit.config.ConfigHandler;
 import me.lemonypancakes.originsbukkit.enums.Config;
-import me.lemonypancakes.originsbukkit.factory.Actions;
+import me.lemonypancakes.originsbukkit.factory.action.PlayerActions;
+import me.lemonypancakes.originsbukkit.factory.condition.PlayerConditions;
 import me.lemonypancakes.originsbukkit.items.ItemHandler;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import me.lemonypancakes.originsbukkit.metrics.Metrics;
@@ -133,7 +134,8 @@ public final class OriginsBukkit extends JavaPlugin {
         Message.sendConsoleMessage("&3[Origins-Bukkit]");
         checkServerCompatibility();
         checkServerDependencies();
-        Actions.register();
+        PlayerActions.register();
+        PlayerConditions.register();
 
         if (isEnabled()) {
             protocolManager = ProtocolLibrary.getProtocolManager();

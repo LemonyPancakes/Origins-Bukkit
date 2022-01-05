@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.playerchecks;
 
-import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerJoinEvent;
+import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
 import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
@@ -39,6 +39,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -86,19 +87,22 @@ public class PlayerOriginChecker implements Listener {
     }
 
     @EventHandler
-    private void onPlayerOriginCheck(AsyncPlayerJoinEvent event) {
+    private void onPlayerOriginCheck(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         checkPlayerOriginData(player);
-        Storage.getPowersData().forEach((key, value) -> {
-            if (value.getCondition() != null) {
-                if (value.getCondition().test(player)) {
-                    value.getAction().accept(player);
-                }
-            } else {
-                value.getAction().accept(player);
+        Storage.getPowersData().forEach(
+                (key, value) -> value.invoke(player)
+        );
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                int start = 0;
+                player.sendMessage("test");
+                start++;
             }
-        });
+        }.runTaskTimerAsynchronously(OriginsBukkit.getPlugin(), 0L, 40L);
     }
 
     public void checkPlayerOriginData(Player player) {
