@@ -441,4 +441,29 @@ public class Elytrian extends Origin implements Listener {
                 .getListenerHandler()
                 .getPlugin());
     }
+    
+    @EventHandler
+    private void elytrianDeath(PlayerDeathEvent event) {
+        Entity entity = event.getEntity();
+
+        if(entity instanceof Player) {
+            Player player = (Player) entity;
+            OriginPlayer originPlayer = new OriginPlayer(player);
+            String playerOrigin = originPlayer.getOrigin();
+            if(playerOrigin == Origins.ELYTRIAN.toString()) {
+            for (ItemStack i : event.getDrops()) if(i.getType() == Material.ELYTRA) i.setType(Material.AIR);
+            };
+        }
+    }
+
+    @EventHandler
+    private void elytrianRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        OriginPlayer originPlayer = new OriginPlayer(player);
+        String playerOrigin = originPlayer.getOrigin();
+        if(playerOrigin == Origins.ELYTRIAN.toString()) {
+        elytrianElytra(player);
+        };
+    }
+
 }
