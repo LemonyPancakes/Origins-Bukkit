@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.WeatherType;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -672,20 +673,6 @@ public final class PlayerActions {
         Registry.register(
                 new ActionContainer<Player>(
                         new IdentifierContainer(
-                                OriginsBukkit.KEY, "action/player/set_ai"
-                        ),
-                        null,
-                        (data, player) -> {
-                            if (data.has("ai")) {
-                                boolean ai = data.get("ai").getAsBoolean();
-
-                                player.setAI(ai);
-                            }
-                        })
-        );
-        Registry.register(
-                new ActionContainer<Player>(
-                        new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_arrow_cooldown"
                         ),
                         null,
@@ -1225,16 +1212,77 @@ public final class PlayerActions {
                         ),
                         null,
                         (data, player) -> {
+                            if (data.has("attribute")) {
+                                JsonObject attribute = data.getAsJsonObject("attribute");
+
+                                if (attribute != null) {
+                                    Attribute type = null;
+                                    Double baseValue = null;
+
+                                    if (attribute.has("type")) {
+                                        type = new Gson().fromJson(
+                                                attribute.get(
+                                                        "type"
+                                                ),
+                                                Attribute.class
+                                        );
+                                    }
+                                    if (attribute.has("base_value")) {
+                                        baseValue = attribute.get("base_value").getAsDouble();
+                                    }
+                                    if (type != null && baseValue != null) {
+                                        AttributeInstance attributeInstance
+                                                = player.getAttribute(type);
+
+                                        if (attributeInstance != null) {
+                                            attributeInstance.setBaseValue(baseValue);
+                                        }
+                                    }
+                                }
+                            }
+                        })
+        );
+        Registry.register(
+                new ActionContainer<Player>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "action/player/set_attributes_base_value"
+                        ),
+                        null,
+                        (data, player) -> {
                             if (data.has("attributes")) {
-                                Attribute[] attributes
+                                JsonObject[] attributes
                                         = new Gson().fromJson(
                                         data.get(
                                                 "attributes"
                                         ),
-                                        Attribute[].class
+                                        JsonObject[].class
                                 );
 
                                 if (attributes != null) {
+                                    for (JsonObject attribute : attributes) {
+                                        Attribute type = null;
+                                        Double baseValue = null;
+
+                                        if (attribute.has("type")) {
+                                            type = new Gson().fromJson(
+                                                    attribute.get(
+                                                            "type"
+                                                    ),
+                                                    Attribute.class
+                                            );
+                                        }
+                                        if (attribute.has("base_value")) {
+                                            baseValue = attribute.get("base_value").getAsDouble();
+                                        }
+                                        if (type != null && baseValue != null) {
+                                            AttributeInstance attributeInstance
+                                                    = player.getAttribute(type);
+
+                                            if (attributeInstance != null) {
+                                                attributeInstance.setBaseValue(baseValue);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         })

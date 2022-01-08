@@ -376,6 +376,7 @@ public final class Loader {
 
                                     Storage.getConditionsData().forEach((key, value) -> {
                                         if (Catcher.catchDuplicate(key, conditionTypeIdentifier)) {
+
                                             power.setCondition(value);
                                             power.getCondition().setJsonObject(conditionSection);
                                         }

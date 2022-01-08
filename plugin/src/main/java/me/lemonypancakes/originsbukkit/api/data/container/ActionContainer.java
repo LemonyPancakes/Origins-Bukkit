@@ -17,7 +17,7 @@ public class ActionContainer<T> implements Action<T> {
     private JsonObject jsonObject;
     private BiConsumer<JsonObject, T> biConsumer;
 
-    private boolean isAsync;
+    private Boolean isAsync;
 
     public ActionContainer(Identifier identifier,
                           JsonObject jsonObject,
@@ -27,30 +27,23 @@ public class ActionContainer<T> implements Action<T> {
         this.biConsumer = biConsumer;
         if (jsonObject != null && jsonObject.has("async")) {
             this.isAsync = jsonObject.get("async").getAsBoolean();
-        } else {
-            this.isAsync = false;
         }
     }
 
     public ActionContainer(Identifier identifier,
                            JsonObject jsonObject) {
-        this.identifier = identifier;
-        this.jsonObject = jsonObject;
+        this(identifier, jsonObject, null);
         if (jsonObject != null && jsonObject.has("async")) {
             this.isAsync = jsonObject.get("async").getAsBoolean();
-        } else {
-            this.isAsync = false;
         }
     }
 
     public ActionContainer(Identifier identifier) {
+        this(identifier, null);
         this.identifier = identifier;
-        this.isAsync = false;
     }
 
-    public ActionContainer() {
-        this.isAsync = false;
-    }
+    public ActionContainer() {}
 
     @Override
     public Identifier getIdentifier() {
@@ -72,8 +65,6 @@ public class ActionContainer<T> implements Action<T> {
         this.jsonObject = jsonObject;
         if (jsonObject != null && jsonObject.has("async")) {
             this.isAsync = jsonObject.get("async").getAsBoolean();
-        } else {
-            this.isAsync = false;
         }
     }
 
@@ -89,26 +80,33 @@ public class ActionContainer<T> implements Action<T> {
 
     @Override
     public void accept(T t) {
-        if (!this.isAsync) {
-            Bukkit.getScheduler()
-                    .runTask(
-                            OriginsBukkit.getPlugin()
-                            , bukkitTask ->
-                                    getBiConsumer().accept(
-                                            getJsonObject(),
-                                            t
-                                    )
-                    );
+        if (this.isAsync != null) {
+            if (!this.isAsync) {
+                Bukkit.getScheduler()
+                        .runTask(
+                                OriginsBukkit.getPlugin()
+                                , bukkitTask ->
+                                        getBiConsumer().accept(
+                                                getJsonObject(),
+                                                t
+                                        )
+                        );
+            } else {
+                Bukkit.getScheduler()
+                        .runTaskAsynchronously(
+                                OriginsBukkit.getPlugin()
+                                , bukkitTask ->
+                                        getBiConsumer().accept(
+                                                getJsonObject(),
+                                                t
+                                        )
+                        );
+            }
         } else {
-            Bukkit.getScheduler()
-                    .runTaskAsynchronously(
-                            OriginsBukkit.getPlugin()
-                            , bukkitTask ->
-                                    getBiConsumer().accept(
-                                            getJsonObject(),
-                                            t
-                                    )
-                    );
+            getBiConsumer().accept(
+                    getJsonObject(),
+                    t
+            );
         }
     }
 

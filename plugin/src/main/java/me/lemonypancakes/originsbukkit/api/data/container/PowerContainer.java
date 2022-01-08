@@ -23,7 +23,8 @@ public class PowerContainer implements Power {
     private Action<?>[] actions;
     private Condition<?> condition;
 
-    private boolean isAsync = false;
+    private Boolean isAsync;
+
     private boolean isTicking = false;
 
     private int tickRate = 4;
@@ -87,12 +88,9 @@ public class PowerContainer implements Power {
     public PowerContainer(Identifier identifier) {
         this(identifier, null);
         this.identifier = identifier;
-        this.isAsync = false;
     }
 
-    public PowerContainer() {
-        this.isAsync = false;
-    }
+    public PowerContainer() {}
 
     @Override
     public Identifier getIdentifier() {
@@ -147,7 +145,234 @@ public class PowerContainer implements Power {
 
     @Override
     public <T> void invoke(T t) {
-        if (!this.isAsync) {
+        if (this.isAsync != null) {
+            if (!this.isAsync) {
+                if (getCondition() != null) {
+                    if (!this.isTicking) {
+                        if (getCondition().test(t)) {
+                            for (Action<Object> action : getActions()) {
+                                action.accept(t);
+                            }
+                        }
+                    } else {
+                        if (t instanceof Player) {
+                            Player player = (Player) t;
+
+                            if (buffer.containsKey(player.getUniqueId())) {
+                                ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
+                            }
+                            BukkitTask tick = new BukkitRunnable() {
+
+                                @Override
+                                public void run() {
+                                    if (player.isOnline()) {
+                                        if (getCondition().test(player)) {
+                                            for (Action<Object> action : getActions()) {
+                                                action.accept(player);
+                                            }
+                                        }
+                                    } else {
+                                        buffer.remove(player.getUniqueId());
+                                        cancel();
+                                    }
+                                }
+                            }.runTaskTimer(
+                                    OriginsBukkit.getPlugin(),
+                                    0,
+                                    tickRate
+                            );
+                            buffer.put(player.getUniqueId(), tick);
+                        } else {
+                            if (!buffer.containsKey(t)) {
+                                buffer.put(t, t);
+
+                                new BukkitRunnable() {
+
+                                    @Override
+                                    public void run() {
+                                        if (getCondition().test(t)) {
+                                            for (Action<Object> action : getActions()) {
+                                                action.accept(t);
+                                            }
+                                        }
+                                    }
+                                }.runTaskTimer(
+                                        OriginsBukkit.getPlugin(),
+                                        0,
+                                        tickRate
+                                );
+                            }
+                        }
+                    }
+                } else {
+                    if (!this.isTicking) {
+                        for (Action<Object> action : getActions()) {
+                            action.accept(t);
+                        }
+                    } else {
+                        if (t instanceof Player) {
+                            Player player = (Player) t;
+
+                            if (buffer.containsKey(player.getUniqueId())) {
+                                ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
+                            }
+                            BukkitTask tick = new BukkitRunnable() {
+
+                                @Override
+                                public void run() {
+                                    if (player.isOnline()) {
+                                        for (Action<Object> action : getActions()) {
+                                            action.accept(player);
+                                        }
+                                    } else {
+                                        buffer.remove(player.getUniqueId());
+                                        cancel();
+                                    }
+                                }
+                            }.runTaskTimer(
+                                    OriginsBukkit.getPlugin(),
+                                    0,
+                                    tickRate
+                            );
+                            buffer.put(player.getUniqueId(), tick);
+                        } else {
+                            if (!buffer.containsKey(t)) {
+                                buffer.put(t, t);
+
+                                new BukkitRunnable() {
+
+                                    @Override
+                                    public void run() {
+                                        for (Action<Object> action : getActions()) {
+                                            action.accept(t);
+                                        }
+                                    }
+                                }.runTaskTimer(
+                                        OriginsBukkit.getPlugin(),
+                                        0,
+                                        tickRate
+                                );
+                            }
+                        }
+                    }
+                }
+            } else {
+                Bukkit.getScheduler()
+                        .runTaskAsynchronously(
+                                OriginsBukkit.getPlugin(),
+                                bukkitTask -> {
+                                    if (getCondition() != null) {
+                                        if (!this.isTicking) {
+                                            if (getCondition().test(t)) {
+                                                for (Action<Object> action : getActions()) {
+                                                    action.accept(t);
+                                                }
+                                            }
+                                        } else {
+                                            if (t instanceof Player) {
+                                                Player player = (Player) t;
+
+                                                if (buffer.containsKey(player.getUniqueId())) {
+                                                    ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
+                                                }
+                                                BukkitTask tick = new BukkitRunnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        if (player.isOnline()) {
+                                                            if (getCondition().test(player)) {
+                                                                for (Action<Object> action : getActions()) {
+                                                                    action.accept(player);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            buffer.remove(player.getUniqueId());
+                                                            cancel();
+                                                        }
+                                                    }
+                                                }.runTaskTimerAsynchronously(
+                                                        OriginsBukkit.getPlugin(),
+                                                        0,
+                                                        tickRate
+                                                );
+                                                buffer.put(player.getUniqueId(), tick);
+                                            } else {
+                                                if (!buffer.containsKey(t)) {
+                                                    buffer.put(t, t);
+
+                                                    new BukkitRunnable() {
+
+                                                        @Override
+                                                        public void run() {
+                                                            if (getCondition().test(t)) {
+                                                                for (Action<Object> action : getActions()) {
+                                                                    action.accept(t);
+                                                                }
+                                                            }
+                                                        }
+                                                    }.runTaskTimerAsynchronously(
+                                                            OriginsBukkit.getPlugin(),
+                                                            0,
+                                                            tickRate
+                                                    );
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if (!this.isTicking) {
+                                            for (Action<Object> action : getActions()) {
+                                                action.accept(t);
+                                            }
+                                        } else {
+                                            if (t instanceof Player) {
+                                                Player player = (Player) t;
+
+                                                if (buffer.containsKey(player.getUniqueId())) {
+                                                    ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
+                                                }
+                                                BukkitTask tick = new BukkitRunnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        if (player.isOnline()) {
+                                                            for (Action<Object> action : getActions()) {
+                                                                action.accept(player);
+                                                            }
+                                                        } else {
+                                                            buffer.remove(player.getUniqueId());
+                                                            cancel();
+                                                        }
+                                                    }
+                                                }.runTaskTimerAsynchronously(
+                                                        OriginsBukkit.getPlugin(),
+                                                        0,
+                                                        tickRate
+                                                );
+                                                buffer.put(player.getUniqueId(), tick);
+                                            } else {
+                                                if (!buffer.containsKey(t)) {
+                                                    buffer.put(t, t);
+
+                                                    new BukkitRunnable() {
+
+                                                        @Override
+                                                        public void run() {
+                                                            for (Action<Object> action : getActions()) {
+                                                                action.accept(t);
+                                                            }
+                                                        }
+                                                    }.runTaskTimerAsynchronously(
+                                                            OriginsBukkit.getPlugin(),
+                                                            0,
+                                                            tickRate
+                                                    );
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+            }
+        } else {
             if (getCondition() != null) {
                 if (!this.isTicking) {
                     if (getCondition().test(t)) {
@@ -257,121 +482,6 @@ public class PowerContainer implements Power {
                     }
                 }
             }
-        } else {
-            Bukkit.getScheduler()
-                    .runTaskAsynchronously(
-                            OriginsBukkit.getPlugin(),
-                            bukkitTask -> {
-                                if (getCondition() != null) {
-                                    if (!this.isTicking) {
-                                        if (getCondition().test(t)) {
-                                            for (Action<Object> action : getActions()) {
-                                                action.accept(t);
-                                            }
-                                        }
-                                    } else {
-                                        if (t instanceof Player) {
-                                            Player player = (Player) t;
-
-                                            if (buffer.containsKey(player.getUniqueId())) {
-                                                ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                                            }
-                                            BukkitTask tick = new BukkitRunnable() {
-
-                                                @Override
-                                                public void run() {
-                                                    if (player.isOnline()) {
-                                                        if (getCondition().test(player)) {
-                                                            for (Action<Object> action : getActions()) {
-                                                                action.accept(player);
-                                                            }
-                                                        }
-                                                    } else {
-                                                        buffer.remove(player.getUniqueId());
-                                                        cancel();
-                                                    }
-                                                }
-                                            }.runTaskTimerAsynchronously(
-                                                    OriginsBukkit.getPlugin(),
-                                                    0,
-                                                    tickRate
-                                            );
-                                            buffer.put(player.getUniqueId(), tick);
-                                        } else {
-                                            if (!buffer.containsKey(t)) {
-                                                buffer.put(t, t);
-
-                                                new BukkitRunnable() {
-
-                                                    @Override
-                                                    public void run() {
-                                                        if (getCondition().test(t)) {
-                                                            for (Action<Object> action : getActions()) {
-                                                                action.accept(t);
-                                                            }
-                                                        }
-                                                    }
-                                                }.runTaskTimerAsynchronously(
-                                                        OriginsBukkit.getPlugin(),
-                                                        0,
-                                                        tickRate
-                                                );
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (!this.isTicking) {
-                                        for (Action<Object> action : getActions()) {
-                                            action.accept(t);
-                                        }
-                                    } else {
-                                        if (t instanceof Player) {
-                                            Player player = (Player) t;
-
-                                            if (buffer.containsKey(player.getUniqueId())) {
-                                                ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                                            }
-                                            BukkitTask tick = new BukkitRunnable() {
-
-                                                @Override
-                                                public void run() {
-                                                    if (player.isOnline()) {
-                                                        for (Action<Object> action : getActions()) {
-                                                            action.accept(player);
-                                                        }
-                                                    } else {
-                                                        buffer.remove(player.getUniqueId());
-                                                        cancel();
-                                                    }
-                                                }
-                                            }.runTaskTimerAsynchronously(
-                                                    OriginsBukkit.getPlugin(),
-                                                    0,
-                                                    tickRate
-                                            );
-                                            buffer.put(player.getUniqueId(), tick);
-                                        } else {
-                                            if (!buffer.containsKey(t)) {
-                                                buffer.put(t, t);
-
-                                                new BukkitRunnable() {
-
-                                                    @Override
-                                                    public void run() {
-                                                        for (Action<Object> action : getActions()) {
-                                                            action.accept(t);
-                                                        }
-                                                    }
-                                                }.runTaskTimerAsynchronously(
-                                                        OriginsBukkit.getPlugin(),
-                                                        0,
-                                                        tickRate
-                                                );
-                                            }
-                                        }
-                                    }
-                                }
-                            });
         }
     }
 
