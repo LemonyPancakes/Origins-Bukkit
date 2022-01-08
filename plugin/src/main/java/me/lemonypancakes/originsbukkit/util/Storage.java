@@ -2,7 +2,6 @@ package me.lemonypancakes.originsbukkit.util;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -19,6 +18,7 @@ public final class Storage {
     private static final Map<Identifier, Action<?>> ACTIONS_DATA = new HashMap<>();
     private static final Map<Identifier, Condition<?>> CONDITIONS_DATA = new HashMap<>();
     private static final Map<Player, Origin> PLAYER_ORIGINS_DATA = new HashMap<>();
+    private static final Map<Player, Scheduler> PLAYER_SCHEDULER_DATA = new HashMap<>();
     private static final Map<Identifier, Origin> CACHED_ORIGINS_DATA = new HashMap<>();
 
     public static Map<Identifier, Origin> getOriginsData() {
@@ -39,6 +39,10 @@ public final class Storage {
 
     public static Map<Player, Origin> getPlayerOriginsData() {
         return PLAYER_ORIGINS_DATA;
+    }
+
+    public static Map<Player, Scheduler> getPlayerSchedulerData() {
+        return PLAYER_SCHEDULER_DATA;
     }
 
     public static Map<Identifier, Origin> getCachedOriginsData() {
@@ -78,6 +82,33 @@ public final class Storage {
             CONDITIONS_DATA.put(condition.getIdentifier(), condition);
         } else {
             LOGGER.warning("log");
+        }
+    }
+
+    public static void addDataToStorage(Player player, Scheduler scheduler) {
+        if (!Catcher.catchDuplicateFromMap(
+                PLAYER_SCHEDULER_DATA, scheduler)) {
+            PLAYER_SCHEDULER_DATA.put(player, scheduler);
+        } else {
+            for (Map.Entry<Player, Scheduler> entry : PLAYER_SCHEDULER_DATA.entrySet()) {
+                Player key = entry.getKey();
+
+                String duplicate
+                        = String.valueOf(
+                        Catcher.getDuplicateFromMap(
+                                PLAYER_SCHEDULER_DATA,
+                                player
+                        )
+                );
+
+                if (duplicate != null) {
+                    if (key.toString().equals(duplicate)) {
+                        PLAYER_SCHEDULER_DATA.get(key).getBukkitTask().cancel();
+                        PLAYER_SCHEDULER_DATA.remove(key);
+                        PLAYER_SCHEDULER_DATA.put(player, scheduler);
+                    }
+                }
+            }
         }
     }
 
@@ -140,8 +171,18 @@ public final class Storage {
     }
 
     public static void removeDataFromStorage(Player player) {
-        if (PLAYER_ORIGINS_DATA.containsKey(player)) {
+        if (Catcher.catchDuplicateFromMap(
+                PLAYER_ORIGINS_DATA, player)) {
             PLAYER_ORIGINS_DATA.remove(player);
+        } else {
+            LOGGER.warning("log");
+        }
+    }
+
+    public static void removeSchedulerDataFromStorage(Player player) {
+        if (Catcher.catchDuplicateFromMap(
+                PLAYER_SCHEDULER_DATA, player)) {
+            PLAYER_SCHEDULER_DATA.remove(player);
         } else {
             LOGGER.warning("log");
         }

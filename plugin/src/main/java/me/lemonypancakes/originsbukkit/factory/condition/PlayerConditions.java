@@ -1629,11 +1629,11 @@ public final class PlayerConditions {
                                     data.getAsJsonObject("offset")
                             );
 
-                            if (data.has("type")) {
+                            if (data.has("block_type")) {
                                 Material type
                                         = new Gson().fromJson(
                                                 data.get(
-                                                        "type"
+                                                        "block_type"
                                                 ),
                                         Material.class
                                 );

@@ -3,20 +3,18 @@ package me.lemonypancakes.originsbukkit.api.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import me.lemonypancakes.originsbukkit.api.data.container.ActionContainer;
-import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
-import me.lemonypancakes.originsbukkit.api.data.container.OriginContainer;
-import me.lemonypancakes.originsbukkit.api.data.container.PowerContainer;
-import me.lemonypancakes.originsbukkit.api.data.type.Action;
-import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
+import me.lemonypancakes.originsbukkit.api.data.container.*;
+import me.lemonypancakes.originsbukkit.api.data.type.*;
 import me.lemonypancakes.originsbukkit.api.data.type.Origin;
-import me.lemonypancakes.originsbukkit.api.data.type.Power;
 import me.lemonypancakes.originsbukkit.enums.Impact;
 import me.lemonypancakes.originsbukkit.util.Catcher;
 import me.lemonypancakes.originsbukkit.util.Message;
 import me.lemonypancakes.originsbukkit.util.Storage;
+import org.apache.commons.jexl3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FilenameUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,9 +23,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiPredicate;
 
 public final class Loader {
 
@@ -342,8 +339,7 @@ public final class Loader {
 
                                         Storage.getActionsData().forEach((key, value) -> {
                                             if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                                Action<?> actionBuff
-                                                        = new ActionContainer<>(
+                                                Action<?> actionBuff = new ActionContainer<>(
                                                         key,
                                                         action,
                                                         value.getBiConsumer()
@@ -362,28 +358,70 @@ public final class Loader {
                         }
                     }
                     if (powerSection.has("condition")) {
-                        JsonObject conditionSection = powerSection.getAsJsonObject("condition");
+                        JsonObject[] condition
+                                = new Gson().fromJson(
+                                powerSection.get(
+                                        "condition"
+                                ),
+                                JsonObject[].class
+                        );
+                        Map<Object, Object> buffer = new HashMap<>();
+                        StringBuilder condition1 = new StringBuilder();
 
-                        if (conditionSection != null) {
-                            if (conditionSection.has("type")) {
-                                String conditionTypeString = conditionSection.get("type").getAsString();
+                        for (JsonObject cond : condition) {
+                            String randString = getSaltString();
 
-                                if (conditionTypeString != null) {
-                                    Identifier conditionTypeIdentifier = new IdentifierContainer(
-                                            conditionTypeString.split(":")[0],
-                                            conditionTypeString.split(":")[1]
+                            if (cond.has("type")) {
+                                String type = cond.get("type").getAsString();
+
+                                if (type != null) {
+                                    Identifier conditionIdentifier = new IdentifierContainer(
+                                            type.split(":")[0],
+                                            type.split(":")[1]
                                     );
 
                                     Storage.getConditionsData().forEach((key, value) -> {
-                                        if (Catcher.catchDuplicate(key, conditionTypeIdentifier)) {
-
-                                            power.setCondition(value);
-                                            power.getCondition().setJsonObject(conditionSection);
+                                        if (Catcher.catchDuplicate(key, conditionIdentifier)) {
+                                            Condition<?> conditionBuff = new ConditionContainer<>(
+                                                    key,
+                                                    cond,
+                                                    value.getBiPredicate()
+                                            );
+                                            buffer.put(randString, conditionBuff);
+                                            condition1.append(randString).append(" ");
                                         }
                                     });
                                 }
+                            } else if (cond.has("operator")) {
+                                String operator = cond.get("operator").getAsString();
+
+                                if (operator != null) {
+                                    condition1.append(operator).append(" ");
+                                }
                             }
                         }
+                        JexlEngine jexlEngine = new JexlBuilder().create();
+                        Bukkit.broadcastMessage("" + condition1);
+                        JexlExpression expression = jexlEngine.createExpression(condition1.toString());
+                        power.setCondition(
+                                new ConditionContainer<Player>(
+                                        null,
+                                        null,
+                                        (data, player) -> {
+                                            JexlContext context = new MapContext();
+                                            buffer.forEach((key, value) -> {
+                                                if (value instanceof Condition) {
+                                                    context.set(
+                                                            key.toString(),
+                                                            ((Condition<Object>) value).test(player)
+                                                    );
+                                                }
+                                            });
+                                            
+                                            return (boolean) expression.evaluate(context);
+                                        }
+                                )
+                        );
                     }
                 }
             }
@@ -394,5 +432,16 @@ public final class Loader {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 7) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        return salt.toString();
     }
 }

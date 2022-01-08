@@ -94,15 +94,6 @@ public class PlayerOriginChecker implements Listener {
         Storage.getPowersData().forEach(
                 (key, value) -> value.invoke(player)
         );
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                int start = 0;
-                player.sendMessage("test");
-                start++;
-            }
-        }.runTaskTimerAsynchronously(OriginsBukkit.getPlugin(), 0L, 40L);
     }
 
     public void checkPlayerOriginData(Player player) {

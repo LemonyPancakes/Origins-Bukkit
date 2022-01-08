@@ -6,14 +6,13 @@ import me.lemonypancakes.originsbukkit.api.data.type.Action;
 import me.lemonypancakes.originsbukkit.api.data.type.Condition;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import me.lemonypancakes.originsbukkit.api.data.type.Power;
+import me.lemonypancakes.originsbukkit.util.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class PowerContainer implements Power {
@@ -28,8 +27,6 @@ public class PowerContainer implements Power {
     private boolean isTicking = false;
 
     private int tickRate = 4;
-
-    private final Map<Object, Object> buffer = new HashMap<>();
 
     public PowerContainer(Identifier identifier,
                           JsonObject jsonObject,
@@ -158,9 +155,7 @@ public class PowerContainer implements Power {
                         if (t instanceof Player) {
                             Player player = (Player) t;
 
-                            if (buffer.containsKey(player.getUniqueId())) {
-                                ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                            }
+                            Storage.removeSchedulerDataFromStorage(player);
                             BukkitTask tick = new BukkitRunnable() {
 
                                 @Override
@@ -172,7 +167,7 @@ public class PowerContainer implements Power {
                                             }
                                         }
                                     } else {
-                                        buffer.remove(player.getUniqueId());
+                                        Storage.removeSchedulerDataFromStorage(player);
                                         cancel();
                                     }
                                 }
@@ -181,27 +176,13 @@ public class PowerContainer implements Power {
                                     0,
                                     tickRate
                             );
-                            buffer.put(player.getUniqueId(), tick);
-                        } else {
-                            if (!buffer.containsKey(t)) {
-                                buffer.put(t, t);
-
-                                new BukkitRunnable() {
-
-                                    @Override
-                                    public void run() {
-                                        if (getCondition().test(t)) {
-                                            for (Action<Object> action : getActions()) {
-                                                action.accept(t);
-                                            }
-                                        }
-                                    }
-                                }.runTaskTimer(
-                                        OriginsBukkit.getPlugin(),
-                                        0,
-                                        tickRate
-                                );
-                            }
+                            Storage.addDataToStorage(
+                                    player,
+                                    new SchedulerContainer(
+                                            getIdentifier(),
+                                            tick
+                                    )
+                            );
                         }
                     }
                 } else {
@@ -213,9 +194,7 @@ public class PowerContainer implements Power {
                         if (t instanceof Player) {
                             Player player = (Player) t;
 
-                            if (buffer.containsKey(player.getUniqueId())) {
-                                ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                            }
+                            Storage.removeSchedulerDataFromStorage(player);
                             BukkitTask tick = new BukkitRunnable() {
 
                                 @Override
@@ -225,7 +204,7 @@ public class PowerContainer implements Power {
                                             action.accept(player);
                                         }
                                     } else {
-                                        buffer.remove(player.getUniqueId());
+                                        Storage.removeSchedulerDataFromStorage(player);
                                         cancel();
                                     }
                                 }
@@ -234,25 +213,13 @@ public class PowerContainer implements Power {
                                     0,
                                     tickRate
                             );
-                            buffer.put(player.getUniqueId(), tick);
-                        } else {
-                            if (!buffer.containsKey(t)) {
-                                buffer.put(t, t);
-
-                                new BukkitRunnable() {
-
-                                    @Override
-                                    public void run() {
-                                        for (Action<Object> action : getActions()) {
-                                            action.accept(t);
-                                        }
-                                    }
-                                }.runTaskTimer(
-                                        OriginsBukkit.getPlugin(),
-                                        0,
-                                        tickRate
-                                );
-                            }
+                            Storage.addDataToStorage(
+                                    player,
+                                    new SchedulerContainer(
+                                            getIdentifier(),
+                                            tick
+                                    )
+                            );
                         }
                     }
                 }
@@ -272,9 +239,7 @@ public class PowerContainer implements Power {
                                             if (t instanceof Player) {
                                                 Player player = (Player) t;
 
-                                                if (buffer.containsKey(player.getUniqueId())) {
-                                                    ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                                                }
+                                                Storage.removeSchedulerDataFromStorage(player);
                                                 BukkitTask tick = new BukkitRunnable() {
 
                                                     @Override
@@ -286,7 +251,7 @@ public class PowerContainer implements Power {
                                                                 }
                                                             }
                                                         } else {
-                                                            buffer.remove(player.getUniqueId());
+                                                            Storage.removeSchedulerDataFromStorage(player);
                                                             cancel();
                                                         }
                                                     }
@@ -295,27 +260,13 @@ public class PowerContainer implements Power {
                                                         0,
                                                         tickRate
                                                 );
-                                                buffer.put(player.getUniqueId(), tick);
-                                            } else {
-                                                if (!buffer.containsKey(t)) {
-                                                    buffer.put(t, t);
-
-                                                    new BukkitRunnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            if (getCondition().test(t)) {
-                                                                for (Action<Object> action : getActions()) {
-                                                                    action.accept(t);
-                                                                }
-                                                            }
-                                                        }
-                                                    }.runTaskTimerAsynchronously(
-                                                            OriginsBukkit.getPlugin(),
-                                                            0,
-                                                            tickRate
-                                                    );
-                                                }
+                                                Storage.addDataToStorage(
+                                                        player,
+                                                        new SchedulerContainer(
+                                                                getIdentifier(),
+                                                                tick
+                                                        )
+                                                );
                                             }
                                         }
                                     } else {
@@ -327,9 +278,7 @@ public class PowerContainer implements Power {
                                             if (t instanceof Player) {
                                                 Player player = (Player) t;
 
-                                                if (buffer.containsKey(player.getUniqueId())) {
-                                                    ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                                                }
+                                                Storage.removeSchedulerDataFromStorage(player);
                                                 BukkitTask tick = new BukkitRunnable() {
 
                                                     @Override
@@ -339,7 +288,7 @@ public class PowerContainer implements Power {
                                                                 action.accept(player);
                                                             }
                                                         } else {
-                                                            buffer.remove(player.getUniqueId());
+                                                            Storage.removeSchedulerDataFromStorage(player);
                                                             cancel();
                                                         }
                                                     }
@@ -348,25 +297,13 @@ public class PowerContainer implements Power {
                                                         0,
                                                         tickRate
                                                 );
-                                                buffer.put(player.getUniqueId(), tick);
-                                            } else {
-                                                if (!buffer.containsKey(t)) {
-                                                    buffer.put(t, t);
-
-                                                    new BukkitRunnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            for (Action<Object> action : getActions()) {
-                                                                action.accept(t);
-                                                            }
-                                                        }
-                                                    }.runTaskTimerAsynchronously(
-                                                            OriginsBukkit.getPlugin(),
-                                                            0,
-                                                            tickRate
-                                                    );
-                                                }
+                                                Storage.addDataToStorage(
+                                                        player,
+                                                        new SchedulerContainer(
+                                                                getIdentifier(),
+                                                                tick
+                                                        )
+                                                );
                                             }
                                         }
                                     }
@@ -384,9 +321,7 @@ public class PowerContainer implements Power {
                     if (t instanceof Player) {
                         Player player = (Player) t;
 
-                        if (buffer.containsKey(player.getUniqueId())) {
-                            ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                        }
+                        Storage.removeSchedulerDataFromStorage(player);
                         BukkitTask tick = new BukkitRunnable() {
 
                             @Override
@@ -398,7 +333,7 @@ public class PowerContainer implements Power {
                                         }
                                     }
                                 } else {
-                                    buffer.remove(player.getUniqueId());
+                                    Storage.removeSchedulerDataFromStorage(player);
                                     cancel();
                                 }
                             }
@@ -407,27 +342,13 @@ public class PowerContainer implements Power {
                                 0,
                                 tickRate
                         );
-                        buffer.put(player.getUniqueId(), tick);
-                    } else {
-                        if (!buffer.containsKey(t)) {
-                            buffer.put(t, t);
-
-                            new BukkitRunnable() {
-
-                                @Override
-                                public void run() {
-                                    if (getCondition().test(t)) {
-                                        for (Action<Object> action : getActions()) {
-                                            action.accept(t);
-                                        }
-                                    }
-                                }
-                            }.runTaskTimer(
-                                    OriginsBukkit.getPlugin(),
-                                    0,
-                                    tickRate
-                            );
-                        }
+                        Storage.addDataToStorage(
+                                player,
+                                new SchedulerContainer(
+                                        getIdentifier(),
+                                        tick
+                                )
+                        );
                     }
                 }
             } else {
@@ -439,9 +360,7 @@ public class PowerContainer implements Power {
                     if (t instanceof Player) {
                         Player player = (Player) t;
 
-                        if (buffer.containsKey(player.getUniqueId())) {
-                            ((BukkitTask) buffer.get(player.getUniqueId())).cancel();
-                        }
+                        Storage.removeSchedulerDataFromStorage(player);
                         BukkitTask tick = new BukkitRunnable() {
 
                             @Override
@@ -451,7 +370,7 @@ public class PowerContainer implements Power {
                                         action.accept(player);
                                     }
                                 } else {
-                                    buffer.remove(player.getUniqueId());
+                                    Storage.removeSchedulerDataFromStorage(player);
                                     cancel();
                                 }
                             }
@@ -460,25 +379,13 @@ public class PowerContainer implements Power {
                                 0,
                                 tickRate
                         );
-                        buffer.put(player.getUniqueId(), tick);
-                    } else {
-                        if (!buffer.containsKey(t)) {
-                            buffer.put(t, t);
-
-                            new BukkitRunnable() {
-
-                                @Override
-                                public void run() {
-                                    for (Action<Object> action : getActions()) {
-                                        action.accept(t);
-                                    }
-                                }
-                            }.runTaskTimer(
-                                    OriginsBukkit.getPlugin(),
-                                    0,
-                                    tickRate
-                            );
-                        }
+                        Storage.addDataToStorage(
+                                player,
+                                new SchedulerContainer(
+                                        getIdentifier(),
+                                        tick
+                                )
+                        );
                     }
                 }
             }
@@ -495,7 +402,6 @@ public class PowerContainer implements Power {
                 ", isAsync=" + isAsync +
                 ", isTicking=" + isTicking +
                 ", tickRate=" + tickRate +
-                ", buffer=" + buffer +
                 '}';
     }
 }
