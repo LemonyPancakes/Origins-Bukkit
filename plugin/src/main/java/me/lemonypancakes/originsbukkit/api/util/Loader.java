@@ -10,11 +10,8 @@ import me.lemonypancakes.originsbukkit.enums.Impact;
 import me.lemonypancakes.originsbukkit.util.Catcher;
 import me.lemonypancakes.originsbukkit.util.Message;
 import me.lemonypancakes.originsbukkit.util.Storage;
-import org.apache.commons.jexl3.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FilenameUtils;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,7 +21,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
-import java.util.function.BiPredicate;
 
 public final class Loader {
 
@@ -277,8 +273,6 @@ public final class Loader {
     }
 
     private static Power loadPowerFromFile(File powerFile, Identifier identifier) {
-        Power power = new PowerContainer(identifier);
-
         try {
             Gson gson = new Gson();
             Reader reader = new FileReader(powerFile);
@@ -288,146 +282,30 @@ public final class Loader {
             if (jsonObject.has("power")) {
                 JsonObject powerSection = jsonObject.getAsJsonObject("power");
 
-                power.setJsonObject(powerSection);
-                if (powerSection != null) {
-                    if (powerSection.has("action") && !powerSection.has("actions")) {
-                        JsonObject action = powerSection.getAsJsonObject("action");
-
-                        if (action != null) {
-                            if (action.has("type")) {
-                                String actionTypeString = action.get("type").getAsString();
-
-                                if (actionTypeString != null) {
-                                    Identifier actionTypeIdentifier = new IdentifierContainer(
-                                            actionTypeString.split(":")[0],
-                                            actionTypeString.split(":")[1]
-                                    );
-
-                                    Storage.getActionsData().forEach((key, value) -> {
-                                        if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                            Action<?> actionBuff = new ActionContainer<>(
-                                                    key,
-                                                    action,
-                                                    value.getBiConsumer()
-                                            );
-                                            power.setActions(new Action<?>[]{actionBuff});
-                                        }
-                                    });
-                                }
-                            }
-                        }
-                    } else if (powerSection.has("actions") && !powerSection.has("action")) {
-                        JsonObject[] actions
-                                = new Gson().fromJson(
-                                powerSection.get(
-                                        "actions"
-                                ),
-                                JsonObject[].class
-                        );
-                        List<Action<?>> actionList = new ArrayList<>();
-
-                        if (actions != null) {
-                            for (JsonObject action : actions) {
-                                if (action.has("type")) {
-                                    String actionTypeString = action.get("type").getAsString();
-
-                                    if (actionTypeString != null) {
-                                        Identifier actionTypeIdentifier = new IdentifierContainer(
-                                                actionTypeString.split(":")[0],
-                                                actionTypeString.split(":")[1]
-                                        );
-
-                                        Storage.getActionsData().forEach((key, value) -> {
-                                            if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                                Action<?> actionBuff = new ActionContainer<>(
-                                                        key,
-                                                        action,
-                                                        value.getBiConsumer()
-                                                );
-                                                actionList.add(actionBuff);
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                            power.setActions(
-                                    actionList.toArray(
-                                            new Action<?>[0]
-                                    )
+                if (powerSection.has("power_type")) {
+                    PowerType powerType =
+                            new Gson().fromJson(
+                                    powerSection.get(
+                                            "power_type"
+                                    ),
+                                    PowerType.class
                             );
+
+                    if (powerType != null) {
+                        PowerType parse = PowerType.parsePower(powerType);
+
+                        if (parse != null) {
+                            return parse.newInstance(identifier, powerSection);
                         }
+                    } else {
+                        Message.sendConsoleMessage("&6[Origins-Bukkit] Power Type cannot be null.");
                     }
-                    if (powerSection.has("condition")) {
-                        JsonObject[] condition
-                                = new Gson().fromJson(
-                                powerSection.get(
-                                        "condition"
-                                ),
-                                JsonObject[].class
-                        );
-                        Map<Object, Object> buffer = new HashMap<>();
-                        StringBuilder condition1 = new StringBuilder();
-
-                        for (JsonObject cond : condition) {
-                            String randString = getSaltString();
-
-                            if (cond.has("type")) {
-                                String type = cond.get("type").getAsString();
-
-                                if (type != null) {
-                                    Identifier conditionIdentifier = new IdentifierContainer(
-                                            type.split(":")[0],
-                                            type.split(":")[1]
-                                    );
-
-                                    Storage.getConditionsData().forEach((key, value) -> {
-                                        if (Catcher.catchDuplicate(key, conditionIdentifier)) {
-                                            Condition<?> conditionBuff = new ConditionContainer<>(
-                                                    key,
-                                                    cond,
-                                                    value.getBiPredicate()
-                                            );
-                                            buffer.put(randString, conditionBuff);
-                                            condition1.append(randString).append(" ");
-                                        }
-                                    });
-                                }
-                            } else if (cond.has("operator")) {
-                                String operator = cond.get("operator").getAsString();
-
-                                if (operator != null) {
-                                    condition1.append(operator).append(" ");
-                                }
-                            }
-                        }
-                        JexlEngine jexlEngine = new JexlBuilder().create();
-                        Bukkit.broadcastMessage("" + condition1);
-                        JexlExpression expression = jexlEngine.createExpression(condition1.toString());
-                        power.setCondition(
-                                new ConditionContainer<Player>(
-                                        null,
-                                        null,
-                                        (data, player) -> {
-                                            JexlContext context = new MapContext();
-                                            buffer.forEach((key, value) -> {
-                                                if (value instanceof Condition) {
-                                                    context.set(
-                                                            key.toString(),
-                                                            ((Condition<Object>) value).test(player)
-                                                    );
-                                                }
-                                            });
-                                            
-                                            return (boolean) expression.evaluate(context);
-                                        }
-                                )
-                        );
-                    }
+                } else {
+                    Message.sendConsoleMessage("&6[Origins-Bukkit] Please specify a power type.");
                 }
             }
             jsonReader.close();
             reader.close();
-            return power;
         } catch (IOException e) {
             e.printStackTrace();
         }

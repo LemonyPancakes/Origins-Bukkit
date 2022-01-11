@@ -296,14 +296,14 @@ public final class PlayerConditions {
         Registry.register(
                 new ConditionContainer<Player>(
                         new IdentifierContainer(
-                                OriginsBukkit.KEY, "condition/player/has_potion_effect"
+                                OriginsBukkit.KEY, "condition/player/has_potion_effect_type"
                         ), null,
                         (data, player) -> {
-                            if (data.has("type")) {
+                            if (data.has("potion_effect_type")) {
                                 PotionEffectType type
                                         = PotionEffectType.getByName(
                                                 data.get(
-                                                        "type"
+                                                        "potion_effect_type"
                                                 ).getAsString()
                                 );
 
@@ -1797,6 +1797,76 @@ public final class PlayerConditions {
                             );
 
                             return location.getBlock().getType().isRecord();
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Player>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare_location/block/is_powered"
+                        ), null,
+                        (data, player) -> {
+                            Location location = locationOffset(
+                                    player.getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            return location.getBlock().isBlockPowered();
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Player>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare_location/block/is_liquid"
+                        ), null,
+                        (data, player) -> {
+                            Location location = locationOffset(
+                                    player.getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            return location.getBlock().isLiquid();
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Player>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare_location/block/is_empty"
+                        ), null,
+                        (data, player) -> {
+                            Location location = locationOffset(
+                                    player.getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            return location.getBlock().isEmpty();
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Player>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare_location/block/is_indirectly_powered"
+                        ), null,
+                        (data, player) -> {
+                            Location location = locationOffset(
+                                    player.getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            return location.getBlock().isBlockIndirectlyPowered();
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Player>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare_location/block/is_passable"
+                        ), null,
+                        (data, player) -> {
+                            Location location = locationOffset(
+                                    player.getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            return location.getBlock().isPassable();
                         })
         );
     }

@@ -1,9 +1,7 @@
 package me.lemonypancakes.originsbukkit.api.util;
 
-import me.lemonypancakes.originsbukkit.api.data.type.Action;
-import me.lemonypancakes.originsbukkit.api.data.type.Condition;
+import me.lemonypancakes.originsbukkit.api.data.type.*;
 import me.lemonypancakes.originsbukkit.api.data.type.Origin;
-import me.lemonypancakes.originsbukkit.api.data.type.Power;
 import me.lemonypancakes.originsbukkit.util.Storage;
 
 public final class Registry {
@@ -24,6 +22,10 @@ public final class Registry {
         Storage.addDataToStorage(condition);
     }
 
+    public static <T> void register(Tag<T> tag) {
+        Storage.addDataToStorage(tag);
+    }
+
     public static void unregister(Origin origin) {
         Storage.removeDataFromStorage(origin);
     }
@@ -38,5 +40,9 @@ public final class Registry {
 
     public static <T> void unregister(Condition<T> condition) {
         Storage.removeDataFromStorage(condition);
+    }
+
+    public static <T> void unregister(Tag<T> tag) {
+        Storage.removeDataFromStorage(tag);
     }
 }

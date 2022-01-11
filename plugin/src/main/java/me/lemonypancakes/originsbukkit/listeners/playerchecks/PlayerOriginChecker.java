@@ -17,7 +17,6 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.playerchecks;
 
-import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
 import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;

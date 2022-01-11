@@ -42,12 +42,7 @@ public class OriginContainer implements Origin {
                            Impact impact,
                            ItemStack icon,
                            String[] authors) {
-        this.identifier = identifier;
-        this.displayName = displayName;
-        this.description = description;
-        this.impact = impact;
-        this.icon = icon;
-        this.authors = authors;
+        this(identifier, displayName, description, impact, icon, authors, null);
     }
 
     public OriginContainer(Identifier identifier,
@@ -55,42 +50,34 @@ public class OriginContainer implements Origin {
                            String[] description,
                            Impact impact,
                            ItemStack icon) {
-        this.identifier = identifier;
-        this.displayName = displayName;
-        this.description = description;
-        this.impact = impact;
-        this.icon = icon;
+        this(identifier, displayName, description, impact, icon, null);
     }
 
     public OriginContainer(Identifier identifier,
                            String displayName,
                            String[] description,
                            Impact impact) {
-        this.identifier = identifier;
-        this.displayName = displayName;
-        this.description = description;
-        this.impact = impact;
+        this(identifier, displayName, description, impact, null);
     }
 
     public OriginContainer(Identifier identifier,
                            String displayName,
                            String[] description) {
-        this.identifier = identifier;
-        this.displayName = displayName;
-        this.description = description;
+        this(identifier, displayName, description, null);
     }
 
     public OriginContainer(Identifier identifier,
                            String displayName) {
-        this.identifier = identifier;
-        this.displayName = displayName;
+        this(identifier, displayName, null);
     }
 
     public OriginContainer(Identifier identifier) {
-        this.identifier = identifier;
+        this(identifier, null);
     }
 
-    public OriginContainer() {}
+    public OriginContainer() {
+        this(null);
+    }
 
     @Override
     public Identifier getIdentifier() {

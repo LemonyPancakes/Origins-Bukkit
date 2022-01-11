@@ -31,22 +31,15 @@ public class ConditionContainer<T> implements Condition<T> {
 
     public ConditionContainer(Identifier identifier,
                               JsonObject jsonObject) {
-        this.identifier = identifier;
-        this.jsonObject = jsonObject;
-        if (jsonObject != null && jsonObject.has("inverted")) {
-            this.isInverted = jsonObject.get("inverted").getAsBoolean();
-        } else {
-            this.isInverted = false;
-        }
+        this(identifier, jsonObject, null);
     }
 
     public ConditionContainer(Identifier identifier) {
-        this.identifier = identifier;
-        this.isInverted = false;
+        this(identifier, null);
     }
 
     public ConditionContainer() {
-        this.isInverted = false;
+        this(null);
     }
 
     @Override

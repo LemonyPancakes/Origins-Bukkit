@@ -33,17 +33,15 @@ public class ActionContainer<T> implements Action<T> {
     public ActionContainer(Identifier identifier,
                            JsonObject jsonObject) {
         this(identifier, jsonObject, null);
-        if (jsonObject != null && jsonObject.has("async")) {
-            this.isAsync = jsonObject.get("async").getAsBoolean();
-        }
     }
 
     public ActionContainer(Identifier identifier) {
         this(identifier, null);
-        this.identifier = identifier;
     }
 
-    public ActionContainer() {}
+    public ActionContainer() {
+        this(null);
+    }
 
     @Override
     public Identifier getIdentifier() {
@@ -121,6 +119,7 @@ public class ActionContainer<T> implements Action<T> {
                 "identifier=" + identifier +
                 ", jsonObject=" + jsonObject +
                 ", biConsumer=" + biConsumer +
+                ", isAsync=" + isAsync +
                 '}';
     }
 }

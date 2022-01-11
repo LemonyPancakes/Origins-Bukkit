@@ -1,22 +1,19 @@
 package me.lemonypancakes.originsbukkit.util;
 
-import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @SuppressWarnings("unused")
 public final class Storage {
-
-    private static final Logger LOGGER = OriginsBukkit.getPlugin().getLogger();
 
     private static final Map<Identifier, Origin> ORIGINS_DATA = new HashMap<>();
     private static final Map<Identifier, Power> POWERS_DATA = new HashMap<>();
     private static final Map<Identifier, Action<?>> ACTIONS_DATA = new HashMap<>();
     private static final Map<Identifier, Condition<?>> CONDITIONS_DATA = new HashMap<>();
+    private static final Map<Identifier, Tag<?>> TAGS_DATA = new HashMap<>();
     private static final Map<Player, Origin> PLAYER_ORIGINS_DATA = new HashMap<>();
     private static final Map<Player, Scheduler> PLAYER_SCHEDULER_DATA = new HashMap<>();
     private static final Map<Identifier, Origin> CACHED_ORIGINS_DATA = new HashMap<>();
@@ -37,6 +34,10 @@ public final class Storage {
         return CONDITIONS_DATA;
     }
 
+    public static Map<Identifier, Tag<?>> getTagsData() {
+        return TAGS_DATA;
+    }
+
     public static Map<Player, Origin> getPlayerOriginsData() {
         return PLAYER_ORIGINS_DATA;
     }
@@ -54,7 +55,11 @@ public final class Storage {
                 ORIGINS_DATA, origin.getIdentifier())) {
             ORIGINS_DATA.put(origin.getIdentifier(), origin);
         } else {
-            LOGGER.warning("log");
+            Message.sendConsoleMessage(
+                    "&6[Origins-Bukkit] Warning. Tried to register duplicate origin &e\""
+                            + origin.getIdentifier().getIdentifier()
+                            + "\""
+            );
         }
     }
 
@@ -63,7 +68,11 @@ public final class Storage {
                 POWERS_DATA, power.getIdentifier())) {
             POWERS_DATA.put(power.getIdentifier(), power);
         } else {
-            LOGGER.warning("log");
+            Message.sendConsoleMessage(
+                    "&6[Origins-Bukkit] Warning. Tried to register duplicate power &e\""
+                            + power.getIdentifier().getIdentifier()
+                            + "\""
+            );
         }
     }
 
@@ -72,7 +81,11 @@ public final class Storage {
                 ACTIONS_DATA, action.getIdentifier())) {
             ACTIONS_DATA.put(action.getIdentifier(), action);
         } else {
-            LOGGER.warning("log");
+            Message.sendConsoleMessage(
+                    "&6[Origins-Bukkit] Warning. Tried to register duplicate action &e\""
+                            + action.getIdentifier().getIdentifier()
+                            + "\""
+            );
         }
     }
 
@@ -81,7 +94,24 @@ public final class Storage {
                 CONDITIONS_DATA, condition.getIdentifier())) {
             CONDITIONS_DATA.put(condition.getIdentifier(), condition);
         } else {
-            LOGGER.warning("log");
+            Message.sendConsoleMessage(
+                    "&6[Origins-Bukkit] Warning. Tried to register duplicate condition &e\""
+                            + condition.getIdentifier().getIdentifier()
+                            + "\""
+            );
+        }
+    }
+
+    public static <T> void addDataToStorage(Tag<T> tag) {
+        if (!Catcher.catchDuplicateFromMap(
+                TAGS_DATA, tag.getIdentifier())) {
+            TAGS_DATA.put(tag.getIdentifier(), tag);
+        } else {
+            Message.sendConsoleMessage(
+                    "&6[Origins-Bukkit] Warning. Tried to register duplicate listener &e\""
+                            + tag.getIdentifier().getIdentifier()
+                            + "\""
+            );
         }
     }
 
@@ -139,52 +169,87 @@ public final class Storage {
     }
 
     public static void removeDataFromStorage(Origin origin) {
-        if (ORIGINS_DATA.containsKey(origin.getIdentifier())) {
-            ORIGINS_DATA.remove(origin.getIdentifier());
-        } else {
-            LOGGER.warning("log");
-        }
+        ORIGINS_DATA.forEach((key, value) -> {
+            if (Catcher.catchDuplicate(key, origin.getIdentifier())) {
+                ORIGINS_DATA.remove(key);
+            }
+        });
     }
 
     public static void removeDataFromStorage(Power power) {
-        if (POWERS_DATA.containsKey(power.getIdentifier())) {
-            POWERS_DATA.remove(power.getIdentifier());
-        } else {
-            LOGGER.warning("log");
-        }
+        POWERS_DATA.forEach((key, value) -> {
+            if (Catcher.catchDuplicate(key, power.getIdentifier())) {
+                POWERS_DATA.remove(key);
+            }
+        });
     }
 
     public static <T> void removeDataFromStorage(Action<T> action) {
-        if (ACTIONS_DATA.containsKey(action.getIdentifier())) {
-            ACTIONS_DATA.remove(action.getIdentifier());
-        } else {
-            LOGGER.warning("log");
-        }
+        ACTIONS_DATA.forEach((key, value) -> {
+            if (Catcher.catchDuplicate(key, action.getIdentifier())) {
+                ACTIONS_DATA.remove(key);
+            }
+        });
     }
 
     public static <T> void removeDataFromStorage(Condition<T> condition) {
-        if (CONDITIONS_DATA.containsKey(condition.getIdentifier())) {
-            CONDITIONS_DATA.remove(condition.getIdentifier());
-        } else {
-            LOGGER.warning("log");
-        }
+        CONDITIONS_DATA.forEach((key, value) -> {
+            if (Catcher.catchDuplicate(key, condition.getIdentifier())) {
+                CONDITIONS_DATA.remove(key);
+            }
+        });
+    }
+
+    public static <T> void removeDataFromStorage(Tag<T> tag) {
+        TAGS_DATA.forEach((key, value) -> {
+            if (Catcher.catchDuplicate(key, tag.getIdentifier())) {
+                TAGS_DATA.remove(key);
+            }
+        });
     }
 
     public static void removeDataFromStorage(Player player) {
-        if (Catcher.catchDuplicateFromMap(
-                PLAYER_ORIGINS_DATA, player)) {
-            PLAYER_ORIGINS_DATA.remove(player);
-        } else {
-            LOGGER.warning("log");
+        for (Map.Entry<Player, Origin> entry : PLAYER_ORIGINS_DATA.entrySet()) {
+            Player key = entry.getKey();
+
+            String duplicate
+                    = String.valueOf(
+                    Catcher.getDuplicateFromMap(
+                            PLAYER_ORIGINS_DATA,
+                            player
+                    )
+            );
+
+            if (duplicate != null) {
+                if (key.toString().equals(duplicate)) {
+                    PLAYER_ORIGINS_DATA.remove(key);
+                }
+            }
         }
     }
 
     public static void removeSchedulerDataFromStorage(Player player) {
-        if (Catcher.catchDuplicateFromMap(
-                PLAYER_SCHEDULER_DATA, player)) {
-            PLAYER_SCHEDULER_DATA.remove(player);
-        } else {
-            LOGGER.warning("log");
+        for (Map.Entry<Player, Scheduler> entry : PLAYER_SCHEDULER_DATA.entrySet()) {
+            Player key = entry.getKey();
+
+            String duplicate
+                    = String.valueOf(
+                    Catcher.getDuplicateFromMap(
+                            PLAYER_SCHEDULER_DATA,
+                            player
+                    )
+            );
+
+            if (duplicate != null) {
+                if (key.toString().equals(duplicate)) {
+                    PLAYER_SCHEDULER_DATA.get(key).getBukkitTask().cancel();
+                    PLAYER_SCHEDULER_DATA.remove(key);
+                }
+            }
         }
+    }
+
+    public static Tag<?> get(Identifier identifier) {
+        return Catcher.getDuplicateFromMap(TAGS_DATA, identifier);
     }
 }

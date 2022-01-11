@@ -36,4 +36,12 @@ public class SchedulerContainer implements Scheduler {
     public void setBukkitTask(BukkitTask bukkitTask) {
         this.bukkitTask = bukkitTask;
     }
+
+    @Override
+    public String toString() {
+        return "SchedulerContainer{" +
+                "identifier=" + identifier +
+                ", bukkitTask=" + bukkitTask +
+                '}';
+    }
 }

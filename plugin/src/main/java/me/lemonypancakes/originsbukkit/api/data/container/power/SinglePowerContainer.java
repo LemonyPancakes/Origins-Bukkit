@@ -1,7 +1,8 @@
-package me.lemonypancakes.originsbukkit.api.data.container;
+package me.lemonypancakes.originsbukkit.api.data.container.power;
 
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
+import me.lemonypancakes.originsbukkit.api.data.container.SchedulerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.Action;
 import me.lemonypancakes.originsbukkit.api.data.type.Condition;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
@@ -15,7 +16,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Arrays;
 
 @SuppressWarnings({"unchecked", "unused"})
-public class PowerContainer implements Power {
+public class SinglePowerContainer implements Power {
 
     private Identifier identifier;
     private JsonObject jsonObject;
@@ -28,10 +29,10 @@ public class PowerContainer implements Power {
 
     private int tickRate = 4;
 
-    public PowerContainer(Identifier identifier,
-                          JsonObject jsonObject,
-                          Action<?>[] actions,
-                          Condition<?> condition) {
+    public SinglePowerContainer(Identifier identifier,
+                                JsonObject jsonObject,
+                                Action<?>[] actions,
+                                Condition<?> condition) {
         this.identifier = identifier;
         this.jsonObject = jsonObject;
         this.actions = actions;
@@ -49,45 +50,24 @@ public class PowerContainer implements Power {
         }
     }
 
-    public PowerContainer(Identifier identifier,
-                          JsonObject jsonObject,
-                          Action<?>[] actions) {
+    public SinglePowerContainer(Identifier identifier,
+                                JsonObject jsonObject,
+                                Action<?>[] actions) {
         this(identifier, jsonObject, actions, null);
-        if (jsonObject != null) {
-            if (jsonObject.has("async")) {
-                this.isAsync = jsonObject.get("async").getAsBoolean();
-            }
-            if (jsonObject.has("ticking")) {
-                this.isTicking = jsonObject.get("ticking").getAsBoolean();
-            }
-            if (jsonObject.has("tick_rate")) {
-                this.tickRate = jsonObject.get("tick_rate").getAsInt();
-            }
-        }
     }
 
-    public PowerContainer(Identifier identifier,
-                          JsonObject jsonObject) {
+    public SinglePowerContainer(Identifier identifier,
+                                JsonObject jsonObject) {
         this(identifier, jsonObject, null);
-        if (jsonObject != null) {
-            if (jsonObject.has("async")) {
-                this.isAsync = jsonObject.get("async").getAsBoolean();
-            }
-            if (jsonObject.has("ticking")) {
-                this.isTicking = jsonObject.get("ticking").getAsBoolean();
-            }
-            if (jsonObject.has("tick_rate")) {
-                this.tickRate = jsonObject.get("tick_rate").getAsInt();
-            }
-        }
     }
 
-    public PowerContainer(Identifier identifier) {
+    public SinglePowerContainer(Identifier identifier) {
         this(identifier, null);
-        this.identifier = identifier;
     }
 
-    public PowerContainer() {}
+    public SinglePowerContainer() {
+        this(null);
+    }
 
     @Override
     public Identifier getIdentifier() {
@@ -394,7 +374,7 @@ public class PowerContainer implements Power {
 
     @Override
     public String toString() {
-        return "PowerContainer{" +
+        return "SinglePowerContainer{" +
                 "identifier=" + identifier +
                 ", jsonObject=" + jsonObject +
                 ", actions=" + Arrays.toString(actions) +

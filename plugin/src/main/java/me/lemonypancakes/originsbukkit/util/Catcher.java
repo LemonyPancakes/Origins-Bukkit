@@ -16,11 +16,11 @@ public class Catcher {
     public static boolean catchDuplicateFromMap(Map<?, ?> map, Object object) {
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             Object key = entry.getKey();
+            boolean equals = key.toString().equals(object.toString());
 
-            return key.toString()
-                    .equals(
-                            object.toString()
-                    );
+            if (equals) {
+                return true;
+            }
         }
         return false;
     }
@@ -28,11 +28,11 @@ public class Catcher {
     public static boolean catchDuplicateFromMap(Map<Identifier, ?> map, Identifier object) {
         for (Map.Entry<Identifier, ?> entry : map.entrySet()) {
             Identifier identifier = entry.getKey();
+            boolean equals = identifier.toString().equals(object.toString());
 
-            return identifier.toString()
-                    .equals(
-                            object.toString()
-                    );
+            if (equals) {
+                return true;
+            }
         }
         return false;
     }
@@ -43,10 +43,21 @@ public class Catcher {
 
             if (key.toString()
                     .equals(
-                            t.toString()
-                    )
-            ) {
+                            t.toString())) {
                 return t;
+            }
+        }
+        return null;
+    }
+
+    public static <T> T getDuplicateFromMap(Map<Identifier, T> map, Identifier object) {
+        for (Map.Entry<Identifier, T> entry : map.entrySet()) {
+            Object identifier = entry.getKey();
+
+            if (identifier.toString()
+                    .equals(
+                            object.toString())) {
+                return entry.getValue();
             }
         }
         return null;

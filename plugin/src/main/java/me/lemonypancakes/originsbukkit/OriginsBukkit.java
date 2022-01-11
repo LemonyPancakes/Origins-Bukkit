@@ -19,14 +19,20 @@ package me.lemonypancakes.originsbukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import me.lemonypancakes.originsbukkit.api.data.container.power.ListenerPowerContainer;
 import me.lemonypancakes.originsbukkit.api.util.Loader;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
 import me.lemonypancakes.originsbukkit.commands.CommandHandler;
 import me.lemonypancakes.originsbukkit.config.ConfigHandler;
 import me.lemonypancakes.originsbukkit.enums.Config;
+import me.lemonypancakes.originsbukkit.factory.action.BlockActions;
+import me.lemonypancakes.originsbukkit.factory.action.ItemStackActions;
 import me.lemonypancakes.originsbukkit.factory.action.PlayerActions;
+import me.lemonypancakes.originsbukkit.factory.condition.BlockConditions;
+import me.lemonypancakes.originsbukkit.factory.condition.ItemStackConditions;
 import me.lemonypancakes.originsbukkit.factory.condition.PlayerConditions;
+import me.lemonypancakes.originsbukkit.factory.listener.SoulboundItemListener;
 import me.lemonypancakes.originsbukkit.items.ItemHandler;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import me.lemonypancakes.originsbukkit.metrics.Metrics;
@@ -136,6 +142,11 @@ public final class OriginsBukkit extends JavaPlugin {
         checkServerDependencies();
         PlayerActions.register();
         PlayerConditions.register();
+        ItemStackActions.register();
+        ItemStackConditions.register();
+        BlockActions.register();
+        BlockConditions.register();
+        Registry.register(SoulboundItemListener.getFactory());
 
         if (isEnabled()) {
             protocolManager = ProtocolLibrary.getProtocolManager();
@@ -249,15 +260,6 @@ public final class OriginsBukkit extends JavaPlugin {
                     }
                 }
             }
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("ORIGINS: " + Storage.getOriginsData());
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("POWERS: " + Storage.getPowersData());
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("ACTIONS: " + Storage.getActionsData());
-            Bukkit.broadcastMessage("");
-            Bukkit.broadcastMessage("CONDITIONS: " + Storage.getConditionsData());
-            Bukkit.broadcastMessage("");
         }
         load();
         startMetrics();
