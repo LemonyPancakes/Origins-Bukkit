@@ -21,6 +21,8 @@ public class ListenerPowerContainer implements Power, Listener {
 
     private final boolean isFactory;
 
+    private boolean setCancelled = false;
+
     private final Set<Player> playersToListen = new HashSet<>();
 
     public ListenerPowerContainer(Identifier identifier,
@@ -34,6 +36,15 @@ public class ListenerPowerContainer implements Power, Listener {
         this.condition = condition;
         this.isFactory = isFactory;
         if (!isFactory) {
+            if (jsonObject != null) {
+                JsonObject fields = jsonObject.getAsJsonObject("fields");
+
+                if (fields != null) {
+                    if (fields.has("set_cancelled")) {
+                        this.setCancelled = fields.get("set_cancelled").getAsBoolean();
+                    }
+                }
+            }
             Bukkit.getPluginManager().registerEvents(this, OriginsBukkit.getPlugin());
         }
     }
@@ -102,6 +113,16 @@ public class ListenerPowerContainer implements Power, Listener {
     @Override
     public <T> void setCondition(Condition<T> condition) {
         this.condition = condition;
+    }
+
+    @Override
+    public boolean isFactory() {
+        return isFactory;
+    }
+
+    @Override
+    public boolean isSetCancelled() {
+        return setCancelled;
     }
 
     @Override

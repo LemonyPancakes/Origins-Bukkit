@@ -5,321 +5,321 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ConditionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
 import me.lemonypancakes.originsbukkit.enums.Operator;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 public final class PlayerConditions {
 
     public static void register() {
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_online"
                         ), null,
-                        (data, player) -> player.isOnline())
+                        (data, temp) -> temp.getPlayer().isOnline())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_in_water"
                         ), null,
-                        (data, player) -> player.isInWater())
+                        (data, temp) -> temp.getPlayer().isInWater())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_player_time_relative"
                         ), null,
-                        (data, player) -> player.isPlayerTimeRelative())
+                        (data, temp) -> temp.getPlayer().isPlayerTimeRelative())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_flying"
                         ), null,
-                        (data, player) -> player.isFlying())
+                        (data, temp) -> temp.getPlayer().isFlying())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_health_scaled"
                         ), null,
-                        (data, player) -> player.isHealthScaled())
+                        (data, temp) -> temp.getPlayer().isHealthScaled())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_sleeping_ignored"
                         ), null,
-                        (data, player) -> player.isSleepingIgnored())
+                        (data, temp) -> temp.getPlayer().isSleepingIgnored())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_sleeping"
                         ), null,
-                        (data, player) -> player.isSleeping())
+                        (data, temp) -> temp.getPlayer().isSleeping())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_banned"
                         ), null,
-                        (data, player) -> player.isBanned())
+                        (data, temp) -> temp.getPlayer().isBanned())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_blocking"
                         ), null,
-                        (data, player) -> player.isBlocking())
+                        (data, temp) -> temp.getPlayer().isBlocking())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_climbing"
                         ), null,
-                        (data, player) -> player.isClimbing())
+                        (data, temp) -> temp.getPlayer().isClimbing())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_collidable"
                         ), null,
-                        (data, player) -> player.isCollidable())
+                        (data, temp) -> temp.getPlayer().isCollidable())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_conversing"
                         ), null,
-                        (data, player) -> player.isConversing())
+                        (data, temp) -> temp.getPlayer().isConversing())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_custom_name_visible"
                         ), null,
-                        (data, player) -> player.isCustomNameVisible())
+                        (data, temp) -> temp.getPlayer().isCustomNameVisible())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_dead"
                         ), null,
-                        (data, player) -> player.isDead())
+                        (data, temp) -> temp.getPlayer().isDead())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_empty"
                         ), null,
-                        (data, player) -> player.isEmpty())
+                        (data, temp) -> temp.getPlayer().isEmpty())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_frozen"
                         ), null,
-                        (data, player) -> player.isFrozen())
+                        (data, temp) -> temp.getPlayer().isFrozen())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_gliding"
                         ), null,
-                        (data, player) -> player.isGliding())
+                        (data, temp) -> temp.getPlayer().isGliding())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_glowing"
                         ), null,
-                        (data, player) -> player.isGlowing())
+                        (data, temp) -> temp.getPlayer().isGlowing())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_hand_raised"
                         ), null,
-                        (data, player) -> player.isHandRaised())
+                        (data, temp) -> temp.getPlayer().isHandRaised())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_inside_vehicle"
                         ), null,
-                        (data, player) -> player.isInsideVehicle())
+                        (data, temp) -> temp.getPlayer().isInsideVehicle())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_invisible"
                         ), null,
-                        (data, player) -> player.isInvisible())
+                        (data, temp) -> temp.getPlayer().isInvisible())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_invulnerable"
                         ), null,
-                        (data, player) -> player.isInvulnerable())
+                        (data, temp) -> temp.getPlayer().isInvulnerable())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_leashed"
                         ), null,
-                        (data, player) -> player.isLeashed())
+                        (data, temp) -> temp.getPlayer().isLeashed())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_op"
                         ), null,
-                        (data, player) -> player.isOp())
+                        (data, temp) -> temp.getPlayer().isOp())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_riptiding"
                         ), null,
-                        (data, player) -> player.isRiptiding())
+                        (data, temp) -> temp.getPlayer().isRiptiding())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_silent"
                         ), null,
-                        (data, player) -> player.isSilent())
+                        (data, temp) -> temp.getPlayer().isSilent())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_swimming"
                         ), null,
-                        (data, player) -> player.isSwimming())
+                        (data, temp) -> temp.getPlayer().isSwimming())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_visual_fire"
                         ), null,
-                        (data, player) -> player.isVisualFire())
+                        (data, temp) -> temp.getPlayer().isVisualFire())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/is_whitelisted"
                         ), null,
-                        (data, player) -> player.isWhitelisted())
+                        (data, temp) -> temp.getPlayer().isWhitelisted())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/has_permission"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("permission")) {
                                 String permission = data.get("permission").getAsString();
 
                                 if (permission != null) {
-                                    return player.hasPermission(permission);
+                                    return temp.getPlayer().hasPermission(permission);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/has_cooldown"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("material")) {
                                 Material material
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "material"
-                                                ),
+                                        data.get(
+                                                "material"
+                                        ),
                                         Material.class
                                 );
 
                                 if (material != null) {
-                                    return player.hasCooldown(material);
+                                    return temp.getPlayer().hasCooldown(material);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/has_played_before"
                         ), null,
-                        (data, player) -> player.hasPlayedBefore())
+                        (data, temp) -> temp.getPlayer().hasPlayedBefore())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/has_discovered_recipe"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("recipe")) {
                                 NamespacedKey recipe
                                         = NamespacedKey.fromString(
-                                                data.get(
-                                                        "recipe"
-                                                ).getAsString()
+                                        data.get(
+                                                "recipe"
+                                        ).getAsString()
                                 );
 
                                 if (recipe != null) {
-                                    return player.hasDiscoveredRecipe(recipe);
+                                    return temp.getPlayer().hasDiscoveredRecipe(recipe);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/has_gravity"
                         ), null,
-                        (data, player) -> player.hasGravity())
+                        (data, temp) -> temp.getPlayer().hasGravity())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/has_potion_effect_type"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("potion_effect_type")) {
                                 PotionEffectType type
                                         = PotionEffectType.getByName(
-                                                data.get(
-                                                        "potion_effect_type"
-                                                ).getAsString()
+                                        data.get(
+                                                "potion_effect_type"
+                                        ).getAsString()
                                 );
 
                                 if (type != null) {
-                                    return player.hasPotionEffect(type);
+                                    return temp.getPlayer().hasPotionEffect(type);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_attribute_value"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("attribute")) {
                                 JsonObject attribute = data.getAsJsonObject("attribute");
 
@@ -340,7 +340,7 @@ public final class PlayerConditions {
                                     }
                                     if (type != null && value != null) {
                                         AttributeInstance attributeInstance
-                                                = player.getAttribute(type);
+                                                = temp.getPlayer().getAttribute(type);
 
                                         if (attributeInstance != null) {
                                             if (data.has("operator")) {
@@ -363,11 +363,11 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_attribute_base_value"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("attribute")) {
                                 JsonObject attribute = data.getAsJsonObject("attribute");
 
@@ -388,7 +388,7 @@ public final class PlayerConditions {
                                     }
                                     if (type != null && baseValue != null) {
                                         AttributeInstance attributeInstance
-                                                = player.getAttribute(type);
+                                                = temp.getPlayer().getAttribute(type);
 
                                         if (attributeInstance != null) {
                                             if (data.has("operator")) {
@@ -411,11 +411,11 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_ping"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ping")) {
                                 int ping = data.get("ping").getAsInt();
 
@@ -425,38 +425,38 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getPing(),
+                                                        temp.getPlayer().getPing(),
                                                         ping
                                                 );
                                     }
                                 }
-                                return player.getPing() == ping;
+                                return temp.getPlayer().getPing() == ping;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_world"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("world")) {
                                 String world = data.get("world").getAsString();
 
                                 if (world != null) {
-                                    return player.getWorld().getName().equals(world);
+                                    return temp.getPlayer().getWorld().getName().equals(world);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_health"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("health")) {
                                 double health = data.get("health").getAsDouble();
 
@@ -466,22 +466,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getHealth(),
+                                                        temp.getPlayer().getHealth(),
                                                         health
                                                 );
                                     }
                                 }
-                                return player.getHealth() == health;
+                                return temp.getPlayer().getHealth() == health;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_health_scale"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("health_scale")) {
                                 double healthScale = data.get("health_scale").getAsDouble();
 
@@ -491,22 +491,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getHealthScale(),
+                                                        temp.getPlayer().getHealthScale(),
                                                         healthScale
                                                 );
                                     }
                                 }
-                                return player.getHealthScale() == healthScale;
+                                return temp.getPlayer().getHealthScale() == healthScale;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_game_mode"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("mode")) {
                                 GameMode mode
                                         = new Gson().fromJson(
@@ -517,32 +517,32 @@ public final class PlayerConditions {
                                 );
 
                                 if (mode != null) {
-                                    return player.getGameMode() == mode;
+                                    return temp.getPlayer().getGameMode() == mode;
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_allow_flight"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("flight")) {
                                 boolean flight = data.get("flight").getAsBoolean();
 
-                                return player.getAllowFlight() == flight;
+                                return temp.getPlayer().getAllowFlight() == flight;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_advancement_progress/is_done"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("advancement")) {
                                 JsonObject advancement = data.getAsJsonObject("advancement");
 
@@ -567,7 +567,7 @@ public final class PlayerConditions {
                                         isDone = advancement.get("is_done").getAsBoolean();
                                     }
                                     if (playerAdvancement != null && isDone != null) {
-                                        return player.getAdvancementProgress(playerAdvancement)
+                                        return temp.getPlayer().getAdvancementProgress(playerAdvancement)
                                                 .isDone() == isDone;
                                     }
                                 }
@@ -576,11 +576,11 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_client_view_distance"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("view_distance")) {
                                 int viewDistance = data.get("view_distance").getAsInt();
 
@@ -590,38 +590,38 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getClientViewDistance(),
+                                                        temp.getPlayer().getClientViewDistance(),
                                                         viewDistance
                                                 );
                                     }
                                 }
-                                return player.getClientViewDistance() == viewDistance;
+                                return temp.getPlayer().getClientViewDistance() == viewDistance;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_display_name"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("display_name")) {
                                 String displayName = data.get("display_name").getAsString();
 
                                 if (displayName != null) {
-                                    return player.getDisplayName().equals(displayName);
+                                    return temp.getPlayer().getDisplayName().equals(displayName);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_exp"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("exp")) {
                                 float exp = data.get("exp").getAsFloat();
 
@@ -631,22 +631,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getExp(),
+                                                        temp.getPlayer().getExp(),
                                                         exp
                                                 );
                                     }
                                 }
-                                return player.getExp() == exp;
+                                return temp.getPlayer().getExp() == exp;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_fly_speed"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("fly_speed")) {
                                 float flySpeed = data.get("fly_speed").getAsFloat();
 
@@ -656,22 +656,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getFlySpeed(),
+                                                        temp.getPlayer().getFlySpeed(),
                                                         flySpeed
                                                 );
                                     }
                                 }
-                                return player.getFlySpeed() == flySpeed;
+                                return temp.getPlayer().getFlySpeed() == flySpeed;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_level"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("level")) {
                                 int level = data.get("level").getAsInt();
 
@@ -681,38 +681,38 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getLevel(),
+                                                        temp.getPlayer().getLevel(),
                                                         level
                                                 );
                                     }
                                 }
-                                return player.getLevel() == level;
+                                return temp.getPlayer().getLevel() == level;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_locale"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("locale")) {
                                 String locale = data.get("locale").getAsString();
 
                                 if (locale != null) {
-                                    return player.getLocale().equals(locale);
+                                    return temp.getPlayer().getLocale().equals(locale);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_time"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("time")) {
                                 long time = data.get("time").getAsLong();
 
@@ -722,22 +722,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getPlayerTime(),
+                                                        temp.getPlayer().getPlayerTime(),
                                                         time
                                                 );
                                     }
                                 }
-                                return player.getPlayerTime() == time;
+                                return temp.getPlayer().getPlayerTime() == time;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_time_offset"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("time_offset")) {
                                 long timeOffset = data.get("time_offset").getAsLong();
 
@@ -747,22 +747,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getPlayerTimeOffset(),
+                                                        temp.getPlayer().getPlayerTimeOffset(),
                                                         timeOffset
                                                 );
                                     }
                                 }
-                                return player.getPlayerTimeOffset() == timeOffset;
+                                return temp.getPlayer().getPlayerTimeOffset() == timeOffset;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_weather"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("weather_type")) {
                                 WeatherType weatherType
                                         = new Gson().fromJson(
@@ -773,18 +773,18 @@ public final class PlayerConditions {
                                 );
 
                                 if (weatherType != null) {
-                                    return player.getPlayerWeather() == weatherType;
+                                    return temp.getPlayer().getPlayerWeather() == weatherType;
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_total_experience"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("total_experience")) {
                                 int totalExperience = data.get("total_experience").getAsInt();
 
@@ -794,22 +794,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getTotalExperience(),
+                                                        temp.getPlayer().getTotalExperience(),
                                                         totalExperience
                                                 );
                                     }
                                 }
-                                return player.getTotalExperience() == totalExperience;
+                                return temp.getPlayer().getTotalExperience() == totalExperience;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_walk_speed"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("walk_speed")) {
                                 float walkSpeed = data.get("walk_speed").getAsFloat();
 
@@ -819,22 +819,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getWalkSpeed(),
+                                                        temp.getPlayer().getWalkSpeed(),
                                                         walkSpeed
                                                 );
                                     }
                                 }
-                                return player.getWalkSpeed() == walkSpeed;
+                                return temp.getPlayer().getWalkSpeed() == walkSpeed;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_absorption_amount"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("absorption_amount")) {
                                 double absorptionAmount = data.get("absorption_amount").getAsDouble();
 
@@ -844,22 +844,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getAbsorptionAmount(),
+                                                        temp.getPlayer().getAbsorptionAmount(),
                                                         absorptionAmount
                                                 );
                                     }
                                 }
-                                return player.getAbsorptionAmount() == absorptionAmount;
+                                return temp.getPlayer().getAbsorptionAmount() == absorptionAmount;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_active_potion_effects_count"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("count")) {
                                 int count = data.get("count").getAsInt();
 
@@ -869,22 +869,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getActivePotionEffects().size(),
+                                                        temp.getPlayer().getActivePotionEffects().size(),
                                                         count
                                                 );
                                     }
                                 }
-                                return player.getActivePotionEffects().size() == count;
+                                return temp.getPlayer().getActivePotionEffects().size() == count;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_arrow_cooldown"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("arrow_cooldown")) {
                                 int arrowCooldown = data.get("arrow_cooldown").getAsInt();
 
@@ -894,22 +894,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getArrowCooldown(),
+                                                        temp.getPlayer().getArrowCooldown(),
                                                         arrowCooldown
                                                 );
                                     }
                                 }
-                                return player.getArrowCooldown() == arrowCooldown;
+                                return temp.getPlayer().getArrowCooldown() == arrowCooldown;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_arrows_in_body"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("arrows_in_body")) {
                                 int arrowsInBody = data.get("arrows_in_body").getAsInt();
 
@@ -919,22 +919,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getArrowsInBody(),
+                                                        temp.getPlayer().getArrowsInBody(),
                                                         arrowsInBody
                                                 );
                                     }
                                 }
-                                return player.getArrowsInBody() == arrowsInBody;
+                                return temp.getPlayer().getArrowsInBody() == arrowsInBody;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_attack_cooldown"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("attack_cooldown")) {
                                 float attackCooldown = data.get("attack_cooldown").getAsFloat();
 
@@ -944,45 +944,45 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getAttackCooldown(),
+                                                        temp.getPlayer().getAttackCooldown(),
                                                         attackCooldown
                                                 );
                                     }
                                 }
-                                return player.getAttackCooldown() == attackCooldown;
+                                return temp.getPlayer().getAttackCooldown() == attackCooldown;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/can_pickup_items"
                         ), null,
-                        (data, player) -> player.getCanPickupItems())
+                        (data, temp) -> temp.getPlayer().getCanPickupItems())
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_custom_name"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("custom_name")) {
                                 String customName = data.get("custom_name").getAsString();
 
-                                if (player.getCustomName() != null && customName != null) {
-                                    return player.getCustomName().equals(customName);
+                                if (temp.getPlayer().getCustomName() != null && customName != null) {
+                                    return temp.getPlayer().getCustomName().equals(customName);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_discovered_recipes_count"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("count")) {
                                 int count = data.get("count").getAsInt();
 
@@ -992,22 +992,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getDiscoveredRecipes().size(),
+                                                        temp.getPlayer().getDiscoveredRecipes().size(),
                                                         count
                                                 );
                                     }
                                 }
-                                return player.getDiscoveredRecipes().size() == count;
+                                return temp.getPlayer().getDiscoveredRecipes().size() == count;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_exhaustion"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("exhaustion")) {
                                 float exhaustion = data.get("exhaustion").getAsFloat();
 
@@ -1017,22 +1017,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getExhaustion(),
+                                                        temp.getPlayer().getExhaustion(),
                                                         exhaustion
                                                 );
                                     }
                                 }
-                                return player.getExhaustion() == exhaustion;
+                                return temp.getPlayer().getExhaustion() == exhaustion;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_eye_height"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("eye_height")) {
                                 double eyeHeight = data.get("eye_height").getAsDouble();
 
@@ -1042,22 +1042,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getEyeHeight(),
+                                                        temp.getPlayer().getEyeHeight(),
                                                         eyeHeight
                                                 );
                                     }
                                 }
-                                return player.getEyeHeight() == eyeHeight;
+                                return temp.getPlayer().getEyeHeight() == eyeHeight;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_exp_to_level"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("level")) {
                                 int level = data.get("level").getAsInt();
 
@@ -1067,22 +1067,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getExpToLevel(),
+                                                        temp.getPlayer().getExpToLevel(),
                                                         level
                                                 );
                                     }
                                 }
-                                return player.getExpToLevel() == level;
+                                return temp.getPlayer().getExpToLevel() == level;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_fire_ticks"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("fire_ticks")) {
                                 int fireTicks = data.get("fire_ticks").getAsInt();
 
@@ -1092,22 +1092,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getFireTicks(),
+                                                        temp.getPlayer().getFireTicks(),
                                                         fireTicks
                                                 );
                                     }
                                 }
-                                return player.getFireTicks() == fireTicks;
+                                return temp.getPlayer().getFireTicks() == fireTicks;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_max_fire_ticks"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("max_fire_ticks")) {
                                 int maxFireTicks = data.get("max_fire_ticks").getAsInt();
 
@@ -1117,22 +1117,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getMaxFireTicks(),
+                                                        temp.getPlayer().getMaxFireTicks(),
                                                         maxFireTicks
                                                 );
                                     }
                                 }
-                                return player.getMaxFireTicks() == maxFireTicks;
+                                return temp.getPlayer().getMaxFireTicks() == maxFireTicks;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_fall_distance"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("fall_distance")) {
                                 float fallDistance = data.get("fall_distance").getAsFloat();
 
@@ -1142,22 +1142,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getFallDistance(),
+                                                        temp.getPlayer().getFallDistance(),
                                                         fallDistance
                                                 );
                                     }
                                 }
-                                return player.getFallDistance() == fallDistance;
+                                return temp.getPlayer().getFallDistance() == fallDistance;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_food_level"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("food_level")) {
                                 int foodLevel = data.get("food_level").getAsInt();
 
@@ -1167,22 +1167,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getFoodLevel(),
+                                                        temp.getPlayer().getFoodLevel(),
                                                         foodLevel
                                                 );
                                     }
                                 }
-                                return player.getFoodLevel() == foodLevel;
+                                return temp.getPlayer().getFoodLevel() == foodLevel;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_freeze_ticks"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("freeze_ticks")) {
                                 int freezeTicks = data.get("freeze_ticks").getAsInt();
 
@@ -1192,22 +1192,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getFreezeTicks(),
+                                                        temp.getPlayer().getFreezeTicks(),
                                                         freezeTicks
                                                 );
                                     }
                                 }
-                                return player.getFreezeTicks() == freezeTicks;
+                                return temp.getPlayer().getFreezeTicks() == freezeTicks;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_max_freeze_ticks"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("max_freeze_ticks")) {
                                 int maxFreezeTicks = data.get("max_freeze_ticks").getAsInt();
 
@@ -1217,22 +1217,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getMaxFreezeTicks(),
+                                                        temp.getPlayer().getMaxFreezeTicks(),
                                                         maxFreezeTicks
                                                 );
                                     }
                                 }
-                                return player.getMaxFreezeTicks() == maxFreezeTicks;
+                                return temp.getPlayer().getMaxFreezeTicks() == maxFreezeTicks;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_height"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("height")) {
                                 double height = data.get("height").getAsDouble();
 
@@ -1242,22 +1242,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getHeight(),
+                                                        temp.getPlayer().getHeight(),
                                                         height
                                                 );
                                     }
                                 }
-                                return player.getHeight() == height;
+                                return temp.getPlayer().getHeight() == height;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_last_damage"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("last_damage")) {
                                 double lastDamage = data.get("last_damage").getAsDouble();
 
@@ -1267,22 +1267,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getLastDamage(),
+                                                        temp.getPlayer().getLastDamage(),
                                                         lastDamage
                                                 );
                                     }
                                 }
-                                return player.getLastDamage() == lastDamage;
+                                return temp.getPlayer().getLastDamage() == lastDamage;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_maximum_air"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("maximum_air")) {
                                 int maximumAir = data.get("maximum_air").getAsInt();
 
@@ -1292,22 +1292,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getMaximumAir(),
+                                                        temp.getPlayer().getMaximumAir(),
                                                         maximumAir
                                                 );
                                     }
                                 }
-                                return player.getMaximumAir() == maximumAir;
+                                return temp.getPlayer().getMaximumAir() == maximumAir;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_remaining_air"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("remaining_air")) {
                                 int remainingAir = data.get("remaining_air").getAsInt();
 
@@ -1317,22 +1317,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getRemainingAir(),
+                                                        temp.getPlayer().getRemainingAir(),
                                                         remainingAir
                                                 );
                                     }
                                 }
-                                return player.getRemainingAir() == remainingAir;
+                                return temp.getPlayer().getRemainingAir() == remainingAir;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_maximum_no_damage_ticks"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("maximum_no_damage_ticks")) {
                                 int ticks = data.get("maximum_no_damage_ticks").getAsInt();
 
@@ -1342,38 +1342,38 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getMaximumNoDamageTicks(),
+                                                        temp.getPlayer().getMaximumNoDamageTicks(),
                                                         ticks
                                                 );
                                     }
                                 }
-                                return player.getMaximumNoDamageTicks() == ticks;
+                                return temp.getPlayer().getMaximumNoDamageTicks() == ticks;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_name"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("name")) {
                                 String name = data.get("name").getAsString();
 
                                 if (name != null) {
-                                    return player.getName().equals(name);
+                                    return temp.getPlayer().getName().equals(name);
                                 }
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_no_damage_ticks"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("no_damage_ticks")) {
                                 int noDamageTicks = data.get("no_damage_ticks").getAsInt();
 
@@ -1383,22 +1383,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getNoDamageTicks(),
+                                                        temp.getPlayer().getNoDamageTicks(),
                                                         noDamageTicks
                                                 );
                                     }
                                 }
-                                return player.getNoDamageTicks() == noDamageTicks;
+                                return temp.getPlayer().getNoDamageTicks() == noDamageTicks;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_saturated_regen_rate"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("saturated_regen_rate")) {
                                 int saturatedRegenRate = data.get("saturated_regen_rate").getAsInt();
 
@@ -1408,22 +1408,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getSaturatedRegenRate(),
+                                                        temp.getPlayer().getSaturatedRegenRate(),
                                                         saturatedRegenRate
                                                 );
                                     }
                                 }
-                                return player.getSaturatedRegenRate() == saturatedRegenRate;
+                                return temp.getPlayer().getSaturatedRegenRate() == saturatedRegenRate;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_saturation"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("saturation")) {
                                 float saturation = data.get("saturation").getAsFloat();
 
@@ -1433,22 +1433,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getSaturation(),
+                                                        temp.getPlayer().getSaturation(),
                                                         saturation
                                                 );
                                     }
                                 }
-                                return player.getSaturation() == saturation;
+                                return temp.getPlayer().getSaturation() == saturation;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_sleep_ticks"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("sleep_ticks")) {
                                 int sleepTicks = data.get("sleep_ticks").getAsInt();
 
@@ -1458,22 +1458,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getSleepTicks(),
+                                                        temp.getPlayer().getSleepTicks(),
                                                         sleepTicks
                                                 );
                                     }
                                 }
-                                return player.getSleepTicks() == sleepTicks;
+                                return temp.getPlayer().getSleepTicks() == sleepTicks;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_starvation_rate"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("starvation_rate")) {
                                 int starvationRate = data.get("starvation_rate").getAsInt();
 
@@ -1483,22 +1483,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getStarvationRate(),
+                                                        temp.getPlayer().getStarvationRate(),
                                                         starvationRate
                                                 );
                                     }
                                 }
-                                return player.getStarvationRate() == starvationRate;
+                                return temp.getPlayer().getStarvationRate() == starvationRate;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_ticks_lived"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks_lived")) {
                                 int ticksLived = data.get("ticks_lived").getAsInt();
 
@@ -1508,22 +1508,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getTicksLived(),
+                                                        temp.getPlayer().getTicksLived(),
                                                         ticksLived
                                                 );
                                     }
                                 }
-                                return player.getTicksLived() == ticksLived;
+                                return temp.getPlayer().getTicksLived() == ticksLived;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_unsaturated_regen_rate"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("unsaturated_regen_rate")) {
                                 int unsaturatedRegenRate = data.get("unsaturated_regen_rate").getAsInt();
 
@@ -1533,22 +1533,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getUnsaturatedRegenRate(),
+                                                        temp.getPlayer().getUnsaturatedRegenRate(),
                                                         unsaturatedRegenRate
                                                 );
                                     }
                                 }
-                                return player.getUnsaturatedRegenRate() == unsaturatedRegenRate;
+                                return temp.getPlayer().getUnsaturatedRegenRate() == unsaturatedRegenRate;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_x_velocity"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("x_velocity")) {
                                 double xVelocity = data.get("x_velocity").getAsDouble();
 
@@ -1558,22 +1558,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getVelocity().getX(),
+                                                        temp.getPlayer().getVelocity().getX(),
                                                         xVelocity
                                                 );
                                     }
                                 }
-                                return player.getVelocity().getX() == xVelocity;
+                                return temp.getPlayer().getVelocity().getX() == xVelocity;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_y_velocity"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("y_velocity")) {
                                 double yVelocity = data.get("y_velocity").getAsDouble();
 
@@ -1583,22 +1583,22 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getVelocity().getY(),
+                                                        temp.getPlayer().getVelocity().getY(),
                                                         yVelocity
                                                 );
                                     }
                                 }
-                                return player.getVelocity().getY() == yVelocity;
+                                return temp.getPlayer().getVelocity().getY() == yVelocity;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_z_velocity"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("z_velocity")) {
                                 double zVelocity = data.get("z_velocity").getAsDouble();
 
@@ -1608,33 +1608,33 @@ public final class PlayerConditions {
                                     if (operator != null) {
                                         return Operator.parseOperator(operator)
                                                 .apply(
-                                                        player.getVelocity().getZ(),
+                                                        temp.getPlayer().getVelocity().getZ(),
                                                         zVelocity
                                                 );
                                     }
                                 }
-                                return player.getVelocity().getZ() == zVelocity;
+                                return temp.getPlayer().getVelocity().getZ() == zVelocity;
                             }
                             return false;
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
                             if (data.has("block_type")) {
                                 Material type
                                         = new Gson().fromJson(
-                                                data.get(
-                                                        "block_type"
-                                                ),
+                                        data.get(
+                                                "block_type"
+                                        ),
                                         Material.class
                                 );
 
@@ -1646,13 +1646,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_solid"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1660,13 +1660,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_block"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1674,13 +1674,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_air"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1688,13 +1688,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_burnable"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1702,13 +1702,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_edible"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1716,13 +1716,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_flammable"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1730,13 +1730,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_fuel"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1744,13 +1744,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_interactable"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1758,13 +1758,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_item"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1772,13 +1772,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_occluding"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1786,13 +1786,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/type/is_record"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1800,13 +1800,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/is_powered"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1814,13 +1814,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/is_liquid"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1828,13 +1828,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/is_empty"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1842,13 +1842,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/is_indirectly_powered"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -1856,13 +1856,13 @@ public final class PlayerConditions {
                         })
         );
         Registry.register(
-                new ConditionContainer<Player>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/player/compare_location/block/is_passable"
                         ), null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    player.getLocation(),
+                                    temp.getPlayer().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 

@@ -5,23 +5,23 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ActionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 
 public class BlockActions {
 
     public static void register() {
         Registry.register(
-                new ActionContainer<Block>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/block/set_biome"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -41,13 +41,13 @@ public class BlockActions {
                 )
         );
         Registry.register(
-                new ActionContainer<Block>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/block/set_type"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 

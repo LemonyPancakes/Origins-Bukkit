@@ -17,6 +17,8 @@
  */
 package me.lemonypancakes.originsbukkit.listeners.playerchecks;
 
+import me.lemonypancakes.originsbukkit.api.data.container.TempContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginChangeEvent;
 import me.lemonypancakes.originsbukkit.api.events.player.AsyncPlayerOriginInitiateEvent;
 import me.lemonypancakes.originsbukkit.api.wrappers.OriginPlayer;
@@ -78,6 +80,11 @@ public class PlayerOriginChecker implements Listener {
                 if (getListenerHandler().getPlugin().getStorageHandler().getOriginsPlayerData().isOriginsPlayerDataLoaded()) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         checkPlayerOriginData(player);
+                        Storage.getOriginsData().forEach(
+                                (identifier, origin) -> origin.getPowers().forEach(
+                                        power -> power.invoke(player)
+                                )
+                        );
                     }
                     cancel();
                 }
@@ -88,10 +95,14 @@ public class PlayerOriginChecker implements Listener {
     @EventHandler
     private void onPlayerOriginCheck(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        Temp temp = new TempContainer();
 
+        temp.setPlayer(player);
         checkPlayerOriginData(player);
-        Storage.getPowersData().forEach(
-                (key, value) -> value.invoke(player)
+        Storage.getOriginsData().forEach(
+                (identifier, origin) -> origin.getPowers().forEach(
+                        power -> power.invoke(temp)
+                )
         );
     }
 

@@ -3,10 +3,7 @@ package me.lemonypancakes.originsbukkit.api.data.container.power;
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.SchedulerContainer;
-import me.lemonypancakes.originsbukkit.api.data.type.Action;
-import me.lemonypancakes.originsbukkit.api.data.type.Condition;
-import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
-import me.lemonypancakes.originsbukkit.api.data.type.Power;
+import me.lemonypancakes.originsbukkit.api.data.type.*;
 import me.lemonypancakes.originsbukkit.util.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -132,8 +129,9 @@ public class SinglePowerContainer implements Power {
                             }
                         }
                     } else {
-                        if (t instanceof Player) {
-                            Player player = (Player) t;
+                        if (t instanceof Temp) {
+                            Temp temp = (Temp) t;
+                            Player player = temp.getPlayer();
 
                             Storage.removeSchedulerDataFromStorage(player);
                             BukkitTask tick = new BukkitRunnable() {
@@ -141,9 +139,9 @@ public class SinglePowerContainer implements Power {
                                 @Override
                                 public void run() {
                                     if (player.isOnline()) {
-                                        if (getCondition().test(player)) {
+                                        if (getCondition().test(temp)) {
                                             for (Action<Object> action : getActions()) {
-                                                action.accept(player);
+                                                action.accept(temp);
                                             }
                                         }
                                     } else {
@@ -171,8 +169,9 @@ public class SinglePowerContainer implements Power {
                             action.accept(t);
                         }
                     } else {
-                        if (t instanceof Player) {
-                            Player player = (Player) t;
+                        if (t instanceof Temp) {
+                            Temp temp = (Temp) t;
+                            Player player = temp.getPlayer();
 
                             Storage.removeSchedulerDataFromStorage(player);
                             BukkitTask tick = new BukkitRunnable() {
@@ -181,7 +180,7 @@ public class SinglePowerContainer implements Power {
                                 public void run() {
                                     if (player.isOnline()) {
                                         for (Action<Object> action : getActions()) {
-                                            action.accept(player);
+                                            action.accept(temp);
                                         }
                                     } else {
                                         Storage.removeSchedulerDataFromStorage(player);
@@ -216,8 +215,9 @@ public class SinglePowerContainer implements Power {
                                                 }
                                             }
                                         } else {
-                                            if (t instanceof Player) {
-                                                Player player = (Player) t;
+                                            if (t instanceof Temp) {
+                                                Temp temp = (Temp) t;
+                                                Player player = temp.getPlayer();
 
                                                 Storage.removeSchedulerDataFromStorage(player);
                                                 BukkitTask tick = new BukkitRunnable() {
@@ -225,9 +225,9 @@ public class SinglePowerContainer implements Power {
                                                     @Override
                                                     public void run() {
                                                         if (player.isOnline()) {
-                                                            if (getCondition().test(player)) {
+                                                            if (getCondition().test(temp)) {
                                                                 for (Action<Object> action : getActions()) {
-                                                                    action.accept(player);
+                                                                    action.accept(temp);
                                                                 }
                                                             }
                                                         } else {
@@ -255,8 +255,9 @@ public class SinglePowerContainer implements Power {
                                                 action.accept(t);
                                             }
                                         } else {
-                                            if (t instanceof Player) {
-                                                Player player = (Player) t;
+                                            if (t instanceof Temp) {
+                                                Temp temp = (Temp) t;
+                                                Player player = temp.getPlayer();
 
                                                 Storage.removeSchedulerDataFromStorage(player);
                                                 BukkitTask tick = new BukkitRunnable() {
@@ -265,7 +266,7 @@ public class SinglePowerContainer implements Power {
                                                     public void run() {
                                                         if (player.isOnline()) {
                                                             for (Action<Object> action : getActions()) {
-                                                                action.accept(player);
+                                                                action.accept(temp);
                                                             }
                                                         } else {
                                                             Storage.removeSchedulerDataFromStorage(player);
@@ -298,8 +299,9 @@ public class SinglePowerContainer implements Power {
                         }
                     }
                 } else {
-                    if (t instanceof Player) {
-                        Player player = (Player) t;
+                    if (t instanceof Temp) {
+                        Temp temp = (Temp) t;
+                        Player player = temp.getPlayer();
 
                         Storage.removeSchedulerDataFromStorage(player);
                         BukkitTask tick = new BukkitRunnable() {
@@ -307,9 +309,9 @@ public class SinglePowerContainer implements Power {
                             @Override
                             public void run() {
                                 if (player.isOnline()) {
-                                    if (getCondition().test(player)) {
+                                    if (getCondition().test(temp)) {
                                         for (Action<Object> action : getActions()) {
-                                            action.accept(player);
+                                            action.accept(temp);
                                         }
                                     }
                                 } else {
@@ -337,8 +339,9 @@ public class SinglePowerContainer implements Power {
                         action.accept(t);
                     }
                 } else {
-                    if (t instanceof Player) {
-                        Player player = (Player) t;
+                    if (t instanceof Temp) {
+                        Temp temp = (Temp) t;
+                        Player player = temp.getPlayer();
 
                         Storage.removeSchedulerDataFromStorage(player);
                         BukkitTask tick = new BukkitRunnable() {
@@ -347,7 +350,7 @@ public class SinglePowerContainer implements Power {
                             public void run() {
                                 if (player.isOnline()) {
                                     for (Action<Object> action : getActions()) {
-                                        action.accept(player);
+                                        action.accept(temp);
                                     }
                                 } else {
                                     Storage.removeSchedulerDataFromStorage(player);

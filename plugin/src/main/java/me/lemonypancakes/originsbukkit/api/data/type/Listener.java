@@ -25,5 +25,9 @@ public interface Listener extends org.bukkit.event.Listener {
 
     Power newInstance();
 
+    boolean isFactory();
+
+    boolean isSetCancelled();
+
     <T> void onInvoke(T t);
 }

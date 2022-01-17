@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ActionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -13,7 +14,6 @@ import org.bukkit.WeatherType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
@@ -23,28 +23,28 @@ public final class PlayerActions {
 
     public static void register() {
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/send_message"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("message")) {
                                 String message = data.get("message").getAsString();
 
                                 if (message != null) {
-                                    player.sendMessage(message);
+                                    temp.getPlayer().sendMessage(message);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/send_messages"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("messages")) {
                                 String[] messages
                                         = new Gson().fromJson(
@@ -55,46 +55,46 @@ public final class PlayerActions {
                                 );
 
                                 if (messages != null) {
-                                    player.sendMessage(messages);
+                                    temp.getPlayer().sendMessage(messages);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/damage"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("amount")) {
                                 double amount = data.get("amount").getAsDouble();
 
-                                player.damage(amount);
+                                temp.getPlayer().damage(amount);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_remaining_air"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setRemainingAir(ticks);
+                                temp.getPlayer().setRemainingAir(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/add_potion_effect"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("effect")) {
                                 JsonObject effect
                                         = new Gson().fromJson(
@@ -142,7 +142,7 @@ public final class PlayerActions {
                                             && ambient != null
                                             && particles != null
                                             && icon != null) {
-                                        player.addPotionEffect(
+                                        temp.getPlayer().addPotionEffect(
                                                 new PotionEffect(
                                                         potionEffectType,
                                                         duration,
@@ -157,7 +157,7 @@ public final class PlayerActions {
                                             && amplifier != null
                                             && ambient != null
                                             && particles != null) {
-                                        player.addPotionEffect(
+                                        temp.getPlayer().addPotionEffect(
                                                 new PotionEffect(
                                                         potionEffectType,
                                                         duration,
@@ -170,7 +170,7 @@ public final class PlayerActions {
                                             && duration != null
                                             && amplifier != null
                                             && ambient != null) {
-                                        player.addPotionEffect(
+                                        temp.getPlayer().addPotionEffect(
                                                 new PotionEffect(
                                                         potionEffectType,
                                                         duration,
@@ -181,7 +181,7 @@ public final class PlayerActions {
                                     } else if (potionEffectType != null
                                             && duration != null
                                             && amplifier != null) {
-                                        player.addPotionEffect(
+                                        temp.getPlayer().addPotionEffect(
                                                 new PotionEffect(
                                                         potionEffectType,
                                                         duration,
@@ -194,12 +194,12 @@ public final class PlayerActions {
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/add_potion_effects"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("effects")) {
                                 JsonObject[] effects
                                         = new Gson().fromJson(
@@ -248,7 +248,7 @@ public final class PlayerActions {
                                                 && ambient != null
                                                 && particles != null
                                                 && icon != null) {
-                                            player.addPotionEffect(
+                                            temp.getPlayer().addPotionEffect(
                                                     new PotionEffect(
                                                             potionEffectType,
                                                             duration,
@@ -263,7 +263,7 @@ public final class PlayerActions {
                                                 && amplifier != null
                                                 && ambient != null
                                                 && particles != null) {
-                                            player.addPotionEffect(
+                                            temp.getPlayer().addPotionEffect(
                                                     new PotionEffect(
                                                             potionEffectType,
                                                             duration,
@@ -276,7 +276,7 @@ public final class PlayerActions {
                                                 && duration != null
                                                 && amplifier != null
                                                 && ambient != null) {
-                                            player.addPotionEffect(
+                                            temp.getPlayer().addPotionEffect(
                                                     new PotionEffect(
                                                             potionEffectType,
                                                             duration,
@@ -287,7 +287,7 @@ public final class PlayerActions {
                                         } else if (potionEffectType != null
                                                 && duration != null
                                                 && amplifier != null) {
-                                            player.addPotionEffect(
+                                            temp.getPlayer().addPotionEffect(
                                                     new PotionEffect(
                                                             potionEffectType,
                                                             duration,
@@ -301,12 +301,12 @@ public final class PlayerActions {
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/remove_potion_effect_types"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("effect_types")) {
                                 PotionEffectType[] potionEffectTypes
                                         = new Gson().fromJson(
@@ -318,117 +318,117 @@ public final class PlayerActions {
 
                                 if (potionEffectTypes != null) {
                                     for (PotionEffectType potionEffectType : potionEffectTypes) {
-                                        player.removePotionEffect(potionEffectType);
+                                        temp.getPlayer().removePotionEffect(potionEffectType);
                                     }
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_health"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("health")) {
                                 double health = data.get("health").getAsDouble();
 
-                                player.setHealth(health);
+                                temp.getPlayer().setHealth(health);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_glowing"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("flag")) {
                                 boolean flag = data.get("flag").getAsBoolean();
 
-                                player.setGlowing(flag);
+                                temp.getPlayer().setGlowing(flag);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_flying"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 boolean value = data.get("value").getAsBoolean();
 
-                                player.setFlying(value);
+                                temp.getPlayer().setFlying(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_fly_speed"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 float value = data.get("value").getAsFloat();
 
-                                player.setFlySpeed(value);
+                                temp.getPlayer().setFlySpeed(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_allow_flight"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("flight")) {
                                 boolean flight = data.get("flight").getAsBoolean();
 
-                                player.setAllowFlight(flight);
+                                temp.getPlayer().setAllowFlight(flight);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_walk_speed"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 float value = data.get("value").getAsFloat();
 
-                                player.setWalkSpeed(value);
+                                temp.getPlayer().setWalkSpeed(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_health_scale"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("scale")) {
                                 double scale = data.get("scale").getAsDouble();
 
-                                player.setHealthScale(scale);
+                                temp.getPlayer().setHealthScale(scale);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_bed_spawn_location"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("location")) {
                                 Location location
                                         = new Gson().fromJson(
@@ -439,18 +439,18 @@ public final class PlayerActions {
                                 );
 
                                 if (location != null) {
-                                    player.setBedSpawnLocation(location);
+                                    temp.getPlayer().setBedSpawnLocation(location);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_compass_target"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("location")) {
                                 Location location
                                         = new Gson().fromJson(
@@ -461,74 +461,74 @@ public final class PlayerActions {
                                 );
 
                                 if (location != null) {
-                                    player.setCompassTarget(location);
+                                    temp.getPlayer().setCompassTarget(location);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_display_name"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("display_name")) {
                                 String displayName = data.get("display_name").getAsString();
 
-                                player.setDisplayName(displayName);
+                                temp.getPlayer().setDisplayName(displayName);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_exp"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("exp")) {
                                 float exp = data.get("exp").getAsFloat();
 
-                                player.setExp(exp);
+                                temp.getPlayer().setExp(exp);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_health_scaled"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("scale")) {
                                 boolean scale = data.get("scale").getAsBoolean();
 
-                                player.setHealthScaled(scale);
+                                temp.getPlayer().setHealthScaled(scale);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_level"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("level")) {
                                 int level = data.get("level").getAsInt();
 
-                                player.setLevel(level);
+                                temp.getPlayer().setLevel(level);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_time"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("time")) {
                                 long time = data.get("time").getAsLong();
                                 boolean relative = false;
@@ -536,17 +536,17 @@ public final class PlayerActions {
                                 if (data.has("relative")) {
                                     relative = data.get("relative").getAsBoolean();
                                 }
-                                player.setPlayerTime(time, relative);
+                                temp.getPlayer().setPlayerTime(time, relative);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_weather"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("weather_type")) {
                                 WeatherType weatherType
                                         = new Gson().fromJson(
@@ -557,34 +557,34 @@ public final class PlayerActions {
                                 );
 
                                 if (weatherType != null) {
-                                    player.setPlayerWeather(weatherType);
+                                    temp.getPlayer().setPlayerWeather(weatherType);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_resource_pack"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("resource_pack_url")) {
                                 String resourcePackUrl = data.get("resource_pack_url").getAsString();
 
                                 if (resourcePackUrl != null) {
-                                    player.setResourcePack(resourcePackUrl);
+                                    temp.getPlayer().setResourcePack(resourcePackUrl);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_scoreboard"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("scoreboard")) {
                                 Scoreboard scoreboard
                                         = new Gson().fromJson(
@@ -595,144 +595,144 @@ public final class PlayerActions {
                                 );
 
                                 if (scoreboard != null) {
-                                    player.setScoreboard(scoreboard);
+                                    temp.getPlayer().setScoreboard(scoreboard);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_sleeping_ignored"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("is_sleeping")) {
                                 boolean isSleeping = data.get("is_sleeping").getAsBoolean();
 
-                                player.setSleepingIgnored(isSleeping);
+                                temp.getPlayer().setSleepingIgnored(isSleeping);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_sneaking"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("sneak")) {
                                 boolean sneak = data.get("sneak").getAsBoolean();
 
-                                player.setSneaking(sneak);
+                                temp.getPlayer().setSneaking(sneak);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_sprinting"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("sprinting")) {
                                 boolean sprinting = data.get("sprinting").getAsBoolean();
 
-                                player.setSprinting(sprinting);
+                                temp.getPlayer().setSprinting(sprinting);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_total_experience"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("exp")) {
                                 int exp = data.get("exp").getAsInt();
 
-                                player.setTotalExperience(exp);
+                                temp.getPlayer().setTotalExperience(exp);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_absorption_amount"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("amount")) {
                                 double amount = data.get("amount").getAsDouble();
 
-                                player.setAbsorptionAmount(amount);
+                                temp.getPlayer().setAbsorptionAmount(amount);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_arrow_cooldown"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setArrowCooldown(ticks);
+                                temp.getPlayer().setArrowCooldown(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_arrows_in_body"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("count")) {
                                 int count = data.get("count").getAsInt();
 
-                                player.setArrowsInBody(count);
+                                temp.getPlayer().setArrowsInBody(count);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_can_pickup_items"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("pickup")) {
                                 boolean pickup = data.get("pickup").getAsBoolean();
 
-                                player.setCanPickupItems(pickup);
+                                temp.getPlayer().setCanPickupItems(pickup);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_collidable"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("collidable")) {
                                 boolean collidable = data.get("collidable").getAsBoolean();
 
-                                player.setCollidable(collidable);
+                                temp.getPlayer().setCollidable(collidable);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_cooldown"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             Material material = null;
                             Integer ticks = null;
 
@@ -748,117 +748,117 @@ public final class PlayerActions {
                                 ticks = data.get("ticks").getAsInt();
                             }
                             if (material != null && ticks != null) {
-                                player.setCooldown(material, ticks);
+                                temp.getPlayer().setCooldown(material, ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_custom_name"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("name")) {
                                 String name = data.get("name").getAsString();
 
                                 if (name != null) {
-                                    player.setCustomName(name);
+                                    temp.getPlayer().setCustomName(name);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_custom_name_visible"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("flag")) {
                                 boolean flag = data.get("flag").getAsBoolean();
 
-                                player.setCustomNameVisible(flag);
+                                temp.getPlayer().setCustomNameVisible(flag);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_exhaustion"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 float value = data.get("value").getAsFloat();
 
-                                player.setExhaustion(value);
+                                temp.getPlayer().setExhaustion(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_fall_distance"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("distance")) {
                                 float distance = data.get("distance").getAsFloat();
 
-                                player.setFallDistance(distance);
+                                temp.getPlayer().setFallDistance(distance);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_fire_ticks"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setFireTicks(ticks);
+                                temp.getPlayer().setFireTicks(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_food_level"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 int value = data.get("value").getAsInt();
 
-                                player.setFoodLevel(value);
+                                temp.getPlayer().setFoodLevel(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_freeze_ticks"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setFreezeTicks(ticks);
+                                temp.getPlayer().setFreezeTicks(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_game_mode"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("mode")) {
                                 GameMode mode
                                         = new Gson().fromJson(
@@ -869,88 +869,88 @@ public final class PlayerActions {
                                 );
 
                                 if (mode != null) {
-                                    player.setGameMode(mode);
+                                    temp.getPlayer().setGameMode(mode);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_gliding"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("gliding")) {
                                 boolean gliding = data.get("gliding").getAsBoolean();
 
-                                player.setGliding(gliding);
+                                temp.getPlayer().setGliding(gliding);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_gravity"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("gravity")) {
                                 boolean gravity = data.get("gravity").getAsBoolean();
 
-                                player.setGravity(gravity);
+                                temp.getPlayer().setGravity(gravity);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_invisible"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("invisible")) {
                                 boolean invisible = data.get("invisible").getAsBoolean();
 
-                                player.setInvisible(invisible);
+                                temp.getPlayer().setInvisible(invisible);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_invulnerable"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("flag")) {
                                 boolean flag = data.get("flag").getAsBoolean();
 
-                                player.setInvulnerable(flag);
+                                temp.getPlayer().setInvulnerable(flag);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_last_damage"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("damage")) {
                                 double damage = data.get("damage").getAsDouble();
 
-                                player.setLastDamage(damage);
+                                temp.getPlayer().setLastDamage(damage);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_leash_holder"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("holder")) {
                                 Entity holder
                                         = new Gson().fromJson(
@@ -961,88 +961,88 @@ public final class PlayerActions {
                                 );
 
                                 if (holder != null) {
-                                    player.setLeashHolder(holder);
+                                    temp.getPlayer().setLeashHolder(holder);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_maximum_air"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setMaximumAir(ticks);
+                                temp.getPlayer().setMaximumAir(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_maximum_no_damage_ticks"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setMaximumNoDamageTicks(ticks);
+                                temp.getPlayer().setMaximumNoDamageTicks(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_no_damage_ticks"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setNoDamageTicks(ticks);
+                                temp.getPlayer().setNoDamageTicks(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_op"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 boolean value = data.get("value").getAsBoolean();
 
-                                player.setOp(value);
+                                temp.getPlayer().setOp(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_portal_cooldown"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("cooldown")) {
                                 int cooldown = data.get("cooldown").getAsInt();
 
-                                player.setPortalCooldown(cooldown);
+                                temp.getPlayer().setPortalCooldown(cooldown);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_rotation"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             float yaw;
                             float pitch;
 
@@ -1056,114 +1056,114 @@ public final class PlayerActions {
                             } else {
                                 pitch = 0;
                             }
-                            player.setRotation(yaw, pitch);
+                            temp.getPlayer().setRotation(yaw, pitch);
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_saturated_regen_rate"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setSaturatedRegenRate(ticks);
+                                temp.getPlayer().setSaturatedRegenRate(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_saturation"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 float value = data.get("value").getAsFloat();
 
-                                player.setSaturation(value);
+                                temp.getPlayer().setSaturation(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_silent"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("flag")) {
                                 boolean flag = data.get("flag").getAsBoolean();
 
-                                player.setSilent(flag);
+                                temp.getPlayer().setSilent(flag);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_starvation_rate"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setStarvationRate(ticks);
+                                temp.getPlayer().setStarvationRate(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_swimming"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("swimming")) {
                                 boolean swimming = data.get("swimming").getAsBoolean();
 
-                                player.setSwimming(swimming);
+                                temp.getPlayer().setSwimming(swimming);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_ticks_lived"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 int value = data.get("value").getAsInt();
 
-                                player.setTicksLived(value);
+                                temp.getPlayer().setTicksLived(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_unsaturated_regen_rate"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("ticks")) {
                                 int ticks = data.get("ticks").getAsInt();
 
-                                player.setUnsaturatedRegenRate(ticks);
+                                temp.getPlayer().setUnsaturatedRegenRate(ticks);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_velocity"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("velocity")) {
                                 Vector velocity
                                         = new Gson().fromJson(
@@ -1172,46 +1172,46 @@ public final class PlayerActions {
                                 );
 
                                 if (velocity != null) {
-                                    player.setVelocity(velocity);
+                                    temp.getPlayer().setVelocity(velocity);
                                 }
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_visual_fire"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("fire")) {
                                 boolean fire = data.get("fire").getAsBoolean();
 
-                                player.setVisualFire(fire);
+                                temp.getPlayer().setVisualFire(fire);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_whitelisted"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("value")) {
                                 boolean value = data.get("value").getAsBoolean();
 
-                                player.setWhitelisted(value);
+                                temp.getPlayer().setWhitelisted(value);
                             }
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_attribute_base_value"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("attribute")) {
                                 JsonObject attribute = data.getAsJsonObject("attribute");
 
@@ -1232,7 +1232,7 @@ public final class PlayerActions {
                                     }
                                     if (type != null && baseValue != null) {
                                         AttributeInstance attributeInstance
-                                                = player.getAttribute(type);
+                                                = temp.getPlayer().getAttribute(type);
 
                                         if (attributeInstance != null) {
                                             attributeInstance.setBaseValue(baseValue);
@@ -1243,12 +1243,12 @@ public final class PlayerActions {
                         })
         );
         Registry.register(
-                new ActionContainer<Player>(
+                new ActionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "action/player/set_attributes_base_value"
                         ),
                         null,
-                        (data, player) -> {
+                        (data, temp) -> {
                             if (data.has("attributes")) {
                                 JsonObject[] attributes
                                         = new Gson().fromJson(
@@ -1276,7 +1276,7 @@ public final class PlayerActions {
                                         }
                                         if (type != null && baseValue != null) {
                                             AttributeInstance attributeInstance
-                                                    = player.getAttribute(type);
+                                                    = temp.getPlayer().getAttribute(type);
 
                                             if (attributeInstance != null) {
                                                 attributeInstance.setBaseValue(baseValue);

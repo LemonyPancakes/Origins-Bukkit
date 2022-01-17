@@ -5,11 +5,11 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ConditionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,11 +19,11 @@ public class ItemStackConditions {
 
     public static void register() {
         Registry.register(
-                new ConditionContainer<ItemStack>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/item_stack/compare_material_type"
                         ), null,
-                        (data, itemStack) -> {
+                        (data, temp) -> {
                             if (data.has("material_type")) {
                                 Material materialType
                                         = new Gson().fromJson(
@@ -34,7 +34,7 @@ public class ItemStackConditions {
                                 );
 
                                 if (materialType != null) {
-                                    return itemStack.getType() == materialType;
+                                    return temp.getItemStack().getType() == materialType;
                                 }
                             }
                             return false;
@@ -42,41 +42,64 @@ public class ItemStackConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<ItemStack>(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/item_stack/compare_material_types"
+                        ), null,
+                        (data, temp) -> {
+                            if (data.has("material_types")) {
+                                Material[] materialTypes
+                                        = new Gson().fromJson(
+                                        data.get(
+                                                "material_types"
+                                        ),
+                                        Material[].class
+                                );
+
+                                if (materialTypes != null) {
+                                    return Arrays.asList(materialTypes).contains(temp.getItemStack().getType());
+                                }
+                            }
+                            return false;
+                        }
+                )
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/item_stack/compare_amount"
                         ), null,
-                        (data, itemStack) -> {
+                        (data, temp) -> {
                             if (data.has("amount")) {
                                 int amount = data.get("amount").getAsInt();
 
-                                return itemStack.getAmount() == amount;
+                                return temp.getItemStack().getAmount() == amount;
                             }
                             return false;
                         }
                 )
         );
         Registry.register(
-                new ConditionContainer<ItemStack>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/item_stack/compare_max_stack_size"
                         ), null,
-                        (data, itemStack) -> {
+                        (data, temp) -> {
                             if (data.has("max_stack_size")) {
                                 int maxStackSize = data.get("max_stack_size").getAsInt();
 
-                                return itemStack.getMaxStackSize() == maxStackSize;
+                                return temp.getItemStack().getMaxStackSize() == maxStackSize;
                             }
                             return false;
                         }
                 )
         );
         Registry.register(
-                new ConditionContainer<ItemStack>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/item_stack/compare_enchantment/level"
                         ), null,
-                        (data, itemStack) -> {
+                        (data, temp) -> {
                             if (data.has("enchantment")) {
                                 JsonObject enchantment = data.getAsJsonObject("enchantment");
 
@@ -97,7 +120,7 @@ public class ItemStackConditions {
                                         level = enchantment.get("level").getAsInt();
                                     }
                                     if (type != null && level != null) {
-                                        return itemStack.getEnchantmentLevel(type) == level;
+                                        return temp.getItemStack().getEnchantmentLevel(type) == level;
                                     }
                                 }
                             }
@@ -106,11 +129,11 @@ public class ItemStackConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<ItemStack>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/item_stack/contains_enchantment_type"
                         ), null,
-                        (data, itemStack) -> {
+                        (data, temp) -> {
                             if (data.has("enchantment_type")) {
                                 Enchantment enchantmentType = Enchantment.getByKey(
                                         NamespacedKey.fromString(
@@ -121,7 +144,7 @@ public class ItemStackConditions {
                                 );
 
                                 if (enchantmentType != null) {
-                                    return itemStack.containsEnchantment(enchantmentType);
+                                    return temp.getItemStack().containsEnchantment(enchantmentType);
                                 }
                             }
                             return false;
@@ -129,11 +152,11 @@ public class ItemStackConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<ItemStack>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/item_stack/contains_enchantment_types"
                         ), null,
-                        (data, itemStack) -> {
+                        (data, temp) -> {
                             if (data.has("enchantment_types")) {
                                 String[] enchantmentTypes
                                         = new Gson().fromJson(
@@ -154,7 +177,7 @@ public class ItemStackConditions {
                                             )
                                     ));
                                     for (Enchantment enchantment : enchantments) {
-                                        if (!itemStack.containsEnchantment(enchantment)) {
+                                        if (!temp.getItemStack().containsEnchantment(enchantment)) {
                                             return false;
                                         }
                                     }

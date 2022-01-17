@@ -22,6 +22,8 @@ import me.lemonypancakes.originsbukkit.listeners.events.CustomEventListenerHandl
 import me.lemonypancakes.originsbukkit.listeners.items.ItemListenerHandler;
 import me.lemonypancakes.originsbukkit.listeners.keys.KeyListener;
 import me.lemonypancakes.originsbukkit.listeners.origins.OriginListenerHandler;
+import me.lemonypancakes.originsbukkit.listeners.player.JoinEvent;
+import me.lemonypancakes.originsbukkit.listeners.player.QuitEvent;
 import me.lemonypancakes.originsbukkit.listeners.playerchecks.NoOriginPlayerRestrict;
 import me.lemonypancakes.originsbukkit.listeners.playerchecks.PlayerOriginChecker;
 
@@ -75,5 +77,7 @@ public class ListenerHandler {
         noOriginPlayerRestrict = new NoOriginPlayerRestrict(this);
         playerOriginChecker = new PlayerOriginChecker(this);
         keyListener = new KeyListener(this);
+        new JoinEvent(this);
+        new QuitEvent(this);
     }
 }

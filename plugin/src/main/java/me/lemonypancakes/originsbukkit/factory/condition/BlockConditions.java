@@ -5,23 +5,23 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ConditionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
 
 public class BlockConditions {
 
     public static void register() {
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/is_passable"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -30,13 +30,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/is_empty"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -45,13 +45,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/is_indirectly_powered"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -60,13 +60,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/is_powered"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -75,13 +75,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/is_liquid"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -90,13 +90,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/compare_block/type"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -118,13 +118,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/compare_biome"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -145,13 +145,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/compare_block_power"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -165,13 +165,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/compare_humidity"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 
@@ -185,13 +185,13 @@ public class BlockConditions {
                 )
         );
         Registry.register(
-                new ConditionContainer<Block>(
+                new ConditionContainer<Temp>(
                         new IdentifierContainer(
                                 OriginsBukkit.KEY, "condition/block/compare_temperature"
                         ), null,
-                        (data, block) -> {
+                        (data, temp) -> {
                             Location location = locationOffset(
-                                    block.getLocation(),
+                                    temp.getBlock().getLocation(),
                                     data.getAsJsonObject("offset")
                             );
 

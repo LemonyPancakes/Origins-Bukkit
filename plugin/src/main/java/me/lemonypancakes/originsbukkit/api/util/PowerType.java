@@ -10,12 +10,10 @@ import me.lemonypancakes.originsbukkit.api.data.type.*;
 import me.lemonypancakes.originsbukkit.util.Catcher;
 import me.lemonypancakes.originsbukkit.util.Storage;
 import org.apache.commons.jexl3.*;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 public enum PowerType {
 
     SINGLE("Single") {
@@ -30,24 +28,30 @@ public enum PowerType {
 
                     if (action != null) {
                         if (action.has("type")) {
-                            String actionTypeString = action.get("type").getAsString();
+                            String actionType = action.get("type").getAsString();
 
-                            if (actionTypeString != null) {
+                            if (actionType != null) {
                                 Identifier actionTypeIdentifier = new IdentifierContainer(
-                                        actionTypeString.split(":")[0],
-                                        actionTypeString.split(":")[1]
+                                        actionType.split(":")[0],
+                                        actionType.split(":")[1]
                                 );
 
-                                Storage.getActionsData().forEach((key, value) -> {
-                                    if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                        Action<?> actionBuff = new ActionContainer<>(
-                                                key,
-                                                action,
-                                                value.getBiConsumer()
-                                        );
-                                        power.setActions(new Action<?>[]{actionBuff});
+                                if (action.has("fields")) {
+                                    JsonObject fields = action.getAsJsonObject("fields");
+
+                                    if (fields != null) {
+                                        Storage.getActionsData().forEach((key, value) -> {
+                                            if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
+                                                Action<?> actionBuff = new ActionContainer<>(
+                                                        key,
+                                                        fields,
+                                                        value.getBiConsumer()
+                                                );
+                                                power.setActions(new Action<?>[]{actionBuff});
+                                            }
+                                        });
                                     }
-                                });
+                                }
                             }
                         }
                     }
@@ -64,24 +68,30 @@ public enum PowerType {
                     if (actions != null) {
                         for (JsonObject action : actions) {
                             if (action.has("type")) {
-                                String actionTypeString = action.get("type").getAsString();
+                                String actionType = action.get("type").getAsString();
 
-                                if (actionTypeString != null) {
+                                if (actionType != null) {
                                     Identifier actionTypeIdentifier = new IdentifierContainer(
-                                            actionTypeString.split(":")[0],
-                                            actionTypeString.split(":")[1]
+                                            actionType.split(":")[0],
+                                            actionType.split(":")[1]
                                     );
 
-                                    Storage.getActionsData().forEach((key, value) -> {
-                                        if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                            Action<?> actionBuff = new ActionContainer<>(
-                                                    key,
-                                                    action,
-                                                    value.getBiConsumer()
-                                            );
-                                            actionList.add(actionBuff);
+                                    if (action.has("fields")) {
+                                        JsonObject fields = action.getAsJsonObject("fields");
+
+                                        if (fields != null) {
+                                            Storage.getActionsData().forEach((key, value) -> {
+                                                if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
+                                                    Action<?> actionBuff = new ActionContainer<>(
+                                                            key,
+                                                            fields,
+                                                            value.getBiConsumer()
+                                                    );
+                                                    actionList.add(actionBuff);
+                                                }
+                                            });
                                         }
-                                    });
+                                    }
                                 }
                             }
                         }
@@ -107,25 +117,31 @@ public enum PowerType {
                         String randString = getSaltString();
 
                         if (cond.has("type")) {
-                            String type = cond.get("type").getAsString();
+                            String conditionType = cond.get("type").getAsString();
 
-                            if (type != null) {
+                            if (conditionType != null) {
                                 Identifier conditionIdentifier = new IdentifierContainer(
-                                        type.split(":")[0],
-                                        type.split(":")[1]
+                                        conditionType.split(":")[0],
+                                        conditionType.split(":")[1]
                                 );
 
-                                Storage.getConditionsData().forEach((key, value) -> {
-                                    if (Catcher.catchDuplicate(key, conditionIdentifier)) {
-                                        Condition<?> conditionBuff = new ConditionContainer<>(
-                                                key,
-                                                cond,
-                                                value.getBiPredicate()
-                                        );
-                                        buffer.put(randString, conditionBuff);
-                                        condition1.append(randString).append(" ");
+                                if (cond.has("fields")) {
+                                    JsonObject fields = cond.getAsJsonObject("fields");
+
+                                    if (fields != null) {
+                                        Storage.getConditionsData().forEach((key, value) -> {
+                                            if (Catcher.catchDuplicate(key, conditionIdentifier)) {
+                                                Condition<?> conditionBuff = new ConditionContainer<>(
+                                                        key,
+                                                        fields,
+                                                        value.getBiPredicate()
+                                                );
+                                                buffer.put(randString, conditionBuff);
+                                                condition1.append(randString).append(" ");
+                                            }
+                                        });
                                     }
-                                });
+                                }
                             }
                         } else if (cond.has("operator")) {
                             String operator = cond.get("operator").getAsString();
@@ -136,19 +152,19 @@ public enum PowerType {
                         }
                     }
                     JexlEngine jexlEngine = new JexlBuilder().create();
-                    Bukkit.broadcastMessage("" + condition1);
                     JexlExpression expression = jexlEngine.createExpression(condition1.toString());
+
                     power.setCondition(
-                            new ConditionContainer<Player>(
+                            new ConditionContainer<Temp>(
                                     null,
                                     null,
-                                    (data, player) -> {
+                                    (data, temp) -> {
                                         JexlContext context = new MapContext();
                                         buffer.forEach((key, value) -> {
                                             if (value instanceof Condition) {
                                                 context.set(
                                                         key.toString(),
-                                                        ((Condition<Object>) value).test(player)
+                                                        ((Condition<Object>) value).test(temp)
                                                 );
                                             }
                                         });
@@ -198,23 +214,29 @@ public enum PowerType {
 
                         if (action != null) {
                             if (action.has("type")) {
-                                String actionTypeString = action.get("type").getAsString();
+                                String actionType = action.get("type").getAsString();
 
-                                if (actionTypeString != null) {
+                                if (actionType != null) {
                                     Identifier actionTypeIdentifier = new IdentifierContainer(
-                                            actionTypeString.split(":")[0],
-                                            actionTypeString.split(":")[1]
+                                            actionType.split(":")[0],
+                                            actionType.split(":")[1]
                                     );
 
-                                    for (Map.Entry<Identifier, Action<?>> entry : Storage.getActionsData().entrySet()) {
-                                        if (Catcher.catchDuplicate(entry.getKey(), actionTypeIdentifier)) {
-                                            Action<?> actionBuff = new ActionContainer<>(
-                                                    entry.getKey(),
-                                                    action,
-                                                    entry.getValue().getBiConsumer()
-                                            );
-                                            power.setActions(new Action<?>[]{actionBuff});
-                                            break;
+                                    if (action.has("fields")) {
+                                        JsonObject fields = action.getAsJsonObject("fields");
+
+                                        if (fields != null) {
+                                            for (Map.Entry<Identifier, Action<?>> entry : Storage.getActionsData().entrySet()) {
+                                                if (Catcher.catchDuplicate(entry.getKey(), actionTypeIdentifier)) {
+                                                    Action<?> actionBuff = new ActionContainer<>(
+                                                            entry.getKey(),
+                                                            fields,
+                                                            entry.getValue().getBiConsumer()
+                                                    );
+                                                    power.setActions(new Action<?>[]{actionBuff});
+                                                    break;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -233,24 +255,30 @@ public enum PowerType {
                         if (actions != null) {
                             for (JsonObject action : actions) {
                                 if (action.has("type")) {
-                                    String actionTypeString = action.get("type").getAsString();
+                                    String actionType = action.get("type").getAsString();
 
-                                    if (actionTypeString != null) {
+                                    if (actionType != null) {
                                         Identifier actionTypeIdentifier = new IdentifierContainer(
-                                                actionTypeString.split(":")[0],
-                                                actionTypeString.split(":")[1]
+                                                actionType.split(":")[0],
+                                                actionType.split(":")[1]
                                         );
 
-                                        Storage.getActionsData().forEach((key, value) -> {
-                                            if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                                Action<?> actionBuff = new ActionContainer<>(
-                                                        key,
-                                                        action,
-                                                        value.getBiConsumer()
-                                                );
-                                                actionList.add(actionBuff);
+                                        if (action.has("fields")) {
+                                            JsonObject fields = action.getAsJsonObject("fields");
+
+                                            if (fields != null) {
+                                                Storage.getActionsData().forEach((key, value) -> {
+                                                    if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
+                                                        Action<?> actionBuff = new ActionContainer<>(
+                                                                key,
+                                                                fields,
+                                                                value.getBiConsumer()
+                                                        );
+                                                        actionList.add(actionBuff);
+                                                    }
+                                                });
                                             }
-                                        });
+                                        }
                                     }
                                 }
                             }
@@ -276,25 +304,31 @@ public enum PowerType {
                             String randString = getSaltString();
 
                             if (cond.has("type")) {
-                                String type = cond.get("type").getAsString();
+                                String conditionType = cond.get("type").getAsString();
 
-                                if (type != null) {
+                                if (conditionType != null) {
                                     Identifier conditionIdentifier = new IdentifierContainer(
-                                            type.split(":")[0],
-                                            type.split(":")[1]
+                                            conditionType.split(":")[0],
+                                            conditionType.split(":")[1]
                                     );
 
-                                    Storage.getConditionsData().forEach((key, value) -> {
-                                        if (Catcher.catchDuplicate(key, conditionIdentifier)) {
-                                            Condition<?> conditionBuff = new ConditionContainer<>(
-                                                    key,
-                                                    cond,
-                                                    value.getBiPredicate()
-                                            );
-                                            buffer.put(randString, conditionBuff);
-                                            condition1.append(randString).append(" ");
+                                    if (cond.has("fields")) {
+                                        JsonObject fields = cond.getAsJsonObject("fields");
+
+                                        if (fields != null) {
+                                            Storage.getConditionsData().forEach((key, value) -> {
+                                                if (Catcher.catchDuplicate(key, conditionIdentifier)) {
+                                                    Condition<?> conditionBuff = new ConditionContainer<>(
+                                                            key,
+                                                            fields,
+                                                            value.getBiPredicate()
+                                                    );
+                                                    buffer.put(randString, conditionBuff);
+                                                    condition1.append(randString).append(" ");
+                                                }
+                                            });
                                         }
-                                    });
+                                    }
                                 }
                             } else if (cond.has("operator")) {
                                 String operator = cond.get("operator").getAsString();
@@ -305,19 +339,19 @@ public enum PowerType {
                             }
                         }
                         JexlEngine jexlEngine = new JexlBuilder().create();
-                        Bukkit.broadcastMessage("" + condition1);
                         JexlExpression expression = jexlEngine.createExpression(condition1.toString());
+
                         power.setCondition(
-                                new ConditionContainer<Player>(
+                                new ConditionContainer<Temp>(
                                         null,
                                         null,
-                                        (data, player) -> {
+                                        (data, temp) -> {
                                             JexlContext context = new MapContext();
                                             buffer.forEach((key, value) -> {
                                                 if (value instanceof Condition) {
                                                     context.set(
                                                             key.toString(),
-                                                            ((Condition<Object>) value).test(player)
+                                                            ((Condition<Object>) value).test(temp)
                                                     );
                                                 }
                                             });
