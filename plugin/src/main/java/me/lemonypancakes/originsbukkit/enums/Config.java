@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.enums;
 
-import me.lemonypancakes.originsbukkit.util.Message;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -108,11 +108,11 @@ public enum Config {
 
     @Override
     public String toString() {
-        return Message.format(CONFIG.getString(this.Path, (String) this.defaultValue));
+        return ChatUtils.format(CONFIG.getString(this.Path, (String) this.defaultValue));
     }
 
     public String[] toStringList() {
-        return Message.formatList(CONFIG.getStringList(this.Path).toArray(new String[0]));
+        return ChatUtils.formatList(CONFIG.getStringList(this.Path).toArray(new String[0]));
     }
 
     public boolean toBoolean() {

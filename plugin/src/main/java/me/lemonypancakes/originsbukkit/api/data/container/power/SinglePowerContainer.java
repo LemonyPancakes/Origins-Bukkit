@@ -4,13 +4,14 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.SchedulerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
-import me.lemonypancakes.originsbukkit.util.Storage;
+import me.lemonypancakes.originsbukkit.storage.OriginPlayers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class SinglePowerContainer implements Power {
@@ -25,6 +26,9 @@ public class SinglePowerContainer implements Power {
     private boolean isTicking = false;
 
     private int tickRate = 4;
+
+    private static final OriginsBukkit PLUGIN = OriginsBukkit.getPlugin();
+    private static final OriginPlayers ORIGIN_PLAYERS = PLUGIN.getStorageHandler().getOriginPlayers();
 
     public SinglePowerContainer(Identifier identifier,
                                 JsonObject jsonObject,
@@ -133,7 +137,11 @@ public class SinglePowerContainer implements Power {
                             Temp temp = (Temp) t;
                             Player player = temp.getPlayer();
 
-                            Storage.removeSchedulerDataFromStorage(player);
+                            ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                    .getSchedulers()
+                                    .removeByIdentifier(
+                                            getIdentifier()
+                                    );
                             BukkitTask tick = new BukkitRunnable() {
 
                                 @Override
@@ -145,7 +153,11 @@ public class SinglePowerContainer implements Power {
                                             }
                                         }
                                     } else {
-                                        Storage.removeSchedulerDataFromStorage(player);
+                                        ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                .getSchedulers()
+                                                .removeByIdentifier(
+                                                        getIdentifier()
+                                                );
                                         cancel();
                                     }
                                 }
@@ -154,13 +166,13 @@ public class SinglePowerContainer implements Power {
                                     0,
                                     tickRate
                             );
-                            Storage.addDataToStorage(
-                                    player,
-                                    new SchedulerContainer(
-                                            getIdentifier(),
-                                            tick
-                                    )
-                            );
+                            ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                    .getSchedulers()
+                                    .add(
+                                            new SchedulerContainer(
+                                                    getIdentifier(), tick
+                                            )
+                                    );
                         }
                     }
                 } else {
@@ -173,7 +185,11 @@ public class SinglePowerContainer implements Power {
                             Temp temp = (Temp) t;
                             Player player = temp.getPlayer();
 
-                            Storage.removeSchedulerDataFromStorage(player);
+                            ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                    .getSchedulers()
+                                    .removeByIdentifier(
+                                            getIdentifier()
+                                    );
                             BukkitTask tick = new BukkitRunnable() {
 
                                 @Override
@@ -183,7 +199,11 @@ public class SinglePowerContainer implements Power {
                                             action.accept(temp);
                                         }
                                     } else {
-                                        Storage.removeSchedulerDataFromStorage(player);
+                                        ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                .getSchedulers()
+                                                .removeByIdentifier(
+                                                        getIdentifier()
+                                                );
                                         cancel();
                                     }
                                 }
@@ -192,13 +212,13 @@ public class SinglePowerContainer implements Power {
                                     0,
                                     tickRate
                             );
-                            Storage.addDataToStorage(
-                                    player,
-                                    new SchedulerContainer(
-                                            getIdentifier(),
-                                            tick
-                                    )
-                            );
+                            ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                    .getSchedulers()
+                                    .add(
+                                            new SchedulerContainer(
+                                                    getIdentifier(), tick
+                                            )
+                                    );
                         }
                     }
                 }
@@ -219,7 +239,11 @@ public class SinglePowerContainer implements Power {
                                                 Temp temp = (Temp) t;
                                                 Player player = temp.getPlayer();
 
-                                                Storage.removeSchedulerDataFromStorage(player);
+                                                ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                        .getSchedulers()
+                                                        .removeByIdentifier(
+                                                                getIdentifier()
+                                                        );
                                                 BukkitTask tick = new BukkitRunnable() {
 
                                                     @Override
@@ -231,7 +255,11 @@ public class SinglePowerContainer implements Power {
                                                                 }
                                                             }
                                                         } else {
-                                                            Storage.removeSchedulerDataFromStorage(player);
+                                                            ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                                    .getSchedulers()
+                                                                    .removeByIdentifier(
+                                                                            getIdentifier()
+                                                                    );
                                                             cancel();
                                                         }
                                                     }
@@ -240,13 +268,13 @@ public class SinglePowerContainer implements Power {
                                                         0,
                                                         tickRate
                                                 );
-                                                Storage.addDataToStorage(
-                                                        player,
-                                                        new SchedulerContainer(
-                                                                getIdentifier(),
-                                                                tick
-                                                        )
-                                                );
+                                                ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                        .getSchedulers()
+                                                        .add(
+                                                                new SchedulerContainer(
+                                                                        getIdentifier(), tick
+                                                                )
+                                                        );
                                             }
                                         }
                                     } else {
@@ -259,7 +287,11 @@ public class SinglePowerContainer implements Power {
                                                 Temp temp = (Temp) t;
                                                 Player player = temp.getPlayer();
 
-                                                Storage.removeSchedulerDataFromStorage(player);
+                                                ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                        .getSchedulers()
+                                                        .removeByIdentifier(
+                                                                getIdentifier()
+                                                        );
                                                 BukkitTask tick = new BukkitRunnable() {
 
                                                     @Override
@@ -269,7 +301,11 @@ public class SinglePowerContainer implements Power {
                                                                 action.accept(temp);
                                                             }
                                                         } else {
-                                                            Storage.removeSchedulerDataFromStorage(player);
+                                                            ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                                    .getSchedulers()
+                                                                    .removeByIdentifier(
+                                                                            getIdentifier()
+                                                                    );
                                                             cancel();
                                                         }
                                                     }
@@ -278,13 +314,13 @@ public class SinglePowerContainer implements Power {
                                                         0,
                                                         tickRate
                                                 );
-                                                Storage.addDataToStorage(
-                                                        player,
-                                                        new SchedulerContainer(
-                                                                getIdentifier(),
-                                                                tick
-                                                        )
-                                                );
+                                                ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                                        .getSchedulers()
+                                                        .add(
+                                                                new SchedulerContainer(
+                                                                        getIdentifier(), tick
+                                                                )
+                                                        );
                                             }
                                         }
                                     }
@@ -303,7 +339,11 @@ public class SinglePowerContainer implements Power {
                         Temp temp = (Temp) t;
                         Player player = temp.getPlayer();
 
-                        Storage.removeSchedulerDataFromStorage(player);
+                        ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                .getSchedulers()
+                                .removeByIdentifier(
+                                        getIdentifier()
+                                );
                         BukkitTask tick = new BukkitRunnable() {
 
                             @Override
@@ -315,7 +355,11 @@ public class SinglePowerContainer implements Power {
                                         }
                                     }
                                 } else {
-                                    Storage.removeSchedulerDataFromStorage(player);
+                                    ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                            .getSchedulers()
+                                            .removeByIdentifier(
+                                                    getIdentifier()
+                                            );
                                     cancel();
                                 }
                             }
@@ -324,13 +368,13 @@ public class SinglePowerContainer implements Power {
                                 0,
                                 tickRate
                         );
-                        Storage.addDataToStorage(
-                                player,
-                                new SchedulerContainer(
-                                        getIdentifier(),
-                                        tick
-                                )
-                        );
+                        ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                .getSchedulers()
+                                .add(
+                                        new SchedulerContainer(
+                                                getIdentifier(), tick
+                                        )
+                                );
                     }
                 }
             } else {
@@ -343,7 +387,11 @@ public class SinglePowerContainer implements Power {
                         Temp temp = (Temp) t;
                         Player player = temp.getPlayer();
 
-                        Storage.removeSchedulerDataFromStorage(player);
+                        ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                .getSchedulers()
+                                .removeByIdentifier(
+                                        getIdentifier()
+                                );
                         BukkitTask tick = new BukkitRunnable() {
 
                             @Override
@@ -353,7 +401,11 @@ public class SinglePowerContainer implements Power {
                                         action.accept(temp);
                                     }
                                 } else {
-                                    Storage.removeSchedulerDataFromStorage(player);
+                                    ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                            .getSchedulers()
+                                            .removeByIdentifier(
+                                                    getIdentifier()
+                                            );
                                     cancel();
                                 }
                             }
@@ -362,17 +414,32 @@ public class SinglePowerContainer implements Power {
                                 0,
                                 tickRate
                         );
-                        Storage.addDataToStorage(
-                                player,
-                                new SchedulerContainer(
-                                        getIdentifier(),
-                                        tick
-                                )
-                        );
+                        ORIGIN_PLAYERS.getByPlayerUUID(player.getUniqueId())
+                                .getSchedulers()
+                                .add(
+                                        new SchedulerContainer(
+                                                getIdentifier(), tick
+                                        )
+                                );
                     }
                 }
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SinglePowerContainer)) return false;
+        SinglePowerContainer that = (SinglePowerContainer) o;
+        return isTicking == that.isTicking && tickRate == that.tickRate && Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Arrays.equals(getActions(), that.getActions()) && Objects.equals(getCondition(), that.getCondition()) && Objects.equals(isAsync, that.isAsync);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getIdentifier(), getJsonObject(), getCondition(), isAsync, isTicking, tickRate);
+        result = 31 * result + Arrays.hashCode(getActions());
+        return result;
     }
 
     @Override

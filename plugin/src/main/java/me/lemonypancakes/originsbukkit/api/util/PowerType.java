@@ -2,13 +2,16 @@ package me.lemonypancakes.originsbukkit.api.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ActionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.ConditionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
+import me.lemonypancakes.originsbukkit.api.data.container.power.ListenerPowerContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.power.SinglePowerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
-import me.lemonypancakes.originsbukkit.util.Catcher;
-import me.lemonypancakes.originsbukkit.util.Storage;
+import me.lemonypancakes.originsbukkit.storage.Actions;
+import me.lemonypancakes.originsbukkit.storage.Conditions;
+import me.lemonypancakes.originsbukkit.storage.Powers;
 import org.apache.commons.jexl3.*;
 
 import java.util.*;
@@ -40,16 +43,16 @@ public enum PowerType {
                                     JsonObject fields = action.getAsJsonObject("fields");
 
                                     if (fields != null) {
-                                        Storage.getActionsData().forEach((key, value) -> {
-                                            if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                                Action<?> actionBuff = new ActionContainer<>(
-                                                        key,
-                                                        fields,
-                                                        value.getBiConsumer()
-                                                );
-                                                power.setActions(new Action<?>[]{actionBuff});
-                                            }
-                                        });
+                                        if (ACTIONS.hasIdentifier(actionTypeIdentifier)) {
+                                            Action<?> toAct = ACTIONS.getByIdentifier(actionTypeIdentifier);
+                                            Action<?> actionBuff = new ActionContainer<>(
+                                                    toAct.getIdentifier(),
+                                                    fields,
+                                                    toAct.getBiConsumer()
+                                            );
+
+                                            power.setActions(new Action<?>[]{actionBuff});
+                                        }
                                     }
                                 }
                             }
@@ -80,16 +83,16 @@ public enum PowerType {
                                         JsonObject fields = action.getAsJsonObject("fields");
 
                                         if (fields != null) {
-                                            Storage.getActionsData().forEach((key, value) -> {
-                                                if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                                    Action<?> actionBuff = new ActionContainer<>(
-                                                            key,
-                                                            fields,
-                                                            value.getBiConsumer()
-                                                    );
-                                                    actionList.add(actionBuff);
-                                                }
-                                            });
+                                            if (ACTIONS.hasIdentifier(actionTypeIdentifier)) {
+                                                Action<?> toAct = ACTIONS.getByIdentifier(actionTypeIdentifier);
+                                                Action<?> actionBuff = new ActionContainer<>(
+                                                        toAct.getIdentifier(),
+                                                        fields,
+                                                        toAct.getBiConsumer()
+                                                );
+
+                                                actionList.add(actionBuff);
+                                            }
                                         }
                                     }
                                 }
@@ -129,17 +132,17 @@ public enum PowerType {
                                     JsonObject fields = cond.getAsJsonObject("fields");
 
                                     if (fields != null) {
-                                        Storage.getConditionsData().forEach((key, value) -> {
-                                            if (Catcher.catchDuplicate(key, conditionIdentifier)) {
-                                                Condition<?> conditionBuff = new ConditionContainer<>(
-                                                        key,
-                                                        fields,
-                                                        value.getBiPredicate()
-                                                );
-                                                buffer.put(randString, conditionBuff);
-                                                condition1.append(randString).append(" ");
-                                            }
-                                        });
+                                        if (CONDITIONS.hasIdentifier(conditionIdentifier)) {
+                                            Condition<?> toCond = CONDITIONS.getByIdentifier(conditionIdentifier);
+                                            Condition<?> conditionBuff = new ConditionContainer<>(
+                                                    toCond.getIdentifier(),
+                                                    fields,
+                                                    toCond.getBiPredicate()
+                                            );
+
+                                            buffer.put(randString, conditionBuff);
+                                            condition1.append(randString).append(" ");
+                                        }
                                     }
                                 }
                             }
@@ -198,10 +201,11 @@ public enum PowerType {
                                 listenerString.split(":")[1]
                         );
 
-                        for (Map.Entry<Identifier, Power> entry : Storage.getPowersData().entrySet()) {
-                            if (Catcher.catchDuplicate(entry.getKey(), listenerIdentifier)) {
-                                power = ((Listener) entry.getValue()).newInstance(identifier, powerSection);
-                                break;
+                        if (POWERS.hasIdentifier(listenerIdentifier)) {
+                            Power powerBuff = POWERS.getByIdentifier(listenerIdentifier);
+
+                            if (powerBuff instanceof ListenerPowerContainer) {
+                                power = ((ListenerPowerContainer) powerBuff).newInstance(identifier, powerSection);
                             }
                         }
                     }
@@ -226,16 +230,15 @@ public enum PowerType {
                                         JsonObject fields = action.getAsJsonObject("fields");
 
                                         if (fields != null) {
-                                            for (Map.Entry<Identifier, Action<?>> entry : Storage.getActionsData().entrySet()) {
-                                                if (Catcher.catchDuplicate(entry.getKey(), actionTypeIdentifier)) {
-                                                    Action<?> actionBuff = new ActionContainer<>(
-                                                            entry.getKey(),
-                                                            fields,
-                                                            entry.getValue().getBiConsumer()
-                                                    );
-                                                    power.setActions(new Action<?>[]{actionBuff});
-                                                    break;
-                                                }
+                                            if (ACTIONS.hasIdentifier(actionTypeIdentifier)) {
+                                                Action<?> toAct = ACTIONS.getByIdentifier(actionTypeIdentifier);
+                                                Action<?> actionBuff = new ActionContainer<>(
+                                                        toAct.getIdentifier(),
+                                                        fields,
+                                                        toAct.getBiConsumer()
+                                                );
+
+                                                power.setActions(new Action<?>[]{actionBuff});
                                             }
                                         }
                                     }
@@ -267,16 +270,16 @@ public enum PowerType {
                                             JsonObject fields = action.getAsJsonObject("fields");
 
                                             if (fields != null) {
-                                                Storage.getActionsData().forEach((key, value) -> {
-                                                    if (Catcher.catchDuplicate(key, actionTypeIdentifier)) {
-                                                        Action<?> actionBuff = new ActionContainer<>(
-                                                                key,
-                                                                fields,
-                                                                value.getBiConsumer()
-                                                        );
-                                                        actionList.add(actionBuff);
-                                                    }
-                                                });
+                                                if (ACTIONS.hasIdentifier(actionTypeIdentifier)) {
+                                                    Action<?> toAct = ACTIONS.getByIdentifier(actionTypeIdentifier);
+                                                    Action<?> actionBuff = new ActionContainer<>(
+                                                            toAct.getIdentifier(),
+                                                            fields,
+                                                            toAct.getBiConsumer()
+                                                    );
+
+                                                    actionList.add(actionBuff);
+                                                }
                                             }
                                         }
                                     }
@@ -316,17 +319,17 @@ public enum PowerType {
                                         JsonObject fields = cond.getAsJsonObject("fields");
 
                                         if (fields != null) {
-                                            Storage.getConditionsData().forEach((key, value) -> {
-                                                if (Catcher.catchDuplicate(key, conditionIdentifier)) {
-                                                    Condition<?> conditionBuff = new ConditionContainer<>(
-                                                            key,
-                                                            fields,
-                                                            value.getBiPredicate()
-                                                    );
-                                                    buffer.put(randString, conditionBuff);
-                                                    condition1.append(randString).append(" ");
-                                                }
-                                            });
+                                            if (CONDITIONS.hasIdentifier(conditionIdentifier)) {
+                                                Condition<?> toCond = CONDITIONS.getByIdentifier(conditionIdentifier);
+                                                Condition<?> conditionBuff = new ConditionContainer<>(
+                                                        toCond.getIdentifier(),
+                                                        fields,
+                                                        toCond.getBiPredicate()
+                                                );
+
+                                                buffer.put(randString, conditionBuff);
+                                                condition1.append(randString).append(" ");
+                                            }
                                         }
                                     }
                                 }
@@ -373,6 +376,11 @@ public enum PowerType {
     };
 
     private final String powerType;
+
+    private static final OriginsBukkit PLUGIN = OriginsBukkit.getPlugin();
+    private static final Actions ACTIONS = PLUGIN.getStorageHandler().getActions();
+    private static final Conditions CONDITIONS = PLUGIN.getStorageHandler().getConditions();
+    private static final Powers POWERS = PLUGIN.getStorageHandler().getPowers();
 
     PowerType(String powerType) {
         this.powerType = powerType;

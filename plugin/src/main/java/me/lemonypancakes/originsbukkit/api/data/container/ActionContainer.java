@@ -7,6 +7,7 @@ import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import org.bukkit.Bukkit;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -111,6 +112,19 @@ public class ActionContainer<T> implements Action<T> {
     @Override
     public Consumer<T> andThen(@Nonnull Consumer<? super T> after) {
         return Action.super.andThen(after);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ActionContainer)) return false;
+        ActionContainer<?> that = (ActionContainer<?>) o;
+        return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiConsumer(), that.getBiConsumer()) && Objects.equals(isAsync, that.isAsync);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdentifier(), getJsonObject(), getBiConsumer(), isAsync);
     }
 
     @Override

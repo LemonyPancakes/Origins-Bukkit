@@ -5,6 +5,7 @@ import me.lemonypancakes.originsbukkit.api.data.type.Condition;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -116,6 +117,19 @@ public class ConditionContainer<T> implements Condition<T> {
     @Override
     public Predicate<T> or(@Nonnull Predicate<? super T> other) {
         return Condition.super.or(other);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ConditionContainer)) return false;
+        ConditionContainer<?> that = (ConditionContainer<?>) o;
+        return isInverted() == that.isInverted() && Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiPredicate(), that.getBiPredicate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdentifier(), getJsonObject(), getBiPredicate(), isInverted());
     }
 
     @Override

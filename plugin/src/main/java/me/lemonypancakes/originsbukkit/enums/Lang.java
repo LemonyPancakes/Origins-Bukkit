@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.enums;
 
-import me.lemonypancakes.originsbukkit.util.Message;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Lang {
@@ -275,11 +275,11 @@ public enum Lang {
 
     @Override
     public String toString() {
-        return Message.format(LANG.getString(this.Path, (String) this.defaultValue));
+        return ChatUtils.format(LANG.getString(this.Path, (String) this.defaultValue));
     }
 
     public String[] toStringList() {
-        return Message.formatList(LANG.getStringList(this.Path).toArray(new String[0]));
+        return ChatUtils.formatList(LANG.getStringList(this.Path).toArray(new String[0]));
     }
 
     public boolean toBoolean() {

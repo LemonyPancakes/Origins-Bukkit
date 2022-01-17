@@ -17,19 +17,9 @@
  */
 package me.lemonypancakes.originsbukkit.api.wrappers;
 
-import com.comphenix.packetwrapper.WrapperPlayServerEntityMetadata;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.comphenix.protocol.wrappers.WrappedWatchableObject;
-import me.lemonypancakes.originsbukkit.OriginsBukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+public class PlayerAirBubbles {
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PlayerAirBubbles extends BukkitRunnable {
-
-    private final OriginsBukkit plugin;
+    /*private final OriginsBukkit plugin;
     private final WrappedDataWatcher.WrappedDataWatcherObject ADDRESS;
     private final Player player;
 
@@ -92,5 +82,5 @@ public class PlayerAirBubbles extends BukkitRunnable {
         } else {
             cancel();
         }
-    }
+    }*/
 }

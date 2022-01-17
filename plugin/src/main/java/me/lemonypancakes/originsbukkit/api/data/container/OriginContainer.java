@@ -4,10 +4,12 @@ import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import me.lemonypancakes.originsbukkit.api.data.type.Origin;
 import me.lemonypancakes.originsbukkit.api.data.type.Power;
 import me.lemonypancakes.originsbukkit.enums.Impact;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class OriginContainer implements Origin {
@@ -19,6 +21,9 @@ public class OriginContainer implements Origin {
     private ItemStack icon;
     private String[] authors;
     private List<Power> powers;
+
+    // The plugin will automagically provide.
+    private Inventory inventoryGUI;
 
     public OriginContainer(Identifier identifier,
                            String displayName,
@@ -150,6 +155,32 @@ public class OriginContainer implements Origin {
     }
 
     @Override
+    public Inventory getInventoryGUI() {
+        return inventoryGUI;
+    }
+
+    @Override
+    public void setInventoryGUI(Inventory inventoryGUI) {
+        this.inventoryGUI = inventoryGUI;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OriginContainer)) return false;
+        OriginContainer that = (OriginContainer) o;
+        return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getDisplayName(), that.getDisplayName()) && Arrays.equals(getDescription(), that.getDescription()) && getImpact() == that.getImpact() && Objects.equals(getIcon(), that.getIcon()) && Arrays.equals(getAuthors(), that.getAuthors()) && Objects.equals(getPowers(), that.getPowers()) && Objects.equals(getInventoryGUI(), that.getInventoryGUI());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getIdentifier(), getDisplayName(), getImpact(), getIcon(), getPowers(), getInventoryGUI());
+        result = 31 * result + Arrays.hashCode(getDescription());
+        result = 31 * result + Arrays.hashCode(getAuthors());
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "OriginContainer{" +
                 "identifier=" + identifier +
@@ -159,6 +190,7 @@ public class OriginContainer implements Origin {
                 ", icon=" + icon +
                 ", authors=" + Arrays.toString(authors) +
                 ", powers=" + powers +
+                ", inventoryGUI=" + inventoryGUI +
                 '}';
     }
 }

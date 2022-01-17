@@ -19,23 +19,15 @@ package me.lemonypancakes.originsbukkit.listeners;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.listeners.events.CustomEventListenerHandler;
-import me.lemonypancakes.originsbukkit.listeners.items.ItemListenerHandler;
-import me.lemonypancakes.originsbukkit.listeners.keys.KeyListener;
-import me.lemonypancakes.originsbukkit.listeners.origins.OriginListenerHandler;
-import me.lemonypancakes.originsbukkit.listeners.player.JoinEvent;
-import me.lemonypancakes.originsbukkit.listeners.player.QuitEvent;
-import me.lemonypancakes.originsbukkit.listeners.playerchecks.NoOriginPlayerRestrict;
-import me.lemonypancakes.originsbukkit.listeners.playerchecks.PlayerOriginChecker;
+import me.lemonypancakes.originsbukkit.listeners.player.InventoryClickEventListener;
+import me.lemonypancakes.originsbukkit.listeners.player.InventoryCloseEventListener;
+import me.lemonypancakes.originsbukkit.listeners.player.JoinEventListener;
+import me.lemonypancakes.originsbukkit.listeners.player.QuitEventListener;
 
 public class ListenerHandler {
 
     private final OriginsBukkit plugin;
     private CustomEventListenerHandler customEventListenerHandler;
-    private OriginListenerHandler originListenerHandler;
-    private ItemListenerHandler itemListenerHandler;
-    private NoOriginPlayerRestrict noOriginPlayerRestrict;
-    private PlayerOriginChecker playerOriginChecker;
-    private KeyListener keyListener;
 
     public OriginsBukkit getPlugin() {
         return plugin;
@@ -45,25 +37,6 @@ public class ListenerHandler {
         return customEventListenerHandler;
     }
 
-    public OriginListenerHandler getOriginListenerHandler() {
-        return originListenerHandler;
-    }
-
-    public ItemListenerHandler getItemListenerHandler() {
-        return itemListenerHandler;
-    }
-
-    public NoOriginPlayerRestrict getNoOriginPlayerRestrict() {
-        return noOriginPlayerRestrict;
-    }
-
-    public PlayerOriginChecker getPlayerOriginChecker() {
-        return playerOriginChecker;
-    }
-
-    public KeyListener getKeyListener() {
-        return keyListener;
-    }
 
     public ListenerHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
@@ -72,12 +45,9 @@ public class ListenerHandler {
 
     private void init() {
         customEventListenerHandler = new CustomEventListenerHandler(this);
-        originListenerHandler = new OriginListenerHandler(this);
-        itemListenerHandler = new ItemListenerHandler(this);
-        noOriginPlayerRestrict = new NoOriginPlayerRestrict(this);
-        playerOriginChecker = new PlayerOriginChecker(this);
-        keyListener = new KeyListener(this);
-        new JoinEvent(this);
-        new QuitEvent(this);
+        new JoinEventListener(this);
+        new QuitEventListener(this);
+        new InventoryClickEventListener(this);
+        new InventoryCloseEventListener(this);
     }
 }

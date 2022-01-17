@@ -18,7 +18,7 @@
 package me.lemonypancakes.originsbukkit.items;
 
 import me.lemonypancakes.originsbukkit.enums.Config;
-import me.lemonypancakes.originsbukkit.util.Message;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -61,7 +61,7 @@ public class OrbOfOrigin {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemMeta.setUnbreakable(true);
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-            itemMeta.setDisplayName(Message.format("&bOrb Of Origin"));
+            itemMeta.setDisplayName(ChatUtils.format("&bOrb Of Origin"));
             itemStack.setItemMeta(itemMeta);
         }
 

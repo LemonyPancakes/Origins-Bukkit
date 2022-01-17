@@ -6,7 +6,7 @@ import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.power.ListenerPowerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
-import me.lemonypancakes.originsbukkit.util.Message;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -92,7 +92,7 @@ public class PlayerSoulBoundArmor extends ListenerPowerContainer {
 
                                             if (originIconDisplayName != null) {
                                                 itemMeta.setDisplayName(
-                                                        Message.format(
+                                                        ChatUtils.format(
                                                                 originIconDisplayName
                                                         )
                                                 );

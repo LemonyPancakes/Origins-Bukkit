@@ -4,6 +4,8 @@ import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import me.lemonypancakes.originsbukkit.api.data.type.Scheduler;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Objects;
+
 public class SchedulerContainer implements Scheduler {
 
     private Identifier identifier;
@@ -35,6 +37,19 @@ public class SchedulerContainer implements Scheduler {
 
     public void setBukkitTask(BukkitTask bukkitTask) {
         this.bukkitTask = bukkitTask;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SchedulerContainer)) return false;
+        SchedulerContainer that = (SchedulerContainer) o;
+        return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getBukkitTask(), that.getBukkitTask());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdentifier(), getBukkitTask());
     }
 
     @Override

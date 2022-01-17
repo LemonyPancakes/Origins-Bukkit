@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @SuppressWarnings({"unchecked", "unused"})
@@ -180,6 +181,21 @@ public class ListenerPowerContainer implements Power, Listener {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ListenerPowerContainer)) return false;
+        ListenerPowerContainer that = (ListenerPowerContainer) o;
+        return isFactory() == that.isFactory() && isSetCancelled() == that.isSetCancelled() && Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Arrays.equals(getActions(), that.getActions()) && Objects.equals(getCondition(), that.getCondition()) && Objects.equals(getPlayersToListen(), that.getPlayersToListen());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getIdentifier(), getJsonObject(), getCondition(), isFactory(), isSetCancelled(), getPlayersToListen());
+        result = 31 * result + Arrays.hashCode(getActions());
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "ListenerPowerContainer{" +
                 "identifier=" + identifier +
@@ -187,6 +203,7 @@ public class ListenerPowerContainer implements Power, Listener {
                 ", actions=" + Arrays.toString(actions) +
                 ", condition=" + condition +
                 ", isFactory=" + isFactory +
+                ", setCancelled=" + setCancelled +
                 ", playersToListen=" + playersToListen +
                 '}';
     }
