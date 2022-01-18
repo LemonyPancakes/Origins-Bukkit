@@ -1,14 +1,20 @@
 package me.lemonypancakes.originsbukkit.api.data.container;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
+import me.lemonypancakes.originsbukkit.api.data.container.power.ListenerPowerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
+import me.lemonypancakes.originsbukkit.storage.Misc;
+import me.lemonypancakes.originsbukkit.storage.Origins;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class OriginPlayerContainer implements OriginPlayer {
 
@@ -18,42 +24,54 @@ public class OriginPlayerContainer implements OriginPlayer {
     private Origin origin;
 
     private static final OriginsBukkit PLUGIN = OriginsBukkit.getPlugin();
+    private static final Origins ORIGINS = PLUGIN.getStorageHandler().getOrigins();
 
     public OriginPlayerContainer(UUID playerUUID) {
         this.playerUUID = playerUUID;
         this.schedulers = new Schedulers();
-        Player player = getPlayer();
-        PersistentDataContainer dataContainer = player.getPersistentDataContainer();
+        PersistentDataContainer dataContainer = getPlayer().getPersistentDataContainer();
         NamespacedKey namespacedKey = new NamespacedKey(OriginsBukkit.getPlugin(), "origin");
-        String identifierString = dataContainer.get(namespacedKey, PersistentDataType.STRING);
 
-        if (identifierString != null) {
-            Identifier identifier = new IdentifierContainer(
-                    identifierString.split(":")[0],
-                    identifierString.split(":")[1]
+        if (dataContainer.has(namespacedKey, PersistentDataType.STRING)) {
+            String identifierString = dataContainer.get(
+                    namespacedKey,
+                    PersistentDataType.STRING
             );
 
-            Origin origin = PLUGIN.getStorageHandler().getOrigins().getByIdentifier(identifier);
-
-            if (origin != null) {
-                setOrigin(origin);
-            }
-            Temp temp = new TempContainer();
-
-            temp.setPlayer(player);
-            if (getOrigin() != null) {
-                getOrigin().getPowers().forEach(
-                        power -> power.invoke(temp)
+            if (identifierString != null) {
+                Identifier identifier = new IdentifierContainer(
+                        identifierString.split(":")[0],
+                        identifierString.split(":")[1]
                 );
+
+                if (ORIGINS.hasIdentifier(identifier)) {
+                    Origin origin = ORIGINS.getByIdentifier(identifier);
+
+                    if (origin != null) {
+                        setOrigin(origin);
+                    }
+                } else {
+                    dataContainer.remove(namespacedKey);
+                    Misc.VIEWERS.put(getPlayerUUID(), 0);
+                    getPlayer().openInventory(Misc.GUIS.get(0));
+                    ChatUtils.sendPlayerMessage(
+                            getPlayer(),
+                            "&cYour origin (&e\"" + identifierString + "\"&c) doesn't exist so we pruned your player data."
+                    );
+                }
             }
+        } else {
+            Misc.VIEWERS.put(getPlayerUUID(), 0);
+            getPlayer().openInventory(Misc.GUIS.get(0));
         }
     }
 
-
+    @Override
     public UUID getPlayerUUID() {
         return playerUUID;
     }
 
+    @Override
     public Player getPlayer() {
         if (Bukkit.getPlayer(playerUUID) != null) {
             return Bukkit.getPlayer(playerUUID);
@@ -61,19 +79,71 @@ public class OriginPlayerContainer implements OriginPlayer {
         return (Player) Bukkit.getOfflinePlayer(playerUUID);
     }
 
+    @Override
     public Origin getOrigin() {
         return origin;
     }
 
+    @Override
     public void setOrigin(Origin origin) {
         if (this.origin != null) {
-            getSchedulers().destroy();
+            unlistenAndDestroy();
         }
         this.origin = origin;
+        PersistentDataContainer dataContainer = getPlayer().getPersistentDataContainer();
+        NamespacedKey namespacedKey = new NamespacedKey(OriginsBukkit.getPlugin(), "origin");
+
+        if (origin != null) {
+            dataContainer.set(
+                    namespacedKey,
+                    PersistentDataType.STRING,
+                    origin.getIdentifier().getIdentifier()
+            );
+            if (origin.getPowers() != null) {
+                Temp temp = new TempContainer();
+
+                temp.setPlayer(getPlayer());
+                origin.getPowers().forEach(
+                        power -> power.invoke(temp)
+                );
+            }
+            if (Misc.VIEWERS.containsKey(getPlayerUUID())) {
+                Misc.VIEWERS.remove(getPlayerUUID());
+                getPlayer().closeInventory();
+            }
+        } else {
+            if (dataContainer.has(namespacedKey, PersistentDataType.STRING)) {
+                dataContainer.remove(namespacedKey);
+            }
+            Misc.VIEWERS.put(getPlayerUUID(), 0);
+            getPlayer().openInventory(Misc.GUIS.get(0));
+        }
     }
 
+    @Override
     public Schedulers getSchedulers() {
         return schedulers;
+    }
+
+    @Override
+    public void unlisten() {
+        if (getOrigin() != null) {
+            if (getOrigin().getPowers() != null) {
+                getOrigin().getPowers().forEach(power -> {
+                    if (power instanceof ListenerPowerContainer) {
+                        ListenerPowerContainer listenerPowerContainer = (ListenerPowerContainer) power;
+
+                        listenerPowerContainer.unlisten(getPlayer());
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void unlistenAndDestroy() {
+        unlisten();
+        getSchedulers().destroy();
     }
 
     public static class Schedulers {

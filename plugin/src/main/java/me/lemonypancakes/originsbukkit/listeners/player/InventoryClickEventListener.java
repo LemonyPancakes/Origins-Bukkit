@@ -87,12 +87,18 @@ public class InventoryClickEventListener implements Listener {
                                     identifierString.split(":")[1]
                             );
                             if (ORIGINS.hasIdentifier(identifier)) {
+                                UUID playerUUID = player.getUniqueId();
+
                                 player.getPersistentDataContainer().set(
                                         new NamespacedKey(OriginsBukkit.getPlugin(), "origin"),
                                         PersistentDataType.STRING,
                                         identifier.getIdentifier());
-                                ORIGIN_PLAYERS.add(new OriginPlayerContainer(player.getUniqueId()));
-                                player.closeInventory();
+                                if (ORIGIN_PLAYERS.hasPlayerUUID(playerUUID)) {
+                                    ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID), true);
+                                } else {
+                                    ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID));
+                                }
+
                                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
                             }
                         }

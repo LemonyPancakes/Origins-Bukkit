@@ -71,6 +71,8 @@ public final class Loader {
                 JsonObject originSection = jsonObject.getAsJsonObject("origin");
 
                 if (originSection != null) {
+
+                    origin.setJsonObject(originSection);
                     if (originSection.has("display_name")) {
                         String displayName = originSection.get("display_name").getAsString();
 

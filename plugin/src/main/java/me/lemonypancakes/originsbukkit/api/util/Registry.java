@@ -2,7 +2,6 @@ package me.lemonypancakes.originsbukkit.api.util;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
-import me.lemonypancakes.originsbukkit.api.data.type.Origin;
 import me.lemonypancakes.originsbukkit.storage.Misc;
 
 public final class Registry {
@@ -13,6 +12,7 @@ public final class Registry {
                 .getOrigins()
                 .add(origin);
         Misc.GUIS.add(origin.getInventoryGUI());
+        Misc.ORIGINS_AS_STRING.add(origin.getIdentifier().getIdentifier());
     }
 
     public static void register(Power power) {

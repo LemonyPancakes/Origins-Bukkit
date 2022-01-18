@@ -45,7 +45,36 @@ public class ChatUtils {
         player.sendMessage(format(message));
     }
 
-    public static void sendCommandSenderMessage(CommandSender sender, String message) {
-        sender.sendMessage(format(message));
+    public static void sendCommandSenderMessage(CommandSender commandSender, String message) {
+        if (commandSender instanceof Player) {
+            commandSender.sendMessage(format(message));
+        } else {
+            commandSender.sendMessage(format("&a[Origins-Bukkit] " + message));
+        }
+    }
+
+    public static void sendCommandSenderMessage(CommandSender commandSender, Type type, String message) {
+        if (commandSender instanceof Player) {
+            commandSender.sendMessage(format(type.getColor() + message));
+        } else {
+            commandSender.sendMessage(format(type.getColor() + "[Origins-Bukkit] " + message));
+        }
+    }
+
+    public enum Type {
+        INFO("&3"),
+        SUCCESS("&a"),
+        WARNING("&6"),
+        ERROR("&c");
+
+        private final String color;
+
+        Type(String color) {
+            this.color = color;
+        }
+
+        public String getColor() {
+            return color;
+        }
     }
 }

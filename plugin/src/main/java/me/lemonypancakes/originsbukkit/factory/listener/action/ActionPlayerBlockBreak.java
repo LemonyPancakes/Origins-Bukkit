@@ -6,46 +6,46 @@ import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.TempContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.power.ListenerPowerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.Arrays;
 
-public class ActionPlayerItemConsume extends ListenerPowerContainer {
+public class ActionPlayerBlockBreak extends ListenerPowerContainer {
 
-    public ActionPlayerItemConsume(Identifier identifier,
-                                   JsonObject jsonObject,
-                                   Action<?>[] actions,
-                                   Condition<?> condition,
-                                   boolean isFactory) {
+    public ActionPlayerBlockBreak(Identifier identifier,
+                                  JsonObject jsonObject,
+                                  Action<?>[] actions,
+                                  Condition<?> condition,
+                                  boolean isFactory) {
         super(identifier, jsonObject, actions, condition, isFactory);
     }
 
-    public ActionPlayerItemConsume(Identifier identifier,
-                                   JsonObject jsonObject,
-                                   Action<?>[] actions,
-                                   boolean isFactory) {
+    public ActionPlayerBlockBreak(Identifier identifier,
+                                  JsonObject jsonObject,
+                                  Action<?>[] actions,
+                                  boolean isFactory) {
         this(identifier, jsonObject, actions, null, isFactory);
     }
 
-    public ActionPlayerItemConsume(Identifier identifier,
-                                   JsonObject jsonObject,
-                                   boolean isFactory) {
+    public ActionPlayerBlockBreak(Identifier identifier,
+                                  JsonObject jsonObject,
+                                  boolean isFactory) {
         this(identifier, jsonObject, null, isFactory);
     }
 
-    public ActionPlayerItemConsume(Identifier identifier,
-                                   boolean isFactory) {
+    public ActionPlayerBlockBreak(Identifier identifier,
+                                  boolean isFactory) {
         this(identifier, null, isFactory);
     }
 
-    public ActionPlayerItemConsume(boolean isFactory) {
+    public ActionPlayerBlockBreak(boolean isFactory) {
         this(null, isFactory);
     }
 
-    public ActionPlayerItemConsume() {
+    public ActionPlayerBlockBreak() {
         this(false);
     }
 
@@ -54,50 +54,50 @@ public class ActionPlayerItemConsume extends ListenerPowerContainer {
                              JsonObject jsonObject,
                              Action<?>[] actions,
                              Condition<?> condition) {
-        return new ActionPlayerItemConsume(identifier, jsonObject, actions, condition, false);
+        return new ActionPlayerBlockBreak(identifier, jsonObject, actions, condition, false);
     }
 
     @Override
     public Power newInstance(Identifier identifier,
                              JsonObject jsonObject,
                              Action<?>[] actions) {
-        return new ActionPlayerItemConsume(identifier, jsonObject, actions, false);
+        return new ActionPlayerBlockBreak(identifier, jsonObject, actions, false);
     }
 
     @Override
     public Power newInstance(Identifier identifier,
                              JsonObject jsonObject) {
-        return new ActionPlayerItemConsume(identifier, jsonObject, false);
+        return new ActionPlayerBlockBreak(identifier, jsonObject, false);
     }
 
     @Override
     public Power newInstance(Identifier identifier) {
-        return new ActionPlayerItemConsume(identifier, false);
+        return new ActionPlayerBlockBreak(identifier, false);
     }
 
     @Override
     public Power newInstance() {
-        return new ActionPlayerItemConsume();
+        return new ActionPlayerBlockBreak();
     }
 
     public static Power getFactory() {
-        return new ActionPlayerItemConsume(
+        return new ActionPlayerBlockBreak(
                 new IdentifierContainer(
-                        OriginsBukkit.KEY, "listener/action/item_consume"
+                        OriginsBukkit.KEY, "listener/action/block_break"
                 ), true
         );
     }
 
     @EventHandler
-    private void onItemConsume(PlayerItemConsumeEvent event) {
+    private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
         if (getPlayersToListen().contains(player)) {
-            ItemStack itemStack = event.getItem();
+            Block block = event.getBlock();
             Temp temp = new TempContainer();
 
             temp.setPlayer(player);
-            temp.setItemStack(itemStack);
+            temp.setBlock(block);
             if (getCondition() != null) {
                 if (getCondition().test(temp)) {
                     event.setCancelled(isSetCancelled());

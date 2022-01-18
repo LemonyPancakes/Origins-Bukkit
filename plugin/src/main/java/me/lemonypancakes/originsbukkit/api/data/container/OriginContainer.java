@@ -1,5 +1,6 @@
 package me.lemonypancakes.originsbukkit.api.data.container;
 
+import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import me.lemonypancakes.originsbukkit.api.data.type.Origin;
 import me.lemonypancakes.originsbukkit.api.data.type.Power;
@@ -15,6 +16,7 @@ import java.util.Objects;
 public class OriginContainer implements Origin {
 
     private Identifier identifier;
+    private JsonObject jsonObject;
     private String displayName;
     private String[] description;
     private Impact impact;
@@ -26,6 +28,7 @@ public class OriginContainer implements Origin {
     private Inventory inventoryGUI;
 
     public OriginContainer(Identifier identifier,
+                           JsonObject jsonObject,
                            String displayName,
                            String[] description,
                            Impact impact,
@@ -33,6 +36,7 @@ public class OriginContainer implements Origin {
                            String[] authors,
                            List<Power> powers) {
         this.identifier = identifier;
+        this.jsonObject = jsonObject;
         this.displayName = displayName;
         this.description = description;
         this.impact = impact;
@@ -42,38 +46,48 @@ public class OriginContainer implements Origin {
     }
 
     public OriginContainer(Identifier identifier,
+                           JsonObject jsonObject,
                            String displayName,
                            String[] description,
                            Impact impact,
                            ItemStack icon,
                            String[] authors) {
-        this(identifier, displayName, description, impact, icon, authors, null);
+        this(identifier, jsonObject, displayName, description, impact, icon, authors, null);
     }
 
     public OriginContainer(Identifier identifier,
+                           JsonObject jsonObject,
                            String displayName,
                            String[] description,
                            Impact impact,
                            ItemStack icon) {
-        this(identifier, displayName, description, impact, icon, null);
+        this(identifier, jsonObject, displayName, description, impact, icon, null);
     }
 
     public OriginContainer(Identifier identifier,
+                           JsonObject jsonObject,
                            String displayName,
                            String[] description,
                            Impact impact) {
-        this(identifier, displayName, description, impact, null);
+        this(identifier, jsonObject, displayName, description, impact, null);
     }
 
     public OriginContainer(Identifier identifier,
+                           JsonObject jsonObject,
                            String displayName,
                            String[] description) {
-        this(identifier, displayName, description, null);
+        this(identifier, jsonObject, displayName, description, null);
     }
 
     public OriginContainer(Identifier identifier,
+                           JsonObject jsonObject,
                            String displayName) {
-        this(identifier, displayName, null);
+        this(identifier, jsonObject, displayName, null);
+    }
+
+    public OriginContainer(Identifier identifier,
+                           JsonObject jsonObject) {
+        this(identifier, jsonObject, null);
     }
 
     public OriginContainer(Identifier identifier) {
@@ -92,6 +106,16 @@ public class OriginContainer implements Origin {
     @Override
     public void setIdentifier(Identifier identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public JsonObject getJsonObject() {
+        return jsonObject;
+    }
+
+    @Override
+    public void setJsonObject(JsonObject jsonObject) {
+        this.jsonObject = jsonObject;
     }
 
     @Override

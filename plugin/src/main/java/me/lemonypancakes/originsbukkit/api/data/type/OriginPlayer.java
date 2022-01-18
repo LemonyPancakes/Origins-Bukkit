@@ -13,5 +13,11 @@ public interface OriginPlayer {
 
     Origin getOrigin();
 
+    void setOrigin(Origin origin);
+
     OriginPlayerContainer.Schedulers getSchedulers();
+
+    void unlisten();
+
+    void unlistenAndDestroy();
 }

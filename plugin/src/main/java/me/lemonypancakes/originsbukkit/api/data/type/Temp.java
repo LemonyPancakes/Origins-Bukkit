@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 public interface Temp {
@@ -37,6 +38,10 @@ public interface Temp {
     World getWorld();
 
     void setWorld(World world);
+
+    Event getEvent();
+
+    void setEvent(Event event);
 
     Object getObject();
 

@@ -204,6 +204,26 @@ public class BlockConditions {
                         }
                 )
         );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/block/compare_light_level"
+                        ), null,
+                        (data, temp) -> {
+                            Location location = locationOffset(
+                                    temp.getBlock().getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            if (data.has("light_level")) {
+                                byte lightLevel = data.get("light_level").getAsByte();
+
+                                return location.getBlock().getLightLevel() == lightLevel;
+                            }
+                            return false;
+                        }
+                )
+        );
     }
 
     private static Location locationOffset(Location location, JsonObject offset) {

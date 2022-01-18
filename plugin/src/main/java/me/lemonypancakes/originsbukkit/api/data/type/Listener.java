@@ -29,5 +29,5 @@ public interface Listener extends org.bukkit.event.Listener {
 
     boolean isSetCancelled();
 
-    <T> void onInvoke(T t);
+    void unlisten(Player player);
 }

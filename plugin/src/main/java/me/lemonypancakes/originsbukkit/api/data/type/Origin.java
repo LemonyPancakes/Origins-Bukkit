@@ -1,5 +1,6 @@
 package me.lemonypancakes.originsbukkit.api.data.type;
 
+import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.enums.Impact;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +12,10 @@ public interface Origin {
     Identifier getIdentifier();
 
     void setIdentifier(Identifier identifier);
+
+    JsonObject getJsonObject();
+
+    void setJsonObject(JsonObject jsonObject);
 
     String getDisplayName();
 

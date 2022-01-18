@@ -25,8 +25,8 @@ public class OriginPlayers {
     public void add(OriginPlayer originPlayer, boolean override) {
         if (originPlayerMap.containsKey(originPlayer.getPlayerUUID())) {
             if (override) {
-                originPlayerMap.get(originPlayer.getPlayerUUID()).getSchedulers().destroy();
-                originPlayerMap.replace(originPlayer.getPlayerUUID(), originPlayer);
+                removeByPlayerUUID(originPlayer.getPlayerUUID());
+                add(originPlayer);
             }
         } else {
             add(originPlayer);
@@ -35,7 +35,7 @@ public class OriginPlayers {
 
     public void removeByPlayerUUID(UUID playerUUID) {
         if (originPlayerMap.containsKey(playerUUID)) {
-            originPlayerMap.get(playerUUID).getSchedulers().destroy();
+            originPlayerMap.get(playerUUID).unlistenAndDestroy();
             originPlayerMap.remove(playerUUID);
         }
     }
@@ -43,7 +43,7 @@ public class OriginPlayers {
     public void removeByValue(OriginPlayer originPlayer) {
         for (Map.Entry<UUID, OriginPlayer> entry : originPlayerMap.entrySet()) {
             if (entry.getValue().equals(originPlayer)) {
-                entry.getValue().getSchedulers().destroy();
+                entry.getValue().unlistenAndDestroy();
                 originPlayerMap.remove(entry.getKey());
                 break;
             }

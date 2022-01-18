@@ -189,7 +189,7 @@ public class PlayerSoulBoundArmor extends ListenerPowerContainer {
     }
 
     @Override
-    public <T> void onInvoke(T t) {
+    protected <T> void onInvoke(T t) {
         if (t instanceof Temp) {
             Temp temp = (Temp) t;
             Player player = temp.getPlayer();

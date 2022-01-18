@@ -2,7 +2,6 @@ package me.lemonypancakes.originsbukkit.storage;
 
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import me.lemonypancakes.originsbukkit.api.data.type.Origin;
-import me.lemonypancakes.originsbukkit.api.data.type.Tag;
 
 import java.util.HashMap;
 import java.util.Map;

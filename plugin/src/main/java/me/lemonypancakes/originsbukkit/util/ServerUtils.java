@@ -24,21 +24,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ServerVersionChecker {
+public class ServerUtils {
 
-    private final OriginsBukkit plugin;
-    private final List<String> SUPPORTED_VERSIONS = new ArrayList<>(
+    private static final OriginsBukkit PLUGIN = OriginsBukkit.getPlugin();
+
+    private static final List<String> SUPPORTED_VERSIONS = new ArrayList<>(
             Arrays.asList("1.17", "1.17.1", "1.18", "1.18.1"));
 
-    public ServerVersionChecker(OriginsBukkit plugin) {
-        this.plugin = plugin;
-    }
-
-    public String getServerSoftware() {
+    public static String getServerSoftware() {
         return Bukkit.getVersion().split("-")[1];
     }
 
-    public boolean isServerSoftwareSafe() {
+    public static boolean isServerSoftwareSafe() {
         String serverSoftware = getServerSoftware().toUpperCase();
 
         switch (serverSoftware) {
@@ -56,7 +53,7 @@ public class ServerVersionChecker {
         }
     }
 
-    public void checkServerSoftwareCompatibility() {
+    public static void checkServerSoftwareCompatibility() {
         if (isServerSoftwareSafe()) {
             ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
             ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
@@ -76,17 +73,17 @@ public class ServerVersionChecker {
         }
     }
 
-    public String getServerVersion() {
+    public static String getServerVersion() {
         return Bukkit.getServer().getBukkitVersion().split("-")[0];
     }
 
-    public void checkServerVersionCompatibility() {
+    public static void checkServerVersionCompatibility() {
         if (SUPPORTED_VERSIONS.contains(getServerVersion())) {
             ChatUtils.sendConsoleMessage("&3[Origins-Bukkit]");
             ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &dSupported Server Version Detected. Initializing!");
         } else {
             ChatUtils.sendConsoleMessage("&4[Origins-Bukkit] Unsupported Server Version Detected! Safely disabling plugin...");
-            plugin.disablePlugin();
+            PLUGIN.disablePlugin();
         }
     }
 }

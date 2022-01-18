@@ -18,7 +18,6 @@
 package me.lemonypancakes.originsbukkit.listeners;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
-import me.lemonypancakes.originsbukkit.listeners.events.CustomEventListenerHandler;
 import me.lemonypancakes.originsbukkit.listeners.player.InventoryClickEventListener;
 import me.lemonypancakes.originsbukkit.listeners.player.InventoryCloseEventListener;
 import me.lemonypancakes.originsbukkit.listeners.player.JoinEventListener;
@@ -27,27 +26,36 @@ import me.lemonypancakes.originsbukkit.listeners.player.QuitEventListener;
 public class ListenerHandler {
 
     private final OriginsBukkit plugin;
-    private CustomEventListenerHandler customEventListenerHandler;
+    private final JoinEventListener joinEventListener;
+    private final QuitEventListener quitEventListener;
+    private final InventoryClickEventListener inventoryClickEventListener;
+    private final InventoryCloseEventListener inventoryCloseEventListener;
+
+    public ListenerHandler(OriginsBukkit plugin) {
+        this.plugin = plugin;
+        this.joinEventListener = new JoinEventListener(this);
+        this.quitEventListener = new QuitEventListener(this);
+        this.inventoryClickEventListener = new InventoryClickEventListener(this);
+        this.inventoryCloseEventListener = new InventoryCloseEventListener(this);
+    }
 
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-    public CustomEventListenerHandler getCustomEventListenerHandler() {
-        return customEventListenerHandler;
+    public JoinEventListener getJoinEventListener() {
+        return joinEventListener;
     }
 
-
-    public ListenerHandler(OriginsBukkit plugin) {
-        this.plugin = plugin;
-        init();
+    public QuitEventListener getQuitEventListener() {
+        return quitEventListener;
     }
 
-    private void init() {
-        customEventListenerHandler = new CustomEventListenerHandler(this);
-        new JoinEventListener(this);
-        new QuitEventListener(this);
-        new InventoryClickEventListener(this);
-        new InventoryCloseEventListener(this);
+    public InventoryClickEventListener getInventoryClickEventListener() {
+        return inventoryClickEventListener;
+    }
+
+    public InventoryCloseEventListener getInventoryCloseEventListener() {
+        return inventoryCloseEventListener;
     }
 }

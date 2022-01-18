@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
@@ -21,6 +22,7 @@ public class TempContainer implements Temp {
     private Material material;
     private Location location;
     private World world;
+    private Event event;
     private Object object;
 
     @Override
@@ -94,6 +96,16 @@ public class TempContainer implements Temp {
     }
 
     @Override
+    public Event getEvent() {
+        return event;
+    }
+
+    @Override
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    @Override
     public Object getObject() {
         return object;
     }
@@ -108,12 +120,12 @@ public class TempContainer implements Temp {
         if (this == o) return true;
         if (!(o instanceof TempContainer)) return false;
         TempContainer that = (TempContainer) o;
-        return Objects.equals(getEntity(), that.getEntity()) && Objects.equals(getPlayer(), that.getPlayer()) && Objects.equals(getBlock(), that.getBlock()) && Objects.equals(getItemStack(), that.getItemStack()) && getMaterial() == that.getMaterial() && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getWorld(), that.getWorld()) && Objects.equals(getObject(), that.getObject());
+        return Objects.equals(getEntity(), that.getEntity()) && Objects.equals(getPlayer(), that.getPlayer()) && Objects.equals(getBlock(), that.getBlock()) && Objects.equals(getItemStack(), that.getItemStack()) && getMaterial() == that.getMaterial() && Objects.equals(getLocation(), that.getLocation()) && Objects.equals(getWorld(), that.getWorld()) && Objects.equals(getEvent(), that.getEvent()) && Objects.equals(getObject(), that.getObject());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getEntity(), getPlayer(), getBlock(), getItemStack(), getMaterial(), getLocation(), getWorld(), getObject());
+        return Objects.hash(getEntity(), getPlayer(), getBlock(), getItemStack(), getMaterial(), getLocation(), getWorld(), getEvent(), getObject());
     }
 
     @Override
@@ -126,6 +138,7 @@ public class TempContainer implements Temp {
                 ", material=" + material +
                 ", location=" + location +
                 ", world=" + world +
+                ", event=" + event +
                 ", object=" + object +
                 '}';
     }

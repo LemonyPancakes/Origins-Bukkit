@@ -18,21 +18,23 @@
 package me.lemonypancakes.originsbukkit.commands;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
+import me.lemonypancakes.originsbukkit.commands.maincommand.MainCommand;
 
 public class CommandHandler {
 
     private final OriginsBukkit plugin;
+    private final MainCommand mainCommand;
+
+    public CommandHandler(OriginsBukkit plugin) {
+        this.plugin = plugin;
+        this.mainCommand = new MainCommand(this);
+    }
 
     public OriginsBukkit getPlugin() {
         return plugin;
     }
 
-
-    public CommandHandler(OriginsBukkit plugin) {
-        this.plugin = plugin;
-        init();
-    }
-
-    private void init() {
+    public MainCommand getMainCommand() {
+        return mainCommand;
     }
 }

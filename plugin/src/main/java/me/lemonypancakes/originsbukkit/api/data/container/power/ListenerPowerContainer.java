@@ -158,19 +158,31 @@ public class ListenerPowerContainer implements Power, Listener {
 
     @Override
     public <T> void invoke(T t) {
-        if (t instanceof Player) {
-            getPlayersToListen().forEach((player -> {
-                if (t.toString().equals(player.toString())) {
-                    getPlayersToListen().remove(player);
+        if (t instanceof Temp) {
+            Player player = ((Temp) t).getPlayer();
+            getPlayersToListen().forEach((p -> {
+                if (player.toString().equals(p.toString())) {
+                    getPlayersToListen().remove(p);
                 }
             }));
-            getPlayersToListen().add((Player) t);
+            getPlayersToListen().add(player);
             onInvoke(t);
         }
     }
 
+    protected <T> void onInvoke(T t) {}
+
     @Override
-    public <T> void onInvoke(T t) {}
+    public void unlisten(Player player) {
+        getPlayersToListen().forEach(p -> {
+            if (player.toString().equals(p.toString())) {
+                getPlayersToListen().remove(p);
+                onUnlisten(p);
+            }
+        });
+    }
+
+    protected void onUnlisten(Player player) {}
 
     public static Power getFactory() {
         return new ListenerPowerContainer(

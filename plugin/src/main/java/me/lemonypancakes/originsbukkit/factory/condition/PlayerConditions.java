@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Biome;
 import org.bukkit.potion.PotionEffectType;
 
 public final class PlayerConditions {
@@ -1867,6 +1868,112 @@ public final class PlayerConditions {
                             );
 
                             return location.getBlock().isPassable();
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/block/compare_biome"
+                        ), null,
+                        (data, temp) -> {
+                            Location location = locationOffset(
+                                    temp.getPlayer().getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            if (data.has("biome")) {
+                                Biome biome = new Gson().fromJson(
+                                        data.get(
+                                                "biome"
+                                        ),
+                                        Biome.class
+                                );
+
+                                if (biome != null) {
+                                    return location.getBlock().getBiome() == biome;
+                                }
+                            }
+                            return false;
+                        }
+                )
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/block/compare_block_power"
+                        ), null,
+                        (data, temp) -> {
+                            Location location = locationOffset(
+                                    temp.getPlayer().getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            if (data.has("block_power")) {
+                                int blockPower = data.get("block_power").getAsInt();
+
+                                return location.getBlock().getBlockPower() == blockPower;
+                            }
+                            return false;
+                        }
+                )
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/block/compare_humidity"
+                        ), null,
+                        (data, temp) -> {
+                            Location location = locationOffset(
+                                    temp.getPlayer().getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            if (data.has("humidity")) {
+                                double humidity = data.get("humidity").getAsDouble();
+
+                                return location.getBlock().getHumidity() == humidity;
+                            }
+                            return false;
+                        }
+                )
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/block/compare_temperature"
+                        ), null,
+                        (data, temp) -> {
+                            Location location = locationOffset(
+                                    temp.getPlayer().getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            if (data.has("temperature")) {
+                                double temperature = data.get("temperature").getAsDouble();
+
+                                return location.getBlock().getTemperature() == temperature;
+                            }
+                            return false;
+                        }
+                )
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare_location/block/light_level"
+                        ), null,
+                        (data, temp) -> {
+                            Location location = locationOffset(
+                                    temp.getPlayer().getLocation(),
+                                    data.getAsJsonObject("offset")
+                            );
+
+                            if (data.has("light_level")) {
+                                byte lightLevel = data.get("light_level").getAsByte();
+
+                                return location.getBlock().getLightLevel() == lightLevel;
+                            }
+                            return false;
                         })
         );
     }

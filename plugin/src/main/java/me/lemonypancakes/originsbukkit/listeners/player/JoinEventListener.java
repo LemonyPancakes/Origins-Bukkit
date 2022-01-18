@@ -42,7 +42,7 @@ public class JoinEventListener implements Listener {
         NamespacedKey namespacedKey = new NamespacedKey(OriginsBukkit.getPlugin(), "origin");
 
         if (!dataContainer.has(namespacedKey, PersistentDataType.STRING)) {
-            Misc.VIEWERS.putIfAbsent(player.getUniqueId(), 0);
+            Misc.VIEWERS.put(player.getUniqueId(), 0);
             player.openInventory(Misc.GUIS.get(0));
         } else {
             UUID playerUUID = player.getUniqueId();
@@ -52,12 +52,16 @@ public class JoinEventListener implements Listener {
                 Temp temp = new TempContainer();
 
                 temp.setPlayer(player);
-                originPlayer.getSchedulers().destroy();
+                originPlayer.unlistenAndDestroy();
                 originPlayer.getOrigin().getPowers().forEach(
                         power -> power.invoke(temp)
                 );
             } else {
-                ORIGIN_PLAYERS.add(new OriginPlayerContainer(player.getUniqueId()));
+                ORIGIN_PLAYERS.add(
+                        new OriginPlayerContainer(
+                                player.getUniqueId()
+                        )
+                );
             }
         }
     }
