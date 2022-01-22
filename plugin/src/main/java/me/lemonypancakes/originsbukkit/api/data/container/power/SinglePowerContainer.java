@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class SinglePowerContainer implements Power {
@@ -23,6 +24,9 @@ public class SinglePowerContainer implements Power {
 
     private Boolean isAsync;
 
+    private Integer probability;
+
+    private boolean invertProbability = false;
     private boolean isTicking = false;
 
     private int tickRate = 4;
@@ -47,6 +51,12 @@ public class SinglePowerContainer implements Power {
             }
             if (jsonObject.has("tick_rate")) {
                 this.tickRate = jsonObject.get("tick_rate").getAsInt();
+            }
+            if (jsonObject.has("action_probability")) {
+                this.probability = jsonObject.get("action_probability").getAsInt();
+            }
+            if (jsonObject.has("invert_action_probability")) {
+                this.invertProbability = jsonObject.get("invert_action_probability").getAsBoolean();
             }
         }
     }
@@ -98,6 +108,9 @@ public class SinglePowerContainer implements Power {
             if (jsonObject.has("tick_rate")) {
                 this.tickRate = jsonObject.get("tick_rate").getAsInt();
             }
+            if (jsonObject.has("invert_action_probability")) {
+                this.invertProbability = jsonObject.get("invert_action_probability").getAsBoolean();
+            }
         }
     }
 
@@ -123,6 +136,20 @@ public class SinglePowerContainer implements Power {
 
     @Override
     public <T> void invoke(T t) {
+        if (this.probability != null) {
+            Random random = new Random();
+            int probability = random.nextInt(this.probability);
+
+            if (this.invertProbability) {
+                if (probability == 0) {
+                    return;
+                }
+            } else {
+                if (probability != 0) {
+                    return;
+                }
+            }
+        }
         if (this.isAsync != null) {
             if (!this.isAsync) {
                 if (getCondition() != null) {

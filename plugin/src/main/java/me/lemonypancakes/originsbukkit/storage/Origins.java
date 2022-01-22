@@ -69,6 +69,10 @@ public class Origins {
         return originMap.containsValue(origin);
     }
 
+    public boolean isEmpty() {
+        return originMap.isEmpty();
+    }
+
     public StorageHandler getStorageHandler() {
         return storageHandler;
     }

@@ -22,6 +22,9 @@ public class ListenerPowerContainer implements Power, Listener {
 
     private final boolean isFactory;
 
+    private Integer probability;
+
+    private boolean invertProbability = false;
     private boolean setCancelled = false;
 
     private final Set<Player> playersToListen = new HashSet<>();
@@ -38,11 +41,19 @@ public class ListenerPowerContainer implements Power, Listener {
         this.isFactory = isFactory;
         if (!isFactory) {
             if (jsonObject != null) {
-                JsonObject fields = jsonObject.getAsJsonObject("fields");
+                if (jsonObject.has("fields")) {
+                    JsonObject fields = jsonObject.getAsJsonObject("fields");
 
-                if (fields != null) {
-                    if (fields.has("set_cancelled")) {
-                        this.setCancelled = fields.get("set_cancelled").getAsBoolean();
+                    if (fields != null) {
+                        if (fields.has("set_cancelled")) {
+                            this.setCancelled = fields.get("set_cancelled").getAsBoolean();
+                        }
+                        if (fields.has("action_probability")) {
+                            this.probability = fields.get("action_probability").getAsInt();
+                        }
+                        if (fields.has("invert_action_probability")) {
+                            this.invertProbability = fields.get("invert_action_probability").getAsBoolean();
+                        }
                     }
                 }
             }
@@ -94,6 +105,23 @@ public class ListenerPowerContainer implements Power, Listener {
     @Override
     public void setJsonObject(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
+        if (jsonObject != null) {
+            if (jsonObject.has("fields")) {
+                JsonObject fields = jsonObject.getAsJsonObject("fields");
+
+                if (fields != null) {
+                    if (fields.has("set_cancelled")) {
+                        this.setCancelled = fields.get("set_cancelled").getAsBoolean();
+                    }
+                    if (fields.has("action_probability")) {
+                        this.probability = fields.get("action_probability").getAsInt();
+                    }
+                    if (fields.has("invert_action_probability")) {
+                        this.invertProbability = fields.get("invert_action_probability").getAsBoolean();
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -119,6 +147,14 @@ public class ListenerPowerContainer implements Power, Listener {
     @Override
     public boolean isFactory() {
         return isFactory;
+    }
+
+    public Integer getProbability() {
+        return probability;
+    }
+
+    public boolean isInvertProbability() {
+        return invertProbability;
     }
 
     @Override
@@ -166,8 +202,8 @@ public class ListenerPowerContainer implements Power, Listener {
                 }
             }));
             getPlayersToListen().add(player);
-            onInvoke(t);
         }
+        onInvoke(t);
     }
 
     protected <T> void onInvoke(T t) {}

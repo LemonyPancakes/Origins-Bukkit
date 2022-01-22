@@ -13,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class ActionPlayerBlockPlace extends ListenerPowerContainer {
 
@@ -90,7 +91,7 @@ public class ActionPlayerBlockPlace extends ListenerPowerContainer {
     }
 
     @EventHandler
-    private void onBlockBreak(BlockPlaceEvent event) {
+    private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
 
         if (getPlayersToListen().contains(player)) {
@@ -105,6 +106,20 @@ public class ActionPlayerBlockPlace extends ListenerPowerContainer {
                 if (getCondition().test(temp)) {
                     event.setCancelled(isSetCancelled());
                     if (getActions() != null) {
+                        if (getProbability() != null) {
+                            Random random = new Random();
+                            int probability = random.nextInt(getProbability());
+
+                            if (isInvertProbability()) {
+                                if (probability == 0) {
+                                    return;
+                                }
+                            } else {
+                                if (probability != 0) {
+                                    return;
+                                }
+                            }
+                        }
                         Arrays.stream(getActions()).forEach(
                                 action -> action.accept(temp)
                         );
@@ -113,6 +128,20 @@ public class ActionPlayerBlockPlace extends ListenerPowerContainer {
             } else {
                 event.setCancelled(isSetCancelled());
                 if (getActions() != null) {
+                    if (getProbability() != null) {
+                        Random random = new Random();
+                        int probability = random.nextInt(getProbability());
+
+                        if (isInvertProbability()) {
+                            if (probability == 0) {
+                                return;
+                            }
+                        } else {
+                            if (probability != 0) {
+                                return;
+                            }
+                        }
+                    }
                     Arrays.stream(getActions()).forEach(
                             action -> action.accept(temp)
                     );

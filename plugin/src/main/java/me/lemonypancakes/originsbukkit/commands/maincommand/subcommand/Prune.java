@@ -2,6 +2,7 @@ package me.lemonypancakes.originsbukkit.commands.maincommand.subcommand;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.commands.maincommand.MainCommand;
+import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Permissions;
 import me.lemonypancakes.originsbukkit.storage.OriginPlayers;
 import me.lemonypancakes.originsbukkit.storage.Origins;
@@ -34,12 +35,25 @@ public class Prune {
                           @Nonnull String label,
                           @Nonnull String[] args) {
         if (commandSender instanceof Player) {
-            if (!commandSender.hasPermission(Permissions.PRUNE.toString())) {
+            Player player = (Player) commandSender;
+
+            if (!player.hasPermission(Permissions.PRUNE.toString())) {
+                ChatUtils.sendCommandSenderMessage(
+                        commandSender,
+                        ChatUtils.Type.ERROR,
+                        Lang.COMMAND_NO_PERMISSION.toString()
+                );
                 return;
             }
         }
-        if (args.length == 1) {
-            ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cNot enough arguments. Usage: &e/origins prune <player>");
+        if (args.length < 2) {
+            ChatUtils.sendCommandSenderMessage(
+                    commandSender,
+                    ChatUtils.Type.ERROR,
+                    Lang.COMMAND_NOT_ENOUGH_ARGUMENTS.toString()
+                            .replace("{command_usage}", Lang.SUBCOMMAND_PRUNE_USAGE.toString()
+                            )
+            );
         } else if (args.length == 2) {
             Player target = Bukkit.getPlayer(args[1]);
 
@@ -50,18 +64,48 @@ public class Prune {
                 if (ORIGIN_PLAYERS.hasPlayerUUID(playerUUID)) {
                     if (ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).getOrigin() != null) {
                         ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).setOrigin(null);
-                        ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.SUCCESS, "&aSuccessfully pruned " + playerName + "'s data.");
+                        ChatUtils.sendCommandSenderMessage(
+                                commandSender,
+                                ChatUtils.Type.SUCCESS,
+                                Lang.SUBCOMMAND_PRUNE_SUCCESS.toString()
+                                        .replace("{player}", playerName
+                                        )
+                        );
                     } else {
-                        ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cCannot find " + playerName + "'s data.");
+                        ChatUtils.sendCommandSenderMessage(
+                                commandSender,
+                                ChatUtils.Type.ERROR,
+                                Lang.SUBCOMMAND_PRUNE_CANNOT_FIND_DATA.toString()
+                                        .replace("{player}", playerName
+                                        )
+                        );
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cCannot find " + playerName + "'s data.");
+                    ChatUtils.sendCommandSenderMessage(
+                            commandSender,
+                            ChatUtils.Type.ERROR,
+                            Lang.SUBCOMMAND_PRUNE_CANNOT_FIND_DATA.toString()
+                                    .replace("{player}", playerName
+                                    )
+                    );
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
+                ChatUtils.sendCommandSenderMessage(
+                        commandSender,
+                        ChatUtils.Type.ERROR,
+                        Lang.COMMAND_PLAYER_NOT_FOUND.toString()
+                                .replace("{player}", args[1]
+                                )
+                );
             }
         } else {
-            ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cToo many arguments. Usage: &e/origins prune <player>");
+            ChatUtils.sendCommandSenderMessage(
+                    commandSender,
+                    ChatUtils.Type.ERROR,
+                    Lang.COMMAND_TOO_MANY_ARGUMENTS.toString()
+                            .replace("{command_usage}", Lang.SUBCOMMAND_PRUNE_USAGE.toString()
+                            )
+            );
         }
     }
 

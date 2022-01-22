@@ -5,17 +5,27 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.ConditionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
+import me.lemonypancakes.originsbukkit.api.data.type.Origin;
 import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
 import me.lemonypancakes.originsbukkit.enums.Operator;
+import me.lemonypancakes.originsbukkit.storage.OriginPlayers;
+import me.lemonypancakes.originsbukkit.storage.Origins;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.UUID;
+
 public final class PlayerConditions {
+
+    private static final OriginsBukkit PLUGIN = OriginsBukkit.getPlugin();
+    private static final Origins ORIGINS = PLUGIN.getStorageHandler().getOrigins();
+    private static final OriginPlayers ORIGIN_PLAYERS = PLUGIN.getStorageHandler().getOriginPlayers();
 
     public static void register() {
         Registry.register(
@@ -448,6 +458,31 @@ public final class PlayerConditions {
                                 if (world != null) {
                                     return temp.getPlayer().getWorld().getName().equals(world);
                                 }
+                            }
+                            return false;
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare/world/time"
+                        ), null,
+                        (data, temp) -> {
+                            if (data.has("world_time")) {
+                                long worldTime = data.get("world_time").getAsLong();
+
+                                if (data.has("operator")) {
+                                    String operator = data.get("operator").getAsString();
+
+                                    if (operator != null) {
+                                        return Operator.parseOperator(operator)
+                                                .apply(
+                                                        temp.getPlayer().getWorld().getTime(),
+                                                        worldTime
+                                                );
+                                    }
+                                }
+                                return temp.getPlayer().getWorld().getTime() == worldTime;
                             }
                             return false;
                         })
@@ -1972,6 +2007,50 @@ public final class PlayerConditions {
                                 byte lightLevel = data.get("light_level").getAsByte();
 
                                 return location.getBlock().getLightLevel() == lightLevel;
+                            }
+                            return false;
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/is_in_shade"
+                        ), null,
+                        (data, temp) -> {
+                            Player player = temp.getPlayer();
+
+                            if (player != null) {
+                                Location location = player.getLocation();
+
+                                return (!(location.getBlockY() > player.getWorld().getHighestBlockAt(location).getLocation().getBlockY()));
+                            }
+                            return false;
+                        })
+        );
+        Registry.register(
+                new ConditionContainer<Temp>(
+                        new IdentifierContainer(
+                                OriginsBukkit.KEY, "condition/player/compare/origin"
+                        ), null,
+                        (data, temp) -> {
+                            Player player = temp.getPlayer();
+
+                            if (player != null) {
+                                UUID playerUUID = player.getUniqueId();
+
+                                if (data.has("origin")) {
+                                    String originString = data.get("origin").getAsString();
+
+                                    if (originString.contains(":")) {
+                                        if (ORIGIN_PLAYERS.hasPlayerUUID(playerUUID)) {
+                                            Origin origin = ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).getOrigin();
+
+                                            if (origin != null) {
+                                                return originString.equals(origin.getIdentifier().getIdentifier());
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             return false;
                         })

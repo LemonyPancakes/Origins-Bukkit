@@ -193,12 +193,12 @@ public class OriginContainer implements Origin {
         if (this == o) return true;
         if (!(o instanceof OriginContainer)) return false;
         OriginContainer that = (OriginContainer) o;
-        return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getDisplayName(), that.getDisplayName()) && Arrays.equals(getDescription(), that.getDescription()) && getImpact() == that.getImpact() && Objects.equals(getIcon(), that.getIcon()) && Arrays.equals(getAuthors(), that.getAuthors()) && Objects.equals(getPowers(), that.getPowers()) && Objects.equals(getInventoryGUI(), that.getInventoryGUI());
+        return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getDisplayName(), that.getDisplayName()) && Arrays.equals(getDescription(), that.getDescription()) && getImpact() == that.getImpact() && Objects.equals(getIcon(), that.getIcon()) && Arrays.equals(getAuthors(), that.getAuthors()) && Objects.equals(getPowers(), that.getPowers()) && Objects.equals(getInventoryGUI(), that.getInventoryGUI());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getIdentifier(), getDisplayName(), getImpact(), getIcon(), getPowers(), getInventoryGUI());
+        int result = Objects.hash(getIdentifier(), getJsonObject(), getDisplayName(), getImpact(), getIcon(), getPowers(), getInventoryGUI());
         result = 31 * result + Arrays.hashCode(getDescription());
         result = 31 * result + Arrays.hashCode(getAuthors());
         return result;
@@ -208,6 +208,7 @@ public class OriginContainer implements Origin {
     public String toString() {
         return "OriginContainer{" +
                 "identifier=" + identifier +
+                ", jsonObject=" + jsonObject +
                 ", displayName='" + displayName + '\'' +
                 ", description=" + Arrays.toString(description) +
                 ", impact=" + impact +

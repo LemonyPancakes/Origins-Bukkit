@@ -77,6 +77,7 @@ public class MainCommand implements TabExecutor {
 
             subCommands.addAll(getPrune().onTabComplete(commandSender, command, alias, args));
             subCommands.addAll(getUpdate().onTabComplete(commandSender, command, alias, args));
+            subCommands.addAll(getGive().onTabComplete(commandSender, command, alias, args));
 
             return subCommands;
         }

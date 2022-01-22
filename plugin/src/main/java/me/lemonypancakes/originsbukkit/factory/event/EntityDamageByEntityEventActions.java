@@ -5,6 +5,7 @@ import me.lemonypancakes.originsbukkit.api.data.container.ActionContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.Temp;
 import me.lemonypancakes.originsbukkit.api.util.Registry;
+import me.lemonypancakes.originsbukkit.util.MathUtils;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class EntityDamageByEntityEventActions {
@@ -18,10 +19,19 @@ public class EntityDamageByEntityEventActions {
                         (data, temp) -> {
                             if (temp.getEvent() instanceof EntityDamageByEntityEvent) {
                                 EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) temp.getEvent();
-                                if (data.has("damage")) {
-                                    double damage = data.get("damage").getAsDouble();
 
-                                    event.setDamage(damage);
+                                if (data.has("damage")) {
+                                    double baseDamage = event.getDamage();
+                                    String damage = data.get("damage")
+                                            .getAsString()
+                                            .replace(
+                                                    "%base_damage%", String.valueOf(
+                                                            baseDamage
+                                                    )
+                                            );
+                                    double result = MathUtils.evaluate(damage);
+
+                                    event.setDamage(result);
                                 }
                             }
                         }
@@ -35,10 +45,18 @@ public class EntityDamageByEntityEventActions {
                         (data, temp) -> {
                             if (temp.getEvent() instanceof EntityDamageByEntityEvent) {
                                 EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) temp.getEvent();
+
                                 if (data.has("additional_damage")) {
                                     double baseDamage = event.getDamage();
-                                    double additionalDamage = data.get("additional_damage").getAsDouble();
-                                    double totalDamage = baseDamage + additionalDamage;
+                                    String additionalDamage = data.get("additional_damage")
+                                            .getAsString()
+                                            .replace(
+                                                    "%base_damage%", String.valueOf(
+                                                            baseDamage
+                                                    )
+                                            );
+                                    double result = MathUtils.evaluate(additionalDamage);
+                                    double totalDamage = baseDamage + result;
 
                                     event.setDamage(totalDamage);
                                 }

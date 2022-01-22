@@ -18,10 +18,8 @@
 package me.lemonypancakes.originsbukkit.listeners;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
-import me.lemonypancakes.originsbukkit.listeners.player.InventoryClickEventListener;
-import me.lemonypancakes.originsbukkit.listeners.player.InventoryCloseEventListener;
-import me.lemonypancakes.originsbukkit.listeners.player.JoinEventListener;
-import me.lemonypancakes.originsbukkit.listeners.player.QuitEventListener;
+import me.lemonypancakes.originsbukkit.listeners.player.*;
+import me.lemonypancakes.originsbukkit.listeners.world.DayAndNightCycleListener;
 
 public class ListenerHandler {
 
@@ -30,6 +28,15 @@ public class ListenerHandler {
     private final QuitEventListener quitEventListener;
     private final InventoryClickEventListener inventoryClickEventListener;
     private final InventoryCloseEventListener inventoryCloseEventListener;
+    private final DayAndNightCycleListener dayAndNightCycleListener;
+    private final InteractEventListener interactEventListener;
+    private final EntityDamageEventListener entityDamageEventListener;
+    private final EntityPickupItemEventListener entityPickupItemEventListener;
+    private final BlockBreakEventListener blockBreakEventListener;
+    private final BlockPlaceEventListener blockPlaceEventListener;
+    private final PlayerInteractEventListener playerInteractEventListener;
+    private final PlayerInteractAtEntityEventListener playerInteractAtEntityEventListener;
+    private final PlayerInteractEntityEventListener playerInteractEntityEventListener;
 
     public ListenerHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
@@ -37,6 +44,15 @@ public class ListenerHandler {
         this.quitEventListener = new QuitEventListener(this);
         this.inventoryClickEventListener = new InventoryClickEventListener(this);
         this.inventoryCloseEventListener = new InventoryCloseEventListener(this);
+        this.dayAndNightCycleListener = new DayAndNightCycleListener(this);
+        this.interactEventListener = new InteractEventListener(this);
+        this.entityDamageEventListener = new EntityDamageEventListener(this);
+        this.entityPickupItemEventListener = new EntityPickupItemEventListener(this);
+        this.blockBreakEventListener = new BlockBreakEventListener(this);
+        this.blockPlaceEventListener = new BlockPlaceEventListener(this);
+        this.playerInteractEventListener = new PlayerInteractEventListener(this);
+        this.playerInteractAtEntityEventListener = new PlayerInteractAtEntityEventListener(this);
+        this.playerInteractEntityEventListener = new PlayerInteractEntityEventListener(this);
     }
 
     public OriginsBukkit getPlugin() {
@@ -57,5 +73,41 @@ public class ListenerHandler {
 
     public InventoryCloseEventListener getInventoryCloseEventListener() {
         return inventoryCloseEventListener;
+    }
+
+    public DayAndNightCycleListener getDayAndNightCycleListener() {
+        return dayAndNightCycleListener;
+    }
+
+    public InteractEventListener getInteractEventListener() {
+        return interactEventListener;
+    }
+
+    public EntityDamageEventListener getEntityDamageEventListener() {
+        return entityDamageEventListener;
+    }
+
+    public EntityPickupItemEventListener getEntityPickupItemEventListener() {
+        return entityPickupItemEventListener;
+    }
+
+    public BlockBreakEventListener getBlockBreakEventListener() {
+        return blockBreakEventListener;
+    }
+
+    public BlockPlaceEventListener getBlockPlaceEventListener() {
+        return blockPlaceEventListener;
+    }
+
+    public PlayerInteractEventListener getPlayerInteractEventListener() {
+        return playerInteractEventListener;
+    }
+
+    public PlayerInteractAtEntityEventListener getPlayerInteractAtEntityEventListener() {
+        return playerInteractAtEntityEventListener;
+    }
+
+    public PlayerInteractEntityEventListener getPlayerInteractEntityEventListener() {
+        return playerInteractEntityEventListener;
     }
 }

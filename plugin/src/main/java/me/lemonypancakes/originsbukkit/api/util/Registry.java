@@ -3,16 +3,33 @@ package me.lemonypancakes.originsbukkit.api.util;
 import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.type.*;
 import me.lemonypancakes.originsbukkit.storage.Misc;
+import org.bukkit.inventory.Inventory;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public final class Registry {
 
+    private static final List<Origin> ORIGINS = new ArrayList<>();
+
     public static void register(Origin origin) {
+        ORIGINS.add(origin);
         OriginsBukkit.getPlugin()
                 .getStorageHandler()
                 .getOrigins()
                 .add(origin);
-        Misc.GUIS.add(origin.getInventoryGUI());
-        Misc.ORIGINS_AS_STRING.add(origin.getIdentifier().getIdentifier());
+        ORIGINS.sort(Comparator.comparing(Origin::getImpact));
+        List<Inventory> inventoryList = new ArrayList<>();
+
+        for (Origin origin1 : ORIGINS) {
+            inventoryList.add(origin1.getInventoryGUI());
+        }
+        Misc.GUIS.clear();
+        Misc.GUIS.addAll(inventoryList);
+        if (!origin.getIdentifier().getIdentifier().equals("origins-bukkit:dummy_origin")) {
+            Misc.ORIGINS_AS_STRING.add(origin.getIdentifier().getIdentifier());
+        }
     }
 
     public static void register(Power power) {

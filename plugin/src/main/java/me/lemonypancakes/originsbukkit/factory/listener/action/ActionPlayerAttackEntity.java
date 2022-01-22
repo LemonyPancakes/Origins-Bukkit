@@ -10,8 +10,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class ActionPlayerAttackEntity extends ListenerPowerContainer {
 
@@ -89,7 +92,7 @@ public class ActionPlayerAttackEntity extends ListenerPowerContainer {
     }
 
     @EventHandler
-    private void onBlockBreak(EntityDamageByEntityEvent event) {
+    private void onSelfAttackEntity(EntityDamageByEntityEvent event) {
         Entity entity = event.getDamager();
 
         if (entity instanceof Player) {
@@ -101,11 +104,32 @@ public class ActionPlayerAttackEntity extends ListenerPowerContainer {
 
                 temp.setPlayer(damager);
                 temp.setEntity(victim);
+                EntityEquipment entityEquipment = damager.getEquipment();
+
+                if (entityEquipment != null) {
+                    ItemStack itemStack = entityEquipment.getItemInMainHand();
+
+                    temp.setItemStack(itemStack);
+                }
                 temp.setEvent(event);
                 if (getCondition() != null) {
                     if (getCondition().test(temp)) {
                         event.setCancelled(isSetCancelled());
                         if (getActions() != null) {
+                            if (getProbability() != null) {
+                                Random random = new Random();
+                                int probability = random.nextInt(getProbability());
+
+                                if (isInvertProbability()) {
+                                    if (probability == 0) {
+                                        return;
+                                    }
+                                } else {
+                                    if (probability != 0) {
+                                        return;
+                                    }
+                                }
+                            }
                             Arrays.stream(getActions()).forEach(
                                     action -> action.accept(temp)
                             );
@@ -114,6 +138,20 @@ public class ActionPlayerAttackEntity extends ListenerPowerContainer {
                 } else {
                     event.setCancelled(isSetCancelled());
                     if (getActions() != null) {
+                        if (getProbability() != null) {
+                            Random random = new Random();
+                            int probability = random.nextInt(getProbability());
+
+                            if (isInvertProbability()) {
+                                if (probability == 0) {
+                                    return;
+                                }
+                            } else {
+                                if (probability != 0) {
+                                    return;
+                                }
+                            }
+                        }
                         Arrays.stream(getActions()).forEach(
                                 action -> action.accept(temp)
                         );

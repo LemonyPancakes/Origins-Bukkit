@@ -21,12 +21,15 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.lemonypancakes.originsbukkit.commands.CommandHandler;
 import me.lemonypancakes.originsbukkit.config.ConfigHandler;
-import me.lemonypancakes.originsbukkit.enums.Config;
 import me.lemonypancakes.originsbukkit.items.ItemHandler;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import me.lemonypancakes.originsbukkit.metrics.Metrics;
+import me.lemonypancakes.originsbukkit.storage.Misc;
 import me.lemonypancakes.originsbukkit.storage.StorageHandler;
-import me.lemonypancakes.originsbukkit.util.*;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.StartupUtils;
+import me.lemonypancakes.originsbukkit.util.UtilHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -70,7 +73,11 @@ public final class OriginsBukkit extends JavaPlugin {
     @Override
     public void onDisable() {
         unregisterRecipes();
-        ShutdownUtils.checkAllOnlinePlayers();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (Misc.VIEWERS.containsKey(player.getUniqueId())) {
+                player.closeInventory();
+            }
+        });
 
         ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
     }
@@ -106,7 +113,7 @@ public final class OriginsBukkit extends JavaPlugin {
     }
 
     private void checkUpdates() {
-        UpdateChecker updateChecker = new UpdateChecker(this, 97926);
+        /*UpdateChecker updateChecker = new UpdateChecker(this, 97926);
         boolean checkUpdate = Config.NOTIFICATIONS_UPDATES.toBoolean();
         String pluginVersion = getDescription().getVersion();
 
@@ -130,12 +137,15 @@ public final class OriginsBukkit extends JavaPlugin {
                     }
                 }
             }
-        }.runTaskLaterAsynchronously(this, 20 * 10);
+        }.runTaskLaterAsynchronously(this, 20 * 10);*/
     }
 
     private void unregisterRecipes() {
-        getServer().removeRecipe(NamespacedKey.minecraft("orb_of_origin"));
-        getServer().removeRecipe(NamespacedKey.minecraft("arachnid_cobweb"));
+        NamespacedKey orbOfOrigin = NamespacedKey.fromString("origins-bukkit:orb_of_origin");
+
+        if (orbOfOrigin != null) {
+            getServer().removeRecipe(orbOfOrigin);
+        }
 
         ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Unregistered all item recipes.");
     }

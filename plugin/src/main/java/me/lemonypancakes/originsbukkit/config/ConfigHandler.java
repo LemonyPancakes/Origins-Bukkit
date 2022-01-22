@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.List;
 
 public class ConfigHandler {
@@ -125,7 +124,7 @@ public class ConfigHandler {
             ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] this stack trace to <your name>.");
         }
         try {
-            ConfigUpdater.update(getPlugin(), "config.yml", configFile, Collections.singletonList("Config.Recipes.Orb-Of-Origin.Ingredients"));
+            ConfigUpdater.update(getPlugin(), "config.yml", configFile, (List<String>) null);
         } catch (IOException event) {
             event.printStackTrace();
         }

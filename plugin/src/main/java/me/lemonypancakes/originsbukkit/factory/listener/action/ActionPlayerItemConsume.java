@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class ActionPlayerItemConsume extends ListenerPowerContainer {
 
@@ -102,6 +103,20 @@ public class ActionPlayerItemConsume extends ListenerPowerContainer {
                 if (getCondition().test(temp)) {
                     event.setCancelled(isSetCancelled());
                     if (getActions() != null) {
+                        if (getProbability() != null) {
+                            Random random = new Random();
+                            int probability = random.nextInt(getProbability());
+
+                            if (isInvertProbability()) {
+                                if (probability == 0) {
+                                    return;
+                                }
+                            } else {
+                                if (probability != 0) {
+                                    return;
+                                }
+                            }
+                        }
                         Arrays.stream(getActions()).forEach(
                                 action -> action.accept(temp)
                         );
@@ -110,6 +125,20 @@ public class ActionPlayerItemConsume extends ListenerPowerContainer {
             } else {
                 event.setCancelled(isSetCancelled());
                 if (getActions() != null) {
+                    if (getProbability() != null) {
+                        Random random = new Random();
+                        int probability = random.nextInt(getProbability());
+
+                        if (isInvertProbability()) {
+                            if (probability == 0) {
+                                return;
+                            }
+                        } else {
+                            if (probability != 0) {
+                                return;
+                            }
+                        }
+                    }
                     Arrays.stream(getActions()).forEach(
                             action -> action.accept(temp)
                     );

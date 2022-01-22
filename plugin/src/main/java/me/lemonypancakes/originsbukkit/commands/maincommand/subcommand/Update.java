@@ -6,6 +6,7 @@ import me.lemonypancakes.originsbukkit.api.data.container.OriginPlayerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
 import me.lemonypancakes.originsbukkit.api.data.type.Origin;
 import me.lemonypancakes.originsbukkit.commands.maincommand.MainCommand;
+import me.lemonypancakes.originsbukkit.enums.Lang;
 import me.lemonypancakes.originsbukkit.enums.Permissions;
 import me.lemonypancakes.originsbukkit.storage.Misc;
 import me.lemonypancakes.originsbukkit.storage.OriginPlayers;
@@ -42,13 +43,22 @@ public class Update {
             Player player = (Player) commandSender;
 
             if (!player.hasPermission(Permissions.UPDATE.toString())) {
+                ChatUtils.sendCommandSenderMessage(
+                        commandSender,
+                        ChatUtils.Type.ERROR,
+                        Lang.COMMAND_NO_PERMISSION.toString()
+                );
                 return;
             }
         }
-        if (args.length == 1) {
-            ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cNot Enough Arguments. Usage: &e/origins update <player> <new origin>");
-        } else if (args.length == 2) {
-            ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cNot Enough Arguments. Usage: &e/origins update " + args[1] + " <new origin>");
+        if (args.length < 3) {
+            ChatUtils.sendCommandSenderMessage(
+                    commandSender,
+                    ChatUtils.Type.ERROR,
+                    Lang.COMMAND_NOT_ENOUGH_ARGUMENTS.toString()
+                            .replace("{command_usage}", Lang.SUBCOMMAND_UPDATE_USAGE.toString()
+                            )
+            );
         } else if (args.length == 3) {
             Player target = Bukkit.getPlayer(args[1]);
             String origin = args[2];
@@ -56,6 +66,9 @@ public class Update {
             if (target != null) {
                 UUID playerUUID = target.getUniqueId();
                 String playerName = target.getName();
+                String cannotFindOriginMessage = Lang.SUBCOMMAND_UPDATE_CANNOT_FIND_ORIGIN.toString()
+                        .replace("{player}", playerName)
+                        .replace("{new_origin}", origin);
 
                 if (origin.contains(":")) {
                     Identifier originIdentifier = new IdentifierContainer(
@@ -63,49 +76,101 @@ public class Update {
                             origin.split(":")[1]
                     );
 
-                    if (ORIGINS.hasIdentifier(originIdentifier)) {
-                        if (ORIGIN_PLAYERS.hasPlayerUUID(playerUUID)) {
-                            Origin playerOrigin = ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).getOrigin();
+                    if (!origin.equals("origins-bukkit:dummy_origin")) {
+                        if (ORIGINS.hasIdentifier(originIdentifier)) {
+                            String originChangeMessage = Lang.SUBCOMMAND_UPDATE_ORIGIN_CHANGE.toString()
+                                    .replace("{player}", playerName)
+                                    .replace("{new_origin}", origin
+                                    );
 
-                            if (playerOrigin != null) {
-                                if (!playerOrigin.getIdentifier().equals(originIdentifier)) {
+                            if (ORIGIN_PLAYERS.hasPlayerUUID(playerUUID)) {
+                                Origin playerOrigin = ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).getOrigin();
+
+                                if (playerOrigin != null) {
+                                    if (!playerOrigin.getIdentifier().equals(originIdentifier)) {
+                                        ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).setOrigin(
+                                                ORIGINS.getByIdentifier(
+                                                        originIdentifier
+                                                )
+                                        );
+                                        ChatUtils.sendCommandSenderMessage(
+                                                commandSender,
+                                                ChatUtils.Type.SUCCESS,
+                                                originChangeMessage
+                                        );
+                                    } else {
+                                        ChatUtils.sendCommandSenderMessage(
+                                                commandSender,
+                                                ChatUtils.Type.ERROR,
+                                                Lang.SUBCOMMAND_UPDATE_NO_CHANGES.toString()
+                                                        .replace("{player}", playerName)
+                                                        .replace("{new_origin}", origin
+                                                        )
+                                        );
+                                    }
+                                } else {
                                     ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).setOrigin(
                                             ORIGINS.getByIdentifier(
                                                     originIdentifier
                                             )
                                     );
-                                    ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.SUCCESS, "&aSuccessfully changed " + playerName + "'s origin to (&e\"" + origin + "\"&a).");
-                                } else {
-                                    ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cNothing changed. Player's origin is already " + "(&e\"" + origin + "\"&c).");
+                                    ChatUtils.sendCommandSenderMessage(
+                                            commandSender,
+                                            ChatUtils.Type.SUCCESS,
+                                            originChangeMessage
+                                    );
                                 }
                             } else {
+                                ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID));
                                 ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).setOrigin(
                                         ORIGINS.getByIdentifier(
                                                 originIdentifier
                                         )
                                 );
-                                ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.SUCCESS, "&aSuccessfully changed " + playerName + "'s origin to (&e\"" + origin + "\"&a).");
+                                ChatUtils.sendCommandSenderMessage(
+                                        commandSender,
+                                        ChatUtils.Type.SUCCESS,
+                                        originChangeMessage
+                                );
                             }
                         } else {
-                            ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID));
-                            ORIGIN_PLAYERS.getByPlayerUUID(playerUUID).setOrigin(
-                                    ORIGINS.getByIdentifier(
-                                            originIdentifier
-                                    )
+                            ChatUtils.sendCommandSenderMessage(
+                                    commandSender,
+                                    ChatUtils.Type.ERROR,
+                                    cannotFindOriginMessage
                             );
-                            ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.SUCCESS, "&aSuccessfully changed " + playerName + "'s origin to (&e\"" + origin + "\"&a).");
                         }
                     } else {
-                        ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cCannot find the origin (&e\"" + origin + "\"&c).");
+                        ChatUtils.sendCommandSenderMessage(
+                                commandSender,
+                                ChatUtils.Type.ERROR,
+                                cannotFindOriginMessage
+                        );
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cCannot find the origin (&e\"" + origin + "\"&c).");
+                    ChatUtils.sendCommandSenderMessage(
+                            commandSender,
+                            ChatUtils.Type.ERROR,
+                            cannotFindOriginMessage
+                    );
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cPlayer " + args[1] + " not found. Player must be online to do this.");
+                ChatUtils.sendCommandSenderMessage(
+                        commandSender,
+                        ChatUtils.Type.ERROR,
+                        Lang.COMMAND_PLAYER_NOT_FOUND.toString()
+                                .replace("{player}", args[1]
+                                )
+                );
             }
         } else {
-            ChatUtils.sendCommandSenderMessage(commandSender, ChatUtils.Type.ERROR, "&cToo many arguments. Usage: &e/origins update <player> <new origin>");
+            ChatUtils.sendCommandSenderMessage(
+                    commandSender,
+                    ChatUtils.Type.ERROR,
+                    Lang.COMMAND_TOO_MANY_ARGUMENTS.toString()
+                            .replace("{command_usage}", Lang.SUBCOMMAND_UPDATE_USAGE.toString()
+                            )
+            );
         }
     }
 

@@ -6,6 +6,8 @@ import me.lemonypancakes.originsbukkit.api.data.type.*;
 import me.lemonypancakes.originsbukkit.storage.Misc;
 import me.lemonypancakes.originsbukkit.storage.Origins;
 import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.IdentifierUtils;
+import me.lemonypancakes.originsbukkit.util.PlayerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -14,6 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class OriginPlayerContainer implements OriginPlayer {
@@ -86,6 +89,28 @@ public class OriginPlayerContainer implements OriginPlayer {
 
     @Override
     public void setOrigin(Origin origin) {
+        if (origin != null && origin.getIdentifier() != null) {
+            if (origin.getIdentifier().getIdentifier().equals("origins-bukkit:dummy_origin")) {
+                return;
+            }
+        }
+        String currentOrigin = PlayerUtils.getPersistentData(getPlayer(), "origins-bukkit:origin", PersistentDataType.STRING);
+
+        if (currentOrigin != null) {
+            Identifier originIdentifier = IdentifierUtils.fromString(currentOrigin);
+
+            if (ORIGINS.hasIdentifier(originIdentifier)) {
+                if (origin != null) {
+                    if (!origin.getIdentifier().getIdentifier().equals(currentOrigin)) {
+                        PlayerUtils.resetDefaults(getPlayer());
+                    }
+                } else {
+                    PlayerUtils.resetDefaults(getPlayer());
+                }
+            }
+        } else {
+            PlayerUtils.resetDefaults(getPlayer());
+        }
         if (this.origin != null) {
             unlistenAndDestroy();
         }
@@ -204,5 +229,47 @@ public class OriginPlayerContainer implements OriginPlayer {
                 removeByIdentifier(entry.getKey());
             }
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Schedulers)) return false;
+            Schedulers that = (Schedulers) o;
+            return Objects.equals(schedulerMap, that.schedulerMap);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(schedulerMap);
+        }
+
+        @Override
+        public String toString() {
+            return "Schedulers{" +
+                    "schedulerMap=" + schedulerMap +
+                    '}';
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OriginPlayerContainer)) return false;
+        OriginPlayerContainer that = (OriginPlayerContainer) o;
+        return Objects.equals(getPlayerUUID(), that.getPlayerUUID()) && Objects.equals(getSchedulers(), that.getSchedulers()) && Objects.equals(getOrigin(), that.getOrigin());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPlayerUUID(), getSchedulers(), getOrigin());
+    }
+
+    @Override
+    public String toString() {
+        return "OriginPlayerContainer{" +
+                "playerUUID=" + playerUUID +
+                ", schedulers=" + schedulers +
+                ", origin=" + origin +
+                '}';
     }
 }

@@ -18,6 +18,7 @@
 package me.lemonypancakes.originsbukkit.items;
 
 import me.lemonypancakes.originsbukkit.enums.Config;
+import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtils;
 import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -27,6 +28,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,37 +57,61 @@ public class OrbOfOrigin {
     }
 
     private void init() {
-        ItemStack itemStack = new ItemStack(Material.MAGMA_CREAM);
+        ItemStack itemStack;
+
+        if (Config.CUSTOM_ITEM_ORB_OF_ORIGIN_MATERIAL.toMaterial() == null) {
+            itemStack = new ItemStack(Material.MAGMA_CREAM);
+        } else {
+            itemStack = new ItemStack(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_MATERIAL.toMaterial());
+        }
         ItemMeta itemMeta = itemStack.getItemMeta();
+
+
         if (itemMeta != null) {
+            BukkitPersistentDataUtils.setPersistentData(
+                    itemMeta,
+                    "origins-bukkit:custom_item",
+                    PersistentDataType.STRING,
+                    "origins-bukkit:orb_of_origin"
+            );
+            itemMeta.setLore(Arrays.asList(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_LORE.toStringArray()));
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemMeta.setUnbreakable(true);
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-            itemMeta.setDisplayName(ChatUtils.format("&bOrb Of Origin"));
+            itemMeta.setDisplayName(ChatUtils.format(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_DISPLAY_NAME.toString()));
             itemStack.setItemMeta(itemMeta);
         }
 
         originBall = itemStack;
 
-        ShapedRecipe shapedRecipe = new ShapedRecipe(NamespacedKey.minecraft("orb_of_origin"), originBall);
+        NamespacedKey namespacedKey = NamespacedKey.fromString("origins-bukkit:orb_of_origin");
 
-        List<String> shape = Arrays.asList(Config.RECIPES_ORB_OF_ORIGIN_RECIPE.toStringList());
+        if (namespacedKey != null) {
+            ShapedRecipe shapedRecipe = new ShapedRecipe(namespacedKey, originBall);
 
-        shapedRecipe.shape(shape.get(0), shape.get(1), shape.get(2));
+            List<String> shape = Arrays.asList(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_RECIPE_SHAPE.toStringArray());
 
-        ConfigurationSection ingredients = Config.RECIPES_ORB_OF_ORIGIN_INGREDIENTS.getConfigurationSection();
-        if (ingredients != null) {
-            ingredients.getKeys(false).forEach((key -> {
-                Material material = Material.valueOf((String) ingredients.get(String.valueOf(key.charAt(0))));
+            shapedRecipe.shape(
+                    shape.get(0),
+                    shape.get(1),
+                    shape.get(2)
+            );
 
-                shapedRecipe.setIngredient(key.charAt(0), material);
-            }));
+            ConfigurationSection ingredients = Config.CUSTOM_ITEM_ORB_OF_ORIGIN_RECIPE_INGREDIENTS.getConfigurationSection();
+
+            if (ingredients != null) {
+                ingredients.getKeys(false).forEach((key -> {
+                    Material material = Material.valueOf((String) ingredients.get(String.valueOf(key.charAt(0))));
+
+                    shapedRecipe.setIngredient(key.charAt(0), material);
+                }));
+            }
+
+            originBallRecipe = shapedRecipe;
+
+            itemHandler.getItems().add(String.valueOf(getRecipe().getKey()));
+            itemHandler.getItems().add(String.valueOf(getRecipe().getKey()).split(":")[1]);
+            getItemHandler().getPlugin().getServer().addRecipe(shapedRecipe);
         }
-
-        originBallRecipe = shapedRecipe;
-
-        itemHandler.getItems().add(String.valueOf(getRecipe().getKey()));
-        itemHandler.getItems().add(String.valueOf(getRecipe().getKey()).split(":")[1]);
-        getItemHandler().getPlugin().getServer().addRecipe(shapedRecipe);
     }
 }

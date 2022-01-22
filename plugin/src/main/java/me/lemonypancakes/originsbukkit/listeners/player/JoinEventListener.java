@@ -42,8 +42,12 @@ public class JoinEventListener implements Listener {
         NamespacedKey namespacedKey = new NamespacedKey(OriginsBukkit.getPlugin(), "origin");
 
         if (!dataContainer.has(namespacedKey, PersistentDataType.STRING)) {
-            Misc.VIEWERS.put(player.getUniqueId(), 0);
-            player.openInventory(Misc.GUIS.get(0));
+            Bukkit.getScheduler().runTaskLater(
+                    OriginsBukkit.getPlugin(),
+                    bukkitTask -> {
+                Misc.VIEWERS.put(player.getUniqueId(), 0);
+                player.openInventory(Misc.GUIS.get(0));
+            }, 20L);
         } else {
             UUID playerUUID = player.getUniqueId();
 

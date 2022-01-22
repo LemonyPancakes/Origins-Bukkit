@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -18,7 +19,10 @@ public class ActionContainer<T> implements Action<T> {
     private JsonObject jsonObject;
     private BiConsumer<JsonObject, T> biConsumer;
 
+    private boolean invertProbability = false;
+
     private Boolean isAsync;
+    private Integer probability;
 
     public ActionContainer(Identifier identifier,
                           JsonObject jsonObject,
@@ -26,8 +30,16 @@ public class ActionContainer<T> implements Action<T> {
         this.identifier = identifier;
         this.jsonObject = jsonObject;
         this.biConsumer = biConsumer;
-        if (jsonObject != null && jsonObject.has("async")) {
-            this.isAsync = jsonObject.get("async").getAsBoolean();
+        if (jsonObject != null) {
+            if (jsonObject.has("async")) {
+                this.isAsync = jsonObject.get("async").getAsBoolean();
+            }
+            if(jsonObject.has("probability")) {
+                this.probability = jsonObject.get("probability").getAsInt();
+            }
+            if (jsonObject.has("invert_action_probability")) {
+                this.invertProbability = jsonObject.get("invert_action_probability").getAsBoolean();
+            }
         }
     }
 
@@ -62,8 +74,16 @@ public class ActionContainer<T> implements Action<T> {
     @Override
     public void setJsonObject(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
-        if (jsonObject != null && jsonObject.has("async")) {
-            this.isAsync = jsonObject.get("async").getAsBoolean();
+        if (jsonObject != null) {
+            if (jsonObject.has("async")) {
+                this.isAsync = jsonObject.get("async").getAsBoolean();
+            }
+            if(jsonObject.has("probability")) {
+                this.probability = jsonObject.get("probability").getAsInt();
+            }
+            if (jsonObject.has("invert_action_probability")) {
+                this.invertProbability = jsonObject.get("invert_action_probability").getAsBoolean();
+            }
         }
     }
 
@@ -79,6 +99,20 @@ public class ActionContainer<T> implements Action<T> {
 
     @Override
     public void accept(T t) {
+        if (this.probability != null) {
+            Random random = new Random();
+            int probability = random.nextInt(this.probability);
+
+            if (this.invertProbability) {
+                if (probability == 0) {
+                    return;
+                }
+            } else {
+                if (probability != 0) {
+                    return;
+                }
+            }
+        }
         if (this.isAsync != null) {
             if (!this.isAsync) {
                 Bukkit.getScheduler()
@@ -119,12 +153,12 @@ public class ActionContainer<T> implements Action<T> {
         if (this == o) return true;
         if (!(o instanceof ActionContainer)) return false;
         ActionContainer<?> that = (ActionContainer<?>) o;
-        return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiConsumer(), that.getBiConsumer()) && Objects.equals(isAsync, that.isAsync);
+        return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiConsumer(), that.getBiConsumer()) && Objects.equals(isAsync, that.isAsync) && Objects.equals(probability, that.probability);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdentifier(), getJsonObject(), getBiConsumer(), isAsync);
+        return Objects.hash(getIdentifier(), getJsonObject(), getBiConsumer(), isAsync, probability);
     }
 
     @Override
@@ -134,6 +168,7 @@ public class ActionContainer<T> implements Action<T> {
                 ", jsonObject=" + jsonObject +
                 ", biConsumer=" + biConsumer +
                 ", isAsync=" + isAsync +
+                ", probability=" + probability +
                 '}';
     }
 }

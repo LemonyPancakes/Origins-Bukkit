@@ -4,6 +4,7 @@ import me.lemonypancakes.originsbukkit.OriginsBukkit;
 import me.lemonypancakes.originsbukkit.api.data.container.IdentifierContainer;
 import me.lemonypancakes.originsbukkit.api.data.container.OriginPlayerContainer;
 import me.lemonypancakes.originsbukkit.api.data.type.Identifier;
+import me.lemonypancakes.originsbukkit.api.events.player.PlayerOriginChooseEvent;
 import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
 import me.lemonypancakes.originsbukkit.storage.Misc;
 import me.lemonypancakes.originsbukkit.storage.OriginPlayers;
@@ -86,20 +87,32 @@ public class InventoryClickEventListener implements Listener {
                                     identifierString.split(":")[0],
                                     identifierString.split(":")[1]
                             );
-                            if (ORIGINS.hasIdentifier(identifier)) {
-                                UUID playerUUID = player.getUniqueId();
 
-                                player.getPersistentDataContainer().set(
-                                        new NamespacedKey(OriginsBukkit.getPlugin(), "origin"),
-                                        PersistentDataType.STRING,
-                                        identifier.getIdentifier());
-                                if (ORIGIN_PLAYERS.hasPlayerUUID(playerUUID)) {
-                                    ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID), true);
-                                } else {
-                                    ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID));
+                            if (!identifier.getIdentifier().equals("origins-bukkit:dummy_origin")) {
+                                if (ORIGINS.hasIdentifier(identifier)) {
+                                    UUID playerUUID = player.getUniqueId();
+                                    PlayerOriginChooseEvent playerOriginChooseEvent
+                                            = new PlayerOriginChooseEvent(player, identifierString);
+
+                                    if (!playerOriginChooseEvent.isCancelled()) {
+                                        player.getPersistentDataContainer().set(
+                                                new NamespacedKey(OriginsBukkit.getPlugin(), "origin"),
+                                                PersistentDataType.STRING,
+                                                identifier.getIdentifier());
+                                        if (ORIGIN_PLAYERS.hasPlayerUUID(playerUUID)) {
+                                            ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID), true);
+                                        } else {
+                                            ORIGIN_PLAYERS.add(new OriginPlayerContainer(playerUUID));
+                                        }
+
+                                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
+                                    } else {
+                                        player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);
+                                    }
+                                    Bukkit.getPluginManager().callEvent(playerOriginChooseEvent);
                                 }
-
-                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
+                            } else {
+                                player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);
                             }
                         }
                     }

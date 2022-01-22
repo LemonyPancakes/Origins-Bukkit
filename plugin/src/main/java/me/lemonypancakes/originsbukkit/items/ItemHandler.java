@@ -27,7 +27,6 @@ public class ItemHandler {
     private final OriginsBukkit plugin;
     private final List<String> items = new ArrayList<>();
     private OrbOfOrigin orbOfOrigin;
-    private ArachnidCobweb arachnidCobweb;
 
     public OriginsBukkit getPlugin() {
         return this.plugin;
@@ -41,10 +40,6 @@ public class ItemHandler {
         return this.orbOfOrigin;
     }
 
-    public ArachnidCobweb getArachnidCobweb() {
-        return arachnidCobweb;
-    }
-
     public ItemHandler(OriginsBukkit plugin) {
         this.plugin = plugin;
         init();
@@ -52,6 +47,5 @@ public class ItemHandler {
 
     private void init() {
         orbOfOrigin = new OrbOfOrigin(this);
-        arachnidCobweb = new ArachnidCobweb(this);
     }
 }
