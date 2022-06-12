@@ -10,6 +10,35 @@
 # Version 2
 ##
 
+storage:
+  # Possible Options:
+  # INTERNAL (Default) - Bukkit's Persistent Data Container.
+  # MY_SQL - MySQL
+  method: INTERNAL
+
+  # For MySQL
+  data:
+    # The address and port of the database.
+    address: localhost
+
+    # The name of the database.
+    database: minecraft
+
+    # Default: originsBukkit_
+    table_prefix: originsBukkit_
+
+    # Database credentials.
+    username: root
+    password: ''
+
+    # Do not change these settings unless you know what you're doing!
+    pool_settings:
+      maximum_pool_size: 10
+      minimum_idle: 10
+      maximum_lifetime: 1800000
+      keepalive_time: 0
+      connection_timeout: 5000
+
 custom_item:
   orb_of_origin:
     material: MAGMA_CREAM

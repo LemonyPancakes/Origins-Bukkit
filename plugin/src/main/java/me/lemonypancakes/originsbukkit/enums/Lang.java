@@ -26,18 +26,29 @@ public enum Lang {
     COMMAND_TOO_MANY_ARGUMENTS("command.too_many_arguments", "&cToo many arguments. Usage: &e{command_usage}"),
     COMMAND_PLAYER_NOT_FOUND("command.player_not_found", "&cPlayer {player} not found. Player must be online to do this."),
     COMMAND_MAIN_COMMAND_USAGE("command.main_command_usage", "/origins <subcommand>"),
-    SUBCOMMAND_HELP_USAGE("subcommand.help.usage", "/origins help (subcommand)"),
+    SUBCOMMAND_HELP_USAGE("subcommand.help.usage", "/origins help"),
+    SUBCOMMAND_HELP_DESCRIPTION("subcommand.help.description", "Displays a help message."),
+    SUBCOMMAND_HELP_HEADER("subcommand.help.header", "&aAvailable Commands:\n&r"),
+    SUBCOMMAND_HELP_SYNTAX("subcommand.help.syntax", "&e{subcommand_usage} &8- &7{subcommand_description}"),
+    SUBCOMMAND_HELP_FOOTER("subcommand.help.footer"),
     SUBCOMMAND_UPDATE_USAGE("subcommand.update.usage", "/origins update <player> <new_origin>"),
+    SUBCOMMAND_UPDATE_DESCRIPTION("subcommand.update.description", "Changes the player's origin."),
     SUBCOMMAND_UPDATE_ORIGIN_CHANGE("subcommand.update.origin_change", "&aSuccessfully changed {player}'s origin to (&e\"{new_origin}\"&a)."),
     SUBCOMMAND_UPDATE_CANNOT_FIND_ORIGIN("subcommand.update.cannot_find_origin", "&cCannot find the origin (&e\"{new_origin}\"&c)."),
     SUBCOMMAND_UPDATE_NO_CHANGES("subcommand.update.no_changes", "&cNothing changed. {player}'s origin is already (&e\"{new_origin}\"&c)."),
     SUBCOMMAND_PRUNE_USAGE("subcommand.prune.usage", "/origins prune <player>"),
+    SUBCOMMAND_PRUNE_DESCRIPTION("subcommand.prune.description", "Deletes the player's origin data."),
     SUBCOMMAND_PRUNE_SUCCESS("subcommand.prune.prune_success", "&aSuccessfully pruned {player}'s data."),
     SUBCOMMAND_PRUNE_CANNOT_FIND_DATA("subcommand.prune.cannot_find_data", "&cCannot find {player}'s data."),
     SUBCOMMAND_GIVE_USAGE("subcommand.give.usage", "/origins give <player> <item> (amount)"),
+    SUBCOMMAND_GIVE_DESCRIPTION("subcommand.give.description", "Gives the player origins items."),
     SUBCOMMAND_GIVE_SUCCESS("subcommand.give.give_success", "&aGave {amount} [{item}&a] to {player}."),
     SUBCOMMAND_GIVE_CANNOT_FIND_ITEM("subcommand.give.cannot_find_item", "&cUnknown item '{item}'"),
-    SUBCOMMAND_GIVE_INVALID_AMOUNT("subcommand.give.invalid_amount", "&c{amount} is not an integer.");
+    SUBCOMMAND_GIVE_INVALID_AMOUNT("subcommand.give.invalid_amount", "&c{amount} is not an integer."),
+    SUBCOMMAND_INFO_USAGE("subcommand.info.usage", "/origins info (player)"),
+    SUBCOMMAND_INFO_DESCRIPTION("subcommand.info.description", "Displays info about the player's origin."),
+    SUBCOMMAND_INFO_CANNOT_FIND_DATA("subcommand.info.cannot_find_data", "&cCannot find {player}'s data."),
+    SUBCOMMAND_INFO_PLAYERS_ONLY("subcommand.info.players_only", "&cOnly players can execute this command.");
 
 
     private static YamlConfiguration LANG;

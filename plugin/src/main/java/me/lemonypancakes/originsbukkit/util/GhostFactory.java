@@ -17,6 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.util;
 
+import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -31,27 +32,19 @@ import java.util.Set;
 
 public class GhostFactory {
 
-    private final UtilHandler utilHandler;
+    private final OriginsBukkitPlugin plugin;
     private static final String GHOST_TEAM_NAME = "Ghosts";
     private static final OfflinePlayer[] EMPTY_PLAYERS = new OfflinePlayer[0];
     private Team ghostTeam;
     private final Set<String> ghosts = new HashSet<String>();
 
-    public UtilHandler getUtilHandler() {
-        return utilHandler;
-    }
-
-    public GhostFactory(UtilHandler utilHandler) {
-        this.utilHandler = utilHandler;
-        init();
-    }
-
-    private void init() {
+    public GhostFactory(OriginsBukkitPlugin plugin) {
+        this.plugin = plugin;
         createGetTeam();
     }
 
     private void createGetTeam() {
-        ScoreboardManager scoreboardManager = getUtilHandler().getPlugin().getServer().getScoreboardManager();
+        ScoreboardManager scoreboardManager = plugin.getJavaPlugin().getServer().getScoreboardManager();
 
         if (scoreboardManager != null) {
             Scoreboard board = scoreboardManager.getMainScoreboard();
@@ -106,7 +99,7 @@ public class GhostFactory {
                                     false
                             ));
                 }
-            }.runTask(getUtilHandler().getPlugin());
+            }.runTask(plugin.getJavaPlugin());
         } else {
             ghosts.remove(player.getName());
             new BukkitRunnable() {
@@ -115,7 +108,7 @@ public class GhostFactory {
                 public void run() {
                     player.removePotionEffect(PotionEffectType.INVISIBILITY);
                 }
-            }.runTask(getUtilHandler().getPlugin());
+            }.runTask(plugin.getJavaPlugin());
         }
     }
 

@@ -17,172 +17,64 @@
  */
 package me.lemonypancakes.originsbukkit;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import me.lemonypancakes.originsbukkit.commands.CommandHandler;
-import me.lemonypancakes.originsbukkit.config.ConfigHandler;
-import me.lemonypancakes.originsbukkit.items.ItemHandler;
-import me.lemonypancakes.originsbukkit.listeners.ListenerHandler;
-import me.lemonypancakes.originsbukkit.metrics.Metrics;
-import me.lemonypancakes.originsbukkit.storage.Misc;
-import me.lemonypancakes.originsbukkit.storage.StorageHandler;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
-import me.lemonypancakes.originsbukkit.util.StartupUtils;
-import me.lemonypancakes.originsbukkit.util.UtilHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public final class OriginsBukkit extends JavaPlugin {
+import java.util.List;
+import java.util.UUID;
 
-    private static OriginsBukkit plugin;
-    private ItemHandler itemHandler;
-    private UtilHandler utilHandler;
-    private ProtocolManager protocolManager;
-    private StorageHandler storageHandler;
-    private ConfigHandler configHandler;
-    private ListenerHandler listenerHandler;
-    private CommandHandler commandHandler;
+public final class OriginsBukkit {
+
+    private static OriginsBukkitPlugin plugin;
+
+    private OriginsBukkit() {}
 
     public static final String KEY = "origins-bukkit";
 
-    @Override
-    public void onEnable() {
-        plugin = this;
-
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &4   ___       _       _                 ____        _    _    _ _");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &c  / _ \\ _ __(_) __ _(_)_ __  ___      | __ ) _   _| | _| | _(_) |_");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &6 | | | | '__| |/ _` | | '_ \\/ __|_____|  _ \\| | | | |/ / |/ / | __|");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &e | |_| | |  | | (_| | | | | \\__ \\_____| |_) | |_| |   <|   <| | |_");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit]");
-        StartupUtils.checkServerCompatibility();
-        StartupUtils.checkServerDependencies();
-
-        if (isEnabled()) {
-            protocolManager = ProtocolLibrary.getProtocolManager();
-
-            init();
-
-            ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
-        }
-    }
-
-    @Override
-    public void onDisable() {
-        unregisterRecipes();
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            if (Misc.VIEWERS.containsKey(player.getUniqueId())) {
-                player.closeInventory();
-            }
-        });
-
-        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
-    }
-
-    private void init() {
-        load();
-        StartupUtils.registerFactories();
-        StartupUtils.registerOriginPacks();
-        StartupUtils.checkAllOnlinePlayers();
-        startMetrics();
-        checkUpdates();
-    }
-
-    private void load() {
-        configHandler = new ConfigHandler(this);
-        utilHandler = new UtilHandler(this);
-        storageHandler = new StorageHandler(this);
-        listenerHandler = new ListenerHandler(this);
-        commandHandler = new CommandHandler(this);
-        itemHandler = new ItemHandler(this);
-    }
-
-    private void startMetrics() {
-        int serviceId = 13236;
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                Metrics metrics = new Metrics(getPlugin(), serviceId);
-            }
-        }.runTaskAsynchronously(this);
-    }
-
-    private void checkUpdates() {
-        /*UpdateChecker updateChecker = new UpdateChecker(this, 97926);
-        boolean checkUpdate = Config.NOTIFICATIONS_UPDATES.toBoolean();
-        String pluginVersion = getDescription().getVersion();
-
-        new BukkitRunnable(){
-
-            @Override
-            public void run(){
-                if (checkUpdate) {
-                    ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] Checking for updates...");
-
-                    try {
-                        if (updateChecker.checkForUpdates()) {
-                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] A new update is available!");
-                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Running on &c" + pluginVersion + " &6while latest is &a" + updateChecker.getLatestVersion() + "&6.");
-                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] &e&n" + updateChecker.getResourceURL());
-                        } else {
-                            ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] No updates found.");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }.runTaskLaterAsynchronously(this, 20 * 10);*/
-    }
-
-    private void unregisterRecipes() {
-        NamespacedKey orbOfOrigin = NamespacedKey.fromString("origins-bukkit:orb_of_origin");
-
-        if (orbOfOrigin != null) {
-            getServer().removeRecipe(orbOfOrigin);
-        }
-
-        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Unregistered all item recipes.");
-    }
-
-    public void disablePlugin() {
-        setEnabled(false);
-    }
-
-    public static OriginsBukkit getPlugin() {
+    public static OriginsBukkitPlugin getPlugin() {
         return plugin;
     }
 
-    public ItemHandler getItemHandler() {
-        return itemHandler;
+    public static void setPlugin(OriginsBukkitPlugin plugin) {
+        if (OriginsBukkit.plugin == null) {
+            OriginsBukkit.plugin = plugin;
+        }
     }
 
-    public UtilHandler getUtilHandler() {
-        return utilHandler;
+    public static JavaPlugin getJavaPlugin() {
+        return plugin.getJavaPlugin();
     }
 
-    public ProtocolManager getProtocolManager() {
-        return protocolManager;
+    public static Registry getRegistry() {
+        return plugin.getRegistry();
     }
 
-    public StorageHandler getStorageHandler() {
-        return storageHandler;
+    public static Loader getLoader() {
+        return plugin.getLoader();
     }
 
-    public ConfigHandler getConfigHandler() {
-        return configHandler;
+    public static OriginPlayer getOriginPlayer(Player player) {
+        return plugin.getOriginPlayer(player);
     }
 
-    public ListenerHandler getListenerHandler() {
-        return listenerHandler;
+    public static OriginPlayer getOriginPlayer(UUID uuid) {
+        return plugin.getOriginPlayer(uuid);
     }
 
-    public CommandHandler getCommandHandler() {
-        return commandHandler;
+    public static OriginPlayer getOriginPlayer(String name) {
+        return plugin.getOriginPlayer(name);
+    }
+
+    public static OriginPlayerDataFetcher getOriginPlayerDataFetcher() {
+        return plugin.getOriginPlayerDataFetcher();
+    }
+
+    public static List<Plugin> getExpansions() {
+        return plugin.getExpansions();
+    }
+
+    public static void disable() {
+        plugin.disable();
     }
 }

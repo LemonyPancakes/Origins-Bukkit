@@ -32,6 +32,16 @@ public class PlayerUtils {
         }
     }
 
+    public static void exhaust(Player player, int amount) {
+        if (player.getSaturation() > 0) {
+            player.setSaturation(Math.max(0, player.getSaturation() - amount));
+        } else {
+            if (player.getFoodLevel() > 0) {
+                player.setFoodLevel(Math.max(0, player.getFoodLevel() - amount));
+            }
+        }
+    }
+
     public static void setMaxHealth(Player player, double amount) {
         AttributeInstance genericMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 

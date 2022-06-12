@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.originsbukkit.util;
 
-import me.lemonypancakes.originsbukkit.OriginsBukkit;
+import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,14 +28,14 @@ import java.util.Objects;
 
 public class UpdateChecker {
 
-    private final OriginsBukkit plugin;
+    private final OriginsBukkitPlugin plugin;
     private final int projectID;
     private URL checkURL;
     private String newVersion = "";
 
-    public UpdateChecker(OriginsBukkit plugin, int projectID){
+    public UpdateChecker(OriginsBukkitPlugin plugin, int projectID){
         this.plugin = plugin;
-        this.newVersion = plugin.getDescription().getVersion();
+        this.newVersion = plugin.getJavaPlugin().getDescription().getVersion();
         this.projectID = projectID;
 
         try {
@@ -48,7 +48,7 @@ public class UpdateChecker {
         return projectID;
     }
 
-    public OriginsBukkit getPlugin() {
+    public OriginsBukkitPlugin getPlugin() {
         return plugin;
     }
 
@@ -64,9 +64,9 @@ public class UpdateChecker {
         URLConnection con = checkURL.openConnection();
         this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
         int newVerson = Integer.parseInt(this.newVersion.split(" ")[1].split("-")[0]);
-        int currentVersion = Integer.parseInt(plugin.getDescription().getVersion().split(" ")[1].split("-")[0]);
+        int currentVersion = Integer.parseInt(plugin.getJavaPlugin().getDescription().getVersion().split(" ")[1].split("-")[0]);
         String A = this.newVersion.split(" ")[1].split("-")[1];
-        String B = plugin.getDescription().getVersion().split(" ")[1].split("-")[1];
+        String B = plugin.getJavaPlugin().getDescription().getVersion().split(" ")[1].split("-")[1];
 
         if (newVerson > currentVersion || newVerson >= currentVersion && !Objects.equals(A, B)) {
             return true;

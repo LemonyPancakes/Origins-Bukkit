@@ -20,10 +20,13 @@ package me.lemonypancakes.originsbukkit.enums;
 public enum Permissions {
     ADMIN("origins.admin"),
     USER("origins.user"),
+    HELP("origins.commands.help"),
     UPDATE("origins.commands.update"),
     PRUNE("origins.commands.prune"),
     RELOAD("origins.commands.reload"),
-    GIVE("origins.commands.give");
+    GIVE("origins.commands.give"),
+    INFO_SELF("origins.commands.info.self"),
+    INFO_OTHERS("origins.commands.info.others");
 
     private final Object value;
 

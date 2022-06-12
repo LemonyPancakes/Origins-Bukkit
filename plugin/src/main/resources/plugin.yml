@@ -1,6 +1,6 @@
 name: Origins-Bukkit
 version: '${project.version}'
-main: me.lemonypancakes.originsbukkit.OriginsBukkit
+main: me.lemonypancakes.originsbukkit.plugin.CraftOriginsBukkitPlugin
 softdepend:
   - ProtocolLib
   - PancakeLibCore

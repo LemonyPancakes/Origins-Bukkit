@@ -25,6 +25,17 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Config {
+    STORAGE_METHOD("storage.method", "INTERNAL"),
+    STORAGE_DATA_ADDRESS("storage.data.address", "localhost"),
+    STORAGE_DATA_DATABASE("storage.data.database", "minecraft"),
+    STORAGE_DATA_TABLE_PREFIX("storage.data.table_prefix", "originsBukkit_"),
+    STORAGE_DATA_USERNAME("storage.data.username", "username"),
+    STORAGE_DATA_PASSWORD("storage.data.password", "password"),
+    STORAGE_DATA_POOL_SETTINGS_MAXIMUM_POOL_SIZE("storage.data.pool_settings.maximum_pool_size", 10),
+    STORAGE_DATA_POOL_SETTINGS_MINIMUM_IDLE("storage.data.pool_settings.minimum_idle", 10),
+    STORAGE_DATA_POOL_SETTINGS_MAXIMUM_LIFETIME("storage.data.pool_settings.maximum_lifetime", 1800000),
+    STORAGE_DATA_POOL_SETTINGS_KEEPALIVE_TIME("storage.data.pool_settings.keepalive_time", 0),
+    STORAGE_DATA_POOL_SETTINGS_CONNECTION_TIMEOUT("storage.data.pool_settings.connection_timeout", 5000),
     CUSTOM_ITEM_ORB_OF_ORIGIN_MATERIAL("custom_item.orb_of_origin.material", Material.MAGMA_CREAM),
     CUSTOM_ITEM_ORB_OF_ORIGIN_CUSTOM_MODEL_DATA("custom_item.orb_of_origin.custom_model_data"),
     CUSTOM_ITEM_ORB_OF_ORIGIN_DISPLAY_NAME("custom_item.orb_of_origin.display_name", "&bOrb of Origin"),
