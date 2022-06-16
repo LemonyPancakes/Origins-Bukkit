@@ -1,15 +1,24 @@
 package me.lemonypancakes.originsbukkit.util;
 
+import com.google.common.base.Preconditions;
 import org.bukkit.NamespacedKey;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public final class Identifier {
 
+    public static final String MINECRAFT = "minecraft";
+    public static final String BUKKIT = "bukkit";
+    public static final String ORIGINS_BUKKIT = "origins-bukkit";
+    private static final Pattern VALID_KEY = Pattern.compile("[a-z0-9/._-]+");
+    private static final Pattern VALID_VALUE = Pattern.compile("[a-z0-9/._-]+");
     private final String key;
     private final String value;
 
     public Identifier(String key, String value) {
+        Preconditions.checkArgument(key != null && VALID_KEY.matcher(key).matches(), "Invalid identifier key. Must be [a-z0-9/._-]: %s", key);
+        Preconditions.checkArgument(value != null && VALID_VALUE.matcher(value).matches(), "Invalid identifier value. Must be [a-z0-9/._-]: %s", value);
         this.key = key;
         this.value = value;
     }

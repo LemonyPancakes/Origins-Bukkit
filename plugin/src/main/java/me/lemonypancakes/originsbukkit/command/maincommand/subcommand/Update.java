@@ -1,13 +1,13 @@
 package me.lemonypancakes.originsbukkit.command.maincommand.subcommand;
 
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginPlayer;
 import me.lemonypancakes.originsbukkit.command.maincommand.MainCommand;
-import me.lemonypancakes.originsbukkit.enums.Lang;
-import me.lemonypancakes.originsbukkit.enums.Permissions;
-import me.lemonypancakes.originsbukkit.storage.Misc;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.Identifier;
+import me.lemonypancakes.originsbukkit.util.Lang;
+import me.lemonypancakes.originsbukkit.util.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -35,18 +35,18 @@ public class Update {
             Player player = (Player) commandSender;
 
             if (!player.hasPermission(Permissions.UPDATE.toString())) {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.ERROR,
+                        ChatUtil.Type.ERROR,
                         Lang.COMMAND_NO_PERMISSION.toString()
                 );
                 return;
             }
         }
         if (args.length < 3) {
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.ERROR,
+                    ChatUtil.Type.ERROR,
                     Lang.COMMAND_NOT_ENOUGH_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_UPDATE_USAGE.toString()
                             )
@@ -82,15 +82,15 @@ public class Update {
                                 if (playerOrigin != null) {
                                     if (!playerOrigin.getIdentifier().equals(originIdentifier)) {
                                         originPlayer.setOrigin(mainCommand.getPlugin().getRegistry().getOrigin(originIdentifier));
-                                        ChatUtils.sendCommandSenderMessage(
+                                        ChatUtil.sendCommandSenderMessage(
                                                 commandSender,
-                                                ChatUtils.Type.SUCCESS,
+                                                ChatUtil.Type.SUCCESS,
                                                 originChangeMessage
                                         );
                                     } else {
-                                        ChatUtils.sendCommandSenderMessage(
+                                        ChatUtil.sendCommandSenderMessage(
                                                 commandSender,
-                                                ChatUtils.Type.ERROR,
+                                                ChatUtil.Type.ERROR,
                                                 Lang.SUBCOMMAND_UPDATE_NO_CHANGES.toString()
                                                         .replace("{player}", playerName)
                                                         .replace("{new_origin}", origin
@@ -99,47 +99,47 @@ public class Update {
                                     }
                                 } else {
                                     originPlayer.setOrigin(mainCommand.getPlugin().getRegistry().getOrigin(originIdentifier));
-                                    ChatUtils.sendCommandSenderMessage(
+                                    ChatUtil.sendCommandSenderMessage(
                                             commandSender,
-                                            ChatUtils.Type.SUCCESS,
+                                            ChatUtil.Type.SUCCESS,
                                             originChangeMessage
                                     );
                                 }
                             }
                         } else {
-                            ChatUtils.sendCommandSenderMessage(
+                            ChatUtil.sendCommandSenderMessage(
                                     commandSender,
-                                    ChatUtils.Type.ERROR,
+                                    ChatUtil.Type.ERROR,
                                     cannotFindOriginMessage
                             );
                         }
                     } else {
-                        ChatUtils.sendCommandSenderMessage(
+                        ChatUtil.sendCommandSenderMessage(
                                 commandSender,
-                                ChatUtils.Type.ERROR,
+                                ChatUtil.Type.ERROR,
                                 cannotFindOriginMessage
                         );
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(
+                    ChatUtil.sendCommandSenderMessage(
                             commandSender,
-                            ChatUtils.Type.ERROR,
+                            ChatUtil.Type.ERROR,
                             cannotFindOriginMessage
                     );
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.ERROR,
+                        ChatUtil.Type.ERROR,
                         Lang.COMMAND_PLAYER_NOT_FOUND.toString()
                                 .replace("{player}", args[1]
                                 )
                 );
             }
         } else {
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.ERROR,
+                    ChatUtil.Type.ERROR,
                     Lang.COMMAND_TOO_MANY_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_UPDATE_USAGE.toString()
                             )

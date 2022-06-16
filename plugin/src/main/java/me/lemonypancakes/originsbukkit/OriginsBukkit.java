@@ -66,8 +66,8 @@ public final class OriginsBukkit {
         return plugin.getOriginPlayer(name);
     }
 
-    public static OriginPlayerDataFetcher getOriginPlayerDataFetcher() {
-        return plugin.getOriginPlayerDataFetcher();
+    public static Storage getStorage() {
+        return plugin.getStorage();
     }
 
     public static List<Plugin> getExpansions() {

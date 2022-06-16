@@ -1,23 +1,29 @@
 package me.lemonypancakes.originsbukkit.factory.action;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.*;
+import me.lemonypancakes.originsbukkit.Action;
+import me.lemonypancakes.originsbukkit.DataType;
+import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.data.CraftAction;
-import me.lemonypancakes.originsbukkit.data.CraftTemp;
-import me.lemonypancakes.originsbukkit.util.BiEntity;
+import me.lemonypancakes.originsbukkit.factory.action.meta.*;
 import me.lemonypancakes.originsbukkit.util.Identifier;
+import me.lemonypancakes.originsbukkit.wrapper.BiEntity;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.function.BiConsumer;
 
 public class BiEntityActions {
 
     public BiEntityActions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "add_velocity"), new CraftAction(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, new CraftAndAction<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.BI_ENTITY, new CraftChanceAction<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.BI_ENTITY, new CraftChoiceAction<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.BI_ENTITY, new CraftDelayAction<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.BI_ENTITY, new CraftIfElseAction<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.BI_ENTITY, new CraftIfElseListAction<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.BI_ENTITY, new CraftNothingAction<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -49,9 +55,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "damage"), new CraftAction(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "damage"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -67,9 +71,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "mount"), new CraftAction(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "mount"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -79,9 +81,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "set_in_love"), new CraftAction(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "set_in_love"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -99,9 +99,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "tame"), new CraftAction(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "tame"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -120,95 +118,64 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "actor_action"), new Meta.ActorAction(plugin, null, (jsonObject, temp) -> {
-
-        })));
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "invert"), new Meta.Invert(plugin, null, (jsonObject, temp) -> {
-
-        })));
-        plugin.getRegistry().register(new Action.Factory(new Identifier(OriginsBukkit.KEY, "target_action"), new Meta.TargetAction(plugin, null, (jsonObject, temp) -> {
-
-        })));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_action"), DataType.BI_ENTITY, new Meta.ActorAction(plugin, null, DataType.BI_ENTITY, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, new Meta.Invert(plugin, null, DataType.BI_ENTITY, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_action"), DataType.BI_ENTITY, new Meta.TargetAction(plugin, null, DataType.BI_ENTITY, null)));
     }
 
     public static class Meta {
 
-        public static class ActorAction extends CraftAction {
+        public static class ActorAction extends CraftAction<BiEntity> {
 
-            private Action[] actions;
+            private Action<Entity> action;
 
-            public ActorAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiConsumer<JsonObject, Temp> biConsumer) {
-                super(plugin, jsonObject, biConsumer);
+            public ActorAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType, BiConsumer<JsonObject, BiEntity> biConsumer) {
+                super(plugin, jsonObject, dataType, biConsumer);
                 if (jsonObject != null) {
-                    this.actions = OriginsBukkit.getLoader().loadActions(jsonObject.getAsJsonArray("action"));
-                    setBiConsumer((jsonObject1, temp) -> {
-                        BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
-                        if (biEntity != null) {
-                            temp.set(DataType.ENTITY, biEntity.getActor());
-                            Arrays.stream(actions).forEach(action -> action.accept(temp));
-                        }
-                    });
+                    this.action = plugin.getLoader().loadAction(DataType.ENTITY, jsonObject);
+                    setBiConsumer((jsonObject1, biEntity) -> action.accept(biEntity.getActor()));
                 }
             }
 
             @Override
-            public void setJsonObject(JsonObject jsonObject) {
-                super.setJsonObject(jsonObject);
-                actions = OriginsBukkit.getLoader().loadActions(getJsonObject());
+            public Action<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType) {
+                return new ActorAction(plugin, jsonObject, dataType, getBiConsumer());
             }
         }
 
-        public static class Invert extends CraftAction {
+        public static class Invert extends CraftAction<BiEntity> {
 
-            private Action[] actions;
+            private Action<BiEntity> action;
 
-            public Invert(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiConsumer<JsonObject, Temp> biConsumer) {
-                super(plugin, jsonObject, biConsumer);
+            public Invert(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType, BiConsumer<JsonObject, BiEntity> biConsumer) {
+                super(plugin, jsonObject, dataType, biConsumer);
                 if (jsonObject != null) {
-                    this.actions = OriginsBukkit.getLoader().loadActions(jsonObject.getAsJsonArray("action"));
-                    setBiConsumer(((jsonObject1, temp) -> {
-                        BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
-                        if (biEntity != null) {
-                            Temp temp1 = new CraftTemp();
-
-                            temp1.set(DataType.BI_ENTITY, new BiEntity(biEntity.getTarget(), biEntity.getActor()));
-                            Arrays.stream(actions).forEach(action -> action.accept(temp1));
-                        }
-                    }));
+                    this.action = plugin.getLoader().loadAction(DataType.BI_ENTITY, jsonObject);
+                    setBiConsumer((jsonObject1, biEntity) -> action.accept(new BiEntity(biEntity.getTarget(), biEntity.getActor())));
                 }
             }
 
             @Override
-            public Action newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-                return new Invert(plugin, jsonObject, null);
+            public Action<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType) {
+                return new Invert(plugin, jsonObject, dataType, getBiConsumer());
             }
         }
 
-        public static class TargetAction extends CraftAction {
+        public static class TargetAction extends CraftAction<BiEntity> {
 
-            private Action[] actions;
+            private Action<Entity> action;
 
-            public TargetAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiConsumer<JsonObject, Temp> biConsumer) {
-                super(plugin, jsonObject, biConsumer);
+            public TargetAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType, BiConsumer<JsonObject, BiEntity> biConsumer) {
+                super(plugin, jsonObject, dataType, biConsumer);
                 if (jsonObject != null) {
-                    this.actions = OriginsBukkit.getLoader().loadActions(jsonObject.getAsJsonArray("action"));
-                    setBiConsumer(((jsonObject1, temp) -> {
-                        BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
-                        if (biEntity != null) {
-                            temp.set(DataType.ENTITY, biEntity.getTarget());
-                            Arrays.stream(actions).forEach(action -> action.accept(temp));
-                        }
-                    }));
+                    this.action = plugin.getLoader().loadAction(DataType.ENTITY, jsonObject);
+                    setBiConsumer((jsonObject1, biEntity) -> action.accept(biEntity.getTarget()));
                 }
             }
 
             @Override
-            public void setJsonObject(JsonObject jsonObject) {
-                super.setJsonObject(jsonObject);
-                actions = OriginsBukkit.getLoader().loadActions(getJsonObject());
+            public Action<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType) {
+                return new TargetAction(plugin, jsonObject, dataType, getBiConsumer());
             }
         }
     }

@@ -1,10 +1,13 @@
 package me.lemonypancakes.originsbukkit.factory.power.prevent;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.*;
+import me.lemonypancakes.originsbukkit.Condition;
+import me.lemonypancakes.originsbukkit.DataType;
+import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
+import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
-import me.lemonypancakes.originsbukkit.data.CraftTemp;
 import me.lemonypancakes.originsbukkit.util.Identifier;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,13 +16,20 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CraftPreventBlockUsePower extends CraftPower {
 
-    public CraftPreventBlockUsePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
-        super(plugin, identifier, jsonObject, isFactory);
+    private Condition<Block> blockCondition;
+
+    public CraftPreventBlockUsePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+        super(plugin, identifier, jsonObject);
+        this.blockCondition = plugin.getLoader().loadCondition(DataType.BLOCK, jsonObject, "block_condition");
+    }
+
+    public CraftPreventBlockUsePower(OriginsBukkitPlugin plugin) {
+        super(plugin);
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftPreventBlockUsePower(plugin, identifier, jsonObject, false);
+        return new CraftPreventBlockUsePower(plugin, identifier, jsonObject);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -30,10 +40,7 @@ public class CraftPreventBlockUsePower extends CraftPower {
             Action action = event.getAction();
 
             if (action == Action.RIGHT_CLICK_BLOCK) {
-                Temp temp = new CraftTemp();
-
-                temp.set(DataType.ENTITY, player);
-                if (testAndAccept(temp)) {
+                if (blockCondition.test(event.getClickedBlock())) {
                     event.setCancelled(true);
                 }
             }

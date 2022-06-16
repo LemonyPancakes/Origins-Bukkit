@@ -2,24 +2,28 @@ package me.lemonypancakes.originsbukkit.data;
 
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.Action;
+import me.lemonypancakes.originsbukkit.DataType;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
-import me.lemonypancakes.originsbukkit.Probability;
-import me.lemonypancakes.originsbukkit.Temp;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-public class CraftAction implements Action {
+public class CraftAction<T> implements Action<T> {
 
     private final OriginsBukkitPlugin plugin;
     private JsonObject jsonObject;
-    private BiConsumer<JsonObject, Temp> biConsumer;
-    private Probability probability;
+    private final DataType<T> dataType;
+    private BiConsumer<JsonObject, T> biConsumer;
 
-    public CraftAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiConsumer<JsonObject, Temp> biConsumer) {
+    public CraftAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType, BiConsumer<JsonObject, T> biConsumer) {
         this.plugin = plugin;
-        setJsonObject(jsonObject);
-        setBiConsumer(biConsumer);
+        this.jsonObject = jsonObject;
+        this.dataType = dataType;
+        this.biConsumer = biConsumer;
+    }
+
+    public CraftAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiConsumer<JsonObject, T> biConsumer) {
+        this(plugin, jsonObject, null, biConsumer);
     }
 
     @Override
@@ -30,51 +34,41 @@ public class CraftAction implements Action {
     @Override
     public void setJsonObject(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
-        if (jsonObject != null) {
-            if (jsonObject.has("probability")) {
-                JsonObject probability = jsonObject.get("probability").getAsJsonObject();
-
-                if (probability != null) {
-                    Probability probabilityContainer = new CraftProbability();
-
-                    if (probability.has("min")) {
-                        probabilityContainer.setMin(probability.get("min").getAsInt());
-                    }
-                    if (probability.has("max")) {
-                        probabilityContainer.setMax(probability.get("max").getAsInt());
-                    }
-
-                    if (probabilityContainer.getMin() > 1 && probabilityContainer.getMax() > 1) {
-                        this.probability = probabilityContainer;
-                    }
-                }
-            }
-        }
     }
 
     @Override
-    public BiConsumer<JsonObject, Temp> getBiConsumer() {
+    public DataType<T> getDataType() {
+        return dataType;
+    }
+
+    @Override
+    public void setDataType(DataType<T> dataType) {}
+
+    @Override
+    public BiConsumer<JsonObject, T> getBiConsumer() {
         return biConsumer;
     }
 
     @Override
-    public void setBiConsumer(BiConsumer<JsonObject, Temp> biConsumer) {
+    public void setBiConsumer(BiConsumer<JsonObject, T> biConsumer) {
         this.biConsumer = biConsumer;
     }
 
     @Override
-    public Action newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-        return new CraftAction(plugin, jsonObject, biConsumer);
+    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
+        return new CraftAction<>(plugin, jsonObject, dataType, biConsumer);
     }
 
     @Override
-    public void accept(Temp temp) {
-        if (probability != null) {
-            if (!probability.generateProbability()) {
-                return;
-            }
+    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+        return newInstance(plugin, jsonObject, null);
+    }
+
+    @Override
+    public void accept(T t) {
+        if (biConsumer != null) {
+            biConsumer.accept(jsonObject, t);
         }
-        getBiConsumer().accept(getJsonObject(), temp);
     }
 
     @Override
@@ -89,13 +83,13 @@ public class CraftAction implements Action {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CraftAction)) return false;
-        CraftAction that = (CraftAction) o;
-        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiConsumer(), that.getBiConsumer()) && Objects.equals(probability, that.probability);
+        CraftAction<?> that = (CraftAction<?>) o;
+        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiConsumer(), that.getBiConsumer());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPlugin(), getJsonObject(), getBiConsumer(), probability);
+        return Objects.hash(getPlugin(), getJsonObject(), getBiConsumer());
     }
 
     @Override
@@ -104,7 +98,6 @@ public class CraftAction implements Action {
                 "plugin=" + plugin +
                 ", jsonObject=" + jsonObject +
                 ", biConsumer=" + biConsumer +
-                ", probability=" + probability +
                 '}';
     }
 }

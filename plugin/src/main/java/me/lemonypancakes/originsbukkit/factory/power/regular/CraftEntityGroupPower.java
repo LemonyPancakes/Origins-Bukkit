@@ -1,10 +1,10 @@
 package me.lemonypancakes.originsbukkit.factory.power.regular;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -24,37 +24,37 @@ import org.bukkit.scheduler.BukkitRunnable;
 @SuppressWarnings("unused")
 public class CraftEntityGroupPower extends CraftPower {
 
-    public CraftEntityGroupPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
-        super(plugin, identifier, jsonObject, isFactory);
-        if (!isFactory) {
-            if (jsonObject != null) {
-                if (jsonObject.has("entity_group")) {
-                    String entityGroup = jsonObject.get("entity_group").getAsString();
+    public CraftEntityGroupPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+        super(plugin, identifier, jsonObject);
+        if (jsonObject.has("entity_group")) {
+            String entityGroup = jsonObject.get("entity_group").getAsString();
 
-                    if (entityGroup != null) {
-                        switch (entityGroup.toUpperCase()) {
-                            case "UNDEAD":
-                                new Undead();
-                                break;
-                            case "AQUATIC":
-                                new Aquatic();
-                                break;
-                            case "ARTHROPODS":
-                                new Arthropods();
-                                break;
-                            case "ILLAGERS":
-                                new Illagers();
-                                break;
-                        }
-                    }
+            if (entityGroup != null) {
+                switch (entityGroup.toUpperCase()) {
+                    case "UNDEAD":
+                        new Undead();
+                        break;
+                    case "AQUATIC":
+                        new Aquatic();
+                        break;
+                    case "ARTHROPODS":
+                        new Arthropods();
+                        break;
+                    case "ILLAGERS":
+                        new Illagers();
+                        break;
                 }
             }
         }
     }
 
+    public CraftEntityGroupPower(OriginsBukkitPlugin plugin) {
+        super(plugin);
+    }
+
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftEntityGroupPower(plugin, identifier, jsonObject, false);
+        return new CraftEntityGroupPower(plugin, identifier, jsonObject);
     }
 
     private class Undead implements Listener {

@@ -3,9 +3,8 @@ package me.lemonypancakes.originsbukkit.factory.power.prevent;
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.*;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
-import me.lemonypancakes.originsbukkit.data.CraftTemp;
 import me.lemonypancakes.originsbukkit.util.Identifier;
-import org.bukkit.EntityEffect;
+import me.lemonypancakes.originsbukkit.wrapper.Damage;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,13 +13,22 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class CraftPreventDeathPower extends CraftPower {
 
-    public CraftPreventDeathPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
-        super(plugin, identifier, jsonObject, isFactory);
+    private Condition<Damage> damageCondition;
+    private Action<Entity> entityAction;
+
+    public CraftPreventDeathPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+        super(plugin, identifier, jsonObject);
+        this.damageCondition = plugin.getLoader().loadCondition(DataType.DAMAGE, jsonObject, "damage_condition");
+        this.entityAction = plugin.getLoader().loadAction(DataType.ENTITY, jsonObject, "entity_action");
+    }
+
+    public CraftPreventDeathPower(OriginsBukkitPlugin plugin) {
+        super(plugin);
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftPreventDeathPower(plugin, identifier, jsonObject, false);
+        return new CraftPreventDeathPower(plugin, identifier, jsonObject);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -32,13 +40,9 @@ public class CraftPreventDeathPower extends CraftPower {
 
             if (getMembers().contains(player)) {
                 if (player.getHealth() - event.getFinalDamage() <= 0) {
-                    Temp temp = new CraftTemp();
-
-                    temp.set(DataType.ENTITY, player);
-                    if (testAndAccept(temp)) {
+                    if (getCondition().test(player) && damageCondition.test(new Damage(event.getFinalDamage(), null, event.getCause()))) {
                         event.setCancelled(true);
-                        player.setHealth(1);
-                        player.playEffect(EntityEffect.HURT);
+                        entityAction.accept(player);
                     }
                 }
             }

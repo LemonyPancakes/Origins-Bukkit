@@ -1,9 +1,9 @@
 package me.lemonypancakes.originsbukkit.command.maincommand.subcommand;
 
 import me.lemonypancakes.originsbukkit.command.maincommand.MainCommand;
-import me.lemonypancakes.originsbukkit.enums.Lang;
-import me.lemonypancakes.originsbukkit.enums.Permissions;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.Lang;
+import me.lemonypancakes.originsbukkit.util.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,18 +31,18 @@ public class Prune {
             Player player = (Player) commandSender;
 
             if (!player.hasPermission(Permissions.PRUNE.toString())) {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.ERROR,
+                        ChatUtil.Type.ERROR,
                         Lang.COMMAND_NO_PERMISSION.toString()
                 );
                 return;
             }
         }
         if (args.length < 2) {
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.ERROR,
+                    ChatUtil.Type.ERROR,
                     Lang.COMMAND_NOT_ENOUGH_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_PRUNE_USAGE.toString()
                             )
@@ -57,44 +57,44 @@ public class Prune {
                 if (mainCommand.getPlugin().getOriginPlayer(target) != null) {
                     if (mainCommand.getPlugin().getOriginPlayer(target).getOrigin() != null) {
                         mainCommand.getPlugin().getOriginPlayer(target).setOrigin(null);
-                        ChatUtils.sendCommandSenderMessage(
+                        ChatUtil.sendCommandSenderMessage(
                                 commandSender,
-                                ChatUtils.Type.SUCCESS,
+                                ChatUtil.Type.SUCCESS,
                                 Lang.SUBCOMMAND_PRUNE_SUCCESS.toString()
                                         .replace("{player}", playerName
                                         )
                         );
                     } else {
-                        ChatUtils.sendCommandSenderMessage(
+                        ChatUtil.sendCommandSenderMessage(
                                 commandSender,
-                                ChatUtils.Type.ERROR,
+                                ChatUtil.Type.ERROR,
                                 Lang.SUBCOMMAND_PRUNE_CANNOT_FIND_DATA.toString()
                                         .replace("{player}", playerName
                                         )
                         );
                     }
                 } else {
-                    ChatUtils.sendCommandSenderMessage(
+                    ChatUtil.sendCommandSenderMessage(
                             commandSender,
-                            ChatUtils.Type.ERROR,
+                            ChatUtil.Type.ERROR,
                             Lang.SUBCOMMAND_PRUNE_CANNOT_FIND_DATA.toString()
                                     .replace("{player}", playerName
                                     )
                     );
                 }
             } else {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.ERROR,
+                        ChatUtil.Type.ERROR,
                         Lang.COMMAND_PLAYER_NOT_FOUND.toString()
                                 .replace("{player}", args[1]
                                 )
                 );
             }
         } else {
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.ERROR,
+                    ChatUtil.Type.ERROR,
                     Lang.COMMAND_TOO_MANY_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_PRUNE_USAGE.toString()
                             )

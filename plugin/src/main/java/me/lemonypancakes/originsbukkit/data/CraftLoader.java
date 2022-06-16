@@ -6,10 +6,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import me.lemonypancakes.originsbukkit.*;
-import me.lemonypancakes.originsbukkit.enums.Impact;
-import me.lemonypancakes.originsbukkit.storage.Misc;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Identifier;
+import me.lemonypancakes.originsbukkit.util.Impact;
+import me.lemonypancakes.originsbukkit.wrapper.ConditionAction;
+import me.lemonypancakes.originsbukkit.wrapper.Element;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,8 +24,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class CraftLoader implements Loader {
 
     private final OriginsBukkitPlugin plugin;
@@ -54,14 +59,14 @@ public class CraftLoader implements Loader {
                 String displayName = jsonObject.get("display_name").getAsString();
 
                 if (displayName != null) {
-                    origin.setDisplayName(ChatUtils.format(displayName));
+                    origin.setDisplayName(ChatUtil.format(displayName));
                 }
             }
             if (jsonObject.has("description")) {
                 String[] description = gson.fromJson(jsonObject.get("description"), String[].class);
 
                 if (description != null) {
-                    origin.setDescription(ChatUtils.formatList(description));
+                    origin.setDescription(ChatUtil.formatList(description));
                 }
             }
             if (jsonObject.has("impact")) {
@@ -109,15 +114,15 @@ public class CraftLoader implements Loader {
                                     String originIconDisplayName = originIconMeta.get("display_name").getAsString();
 
                                     if (originIconDisplayName != null) {
-                                        itemMeta.setDisplayName(ChatUtils.format(originIconDisplayName));
+                                        itemMeta.setDisplayName(ChatUtil.format(originIconDisplayName));
                                     } else {
                                         if (origin.getDisplayName() != null) {
-                                            itemMeta.setDisplayName(ChatUtils.format(origin.getDisplayName()));
+                                            itemMeta.setDisplayName(ChatUtil.format(origin.getDisplayName()));
                                         }
                                     }
                                 } else {
                                     if (origin.getDisplayName() != null) {
-                                        itemMeta.setDisplayName(ChatUtils.format(origin.getDisplayName()));
+                                        itemMeta.setDisplayName(ChatUtil.format(origin.getDisplayName()));
                                     }
                                 }
                                 if (originIconMeta.has("description")) {
@@ -143,7 +148,7 @@ public class CraftLoader implements Loader {
                             }
                         } else {
                             if (origin.getDisplayName() != null) {
-                                itemMeta.setDisplayName(ChatUtils.format(origin.getDisplayName()));
+                                itemMeta.setDisplayName(ChatUtil.format(origin.getDisplayName()));
                             }
                             if (origin.getDescription() != null) {
                                 itemMeta.setLore(Arrays.asList(origin.getDescription()));
@@ -178,8 +183,8 @@ public class CraftLoader implements Loader {
                     origin.setPowers(originPowers);
                 }
             }
-            Inventory inventory = Bukkit.createInventory(null, 54, ChatUtils.format("&0Choose your origin."));
-            Inventory originInfo = Bukkit.createInventory(null, 54, ChatUtils.format("&0Origin info."));
+            Inventory inventory = Bukkit.createInventory(null, 54, ChatUtil.format("&0Choose your origin."));
+            Inventory originInfo = Bukkit.createInventory(null, 54, ChatUtil.format("&0Origin info."));
             ItemStack itemStack = new ItemStack(origin.getIcon());
             itemStack.setAmount(1);
             ItemMeta itemMeta = itemStack.getItemMeta();
@@ -197,7 +202,7 @@ public class CraftLoader implements Loader {
                     ItemStack none = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta noneMeta = none.getItemMeta();
                     if (noneMeta != null) {
-                        noneMeta.setDisplayName(ChatUtils.format("&fImpact: &7None"));
+                        noneMeta.setDisplayName(ChatUtil.format("&fImpact: &7None"));
                         none.setItemMeta(noneMeta);
                     }
                     inventory.setItem(6, none);
@@ -211,13 +216,13 @@ public class CraftLoader implements Loader {
                     ItemStack low = new ItemStack(Material.LIME_CONCRETE, 1);
                     ItemMeta lowMeta = low.getItemMeta();
                     if (lowMeta != null) {
-                        lowMeta.setDisplayName(ChatUtils.format("&fImpact: &aLow"));
+                        lowMeta.setDisplayName(ChatUtil.format("&fImpact: &aLow"));
                         low.setItemMeta(lowMeta);
                     }
                     ItemStack low1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta lowMeta1 = low1.getItemMeta();
                     if (lowMeta1 != null) {
-                        lowMeta1.setDisplayName(ChatUtils.format("&fImpact: &aLow"));
+                        lowMeta1.setDisplayName(ChatUtil.format("&fImpact: &aLow"));
                         low1.setItemMeta(lowMeta);
                     }
                     inventory.setItem(6, low);
@@ -231,13 +236,13 @@ public class CraftLoader implements Loader {
                     ItemStack medium = new ItemStack(Material.YELLOW_CONCRETE, 1);
                     ItemMeta mediumMeta = medium.getItemMeta();
                     if (mediumMeta != null) {
-                        mediumMeta.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
+                        mediumMeta.setDisplayName(ChatUtil.format("&fImpact: &eMedium"));
                         medium.setItemMeta(mediumMeta);
                     }
                     ItemStack medium1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta mediumMeta1 = medium1.getItemMeta();
                     if (mediumMeta1 != null) {
-                        mediumMeta1.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
+                        mediumMeta1.setDisplayName(ChatUtil.format("&fImpact: &eMedium"));
                         medium1.setItemMeta(mediumMeta);
                     }
                     inventory.setItem(6, medium);
@@ -251,7 +256,7 @@ public class CraftLoader implements Loader {
                     ItemStack high = new ItemStack(Material.RED_CONCRETE, 1);
                     ItemMeta highMeta = high.getItemMeta();
                     if (highMeta != null) {
-                        highMeta.setDisplayName(ChatUtils.format("&fImpact: &cHigh"));
+                        highMeta.setDisplayName(ChatUtil.format("&fImpact: &cHigh"));
                         high.setItemMeta(highMeta);
                     }
                     inventory.setItem(6, high);
@@ -266,21 +271,21 @@ public class CraftLoader implements Loader {
             ItemStack previous = new ItemStack(Material.ARROW, 1);
             ItemMeta previousMeta = previous.getItemMeta();
             if (previousMeta != null) {
-                previousMeta.setDisplayName(ChatUtils.format("&6Previous Page"));
+                previousMeta.setDisplayName(ChatUtil.format("&6Previous Page"));
                 previous.setItemMeta(previousMeta);
             }
 
             ItemStack close = new ItemStack(Material.BARRIER, 1);
             ItemMeta closeMeta = close.getItemMeta();
             if (closeMeta != null) {
-                closeMeta.setDisplayName(ChatUtils.format("&cQuit Game"));
+                closeMeta.setDisplayName(ChatUtil.format("&cQuit Game"));
                 close.setItemMeta(closeMeta);
             }
 
             ItemStack next = new ItemStack(Material.ARROW, 1);
             ItemMeta nextMeta = next.getItemMeta();
             if (nextMeta != null) {
-                nextMeta.setDisplayName(ChatUtils.format("&6Next Page"));
+                nextMeta.setDisplayName(ChatUtil.format("&6Next Page"));
                 next.setItemMeta(nextMeta);
             }
 
@@ -322,10 +327,10 @@ public class CraftLoader implements Loader {
                         Identifier powerFactoryIdentifier = new Identifier(type.split(":")[0], type.split(":")[1]);
 
                         if (plugin.getRegistry().hasPowerFactory(powerFactoryIdentifier)) {
-                            Power.Factory powerFactory = plugin.getRegistry().getPowerFactory(powerFactoryIdentifier);
+                            Power.Factory factory = plugin.getRegistry().getPowerFactory(powerFactoryIdentifier);
 
-                            if (powerFactory != null) {
-                                power = powerFactory.newInstance(plugin, identifier, jsonObject);
+                            if (factory != null) {
+                                power = factory.newInstance(plugin, identifier, jsonObject);
                             }
                         }
                     }
@@ -333,8 +338,6 @@ public class CraftLoader implements Loader {
                 if (power != null) {
 
                     power.setJsonObject(jsonObject);
-                    power.setActions(loadActions(jsonObject));
-                    power.setConditions(loadConditions(jsonObject));
                 }
             }
             jsonReader.close();
@@ -394,107 +397,234 @@ public class CraftLoader implements Loader {
     }
 
     @Override
-    public Action[] loadActions(JsonObject jsonObject) {
-        List<Action> actions = new ArrayList<>();
+    public <T> Action<T> loadAction(DataType<T> dataType, JsonObject jsonObject) {
+        return loadAction(dataType, jsonObject, "action");
+    }
 
-        if (jsonObject != null) {
-            if (jsonObject.has("action")) {
-                JsonObject[] actionList = new Gson().fromJson(jsonObject.get("action"), JsonObject[].class);
+    @Override
+    public <T> Action<T> loadAction(DataType<T> dataType, JsonObject jsonObject, String memberName) {
+        if (jsonObject.has(memberName)) {
+            JsonObject actionJsonObject = jsonObject.getAsJsonObject(memberName);
 
-                if (actionList != null) {
-                    for (JsonObject action : actionList) {
-                        if (action.has("type")) {
-                            String actionType = action.get("type").getAsString();
-                            Identifier actionTypeIdentifier = new Identifier(actionType.split(":")[0], actionType.split(":")[1]);
+            if (actionJsonObject != null) {
+                if (actionJsonObject.has("type")) {
+                    String actionTypeString = actionJsonObject.get("type").getAsString();
+                    Identifier actionTypeIdentifier = new Identifier(actionTypeString.split(":")[0], actionTypeString.split(":")[1]);
 
-                            if (plugin.getRegistry().hasActionFactory(actionTypeIdentifier)) {
-                                Action.Factory actionFactory = plugin.getRegistry().getActionFactory(actionTypeIdentifier);
-                                Action actionBuff = actionFactory.newInstance(plugin, action);
+                    if (plugin.getRegistry().hasActionFactory(dataType, actionTypeIdentifier)) {
+                        Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
 
-                                actions.add(actionBuff);
-                            }
+                        return factory.newInstance(plugin, actionJsonObject, dataType);
+                    }
+                }
+            }
+        }
+        return new CraftAction<>(null, null, null, null);
+    }
+
+    @Override
+    public <T> Action<T>[] loadActions(DataType<T> dataType, JsonObject jsonObject) {
+        return loadActions(dataType, jsonObject, "actions");
+    }
+
+    @Override
+    public <T> Action<T>[] loadActions(DataType<T> dataType, JsonObject jsonObject, String memberName) {
+        List<Action<T>> actions = new ArrayList<>();
+        JsonObject[] actionJsonObjects = new Gson().fromJson(jsonObject.get(memberName), JsonObject[].class);
+
+        if (actionJsonObjects != null) {
+            for (JsonObject actionJsonObject : actionJsonObjects) {
+                if (actionJsonObject.has("type")) {
+                    String actionTypeString = actionJsonObject.get("type").getAsString();
+                    Identifier actionTypeIdentifier = new Identifier(actionTypeString.split(":")[0], actionTypeString.split(":")[1]);
+
+                    if (plugin.getRegistry().hasActionFactory(dataType, actionTypeIdentifier)) {
+                        Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
+                        Action<T> action = factory.newInstance(plugin, actionJsonObject, dataType);
+
+                        actions.add(action);
+                    }
+                }
+            }
+        }
+        return (Action<T>[]) actions.toArray(new Action<?>[0]);
+    }
+
+    @Override
+    public <T> Action<T>[] loadActions(DataType<T> dataType, JsonArray jsonArray) {
+        List<Action<T>> actions = new ArrayList<>();
+
+        for (JsonElement jsonElement : jsonArray) {
+            JsonObject actionJsonObject = jsonElement.getAsJsonObject();
+
+            if (actionJsonObject.has("type")) {
+                String actionTypeString = actionJsonObject.get("type").getAsString();
+                Identifier actionTypeIdentifier = new Identifier(actionTypeString.split(":")[0], actionTypeString.split(":")[1]);
+
+                if (plugin.getRegistry().hasActionFactory(dataType, actionTypeIdentifier)) {
+                    Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
+                    Action<T> action = factory.newInstance(plugin, actionJsonObject, dataType);
+
+                    actions.add(action);
+                }
+            }
+        }
+        return (Action<T>[]) actions.toArray(new Action<?>[0]);
+    }
+
+    @Override
+    public <T> Condition<T> loadCondition(DataType<T> dataType, JsonObject jsonObject) {
+        return loadCondition(dataType, jsonObject, "condition");
+    }
+
+    @Override
+    public <T> Condition<T> loadCondition(DataType<T> dataType, JsonObject jsonObject, String memberName) {
+        if (jsonObject.has(memberName)) {
+            JsonObject conditionJsonObject = jsonObject.getAsJsonObject(memberName);
+
+            if (conditionJsonObject != null) {
+                if (conditionJsonObject.has("type")) {
+                    String conditionTypeString = conditionJsonObject.get("type").getAsString();
+                    Identifier conditionTypeIdentifier = new Identifier(conditionTypeString.split(":")[0], conditionTypeString.split(":")[1]);
+
+                    if (plugin.getRegistry().hasConditionFactory(dataType, conditionTypeIdentifier)) {
+                        Condition.Factory<T> factory = plugin.getRegistry().getConditionFactory(dataType, conditionTypeIdentifier);
+
+                        return factory.newInstance(plugin, conditionJsonObject, dataType);
+                    }
+                }
+            }
+        }
+        return new CraftCondition<>(null, null, null, null);
+    }
+
+    @Override
+    public <T> Condition<T>[] loadConditions(DataType<T> dataType, JsonObject jsonObject) {
+        return loadConditions(dataType, jsonObject, "conditions");
+    }
+
+    @Override
+    public <T> Condition<T>[] loadConditions(DataType<T> dataType, JsonObject jsonObject, String memberName) {
+        List<Condition<T>> conditions = new ArrayList<>();
+        JsonObject[] conditionJsonObjects = new Gson().fromJson(jsonObject.get(memberName), JsonObject[].class);
+
+        if (conditionJsonObjects != null) {
+            for (JsonObject conditionJsonObject : conditionJsonObjects) {
+                if (conditionJsonObject.has("type")) {
+                    String conditionTypeString = conditionJsonObject.get("type").getAsString();
+                    Identifier conditionTypeIdentifier = new Identifier(conditionTypeString.split(":")[0], conditionTypeString.split(":")[1]);
+
+                    if (plugin.getRegistry().hasActionFactory(dataType, conditionTypeIdentifier)) {
+                        Condition.Factory<T> factory = plugin.getRegistry().getConditionFactory(dataType, conditionTypeIdentifier);
+                        Condition<T> condition = factory.newInstance(plugin, conditionJsonObject, dataType);
+
+                        conditions.add(condition);
+                    }
+                }
+            }
+        }
+        return (Condition<T>[]) conditions.toArray(new Condition<?>[0]);
+    }
+
+    @Override
+    public <T> Condition<T>[] loadConditions(DataType<T> dataType, JsonArray jsonArray) {
+        List<Condition<T>> conditions = new ArrayList<>();
+
+        for (JsonElement jsonElement : jsonArray) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+            if (jsonObject.has("type")) {
+                String conditionTypeString = jsonObject.get("type").getAsString();
+                Identifier conditionTypeIdentifier = new Identifier(conditionTypeString.split(":")[0], conditionTypeString.split(":")[1]);
+
+                if (plugin.getRegistry().hasConditionFactory(dataType, conditionTypeIdentifier)) {
+                    Condition.Factory<T> factory = plugin.getRegistry().getConditionFactory(dataType, conditionTypeIdentifier);
+                    Condition<T> condition = factory.newInstance(plugin, jsonObject, dataType);
+
+                    conditions.add(condition);
+                }
+            }
+        }
+        return (Condition<T>[]) conditions.toArray(new Condition<?>[0]);
+    }
+
+    @Override
+    public <T> ConditionAction<T> loadConditionAction(DataType<T> dataType, JsonObject jsonObject) {
+        return new ConditionAction<>(plugin, loadCondition(dataType, jsonObject), loadAction(dataType, jsonObject));
+    }
+
+    @Override
+    public <T> ConditionAction<T> loadConditionAction(DataType<T> dataType, JsonObject jsonObject, String conditionMemberName, String actionMemberName) {
+        return new ConditionAction<>(plugin, loadCondition(dataType, jsonObject, conditionMemberName), loadAction(dataType, jsonObject, actionMemberName));
+    }
+
+    @Override
+    public <T> ConditionAction<T>[] loadConditionActions(DataType<T> dataType, JsonObject jsonObject) {
+        return loadConditionActions(dataType, jsonObject, "condition", "action");
+    }
+
+    @Override
+    public <T> ConditionAction<T>[] loadConditionActions(DataType<T> dataType, JsonObject jsonObject, String conditionMemberName, String actionMemberName) {
+        List<ConditionAction<T>> conditionActions = new ArrayList<>();
+
+        if (jsonObject.has("actions")) {
+            JsonObject[] actionsJsonObject = new Gson().fromJson(jsonObject.get("actions"), JsonObject[].class);
+
+            for (JsonObject actionJsonObject : actionsJsonObject) {
+                conditionActions.add(new ConditionAction<>(plugin, loadCondition(dataType, actionJsonObject, conditionMemberName), loadAction(dataType, actionJsonObject, actionMemberName)));
+            }
+        }
+        return (ConditionAction<T>[]) conditionActions.toArray(new ConditionAction<?>[0]);
+    }
+
+    @Override
+    public <T> ConditionAction<T>[] loadConditionActions(DataType<T> dataType, JsonArray jsonArray) {
+        List<ConditionAction<T>> conditionActions = new ArrayList<>();
+
+        for (JsonElement jsonElement : jsonArray) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+            conditionActions.add(new ConditionAction<>(plugin, loadCondition(dataType, jsonObject), loadAction(dataType, jsonObject)));
+        }
+        return (ConditionAction<T>[]) conditionActions.toArray(new ConditionAction<?>[0]);
+    }
+
+    @Override
+    public <T> ConditionAction<T>[] loadConditionActions(DataType<T> dataType, JsonArray jsonArray, String conditionMemberName, String actionMemberName) {
+        List<ConditionAction<T>> conditionActions = new ArrayList<>();
+
+        for (JsonElement jsonElement : jsonArray) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+            conditionActions.add(new ConditionAction<>(plugin, loadCondition(dataType, jsonObject, conditionMemberName), loadAction(dataType, jsonObject, actionMemberName)));
+        }
+        return (ConditionAction<T>[]) conditionActions.toArray(new ConditionAction<?>[0]);
+    }
+
+    @Override
+    public <T> Element<T>[] loadElements(DataType<T> dataType, JsonObject jsonObject) {
+        List<Element<T>> elements = new ArrayList<>();
+
+        if (jsonObject.has("actions")) {
+            JsonObject[] actionsJsonObject = new Gson().fromJson(jsonObject.get("actions"), JsonObject[].class);
+
+            for (JsonObject actionJsonObject : actionsJsonObject) {
+                if (actionJsonObject != null) {
+                    if (actionJsonObject.has("type")) {
+                        String actionTypeString = actionJsonObject.get("type").getAsString();
+                        Identifier actionTypeIdentifier = new Identifier(actionTypeString.split(":")[0], actionTypeString.split(":")[1]);
+
+                        if (plugin.getRegistry().hasConditionFactory(dataType, actionTypeIdentifier)) {
+                            Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
+                            Action<T> action = factory.newInstance(plugin, jsonObject, dataType);
+
+                            elements.add(new Element<>(action, actionJsonObject.get("weight").getAsInt()));
                         }
                     }
                 }
             }
         }
-        return actions.toArray(new Action[0]);
-    }
-
-    @Override
-    public Action[] loadActions(JsonArray jsonArray) {
-        List<Action> actions = new ArrayList<>();
-
-        if (jsonArray != null) {
-            for (JsonElement jsonElement : jsonArray) {
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-                if (jsonObject.has("type")) {
-                    String actionType = jsonObject.get("type").getAsString();
-                    Identifier actionTypeIdentifier = new Identifier(actionType.split(":")[0], actionType.split(":")[1]);
-
-                    if (plugin.getRegistry().hasActionFactory(actionTypeIdentifier)) {
-                        Action.Factory actionFactory = plugin.getRegistry().getActionFactory(actionTypeIdentifier);
-                        Action actionBuff = actionFactory.newInstance(plugin, jsonObject);
-
-                        actions.add(actionBuff);
-                    }
-                }
-            }
-        }
-        return actions.toArray(new Action[0]);
-    }
-
-    @Override
-    public Condition[] loadConditions(JsonObject jsonObject) {
-        List<Condition> conditions = new ArrayList<>();
-
-        if (jsonObject != null) {
-            if (jsonObject.has("condition")) {
-                JsonObject[] conditionsList = new Gson().fromJson(jsonObject.get("condition"), JsonObject[].class);
-
-                if (conditionsList != null) {
-                    for (JsonObject condition : conditionsList) {
-                        if (condition.has("type")) {
-                            String conditionType = condition.get("type").getAsString();
-                            Identifier conditionTypeIdentifier = new Identifier(conditionType.split(":")[0], conditionType.split(":")[1]);
-
-                            if (plugin.getRegistry().hasConditionFactory(conditionTypeIdentifier)) {
-                                Condition.Factory conditionsFactory = plugin.getRegistry().getConditionFactory(conditionTypeIdentifier);
-                                Condition conditionsBuff = conditionsFactory.newInstance(plugin, condition);
-
-                                conditions.add(conditionsBuff);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return conditions.toArray(new Condition[0]);
-    }
-
-    @Override
-    public Condition[] loadConditions(JsonArray jsonArray) {
-        List<Condition> conditions = new ArrayList<>();
-
-        if (jsonArray != null) {
-            for (JsonElement jsonElement : jsonArray) {
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-
-                if (jsonObject.has("type")) {
-                    String conditionType = jsonObject.get("type").getAsString();
-                    Identifier conditionTypeIdentifier = new Identifier(conditionType.split(":")[0], conditionType.split(":")[1]);
-
-                    if (plugin.getRegistry().hasConditionFactory(conditionTypeIdentifier)) {
-                        Condition.Factory conditionsFactory = plugin.getRegistry().getConditionFactory(conditionTypeIdentifier);
-                        Condition conditionsBuff = conditionsFactory.newInstance(plugin, jsonObject);
-
-                        conditions.add(conditionsBuff);
-                    }
-                }
-            }
-        }
-        return conditions.toArray(new Condition[0]);
+        return (Element<T>[]) elements.toArray(new Element<?>[0]);
     }
 
     @Override

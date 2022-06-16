@@ -1,10 +1,10 @@
 package me.lemonypancakes.originsbukkit.factory.power.modify;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
@@ -20,37 +20,37 @@ public class CraftModifyPlayerSpawnPower extends CraftPower {
     private String spawnStrategy;
     private String dimensionDistanceMultiplier;
 
-    public CraftModifyPlayerSpawnPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
-        super(plugin, identifier, jsonObject, isFactory);
-        if (!isFactory) {
-            if (jsonObject != null) {
-                if (jsonObject.has("dimension")) {
-                    this.dimension = Bukkit.getWorld(jsonObject.get("dimension").getAsString());
-                }
-                if (jsonObject.has("biome")) {
-                    this.biome = Biome.valueOf(jsonObject.get("biome").getAsString());
-                }
-                if (jsonObject.has("structure")) {
-                    this.structure = StructureType.getStructureTypes().get(jsonObject.get("structure").getAsString());
-                }
-                if (jsonObject.has("spawn_strategy")) {
-                    this.spawnStrategy = jsonObject.get("spawn_strategy").getAsString();
-                }
-                if (jsonObject.has("dimension_distance_multiplier")) {
-                    this.dimensionDistanceMultiplier = jsonObject.get("dimension_distance_multiplier").getAsString();
-                }
-            }
+    public CraftModifyPlayerSpawnPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+        super(plugin, identifier, jsonObject);
+        if (jsonObject.has("dimension")) {
+            this.dimension = Bukkit.getWorld(jsonObject.get("dimension").getAsString());
         }
+        if (jsonObject.has("biome")) {
+            this.biome = Biome.valueOf(jsonObject.get("biome").getAsString());
+        }
+        if (jsonObject.has("structure")) {
+            this.structure = StructureType.getStructureTypes().get(jsonObject.get("structure").getAsString());
+        }
+        if (jsonObject.has("spawn_strategy")) {
+            this.spawnStrategy = jsonObject.get("spawn_strategy").getAsString();
+        }
+        if (jsonObject.has("dimension_distance_multiplier")) {
+            this.dimensionDistanceMultiplier = jsonObject.get("dimension_distance_multiplier").getAsString();
+        }
+    }
+
+    public CraftModifyPlayerSpawnPower(OriginsBukkitPlugin plugin) {
+        super(plugin);
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftModifyPlayerSpawnPower(plugin, identifier, jsonObject, false);
+        return new CraftModifyPlayerSpawnPower(plugin, identifier, jsonObject);
     }
 
     @Override
     protected void onMemberAdd(Player player) {
-        if (getPlugin().getOriginPlayerDataFetcher().hasOriginPlayerData(player)) {
+        if (getPlugin().getStorage().hasOriginPlayerData(player)) {
             player.teleport(generateLocation());
         }
     }

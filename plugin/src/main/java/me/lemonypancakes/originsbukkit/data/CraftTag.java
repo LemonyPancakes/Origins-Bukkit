@@ -1,7 +1,7 @@
 package me.lemonypancakes.originsbukkit.data;
 
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.Tag;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 
 import java.util.HashSet;
 import java.util.Objects;

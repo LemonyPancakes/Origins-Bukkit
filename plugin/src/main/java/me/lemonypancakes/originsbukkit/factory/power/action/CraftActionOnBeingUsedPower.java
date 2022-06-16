@@ -2,25 +2,36 @@ package me.lemonypancakes.originsbukkit.factory.power.action;
 
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.*;
-import me.lemonypancakes.originsbukkit.data.CraftPower;
-import me.lemonypancakes.originsbukkit.data.CraftTemp;
-import me.lemonypancakes.originsbukkit.util.BiEntity;
+import me.lemonypancakes.originsbukkit.factory.power.CraftInteractionPower;
 import me.lemonypancakes.originsbukkit.util.Identifier;
+import me.lemonypancakes.originsbukkit.wrapper.BiEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
-public class CraftActionOnBeingUsedPower extends CraftPower {
+import java.util.Arrays;
 
-    public CraftActionOnBeingUsedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
-        super(plugin, identifier, jsonObject, isFactory);
+public class CraftActionOnBeingUsedPower extends CraftInteractionPower {
+
+    private Action<BiEntity> biEntityAction;
+    private Condition<BiEntity> biEntityCondition;
+
+    public CraftActionOnBeingUsedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+        super(plugin, identifier, jsonObject);
+        this.biEntityAction = plugin.getLoader().loadAction(DataType.BI_ENTITY, jsonObject, "bientity_action");
+        this.biEntityCondition = plugin.getLoader().loadCondition(DataType.BI_ENTITY, jsonObject, "bientity_condition");
+    }
+
+    public CraftActionOnBeingUsedPower(OriginsBukkitPlugin plugin) {
+        super(plugin);
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOnBeingUsedPower(plugin, identifier, jsonObject, false);
+        return new CraftActionOnBeingUsedPower(plugin, identifier, jsonObject);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -31,12 +42,23 @@ public class CraftActionOnBeingUsedPower extends CraftPower {
             Player player = (Player) entity;
 
             if (getMembers().contains(player)) {
-                Entity whoClicked = event.getPlayer();
-                Temp temp = new CraftTemp();
+                Player whoClicked = event.getPlayer();
+                BiEntity biEntity = new BiEntity(whoClicked, player);
+                ItemStack heldItem = whoClicked.getItemInUse();
 
-                temp.set(DataType.ENTITY, player);
-                temp.set(DataType.BI_ENTITY, new BiEntity(whoClicked, player));
-                testAndAccept(temp);
+                if (getHands() != null) {
+                    if (!Arrays.asList(getHands()).contains(event.getHand())) {
+                        return;
+                    }
+                }
+                if (getCondition().test(player) && biEntityCondition.test(biEntity) && getItemCondition().test(heldItem)) {
+                    biEntityAction.accept(biEntity);
+                    if (getResultStack() != null) {
+                        whoClicked.getInventory().addItem(getResultStack());
+                        getResultItemAction().accept(getResultStack());
+                    }
+                    getHeldItemAction().accept(heldItem);
+                }
             }
         }
     }

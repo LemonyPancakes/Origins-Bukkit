@@ -1,13 +1,16 @@
 package me.lemonypancakes.originsbukkit.data;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.*;
+import me.lemonypancakes.originsbukkit.Condition;
+import me.lemonypancakes.originsbukkit.DataType;
+import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
+import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -17,22 +20,21 @@ public class CraftPower implements Power, Listener {
     private final OriginsBukkitPlugin plugin;
     private Identifier identifier;
     private JsonObject jsonObject;
-    private Action[] actions;
-    private Condition[] conditions;
-    private Probability probability;
-    private final boolean isFactory;
+    private Condition<Entity> condition;
     private final Set<Player> members = new HashSet<>();
 
-    public CraftPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
+    public CraftPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         this.plugin = plugin;
-        setIdentifier(identifier);
-        setJsonObject(jsonObject);
-        setActions(plugin.getLoader().loadActions(jsonObject));
-        setConditions(plugin.getLoader().loadConditions(jsonObject));
-        this.isFactory = isFactory;
-        if (!isFactory) {
+        this.identifier = identifier;
+        this.jsonObject = jsonObject;
+        if (plugin != null && identifier != null && jsonObject != null) {
+            this.condition = plugin.getLoader().loadCondition(DataType.ENTITY, jsonObject);
             Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
         }
+    }
+
+    public CraftPower(OriginsBukkitPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -53,58 +55,23 @@ public class CraftPower implements Power, Listener {
     @Override
     public void setJsonObject(JsonObject jsonObject) {
         this.jsonObject = jsonObject;
-        if (jsonObject != null) {
-            if (jsonObject.has("probability")) {
-                JsonObject probability = jsonObject.get("probability").getAsJsonObject();
-
-                if (probability != null) {
-                    Probability probabilityContainer = new CraftProbability();
-
-                    if (probability.has("min")) {
-                        probabilityContainer.setMin(probability.get("min").getAsInt());
-                    }
-                    if (probability.has("max")) {
-                        probabilityContainer.setMax(probability.get("max").getAsInt());
-                    }
-
-                    if (probabilityContainer.getMin() > 0 && probabilityContainer.getMax() > 0) {
-                        this.probability = probabilityContainer;
-                    }
-                }
-            }
-        }
     }
 
     @Override
-    public Action[] getActions() {
-        return actions;
+    public Condition<Entity> getCondition() {
+        return condition;
     }
 
     @Override
-    public void setActions(Action[] actions) {
-        this.actions = actions;
-    }
-
-    @Override
-    public Condition[] getConditions() {
-        return conditions;
-    }
-
-    @Override
-    public void setConditions(Condition[] conditions) {
-        this.conditions = conditions;
-    }
-
-    @Override
-    public boolean isFactory() {
-        return isFactory;
+    public void setCondition(Condition<Entity> condition) {
+        this.condition = condition;
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin,
                              Identifier identifier,
                              JsonObject jsonObject) {
-        return new CraftPower(plugin, identifier, jsonObject, false);
+        return new CraftPower(plugin, identifier, jsonObject);
     }
 
     @Override
@@ -134,26 +101,6 @@ public class CraftPower implements Power, Listener {
     }
 
     @Override
-    public boolean testAndAccept(Temp temp) {
-        if (probability != null) {
-            if (!probability.generateProbability()) {
-                return false;
-            }
-        }
-        if (getConditions() != null) {
-            if (!Arrays.stream(getConditions()).allMatch(condition -> condition.test(temp))) {
-                return false;
-            }
-        }
-        if (getActions() != null) {
-            Arrays.stream(getActions()).forEach(action -> action.accept(temp));
-
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public OriginsBukkitPlugin getPlugin() {
         return plugin;
     }
@@ -162,19 +109,16 @@ public class CraftPower implements Power, Listener {
     public void setPlugin(OriginsBukkitPlugin plugin) {}
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CraftPower)) return false;
-        CraftPower that = (CraftPower) o;
-        return isFactory() == that.isFactory() && Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Arrays.equals(getActions(), that.getActions()) && Arrays.equals(getConditions(), that.getConditions()) && Objects.equals(probability, that.probability) && Objects.equals(getMembers(), that.getMembers());
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftPower)) return false;
+        CraftPower that = (CraftPower) itemStack;
+        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getMembers(), that.getMembers());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(getPlugin(), getIdentifier(), getJsonObject(), probability, isFactory(), getMembers());
-        result = 31 * result + Arrays.hashCode(getActions());
-        result = 31 * result + Arrays.hashCode(getConditions());
-        return result;
+        return Objects.hash(getPlugin(), getIdentifier(), getJsonObject(), getMembers());
     }
 
     @Override
@@ -183,10 +127,6 @@ public class CraftPower implements Power, Listener {
                 "plugin=" + plugin +
                 ", identifier=" + identifier +
                 ", jsonObject=" + jsonObject +
-                ", actions=" + Arrays.toString(actions) +
-                ", conditions=" + Arrays.toString(conditions) +
-                ", probability=" + probability +
-                ", isFactory=" + isFactory +
                 ", members=" + members +
                 '}';
     }

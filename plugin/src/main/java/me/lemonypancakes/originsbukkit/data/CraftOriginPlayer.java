@@ -1,11 +1,11 @@
 package me.lemonypancakes.originsbukkit.data;
 
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginPlayer;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
-import me.lemonypancakes.originsbukkit.storage.Misc;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -24,8 +24,8 @@ public class CraftOriginPlayer implements OriginPlayer {
         this.uuid = uuid;
         this.schedulers = new Schedulers();
 
-        if (plugin.getOriginPlayerDataFetcher().getOrigin(getPlayer()) != null) {
-            Identifier originIdentifier = plugin.getOriginPlayerDataFetcher().getOrigin(getPlayer());
+        if (plugin.getStorage().getOrigin(getPlayer()) != null) {
+            Identifier originIdentifier = plugin.getStorage().getOrigin(getPlayer());
 
             if (plugin.getRegistry().hasOrigin(originIdentifier)) {
                 Origin origin = plugin.getRegistry().getOrigin(originIdentifier);
@@ -34,12 +34,12 @@ public class CraftOriginPlayer implements OriginPlayer {
                     setOrigin(origin);
                 }
             } else {
-                plugin.getOriginPlayerDataFetcher().setOrigin(getPlayer(), null);
+                plugin.getStorage().setOrigin(getPlayer(), null);
                 Bukkit.getScheduler().runTaskLater(plugin.getJavaPlugin(), bukkitTask -> {
                     Misc.VIEWERS.put(getPlayer().getUniqueId(), 0);
                     getPlayer().openInventory(Misc.GUIS.get(0));
                 }, 20L);
-                ChatUtils.sendPlayerMessage(getPlayer(), "&cYour origin (&e\"" + originIdentifier + "\"&c) doesn't exist so we pruned your player data.");
+                ChatUtil.sendPlayerMessage(getPlayer(), "&cYour origin (&e\"" + originIdentifier + "\"&c) doesn't exist so we pruned your player data.");
             }
         } else {
             Bukkit.getScheduler().runTaskLater(plugin.getJavaPlugin(), bukkitTask -> {
@@ -72,7 +72,7 @@ public class CraftOriginPlayer implements OriginPlayer {
         if (origin == null) {
             if (this.origin != null) {
                 unlistenAndDestroy();
-                plugin.getOriginPlayerDataFetcher().setOrigin(getPlayer(), null);
+                plugin.getStorage().setOrigin(getPlayer(), null);
                 this.origin = null;
                 Misc.VIEWERS.put(getUUID(), 0);
                 getPlayer().openInventory(Misc.GUIS.get(0));
@@ -91,7 +91,7 @@ public class CraftOriginPlayer implements OriginPlayer {
                     if (origin.getPowers() != null) {
                         origin.getPowers().forEach(power -> power.addMember(getPlayer()));
                     }
-                    plugin.getOriginPlayerDataFetcher().setOrigin(getPlayer(), origin.getIdentifier());
+                    plugin.getStorage().setOrigin(getPlayer(), origin.getIdentifier());
                 }
             }
         }

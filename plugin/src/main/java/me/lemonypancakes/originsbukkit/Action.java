@@ -6,26 +6,34 @@ import me.lemonypancakes.originsbukkit.util.Identifier;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public interface Action extends Consumer<Temp>, JsonObjectHolder, OriginsBukkitPluginHolder {
+public interface Action<T> extends Consumer<T>, DataTypeHolder<T>, JsonObjectHolder, OriginsBukkitPluginHolder {
 
-    BiConsumer<JsonObject, Temp> getBiConsumer();
+    BiConsumer<JsonObject, T> getBiConsumer();
 
-    void setBiConsumer(BiConsumer<JsonObject, Temp> biConsumer);
+    void setBiConsumer(BiConsumer<JsonObject, T> biConsumer);
 
-    Action newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject);
+    Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType);
 
-    final class Factory implements Identifiable {
+    Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject);
+
+    final class Factory<T> implements Identifiable, DataTypeHolder<T> {
 
         private Identifier identifier;
-        private Action action;
+        private DataType<T> dataType;
+        private Action<T> action;
 
-        public Factory(Identifier identifier, Action action) {
+        public Factory(Identifier identifier, DataType<T> dataType, Action<T> action) {
             this.identifier = identifier;
+            this.dataType = dataType;
             this.action = action;
         }
 
-        public Action newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-            return action.newInstance(plugin, jsonObject);
+        public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
+            return action.newInstance(plugin, jsonObject, dataType);
+        }
+
+        public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+            return action.newInstance(plugin, jsonObject, dataType);
         }
 
         @Override
@@ -38,11 +46,21 @@ public interface Action extends Consumer<Temp>, JsonObjectHolder, OriginsBukkitP
             this.identifier = identifier;
         }
 
-        public Action getAction() {
+        @Override
+        public DataType<T> getDataType() {
+            return dataType;
+        }
+
+        @Override
+        public void setDataType(DataType<T> dataType) {
+            this.dataType = dataType;
+        }
+
+        public Action<T> getAction() {
             return action;
         }
 
-        public void setAction(Action action) {
+        public void setAction(Action<T> action) {
             this.action = action;
         }
     }

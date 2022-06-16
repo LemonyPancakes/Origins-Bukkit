@@ -1,10 +1,10 @@
 package me.lemonypancakes.originsbukkit.listener.inventory;
 
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
+import me.lemonypancakes.originsbukkit.data.storage.Misc;
 import me.lemonypancakes.originsbukkit.event.player.PlayerOriginChooseEvent;
-import me.lemonypancakes.originsbukkit.storage.Misc;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;

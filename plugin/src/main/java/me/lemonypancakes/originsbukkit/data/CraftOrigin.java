@@ -1,10 +1,10 @@
 package me.lemonypancakes.originsbukkit.data;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.Power;
-import me.lemonypancakes.originsbukkit.enums.Impact;
+import me.lemonypancakes.originsbukkit.util.Identifier;
+import me.lemonypancakes.originsbukkit.util.Impact;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 

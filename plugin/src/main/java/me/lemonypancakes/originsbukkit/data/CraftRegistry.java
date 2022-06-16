@@ -1,7 +1,8 @@
 package me.lemonypancakes.originsbukkit.data;
 
 import me.lemonypancakes.originsbukkit.*;
-import me.lemonypancakes.originsbukkit.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
@@ -11,8 +12,8 @@ import java.util.*;
 public class CraftRegistry implements Registry {
 
     private final OriginsBukkitPlugin plugin;
-    private final Map<Identifier, Action.Factory> actionFactoryMap = new HashMap<>();
-    private final Map<Identifier, Condition.Factory> conditionFactoryMap = new HashMap<>();
+    private final Map<DataType<?>, Map<Identifier, Action.Factory<?>>> actionFactoryMap = new HashMap<>();
+    private final Map<DataType<?>, Map<Identifier, Condition.Factory<?>>> conditionFactoryMap = new HashMap<>();
     private final Map<Identifier, Origin> originMap = new HashMap<>();
     private final Map<Identifier, Power> powerMap = new HashMap<>();
     private final Map<Identifier, Power.Factory> powerFactoryMap = new HashMap<>();
@@ -24,20 +25,38 @@ public class CraftRegistry implements Registry {
     }
 
     @Override
-    public void register(Action.Factory actionFactory) {
-        Identifier identifier = actionFactory.getIdentifier();
+    public void register(Action.Factory<?> factory) {
+        DataType<?> dataType = factory.getDataType();
 
-        if (!actionFactoryMap.containsKey(identifier)) {
-            actionFactoryMap.put(identifier, actionFactory);
+        if (!actionFactoryMap.containsKey(dataType)) {
+            actionFactoryMap.put(dataType, new HashMap<>());
+        }
+        Map<Identifier, Action.Factory<?>> identifierFactoryMap = actionFactoryMap.get(dataType);
+
+        if (identifierFactoryMap != null) {
+            Identifier identifier = factory.getIdentifier();
+
+            if (!identifierFactoryMap.containsKey(identifier)) {
+                identifierFactoryMap.put(identifier, factory);
+            }
         }
     }
 
     @Override
-    public void register(Condition.Factory condition) {
-        Identifier identifier = condition.getIdentifier();
+    public void register(Condition.Factory<?> factory) {
+        DataType<?> dataType = factory.getDataType();
 
-        if (!conditionFactoryMap.containsKey(identifier)) {
-            conditionFactoryMap.put(identifier, condition);
+        if (!conditionFactoryMap.containsKey(dataType)) {
+            conditionFactoryMap.put(dataType, new HashMap<>());
+        }
+        Map<Identifier, Condition.Factory<?>> identifierFactoryMap = conditionFactoryMap.get(dataType);
+
+        if (identifierFactoryMap != null) {
+            Identifier identifier = factory.getIdentifier();
+
+            if (!identifierFactoryMap.containsKey(identifier)) {
+                identifierFactoryMap.put(identifier, factory);
+            }
         }
     }
 
@@ -59,6 +78,8 @@ public class CraftRegistry implements Registry {
             if (!origin.getIdentifier().toString().equals("origins-bukkit:dummy_origin")) {
                 Misc.ORIGINS_AS_STRING.add(origin.getIdentifier().toString());
             }
+        } else {
+            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "An origin with the identifier '" + origin.getIdentifier() + "' already exists.");
         }
     }
 
@@ -68,15 +89,19 @@ public class CraftRegistry implements Registry {
 
         if (!powerMap.containsKey(identifier)) {
             powerMap.put(identifier, power);
+        } else {
+            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "A power with the identifier '" + power.getIdentifier() + "' already exists.");
         }
     }
 
     @Override
-    public void register(Power.Factory powerFactory) {
-        Identifier identifier = powerFactory.getIdentifier();
+    public void register(Power.Factory factory) {
+        Identifier identifier = factory.getIdentifier();
 
         if (!powerFactoryMap.containsKey(identifier)) {
-            powerFactoryMap.put(identifier, powerFactory);
+            powerFactoryMap.put(identifier, factory);
+        } else {
+            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "A power factory with the identifier '" + factory.getIdentifier() + "' already exists.");
         }
     }
 
@@ -89,17 +114,19 @@ public class CraftRegistry implements Registry {
                 Bukkit.addRecipe(originItem.getRecipe());
             }
             originItemMap.put(identifier, originItem);
+        } else {
+            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "An origin item with the identifier '" + originItem.getIdentifier() + "' already exists.");
         }
     }
 
     @Override
-    public void unregisterActionFactory(Identifier identifier) {
-        actionFactoryMap.remove(identifier);
+    public <T> void unregisterActionFactory(DataType<T> dataType, Identifier identifier) {
+        actionFactoryMap.get(dataType).remove(identifier);
     }
 
     @Override
-    public void unregisterConditionFactory(Identifier identifier) {
-        conditionFactoryMap.remove(identifier);
+    public <T> void unregisterConditionFactory(DataType<T> dataType, Identifier identifier) {
+        conditionFactoryMap.remove(dataType).remove(identifier);
     }
 
     @Override
@@ -132,13 +159,23 @@ public class CraftRegistry implements Registry {
     }
 
     @Override
-    public boolean hasActionFactory(Identifier identifier) {
-        return actionFactoryMap.containsKey(identifier);
+    public <T> boolean hasActionFactory(DataType<T> dataType, Identifier identifier) {
+        Map<Identifier, Action.Factory<?>> identifierFactoryMap = actionFactoryMap.get(dataType);
+
+        if (identifierFactoryMap != null) {
+            return identifierFactoryMap.containsKey(identifier);
+        }
+        return false;
     }
 
     @Override
-    public boolean hasConditionFactory(Identifier identifier) {
-        return conditionFactoryMap.containsKey(identifier);
+    public <T> boolean hasConditionFactory(DataType<T> dataType, Identifier identifier) {
+        Map<Identifier, Condition.Factory<?>> identifierFactoryMap = conditionFactoryMap.get(dataType);
+
+        if (identifierFactoryMap != null) {
+            return identifierFactoryMap.containsKey(identifier);
+        }
+        return false;
     }
 
     @Override
@@ -161,14 +198,24 @@ public class CraftRegistry implements Registry {
         return originItemMap.containsKey(identifier);
     }
 
-    @Override
-    public Action.Factory getActionFactory(Identifier identifier) {
-        return actionFactoryMap.get(identifier);
+    @Override @SuppressWarnings("unchecked")
+    public <T> Action.Factory<T> getActionFactory(DataType<T> dataType, Identifier identifier) {
+        Map<Identifier, Action.Factory<?>> identifierFactoryMap = actionFactoryMap.get(dataType);
+
+        if (identifierFactoryMap != null) {
+            return (Action.Factory<T>) identifierFactoryMap.get(identifier);
+        }
+        return null;
     }
 
-    @Override
-    public Condition.Factory getConditionFactory(Identifier identifier) {
-        return conditionFactoryMap.get(identifier);
+    @Override @SuppressWarnings("unchecked")
+    public <T> Condition.Factory<T> getConditionFactory(DataType<T> dataType, Identifier identifier) {
+        Map<Identifier, Condition.Factory<?>> identifierFactoryMap = conditionFactoryMap.get(dataType);
+
+        if (identifierFactoryMap != null) {
+            return (Condition.Factory<T>) identifierFactoryMap.get(identifier);
+        }
+        return null;
     }
 
     @Override
@@ -192,12 +239,12 @@ public class CraftRegistry implements Registry {
     }
 
     @Override
-    public Set<Identifier> getActionFactoriesKeySet() {
+    public Set<DataType<?>> getActionFactoriesKeySet() {
         return actionFactoryMap.keySet();
     }
 
     @Override
-    public Set<Identifier> getConditionFactoriesKeySet() {
+    public Set<DataType<?>> getConditionFactoriesKeySet() {
         return conditionFactoryMap.keySet();
     }
 
@@ -222,12 +269,12 @@ public class CraftRegistry implements Registry {
     }
 
     @Override
-    public Collection<Action.Factory> getActionFactories() {
+    public Collection<Map<Identifier, Action.Factory<?>>> getActionFactories() {
         return actionFactoryMap.values();
     }
 
     @Override
-    public Collection<Condition.Factory> getConditionFactories() {
+    public Collection<Map<Identifier, Condition.Factory<?>>> getConditionFactories() {
         return conditionFactoryMap.values();
     }
 

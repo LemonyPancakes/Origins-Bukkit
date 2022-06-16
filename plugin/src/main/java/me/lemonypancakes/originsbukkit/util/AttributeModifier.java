@@ -53,7 +53,7 @@ public enum AttributeModifier {
         } else if (modifiers != null && modifier == null) {
 
         } else {
-            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Cannot have 2 fields of modifiers at the same time.");
+            ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Cannot have 2 fields of modifiers at the same time.");
         }
         return 0;
     }

@@ -1,63 +1,73 @@
 package me.lemonypancakes.originsbukkit.factory.condition;
 
-import me.lemonypancakes.originsbukkit.*;
+import com.google.gson.JsonObject;
+import me.lemonypancakes.originsbukkit.Condition;
+import me.lemonypancakes.originsbukkit.DataType;
+import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.data.CraftCondition;
-import me.lemonypancakes.originsbukkit.util.BiEntity;
+import me.lemonypancakes.originsbukkit.factory.condition.meta.CraftAndCondition;
+import me.lemonypancakes.originsbukkit.factory.condition.meta.CraftOrCondition;
+import me.lemonypancakes.originsbukkit.util.Comparison;
 import me.lemonypancakes.originsbukkit.util.Identifier;
+import me.lemonypancakes.originsbukkit.wrapper.BiEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
 import org.bukkit.util.RayTraceResult;
 
+import java.util.function.BiPredicate;
+
 public class BiEntityConditions {
 
     public BiEntityConditions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "attack_target"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, new CraftAndCondition<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.BI_ENTITY, new CraftOrCondition<>(plugin, null, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attack_target"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
 
-                if (actor instanceof Monster && target instanceof LivingEntity) {
-                    Monster monster = (Monster) actor;
-                    LivingEntity livingEntity = (LivingEntity) target;
+                if (actor != null && target != null) {
+                    if (actor instanceof Monster && target instanceof LivingEntity) {
+                        Monster monster = (Monster) actor;
+                        LivingEntity livingEntity = (LivingEntity) target;
 
-                    return monster.getTarget() != null && monster.getTarget() == livingEntity;
-                }
-            }
-            return false;
-        })));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "attacker"), new CraftCondition(plugin, null, (jsonObject, temp) -> false)));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "can_see"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
-            if (biEntity != null) {
-                Entity actor = biEntity.getActor();
-                Entity target = biEntity.getTarget();
-
-                if (actor instanceof LivingEntity) {
-                    LivingEntity livingEntity = (LivingEntity) actor;
-                    RayTraceResult rayTraceResult = livingEntity.getWorld().rayTraceEntities(livingEntity.getEyeLocation(), livingEntity.getEyeLocation().getDirection(), Bukkit.getViewDistance());
-
-                    if (rayTraceResult != null) {
-                        Bukkit.broadcastMessage("" + rayTraceResult.getHitEntity());
-                        return rayTraceResult.getHitEntity() != null && rayTraceResult.getHitEntity() == target;
+                        return monster.getTarget() != null && monster.getTarget() == livingEntity;
                     }
                 }
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "distance"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attacker"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> false)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "can_see"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
+                Entity actor = biEntity.getActor();
+                Entity target = biEntity.getTarget();
 
+                if (actor != null && target != null) {
+                    if (actor instanceof LivingEntity) {
+                        LivingEntity livingEntity = (LivingEntity) actor;
+                        RayTraceResult rayTraceResult = livingEntity.getWorld().rayTraceEntities(livingEntity.getEyeLocation(), livingEntity.getEyeLocation().getDirection(), Bukkit.getViewDistance() * 16, entity -> entity == actor);
+
+                        if (rayTraceResult != null) {
+                            return rayTraceResult.getHitEntity() != null && rayTraceResult.getHitEntity() == target;
+                        }
+                    }
+                }
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "owner"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "distance"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
+            if (biEntity != null) {
+                Entity actor = biEntity.getActor();
+                Entity target = biEntity.getTarget();
 
+                if (actor != null && target != null) {
+                    return Comparison.parseComparison(jsonObject).compare(actor.getLocation().distance(target.getLocation()), jsonObject);
+                }
+            }
+            return false;
+        })));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "owner"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -76,37 +86,209 @@ public class BiEntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "relative_rotation"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "relative_rotation"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "riding_recursive"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding_recursive"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "riding_root"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding_root"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory(new Identifier(OriginsBukkit.KEY, "riding"), new CraftCondition(plugin, null, (jsonObject, temp) -> {
-            BiEntity biEntity = temp.get(DataType.BI_ENTITY);
-
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding"), DataType.BI_ENTITY, new CraftCondition<>(plugin, null, (jsonObject, biEntity) -> {
             if (biEntity != null) {
+                Entity actor = biEntity.getActor();
+                Entity target = biEntity.getTarget();
 
+                if (actor != null && target != null) {
+                    return target.getPassengers().contains(actor);
+                }
             }
             return false;
         })));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_condition"), DataType.BI_ENTITY, new Meta.ActorCondition(plugin, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "both"), DataType.BI_ENTITY, new Meta.Both(plugin, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "either"), DataType.BI_ENTITY, new Meta.Either(plugin, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, new Meta.Invert(plugin, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_condition"), DataType.BI_ENTITY, new Meta.TargetCondition(plugin, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "undirected"), DataType.BI_ENTITY, new Meta.Undirected(plugin, null, null)));
+    }
+
+    public static class Meta {
+
+        public static class ActorCondition extends CraftCondition<BiEntity> {
+
+            private Condition<Entity> condition;
+
+            public ActorCondition(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, BiEntity> biPredicate) {
+                super(plugin, jsonObject, DataType.BI_ENTITY, biPredicate);
+                if (jsonObject != null) {
+                    this.condition = plugin.getLoader().loadCondition(DataType.ENTITY, jsonObject);
+                    setBiPredicate(((jsonObject1, biEntity) -> {
+                        if (biEntity != null) {
+                            Entity actor = biEntity.getActor();
+
+                            if (actor != null) {
+                                return condition.test(biEntity.getActor());
+                            }
+                        }
+                        return false;
+                    }));
+                }
+            }
+
+            @Override
+            public Condition<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+                return new ActorCondition(plugin, jsonObject, getBiPredicate());
+            }
+        }
+
+        public static class Both extends CraftCondition<BiEntity> {
+
+            private Condition<Entity> condition;
+
+            public Both(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, BiEntity> biPredicate) {
+                super(plugin, jsonObject, DataType.BI_ENTITY, biPredicate);
+                if (jsonObject != null) {
+                    this.condition = plugin.getLoader().loadCondition(DataType.ENTITY, jsonObject);
+                    setBiPredicate(((jsonObject1, biEntity) -> {
+                        if (biEntity != null) {
+                            Entity actor = biEntity.getActor();
+                            Entity target = biEntity.getTarget();
+
+                            if (actor != null && target != null) {
+                                return condition.test(biEntity.getActor()) && condition.test(biEntity.getTarget());
+                            }
+                        }
+                        return false;
+                    }));
+                }
+            }
+
+            @Override
+            public Condition<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+                return new Both(plugin, jsonObject, getBiPredicate());
+            }
+        }
+
+        public static class Either extends CraftCondition<BiEntity> {
+
+            private Condition<Entity> condition;
+
+            public Either(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, BiEntity> biPredicate) {
+                super(plugin, jsonObject, DataType.BI_ENTITY, biPredicate);
+                if (jsonObject != null) {
+                    this.condition = plugin.getLoader().loadCondition(DataType.ENTITY, jsonObject);
+                    setBiPredicate(((jsonObject1, biEntity) -> {
+                        if (biEntity != null) {
+                            Entity actor = biEntity.getActor();
+                            Entity target = biEntity.getTarget();
+
+                            if (actor != null && target != null) {
+                                return condition.test(biEntity.getActor()) || condition.test(biEntity.getTarget());
+                            }
+                        }
+                        return false;
+                    }));
+                }
+            }
+
+            @Override
+            public Condition<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+                return new Either(plugin, jsonObject, getBiPredicate());
+            }
+        }
+
+        public static class Invert extends CraftCondition<BiEntity> {
+
+            private Condition<BiEntity> condition;
+
+            public Invert(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, BiEntity> biPredicate) {
+                super(plugin, jsonObject, DataType.BI_ENTITY, biPredicate);
+                if (jsonObject != null) {
+                    this.condition = plugin.getLoader().loadCondition(DataType.BI_ENTITY, jsonObject);
+                    setBiPredicate(((jsonObject1, biEntity) -> {
+                        if (biEntity != null) {
+                            Entity actor = biEntity.getActor();
+                            Entity target = biEntity.getTarget();
+
+                            if (actor != null && target != null) {
+                                return condition.test(new BiEntity(biEntity.getTarget(), biEntity.getActor()));
+                            }
+                        }
+                        return false;
+                    }));
+                }
+            }
+
+            @Override
+            public Condition<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+                return new Invert(plugin, jsonObject, getBiPredicate());
+            }
+        }
+
+        public static class TargetCondition extends CraftCondition<BiEntity> {
+
+            private Condition<Entity> condition;
+
+            public TargetCondition(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, BiEntity> biPredicate) {
+                super(plugin, jsonObject, DataType.BI_ENTITY, biPredicate);
+                if (jsonObject != null) {
+                    this.condition = plugin.getLoader().loadCondition(DataType.ENTITY, jsonObject);
+                    setBiPredicate(((jsonObject1, biEntity) -> {
+                        if (biEntity != null) {
+                            Entity target = biEntity.getTarget();
+
+                            if (target != null) {
+                                return condition.test(biEntity.getTarget());
+                            }
+                        }
+                        return false;
+                    }));
+                }
+            }
+
+            @Override
+            public Condition<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+                return new TargetCondition(plugin, jsonObject, getBiPredicate());
+            }
+        }
+
+        public static class Undirected extends CraftCondition<BiEntity> {
+
+            private Condition<BiEntity> condition;
+
+            public Undirected(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, BiEntity> biPredicate) {
+                super(plugin, jsonObject, DataType.BI_ENTITY, biPredicate);
+                if (jsonObject != null) {
+                    this.condition = plugin.getLoader().loadCondition(DataType.BI_ENTITY, jsonObject);
+                    setBiPredicate(((jsonObject1, biEntity) -> {
+                        if (biEntity != null) {
+                            Entity actor = biEntity.getActor();
+                            Entity target = biEntity.getTarget();
+
+                            if (actor != null && target != null) {
+                                return condition.test(biEntity) || condition.test(new BiEntity(biEntity.getTarget(), biEntity.getActor()));
+                            }
+                        }
+                        return false;
+                    }));
+                }
+            }
+
+            @Override
+            public Condition<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+                return new Undirected(plugin, jsonObject, getBiPredicate());
+            }
+        }
     }
 }

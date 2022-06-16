@@ -8,10 +8,10 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,21 +29,21 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
     private int modifier = 0;
     private final Map<Player, PotionEffect> potionEffectMap = new HashMap<>();
 
-    public CraftModifyBreakSpeedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
-        super(plugin, identifier, jsonObject, isFactory);
-        if (!isFactory) {
-            if (jsonObject != null) {
-                if (jsonObject.has("modifier")) {
-                    this.modifier = jsonObject.get("modifier").getAsInt();
-                }
-            }
-            registerBlockBreakPacketListener();
+    public CraftModifyBreakSpeedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+        super(plugin, identifier, jsonObject);
+        if (jsonObject.has("modifier")) {
+            this.modifier = jsonObject.get("modifier").getAsInt();
         }
+        registerBlockBreakPacketListener();
+    }
+
+    public CraftModifyBreakSpeedPower(OriginsBukkitPlugin plugin) {
+        super(plugin);
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftModifyBreakSpeedPower(plugin, identifier, jsonObject, false);
+        return new CraftModifyBreakSpeedPower(plugin, identifier, jsonObject);
     }
 
     @Override
@@ -73,8 +73,6 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
         }
     }
 
-    //private int a = 0;
-
     private void registerBlockBreakPacketListener() {
         getPlugin().getProtocolManager().addPacketListener(
                 new PacketAdapter(getPlugin().getJavaPlugin(), ListenerPriority.NORMAL, PacketType.Play.Client.BLOCK_DIG) {
@@ -94,8 +92,6 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
                         Material material = block.getType();
 
                         if (getMembers().contains(player)) {
-                            //a = a + 1;
-                            //player.sendMessage(a + " = " + digType);
                             if (material.isSolid()) {
                                 if (modifier < 0) {
                                     if (digType == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {
@@ -157,7 +153,6 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
                                     if (digType == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {
                                         Bukkit.getScheduler().runTask(CraftModifyBreakSpeedPower.this.getPlugin().getJavaPlugin(),
                                                 bukkitTask -> {
-                                                    player.sendMessage("" + location.getBlock().getType().isSolid());
                                                     if (location.getBlock().getType().isSolid()) {
                                                         PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.FAST_DIGGING);
 

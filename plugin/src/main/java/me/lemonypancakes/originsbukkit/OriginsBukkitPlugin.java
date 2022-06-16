@@ -24,7 +24,7 @@ public interface OriginsBukkitPlugin {
 
     JavaPlugin getJavaPlugin();
 
-    OriginPlayerDataFetcher getOriginPlayerDataFetcher();
+    Storage getStorage();
 
     List<Plugin> getExpansions();
 

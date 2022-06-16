@@ -9,12 +9,14 @@ import me.lemonypancakes.originsbukkit.config.CraftConfigHandler;
 import me.lemonypancakes.originsbukkit.data.CraftLoader;
 import me.lemonypancakes.originsbukkit.data.CraftOriginPlayer;
 import me.lemonypancakes.originsbukkit.data.CraftRegistry;
-import me.lemonypancakes.originsbukkit.data.fetcher.BukkitOriginPlayerDataFetcher;
-import me.lemonypancakes.originsbukkit.data.fetcher.MySQLOriginPlayerDataFetcher;
-import me.lemonypancakes.originsbukkit.enums.Config;
+import me.lemonypancakes.originsbukkit.data.storage.BukkitStorage;
+import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.MySQLStorage;
 import me.lemonypancakes.originsbukkit.factory.action.BiEntityActions;
-import me.lemonypancakes.originsbukkit.factory.condition.BiEntityConditions;
-import me.lemonypancakes.originsbukkit.factory.condition.MetaConditions;
+import me.lemonypancakes.originsbukkit.factory.action.BlockActions;
+import me.lemonypancakes.originsbukkit.factory.action.EntityActions;
+import me.lemonypancakes.originsbukkit.factory.action.ItemActions;
+import me.lemonypancakes.originsbukkit.factory.condition.*;
 import me.lemonypancakes.originsbukkit.item.OrbOfOrigin;
 import me.lemonypancakes.originsbukkit.listener.block.BlockBreakEventListener;
 import me.lemonypancakes.originsbukkit.listener.block.BlockPlaceEventListener;
@@ -26,8 +28,8 @@ import me.lemonypancakes.originsbukkit.listener.entity.player.PlayerInteractEven
 import me.lemonypancakes.originsbukkit.listener.inventory.InventoryClickEventListener;
 import me.lemonypancakes.originsbukkit.listener.inventory.InventoryCloseEventListener;
 import me.lemonypancakes.originsbukkit.listener.world.DayAndNightCycleListener;
-import me.lemonypancakes.originsbukkit.storage.Misc;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.Config;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.StartupUtils;
 import org.bukkit.Bukkit;
@@ -50,7 +52,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
     private final Registry registry = new CraftRegistry(this);
     private final Loader loader = new CraftLoader(this);
     private ProtocolManager protocolManager;
-    private OriginPlayerDataFetcher originPlayerDataFetcher;
+    private Storage storage;
 
     public CraftOriginsBukkitPlugin() {
         OriginsBukkit.setPlugin(this);
@@ -60,13 +62,13 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
     public void onEnable() {
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &4   ___       _       _                 ____        _    _    _ _");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &c  / _ \\ _ __(_) __ _(_)_ __  ___      | __ ) _   _| | _| | _(_) |_");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &6 | | | | '__| |/ _` | | '_ \\/ __|_____|  _ \\| | | | |/ / |/ / | __|");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &e | |_| | |  | | (_| | | | | \\__ \\_____| |_) | |_| |   <|   <| | |_");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
-        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit]");
+        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &4   ___       _       _                 ____        _    _    _ _");
+        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &c  / _ \\ _ __(_) __ _(_)_ __  ___      | __ ) _   _| | _| | _(_) |_");
+        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &6 | | | | '__| |/ _` | | '_ \\/ __|_____|  _ \\| | | | |/ / |/ / | __|");
+        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &e | |_| | |  | | (_| | | | | \\__ \\_____| |_) | |_| |   <|   <| | |_");
+        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
+        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
+        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit]");
         StartupUtils.checkServerCompatibility(this);
         StartupUtils.checkServerDependencies(this);
 
@@ -86,20 +88,28 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new CraftConfigHandler(this);
             registry.register(new OrbOfOrigin());
             new BiEntityActions(this);
+            new BlockActions(this);
+            new EntityActions(this);
+            new ItemActions(this);
             new BiEntityConditions(this);
-            new MetaConditions(this);
+            new BiomeConditions(this);
+            new BlockConditions(this);
+            new DamageConditions(this);
+            new EntityConditions(this);
+            new FluidConditions(this);
+            new ItemConditions(this);
             StartupUtils.registerFactories(this);
             StartupUtils.loadExpansions(this);
             StartupUtils.registerOriginPacks(this);
             switch (Config.STORAGE_METHOD.toString()) {
                 case "INTERNAL":
-                    this.originPlayerDataFetcher = new BukkitOriginPlayerDataFetcher();
+                    this.storage = new BukkitStorage();
                     break;
                 case "MY_SQL":
-                    this.originPlayerDataFetcher = new MySQLOriginPlayerDataFetcher(this);
+                    this.storage = new MySQLStorage(this);
                     break;
                 default:
-                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Unknown storage method: &e" + Config.STORAGE_METHOD + ".");
+                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Unknown storage method: &e" + Config.STORAGE_METHOD + ".");
                     disable();
                     break;
             }
@@ -130,7 +140,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                 originPlayers.put(uuid, new CraftOriginPlayer(this, uuid));
             });
 
-            ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
+            ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
         }
     }
 
@@ -154,7 +164,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
         originPlayers.values().forEach(OriginPlayer::unlistenAndDestroy);
         expansions.forEach(plugin -> Bukkit.getPluginManager().disablePlugin(plugin));
 
-        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
+        ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
     }
 
     @Override
@@ -198,8 +208,8 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
     }
 
     @Override
-    public OriginPlayerDataFetcher getOriginPlayerDataFetcher() {
-        return originPlayerDataFetcher;
+    public Storage getStorage() {
+        return storage;
     }
 
     @Override

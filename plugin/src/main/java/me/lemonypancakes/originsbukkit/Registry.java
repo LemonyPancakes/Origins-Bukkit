@@ -3,13 +3,14 @@ package me.lemonypancakes.originsbukkit;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 public interface Registry extends OriginsBukkitPluginHolder {
 
-    void register(Action.Factory actionFactory);
+    void register(Action.Factory<?> actionFactory);
 
-    void register(Condition.Factory conditionFactory);
+    void register(Condition.Factory<?> conditionFactory);
 
     void register(Origin origin);
 
@@ -19,9 +20,9 @@ public interface Registry extends OriginsBukkitPluginHolder {
 
     void register(OriginItem originItem);
 
-    void unregisterActionFactory(Identifier identifier);
+    <T> void unregisterActionFactory(DataType<T> dataType, Identifier identifier);
 
-    void unregisterConditionFactory(Identifier identifier);
+    <T> void unregisterConditionFactory(DataType<T> dataType, Identifier identifier);
 
     void unregisterOrigin(Identifier identifier);
 
@@ -31,9 +32,9 @@ public interface Registry extends OriginsBukkitPluginHolder {
 
     void unregisterOriginItem(Identifier identifier);
 
-    boolean hasActionFactory(Identifier identifier);
+    <T> boolean hasActionFactory(DataType<T> dataType, Identifier identifier);
 
-    boolean hasConditionFactory(Identifier identifier);
+    <T> boolean hasConditionFactory(DataType<T> dataType, Identifier identifier);
 
     boolean hasOrigin(Identifier identifier);
 
@@ -43,9 +44,9 @@ public interface Registry extends OriginsBukkitPluginHolder {
 
     boolean hasOriginItem(Identifier identifier);
 
-    Action.Factory getActionFactory(Identifier identifier);
+    <T> Action.Factory<T> getActionFactory(DataType<T> dataType, Identifier identifier);
 
-    Condition.Factory getConditionFactory(Identifier identifier);
+    <T> Condition.Factory<T> getConditionFactory(DataType<T> dataType, Identifier identifier);
 
     Origin getOrigin(Identifier identifier);
 
@@ -55,9 +56,9 @@ public interface Registry extends OriginsBukkitPluginHolder {
 
     OriginItem getOriginItem(Identifier identifier);
 
-    Set<Identifier> getActionFactoriesKeySet();
+    Set<DataType<?>> getActionFactoriesKeySet();
 
-    Set<Identifier> getConditionFactoriesKeySet();
+    Set<DataType<?>> getConditionFactoriesKeySet();
 
     Set<Identifier> getOriginsKeySet();
 
@@ -67,9 +68,9 @@ public interface Registry extends OriginsBukkitPluginHolder {
 
     Set<Identifier> getOriginItemsKeySet();
 
-    Collection<Action.Factory> getActionFactories();
+    Collection<Map<Identifier, Action.Factory<?>>> getActionFactories();
 
-    Collection<Condition.Factory> getConditionFactories();
+    Collection<Map<Identifier, Condition.Factory<?>>> getConditionFactories();
 
     Collection<Origin> getOrigins();
 

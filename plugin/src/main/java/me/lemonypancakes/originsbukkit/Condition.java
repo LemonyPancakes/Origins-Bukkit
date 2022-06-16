@@ -6,28 +6,36 @@ import me.lemonypancakes.originsbukkit.util.Identifier;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public interface Condition extends Predicate<Temp>, JsonObjectHolder, OriginsBukkitPluginHolder {
+public interface Condition<T> extends Predicate<T>, DataTypeHolder<T>, JsonObjectHolder, OriginsBukkitPluginHolder {
 
-    BiPredicate<JsonObject, Temp> getBiPredicate();
+    BiPredicate<JsonObject, T> getBiPredicate();
 
-    void setBiPredicate(BiPredicate<JsonObject, Temp> biPredicate);
+    void setBiPredicate(BiPredicate<JsonObject, T> biPredicate);
 
     boolean isInverted();
 
-    Condition newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject);
+    Condition<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType);
 
-    final class Factory implements Identifiable {
+    Condition<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject);
+
+    final class Factory<T> implements Identifiable, DataTypeHolder<T> {
 
         private Identifier identifier;
-        private Condition condition;
+        private DataType<T> dataType;
+        private Condition<T> condition;
 
-        public Factory(Identifier identifier, Condition condition) {
+        public Factory(Identifier identifier, DataType<T> dataType, Condition<T> condition) {
             this.identifier = identifier;
+            this.dataType = dataType;
             this.condition = condition;
         }
 
-        public Condition newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-            return condition.newInstance(plugin, jsonObject);
+        public Condition<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
+            return condition.newInstance(plugin, jsonObject, dataType);
+        }
+
+        public Condition<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+            return condition.newInstance(plugin, jsonObject, dataType);
         }
 
         @Override
@@ -40,11 +48,21 @@ public interface Condition extends Predicate<Temp>, JsonObjectHolder, OriginsBuk
             this.identifier = identifier;
         }
 
-        public Condition getAction() {
+        @Override
+        public DataType<T> getDataType() {
+            return dataType;
+        }
+
+        @Override
+        public void setDataType(DataType<T> dataType) {
+            this.dataType = dataType;
+        }
+
+        public Condition<T> getCondition() {
             return condition;
         }
 
-        public void setAction(Condition condition) {
+        public void setCondition(Condition<T> condition) {
             this.condition = condition;
         }
     }

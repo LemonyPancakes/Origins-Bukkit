@@ -17,12 +17,11 @@
  */
 package me.lemonypancakes.originsbukkit.item;
 
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.OriginItem;
-import me.lemonypancakes.originsbukkit.OriginsBukkit;
-import me.lemonypancakes.originsbukkit.enums.Config;
 import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtils;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.Config;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -39,7 +38,7 @@ import java.util.List;
 
 public class OrbOfOrigin implements OriginItem {
 
-    private Identifier identifier = new Identifier(OriginsBukkit.KEY, "orb_of_origin");
+    private Identifier identifier = new Identifier(Identifier.ORIGINS_BUKKIT, "orb_of_origin");
     private final ItemStack itemStack;
     private Recipe recipe;
 
@@ -65,7 +64,7 @@ public class OrbOfOrigin implements OriginItem {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemMeta.setUnbreakable(true);
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-            itemMeta.setDisplayName(ChatUtils.format(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_DISPLAY_NAME.toString()));
+            itemMeta.setDisplayName(ChatUtil.format(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_DISPLAY_NAME.toString()));
             itemStack.setItemMeta(itemMeta);
         }
 

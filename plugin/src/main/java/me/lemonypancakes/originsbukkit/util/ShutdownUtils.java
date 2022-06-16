@@ -1,6 +1,6 @@
 package me.lemonypancakes.originsbukkit.util;
 
-import me.lemonypancakes.originsbukkit.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.Misc;
 import org.bukkit.Bukkit;
 
 public class ShutdownUtils {

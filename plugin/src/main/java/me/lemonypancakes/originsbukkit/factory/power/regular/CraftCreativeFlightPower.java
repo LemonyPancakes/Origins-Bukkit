@@ -1,27 +1,43 @@
 package me.lemonypancakes.originsbukkit.factory.power.regular;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class CraftCreativeFlightPower extends CraftPower {
 
-    public CraftCreativeFlightPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject, boolean isFactory) {
-        super(plugin, identifier, jsonObject, isFactory);
+    public CraftCreativeFlightPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+        super(plugin, identifier, jsonObject);
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                getMembers().forEach(player -> {
+                    if (getCondition().test(player)) {
+                        if (!player.isFlying()) {
+                            player.setAllowFlight(true);
+                            player.setFlying(true);
+                        }
+                    } else {
+                        player.setAllowFlight(false);
+                        player.setFlying(false);
+                    }
+                });
+            }
+        }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1L);
+    }
+
+    public CraftCreativeFlightPower(OriginsBukkitPlugin plugin) {
+        super(plugin);
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftCreativeFlightPower(plugin, identifier, jsonObject, false);
-    }
-
-    @Override
-    protected void onMemberAdd(Player player) {
-        player.setAllowFlight(true);
-        player.setFlying(true);
+        return new CraftCreativeFlightPower(plugin, identifier, jsonObject);
     }
 
     @Override

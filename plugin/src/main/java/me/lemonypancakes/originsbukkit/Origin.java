@@ -1,6 +1,6 @@
 package me.lemonypancakes.originsbukkit;
 
-import me.lemonypancakes.originsbukkit.enums.Impact;
+import me.lemonypancakes.originsbukkit.util.Impact;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 

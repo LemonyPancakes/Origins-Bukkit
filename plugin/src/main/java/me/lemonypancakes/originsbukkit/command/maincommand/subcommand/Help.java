@@ -1,9 +1,9 @@
 package me.lemonypancakes.originsbukkit.command.maincommand.subcommand;
 
 import me.lemonypancakes.originsbukkit.command.maincommand.MainCommand;
-import me.lemonypancakes.originsbukkit.enums.Lang;
-import me.lemonypancakes.originsbukkit.enums.Permissions;
-import me.lemonypancakes.originsbukkit.util.ChatUtils;
+import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.Lang;
+import me.lemonypancakes.originsbukkit.util.Permissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -25,31 +25,31 @@ public class Help {
                              @Nonnull String label,
                              @Nonnull String[] args) {
         if (!commandSender.hasPermission(Permissions.HELP.toString())) {
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.ERROR,
+                    ChatUtil.Type.ERROR,
                     Lang.COMMAND_NO_PERMISSION.toString()
             );
             return;
         }
         if (args.length < 2) {
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.INFO,
+                    ChatUtil.Type.INFO,
                     Lang.SUBCOMMAND_HELP_HEADER.toString()
             );
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.INFO,
+                    ChatUtil.Type.INFO,
                     Lang.SUBCOMMAND_HELP_SYNTAX.toString()
                             .replace("{subcommand_usage}", Lang.SUBCOMMAND_HELP_USAGE.toString())
                             .replace("{subcommand_description}", Lang.SUBCOMMAND_HELP_DESCRIPTION.toString()
                             )
             );
             if (commandSender.hasPermission(Permissions.PRUNE.toString())) {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.INFO,
+                        ChatUtil.Type.INFO,
                         Lang.SUBCOMMAND_HELP_SYNTAX.toString()
                                 .replace("{subcommand_usage}", Lang.SUBCOMMAND_PRUNE_USAGE.toString())
                                 .replace("{subcommand_description}", Lang.SUBCOMMAND_PRUNE_DESCRIPTION.toString()
@@ -57,9 +57,9 @@ public class Help {
                 );
             }
             if (commandSender.hasPermission(Permissions.UPDATE.toString())) {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.INFO,
+                        ChatUtil.Type.INFO,
                         Lang.SUBCOMMAND_HELP_SYNTAX.toString()
                                 .replace("{subcommand_usage}", Lang.SUBCOMMAND_UPDATE_USAGE.toString())
                                 .replace("{subcommand_description}", Lang.SUBCOMMAND_UPDATE_DESCRIPTION.toString()
@@ -67,9 +67,9 @@ public class Help {
                 );
             }
             if (commandSender.hasPermission(Permissions.GIVE.toString())) {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.INFO,
+                        ChatUtil.Type.INFO,
                         Lang.SUBCOMMAND_HELP_SYNTAX.toString()
                                 .replace("{subcommand_usage}", Lang.SUBCOMMAND_GIVE_USAGE.toString())
                                 .replace("{subcommand_description}", Lang.SUBCOMMAND_GIVE_DESCRIPTION.toString()
@@ -77,9 +77,9 @@ public class Help {
                 );
             }
             if (commandSender.hasPermission(Permissions.INFO_SELF.toString()) || commandSender.hasPermission(Permissions.INFO_OTHERS.toString())) {
-                ChatUtils.sendCommandSenderMessage(
+                ChatUtil.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtils.Type.INFO,
+                        ChatUtil.Type.INFO,
                         Lang.SUBCOMMAND_HELP_SYNTAX.toString()
                                 .replace("{subcommand_usage}", Lang.SUBCOMMAND_INFO_USAGE.toString())
                                 .replace("{subcommand_description}", Lang.SUBCOMMAND_INFO_DESCRIPTION.toString()
@@ -87,9 +87,9 @@ public class Help {
                 );
             }
         } else {
-            ChatUtils.sendCommandSenderMessage(
+            ChatUtil.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtils.Type.ERROR,
+                    ChatUtil.Type.ERROR,
                     Lang.COMMAND_TOO_MANY_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_HELP_USAGE.toString()
                             )

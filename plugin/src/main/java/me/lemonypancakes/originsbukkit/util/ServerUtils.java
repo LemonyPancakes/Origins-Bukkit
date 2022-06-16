@@ -53,20 +53,20 @@ public class ServerUtils {
 
     public static void checkServerSoftwareCompatibility(OriginsBukkitPlugin plugin) {
         if (isServerSoftwareSafe()) {
-            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
-            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
+            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
+            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
         } else {
             if (getServerSoftware().equalsIgnoreCase("YATOPIA")) {
-                ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
-                ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
-                ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Warning! You are using an unstable minecraft server software");
-                ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] that might break some plugin features! Use at your own risk.");
+                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
+                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
+                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Warning! You are using an unstable minecraft server software");
+                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] that might break some plugin features! Use at your own risk.");
             } else {
-                ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
-                ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
-                ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Custom Software Detected! You are using a custom server software.");
-                ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] There is no assurance of this plugin fully supporting the custom software!");
-                ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Use at your own risk.");
+                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
+                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
+                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Custom Software Detected! You are using a custom server software.");
+                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] There is no assurance of this plugin fully supporting the custom software!");
+                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Use at your own risk.");
             }
         }
     }
@@ -77,10 +77,10 @@ public class ServerUtils {
 
     public static void checkServerVersionCompatibility(OriginsBukkitPlugin plugin) {
         if (SUPPORTED_VERSIONS.contains(getServerVersion())) {
-            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit]");
-            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &dSupported Server Version Detected. Initializing!");
+            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit]");
+            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &dSupported Server Version Detected. Initializing!");
         } else {
-            ChatUtils.sendConsoleMessage("&4[Origins-Bukkit] Unsupported Server Version Detected! Safely disabling plugin...");
+            ChatUtil.sendConsoleMessage("&4[Origins-Bukkit] Unsupported Server Version Detected! Safely disabling plugin...");
             plugin.disable();
         }
     }

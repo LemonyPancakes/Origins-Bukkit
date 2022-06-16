@@ -1,7 +1,7 @@
 package me.lemonypancakes.originsbukkit.data;
 
-import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.Scheduler;
+import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Objects;
