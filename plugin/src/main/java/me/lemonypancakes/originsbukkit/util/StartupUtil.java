@@ -5,10 +5,11 @@ import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftOrigin;
 import me.lemonypancakes.originsbukkit.factory.power.action.*;
-import me.lemonypancakes.originsbukkit.factory.power.modify.CraftModifyBreakSpeedPower;
-import me.lemonypancakes.originsbukkit.factory.power.modify.CraftModifyPlayerSpawnPower;
+import me.lemonypancakes.originsbukkit.factory.power.modify.*;
 import me.lemonypancakes.originsbukkit.factory.power.prevent.*;
 import me.lemonypancakes.originsbukkit.factory.power.regular.*;
+import me.lemonypancakes.originsbukkit.factory.power.temporary.CraftThrowEnderPearlPower;
+import me.lemonypancakes.originsbukkit.factory.power.regular.CraftWaterBreathingPower;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -56,6 +57,10 @@ public final class StartupUtil {
 
         //MODIFY
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_break_speed"), new CraftModifyBreakSpeedPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_damage_dealt"), new CraftModifyDamageDealtPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_damage_taken"), new CraftModifyDamageTakenPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_falling"), new CraftModifyFallingPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_harvest"), new CraftModifyHarvestPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_player_spawn"), new CraftModifyPlayerSpawnPower(plugin)));
 
         //ACTION
@@ -81,6 +86,10 @@ public final class StartupUtil {
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_elytra_flight"), new CraftPreventElytraFlightPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_item_use"), new CraftPreventItemUsePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_sleep"), new CraftPreventSleepPower(plugin)));
+
+        //TEMPORARY
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:throw_ender_pearl"), new CraftThrowEnderPearlPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_breathing"), new CraftWaterBreathingPower(plugin)));
     }
 
     public static void loadExpansions(OriginsBukkitPlugin plugin) {
@@ -118,6 +127,30 @@ public final class StartupUtil {
         File[] packs = file.listFiles();
 
         if (packs != null) {
+            for (File pack : packs) {
+                if (pack.getName().endsWith(".zip")) {
+                    try {
+                        ZipFile zipFile = new ZipFile(pack);
+                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+                        while (entries.hasMoreElements()) {
+                            ZipEntry zipEntry = entries.nextElement();
+                            String zipEntryName = zipEntry.getName();
+                            InputStream inputStream = zipFile.getInputStream(zipEntry);
+                            Reader reader = new InputStreamReader(inputStream);
+
+                            if (zipEntryName.startsWith("tags/") && zipEntryName.endsWith(".json")) {
+                                plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, pack, FilenameUtils.getBaseName(zipEntryName.replaceFirst("powers/", ""))));
+                            }
+                            reader.close();
+                            inputStream.close();
+                        }
+                        zipFile.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             for (File pack : packs) {
                 if (pack.getName().endsWith(".zip")) {
                     try {

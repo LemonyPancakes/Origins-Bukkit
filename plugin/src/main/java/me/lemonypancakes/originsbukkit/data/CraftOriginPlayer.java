@@ -1,5 +1,6 @@
 package me.lemonypancakes.originsbukkit.data;
 
+import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginPlayer;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
@@ -18,6 +19,7 @@ public class CraftOriginPlayer implements OriginPlayer {
     private final UUID uuid;
     private final Schedulers schedulers;
     private Origin origin;
+    private JsonObject metadata;
 
     public CraftOriginPlayer(OriginsBukkitPlugin plugin, UUID uuid) {
         this.plugin = plugin;
@@ -112,6 +114,11 @@ public class CraftOriginPlayer implements OriginPlayer {
     public void unlistenAndDestroy() {
         unlisten();
         getSchedulers().destroy();
+    }
+
+    @Override
+    public JsonObject getMetadata() {
+        return metadata;
     }
 
     @Override

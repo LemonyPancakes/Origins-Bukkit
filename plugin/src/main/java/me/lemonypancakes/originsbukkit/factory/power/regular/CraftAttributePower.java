@@ -9,7 +9,6 @@ import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.wrapper.AttributedAttributeModifier;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

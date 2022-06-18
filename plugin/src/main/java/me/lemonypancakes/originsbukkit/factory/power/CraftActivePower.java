@@ -14,8 +14,13 @@ import org.bukkit.event.EventPriority;
 
 public class CraftActivePower extends CraftPower implements Keyed {
 
+    private Key key;
+
     public CraftActivePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
+        if (jsonObject.has("key")) {
+            this.key = Key.valueOf(jsonObject.get("key").getAsString());
+        }
     }
 
     public CraftActivePower(OriginsBukkitPlugin plugin) {
@@ -29,20 +34,24 @@ public class CraftActivePower extends CraftPower implements Keyed {
 
     @Override
     public Key getKey() {
-        return null;
+        return key;
     }
 
     @Override
     public void setKey(Key key) {
-
+        this.key = key;
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerSwapHandItems(PlayerKeyEvent event) {
+    public void onPlayerKeyEvent(PlayerKeyEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {
-            onUse(player, event.getKey());
+            Key key = event.getKey();
+
+            if (this.key == key) {
+                onUse(player, event.getKey());
+            }
         }
     }
 

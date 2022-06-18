@@ -10,11 +10,16 @@ public class ItemStackWrapper {
 
     public ItemStackWrapper(JsonObject jsonObject) {
         if (jsonObject != null) {
+            ItemStack itemStack = null;
+
             if (jsonObject.has("item")) {
                 Material material = Material.valueOf(jsonObject.get("item").getAsString());
-                int amount = 1;
-                ItemStack itemStack = new ItemStack(material);
-                itemStack.setAmount(amount);
+                itemStack = new ItemStack(material);
+            }
+            if (itemStack != null) {
+                if (jsonObject.has("amount")) {
+                    itemStack.setAmount(jsonObject.get("amount").getAsInt());
+                }
                 this.itemStack = itemStack;
             }
         }

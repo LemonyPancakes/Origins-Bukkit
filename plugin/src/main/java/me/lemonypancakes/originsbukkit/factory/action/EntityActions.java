@@ -9,7 +9,9 @@ import me.lemonypancakes.originsbukkit.data.CraftAction;
 import me.lemonypancakes.originsbukkit.factory.action.meta.*;
 import me.lemonypancakes.originsbukkit.util.EquipmentSlot;
 import me.lemonypancakes.originsbukkit.util.Identifier;
+import me.lemonypancakes.originsbukkit.wrapper.ItemStackWrapper;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -213,14 +215,33 @@ public class EntityActions {
                 entity.setFireTicks(0);
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "b"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "give"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
             if (entity != null) {
+                if (entity instanceof Player) {
+                    Player player = (Player) entity;
+                    ItemStack stack = null;
 
+                    if (jsonObject.has("stack")) {
+                        stack = new ItemStackWrapper(jsonObject.getAsJsonObject("stack")).getItemStack();
+                    }
+                    if (stack != null) {
+                        player.getInventory().addItem(stack);
+                    }
+                }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "a"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "play_sound"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
             if (entity != null) {
+                Sound sound = null;
+                float volume = 1;
+                float pitch = 1;
 
+                if (jsonObject.has("sound")) {
+                    sound = Sound.valueOf(jsonObject.get("sound").getAsString());
+                }
+                if (sound != null) {
+                    entity.getWorld().playSound(entity.getLocation(), sound, volume, pitch);
+                }
             }
         })));
     }

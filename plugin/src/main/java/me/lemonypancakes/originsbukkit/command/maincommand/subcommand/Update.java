@@ -82,6 +82,7 @@ public class Update {
                                 if (playerOrigin != null) {
                                     if (!playerOrigin.getIdentifier().equals(originIdentifier)) {
                                         originPlayer.setOrigin(mainCommand.getPlugin().getRegistry().getOrigin(originIdentifier));
+                                        mainCommand.getPlugin().getRegistry().getOrigin(originIdentifier).getPowers().forEach(power -> power.addMember(target));
                                         ChatUtil.sendCommandSenderMessage(
                                                 commandSender,
                                                 ChatUtil.Type.SUCCESS,

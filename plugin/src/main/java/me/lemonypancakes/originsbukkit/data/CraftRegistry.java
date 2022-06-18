@@ -18,6 +18,7 @@ public class CraftRegistry implements Registry {
     private final Map<Identifier, Power> powerMap = new HashMap<>();
     private final Map<Identifier, Power.Factory> powerFactoryMap = new HashMap<>();
     private final Map<Identifier, OriginItem> originItemMap = new HashMap<>();
+    private final Map<Identifier, Tag<?>> tagMap = new HashMap<>();
     private final List<Origin> origins = new ArrayList<>();
 
     public CraftRegistry(OriginsBukkitPlugin plugin) {
@@ -120,6 +121,17 @@ public class CraftRegistry implements Registry {
     }
 
     @Override
+    public void register(Tag<?> tag) {
+        Identifier identifier = tag.getIdentifier();
+
+        if (!tagMap.containsKey(identifier)) {
+            tagMap.put(identifier, tag);
+        } else {
+            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "A tag with the identifier '" + tag.getIdentifier() + "' already exists.");
+        }
+    }
+
+    @Override
     public <T> void unregisterActionFactory(DataType<T> dataType, Identifier identifier) {
         actionFactoryMap.get(dataType).remove(identifier);
     }
@@ -156,6 +168,11 @@ public class CraftRegistry implements Registry {
                 originItemMap.remove(identifier);
             }
         }
+    }
+
+    @Override
+    public void unregisterTag(Identifier identifier) {
+        tagMap.remove(identifier);
     }
 
     @Override
@@ -198,6 +215,11 @@ public class CraftRegistry implements Registry {
         return originItemMap.containsKey(identifier);
     }
 
+    @Override
+    public boolean hasTag(Identifier identifier) {
+        return tagMap.containsKey(identifier);
+    }
+
     @Override @SuppressWarnings("unchecked")
     public <T> Action.Factory<T> getActionFactory(DataType<T> dataType, Identifier identifier) {
         Map<Identifier, Action.Factory<?>> identifierFactoryMap = actionFactoryMap.get(dataType);
@@ -236,6 +258,11 @@ public class CraftRegistry implements Registry {
     @Override
     public OriginItem getOriginItem(Identifier identifier) {
         return originItemMap.get(identifier);
+    }
+
+    @Override @SuppressWarnings("unchecked")
+    public <T> Tag<T> getTag(Identifier identifier) {
+        return (Tag<T>) tagMap.get(identifier);
     }
 
     @Override

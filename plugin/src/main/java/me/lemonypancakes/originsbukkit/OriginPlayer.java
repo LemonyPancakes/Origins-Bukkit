@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public interface OriginPlayer extends OriginsBukkitPluginHolder {
+public interface OriginPlayer extends Metadatable, OriginsBukkitPluginHolder {
 
     UUID getUUID();
 

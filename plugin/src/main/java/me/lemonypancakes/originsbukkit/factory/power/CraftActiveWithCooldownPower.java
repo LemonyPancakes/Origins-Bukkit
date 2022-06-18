@@ -13,8 +13,13 @@ import org.bukkit.event.EventPriority;
 
 public class CraftActiveWithCooldownPower extends CraftCooldownPower implements Keyed {
 
+    private Key key;
+
     public CraftActiveWithCooldownPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
+        if (jsonObject.has("key")) {
+            this.key = Key.valueOf(jsonObject.get("key").getAsString());
+        }
     }
 
     public CraftActiveWithCooldownPower(OriginsBukkitPlugin plugin) {
@@ -28,22 +33,26 @@ public class CraftActiveWithCooldownPower extends CraftCooldownPower implements 
 
     @Override
     public Key getKey() {
-        return null;
+        return key;
     }
 
     @Override
     public void setKey(Key key) {
-
+        this.key = key;
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerSwapHandItems(PlayerKeyEvent event) {
+    public void onPlayerKeyEvent(PlayerKeyEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {
-            if (canUse(player)) {
-                setCooldown(player);
-                onUse(player, event.getKey());
+            Key key = event.getKey();
+
+            if (this.key == key) {
+                if (canUse(player)) {
+                    setCooldown(player);
+                    onUse(player, event.getKey());
+                }
             }
         }
     }

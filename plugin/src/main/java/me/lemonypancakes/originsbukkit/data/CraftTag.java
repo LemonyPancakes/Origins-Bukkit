@@ -1,5 +1,6 @@
 package me.lemonypancakes.originsbukkit.data;
 
+import me.lemonypancakes.originsbukkit.DataType;
 import me.lemonypancakes.originsbukkit.Tag;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 
@@ -10,11 +11,18 @@ import java.util.Set;
 public class CraftTag<T> implements Tag<T> {
 
     private Identifier identifier;
+    private final DataType<T> dataType;
+    private Set<T> values = new HashSet<>();
 
-    private final Set<T> values = new HashSet<>();
-
-    public CraftTag(Identifier identifier) {
+    public CraftTag(Identifier identifier, DataType<T> dataType, Set<T> values) {
         this.identifier = identifier;
+        this.dataType = dataType;
+        this.values = values;
+    }
+
+    public CraftTag(Identifier identifier, DataType<T> dataType) {
+        this.identifier = identifier;
+        this.dataType = dataType;
     }
 
     @Override
@@ -28,8 +36,18 @@ public class CraftTag<T> implements Tag<T> {
     }
 
     @Override
+    public DataType<T> getDataType() {
+        return dataType;
+    }
+
+    @Override
     public Set<T> getValues() {
         return values;
+    }
+
+    @Override
+    public void setValues(Set<T> values) {
+        this.values = values;
     }
 
     @Override

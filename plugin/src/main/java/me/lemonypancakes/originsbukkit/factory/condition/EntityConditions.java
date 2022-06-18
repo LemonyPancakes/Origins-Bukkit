@@ -10,6 +10,7 @@ import me.lemonypancakes.originsbukkit.util.Comparison;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attributable;
@@ -266,6 +267,12 @@ public class EntityConditions {
 
                     return Comparison.parseComparison(jsonObject).compare(player.getTotalExperience(), jsonObject);
                 }
+            }
+            return false;
+        })));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "in_water"), DataType.ENTITY, new CraftCondition<>(plugin, null, (jsonObject, entity) -> {
+            if (entity != null) {
+                return entity.isInWater() || entity.getLocation().getBlock().getType() == Material.WATER_CAULDRON;
             }
             return false;
         })));

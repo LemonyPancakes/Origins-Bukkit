@@ -342,27 +342,11 @@ public class CraftLoader implements Loader {
     }
 
     public Tag<?> loadTagFromFile(File tagFile, String identifierKey) {
-        return loadTagFromFile(
-                tagFile,
-                new Identifier(
-                        identifierKey,
-                        FilenameUtils.getBaseName(
-                                tagFile.getName()
-                        )
-                )
-        );
+        return loadTagFromFile(tagFile, new Identifier(identifierKey, FilenameUtils.getBaseName(tagFile.getName())));
     }
 
     public Tag<?> loadTagFromFile(File tagFile) {
-        return loadTagFromFile(
-                tagFile,
-                new Identifier(
-                        "undefined",
-                        FilenameUtils.getBaseName(
-                                tagFile.getName()
-                        )
-                )
-        );
+        return loadTagFromFile(tagFile, new Identifier("undefined", FilenameUtils.getBaseName(tagFile.getName())));
     }
 
     private Tag<?> loadTagFromFile(File tagFile, Identifier identifier) {
@@ -377,7 +361,7 @@ public class CraftLoader implements Loader {
                     Material[] materials = gson.fromJson(jsonObject.get("materials"), Material[].class);
 
                     if (materials != null) {
-                        return new CraftTag<Material>(identifier);
+                        //return new CraftTag<Material>(identifier);
                     }
                 }
             }
