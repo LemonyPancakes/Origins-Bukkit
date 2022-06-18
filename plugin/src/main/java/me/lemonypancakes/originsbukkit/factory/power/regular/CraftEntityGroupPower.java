@@ -5,7 +5,7 @@ import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
 import me.lemonypancakes.originsbukkit.util.Identifier;
-import me.lemonypancakes.originsbukkit.util.PlayerUtils;
+import me.lemonypancakes.originsbukkit.util.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -26,8 +26,8 @@ public class CraftEntityGroupPower extends CraftPower {
 
     public CraftEntityGroupPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
-        if (jsonObject.has("entity_group")) {
-            String entityGroup = jsonObject.get("entity_group").getAsString();
+        if (jsonObject.has("group")) {
+            String entityGroup = jsonObject.get("group").getAsString();
 
             if (entityGroup != null) {
                 switch (entityGroup.toUpperCase()) {
@@ -37,11 +37,11 @@ public class CraftEntityGroupPower extends CraftPower {
                     case "AQUATIC":
                         new Aquatic();
                         break;
-                    case "ARTHROPODS":
-                        new Arthropods();
+                    case "ARTHROPOD":
+                        new Arthropod();
                         break;
-                    case "ILLAGERS":
-                        new Illagers();
+                    case "ILLAGER":
+                        new Illager();
                         break;
                 }
             }
@@ -141,7 +141,7 @@ public class CraftEntityGroupPower extends CraftPower {
 
                     if (event.getCause() == magic) {
                         event.setCancelled(true);
-                        PlayerUtils.heal(player, event.getDamage());
+                        PlayerUtil.heal(player, event.getDamage());
                     } else if (event.getCause() == poison) {
                         event.setCancelled(true);
                     }
@@ -232,9 +232,9 @@ public class CraftEntityGroupPower extends CraftPower {
         }
     }
 
-    private class Arthropods implements Listener {
+    private class Arthropod implements Listener {
 
-        public Arthropods() {
+        public Arthropod() {
             Bukkit.getPluginManager().registerEvents(this, getPlugin().getJavaPlugin());
         }
 
@@ -270,9 +270,9 @@ public class CraftEntityGroupPower extends CraftPower {
         }
     }
 
-    private class Illagers implements Listener {
+    private class Illager implements Listener {
 
-        public Illagers() {
+        public Illager() {
             Bukkit.getPluginManager().registerEvents(this, getPlugin().getJavaPlugin());
         }
 

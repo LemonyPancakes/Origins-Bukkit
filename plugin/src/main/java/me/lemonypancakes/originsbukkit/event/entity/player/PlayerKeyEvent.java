@@ -15,26 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package me.lemonypancakes.originsbukkit.event.player;
+package me.lemonypancakes.originsbukkit.event.entity.player;
 
+import me.lemonypancakes.originsbukkit.util.Key;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
-public class AsyncPlayerOriginChangeEvent extends Event {
+public class PlayerKeyEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
-    private final String oldOrigin;
-    private final String newOrigin;
+    private final Key key;
 
-    public AsyncPlayerOriginChangeEvent(Player player, String oldOrigin, String newOrigin) {
-        super(true);
+    public PlayerKeyEvent(Player player, Key key) {
         this.player = player;
-        this.oldOrigin = oldOrigin;
-        this.newOrigin = newOrigin;
+        this.key = key;
     }
 
     @Nonnull
@@ -51,11 +49,7 @@ public class AsyncPlayerOriginChangeEvent extends Event {
         return this.player;
     }
 
-    public String getNewOrigin() {
-        return this.newOrigin;
-    }
-
-    public String getOldOrigin() {
-        return this.oldOrigin;
+    public Key getKey() {
+        return this.key;
     }
 }

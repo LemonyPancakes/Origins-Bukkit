@@ -9,6 +9,7 @@ import me.lemonypancakes.originsbukkit.factory.power.modify.CraftModifyBreakSpee
 import me.lemonypancakes.originsbukkit.factory.power.modify.CraftModifyPlayerSpawnPower;
 import me.lemonypancakes.originsbukkit.factory.power.prevent.*;
 import me.lemonypancakes.originsbukkit.factory.power.regular.*;
+import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -16,16 +17,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
-public final class StartupUtils {
+public final class StartupUtil {
 
     public static void registerFactories(OriginsBukkitPlugin plugin) {
 
         //REGULAR
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:attribute"), new CraftAttributePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:burn"), new CraftBurnPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:climbing"), new CraftClimbingPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:conditioned_restrict_armor"), new CraftConditionedRestrictArmorPower(plugin)));
@@ -114,37 +119,50 @@ public final class StartupUtils {
 
         if (packs != null) {
             for (File pack : packs) {
-                if (pack.isDirectory()) {
-                    File packJson = new File(pack.getAbsolutePath() + s + "origins.json");
-                    File[] powerFiles = new File(pack.getAbsolutePath() + s + "powers").listFiles();
-                    File[] originFiles = new File(pack.getAbsolutePath() + s + "origins").listFiles();
+                if (pack.getName().endsWith(".zip")) {
+                    try {
+                        ZipFile zipFile = new ZipFile(pack);
+                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-                    if (powerFiles != null) {
-                        for (File powerFile : powerFiles) {
-                            plugin.getRegistry().register(
-                                    plugin.getLoader().loadPowerFromFile(powerFile, pack.getName()));
-                        }
-                    }
-                    if (originFiles != null) {
-                        for (File originFile : originFiles) {
-                            Origin origin = plugin.getLoader().loadOriginFromFile(originFile, pack.getName());
+                        while (entries.hasMoreElements()) {
+                            ZipEntry zipEntry = entries.nextElement();
+                            String zipEntryName = zipEntry.getName();
+                            InputStream inputStream = zipFile.getInputStream(zipEntry);
+                            Reader reader = new InputStreamReader(inputStream);
 
-                            if (origin != null) {
-                                if (origin.getJsonObject() != null) {
-                                    if (origin.getJsonObject().has("disable_origin")) {
-                                        boolean disableOrigin = origin.getJsonObject().get("disable_origin").getAsBoolean();
-
-                                        if (!disableOrigin) {
-                                            plugin.getRegistry().register(origin);
-                                        }
-                                    } else {
-                                        plugin.getRegistry().register(origin);
-                                    }
-                                } else {
-                                    plugin.getRegistry().register(origin);
-                                }
+                            if (zipEntryName.startsWith("powers/") && zipEntryName.endsWith(".json")) {
+                                plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, pack, FilenameUtils.getBaseName(zipEntryName.replaceFirst("powers/", ""))));
                             }
+                            reader.close();
+                            inputStream.close();
                         }
+                        zipFile.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            for (File pack : packs) {
+                if (pack.getName().endsWith(".zip")) {
+                    try {
+                        ZipFile zipFile = new ZipFile(pack);
+                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+                        while (entries.hasMoreElements()) {
+                            ZipEntry zipEntry = entries.nextElement();
+                            String zipEntryName = zipEntry.getName();
+                            InputStream inputStream = zipFile.getInputStream(zipEntry);
+                            Reader reader = new InputStreamReader(inputStream);
+
+                            if (zipEntryName.startsWith("origins/") && zipEntryName.endsWith(".json")) {
+                                plugin.getRegistry().register(plugin.getLoader().loadOriginFromFile(reader, pack, FilenameUtils.getBaseName(zipEntryName.replaceFirst("origins/", ""))));
+                            }
+                            reader.close();
+                            inputStream.close();
+                        }
+                        zipFile.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
@@ -262,8 +280,8 @@ public final class StartupUtils {
     }
 
     public static void checkServerCompatibility(OriginsBukkitPlugin plugin) {
-        ServerUtils.checkServerSoftwareCompatibility(plugin);
-        ServerUtils.checkServerVersionCompatibility(plugin);
+        ServerUtil.checkServerSoftwareCompatibility(plugin);
+        ServerUtil.checkServerVersionCompatibility(plugin);
     }
 
     public static void checkServerDependencies(OriginsBukkitPlugin plugin) {

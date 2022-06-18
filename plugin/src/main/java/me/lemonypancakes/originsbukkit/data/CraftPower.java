@@ -27,10 +27,8 @@ public class CraftPower implements Power, Listener {
         this.plugin = plugin;
         this.identifier = identifier;
         this.jsonObject = jsonObject;
-        if (plugin != null && identifier != null && jsonObject != null) {
-            this.condition = plugin.getLoader().loadCondition(DataType.ENTITY, jsonObject);
-            Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
-        }
+        this.condition = plugin.getLoader().loadCondition(DataType.ENTITY, jsonObject);
+        Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
     }
 
     public CraftPower(OriginsBukkitPlugin plugin) {
@@ -68,13 +66,6 @@ public class CraftPower implements Power, Listener {
     }
 
     @Override
-    public Power newInstance(OriginsBukkitPlugin plugin,
-                             Identifier identifier,
-                             JsonObject jsonObject) {
-        return new CraftPower(plugin, identifier, jsonObject);
-    }
-
-    @Override
     public Set<Player> getMembers() {
         return new HashSet<>(members);
     }
@@ -101,6 +92,21 @@ public class CraftPower implements Power, Listener {
     }
 
     @Override
+    public boolean isActive(Player player) {
+        if (getMembers().contains(player)) {
+            return getCondition().test(player);
+        }
+        return false;
+    }
+
+    @Override
+    public Power newInstance(OriginsBukkitPlugin plugin,
+                             Identifier identifier,
+                             JsonObject jsonObject) {
+        return new CraftPower(plugin, identifier, jsonObject);
+    }
+
+    @Override
     public OriginsBukkitPlugin getPlugin() {
         return plugin;
     }
@@ -113,12 +119,12 @@ public class CraftPower implements Power, Listener {
         if (this == itemStack) return true;
         if (!(itemStack instanceof CraftPower)) return false;
         CraftPower that = (CraftPower) itemStack;
-        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getMembers(), that.getMembers());
+        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getCondition(), that.getCondition()) && Objects.equals(getMembers(), that.getMembers());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPlugin(), getIdentifier(), getJsonObject(), getMembers());
+        return Objects.hash(getPlugin(), getIdentifier(), getJsonObject(), getCondition(), getMembers());
     }
 
     @Override
@@ -127,6 +133,7 @@ public class CraftPower implements Power, Listener {
                 "plugin=" + plugin +
                 ", identifier=" + identifier +
                 ", jsonObject=" + jsonObject +
+                ", condition=" + condition +
                 ", members=" + members +
                 '}';
     }

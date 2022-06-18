@@ -2,9 +2,9 @@ package me.lemonypancakes.originsbukkit.util;
 
 import java.util.Random;
 
-public final class StringUtils {
+public final class StringUtil {
 
-    private StringUtils() {}
+    private StringUtil() {}
 
     public static String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

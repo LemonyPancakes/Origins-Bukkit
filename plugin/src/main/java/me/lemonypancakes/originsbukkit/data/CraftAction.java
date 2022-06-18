@@ -80,16 +80,16 @@ public class CraftAction<T> implements Action<T> {
     public void setPlugin(OriginsBukkitPlugin plugin) {}
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CraftAction)) return false;
-        CraftAction<?> that = (CraftAction<?>) o;
-        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiConsumer(), that.getBiConsumer());
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftAction)) return false;
+        CraftAction<?> that = (CraftAction<?>) itemStack;
+        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getDataType(), that.getDataType()) && Objects.equals(getBiConsumer(), that.getBiConsumer());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPlugin(), getJsonObject(), getBiConsumer());
+        return Objects.hash(getPlugin(), getJsonObject(), getDataType(), getBiConsumer());
     }
 
     @Override
@@ -97,6 +97,7 @@ public class CraftAction<T> implements Action<T> {
         return "CraftAction{" +
                 "plugin=" + plugin +
                 ", jsonObject=" + jsonObject +
+                ", dataType=" + dataType +
                 ", biConsumer=" + biConsumer +
                 '}';
     }

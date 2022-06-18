@@ -122,16 +122,16 @@ public class CraftCondition<T> implements Condition<T> {
     public void setPlugin(OriginsBukkitPlugin plugin) {}
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CraftCondition)) return false;
-        CraftCondition<?> that = (CraftCondition<?>) o;
-        return isInverted() == that.isInverted() && Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getBiPredicate(), that.getBiPredicate());
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftCondition)) return false;
+        CraftCondition<?> that = (CraftCondition<?>) itemStack;
+        return isInverted() == that.isInverted() && Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getDataType(), that.getDataType()) && Objects.equals(getBiPredicate(), that.getBiPredicate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPlugin(), getJsonObject(), getBiPredicate(), isInverted());
+        return Objects.hash(getPlugin(), getJsonObject(), getDataType(), getBiPredicate(), isInverted());
     }
 
     @Override
@@ -139,6 +139,7 @@ public class CraftCondition<T> implements Condition<T> {
         return "CraftCondition{" +
                 "plugin=" + plugin +
                 ", jsonObject=" + jsonObject +
+                ", dataType=" + dataType +
                 ", biPredicate=" + biPredicate +
                 ", inverted=" + inverted +
                 '}';

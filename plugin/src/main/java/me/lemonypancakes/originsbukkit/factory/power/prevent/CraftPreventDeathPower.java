@@ -32,7 +32,7 @@ public class CraftPreventDeathPower extends CraftPower {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    private void onEntityDamage(EntityDamageEvent event) {
+    public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
 
         if (entity instanceof Player) {

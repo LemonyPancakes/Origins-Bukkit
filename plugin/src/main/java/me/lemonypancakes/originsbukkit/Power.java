@@ -1,7 +1,6 @@
 package me.lemonypancakes.originsbukkit;
 
 import com.google.gson.JsonObject;
-import me.lemonypancakes.ConditionHolder;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -10,8 +9,6 @@ import java.util.Set;
 
 public interface Power extends Identifiable, JsonObjectHolder, ConditionHolder<Entity>, OriginsBukkitPluginHolder {
 
-    Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject);
-
     Set<Player> getMembers();
 
     void addMember(Player player);
@@ -19,6 +16,10 @@ public interface Power extends Identifiable, JsonObjectHolder, ConditionHolder<E
     void removeMember(Player player);
 
     boolean hasMember(Player player);
+
+    boolean isActive(Player player);
+
+    Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject);
 
     final class Factory implements Identifiable {
 

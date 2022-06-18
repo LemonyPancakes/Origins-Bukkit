@@ -35,7 +35,7 @@ public class CraftActionOnEntityUsePower extends CraftInteractionPower {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    private void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {

@@ -5,9 +5,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 
-public final class BukkitPersistentDataUtils {
+public final class BukkitPersistentDataUtil {
 
-    private BukkitPersistentDataUtils() {}
+    private BukkitPersistentDataUtil() {}
 
     public static <T, Z> Z getPersistentData(PersistentDataHolder persistentDataHolder,
                                              String string,

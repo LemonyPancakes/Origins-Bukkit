@@ -34,7 +34,7 @@ public class CraftActionOnWakeUpPower extends CraftPower {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    private void onPlayerBedLeave(PlayerBedLeaveEvent event) {
+    public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {

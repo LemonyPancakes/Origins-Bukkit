@@ -5,7 +5,7 @@ import me.lemonypancakes.originsbukkit.Action;
 import me.lemonypancakes.originsbukkit.DataType;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.data.CraftAction;
-import me.lemonypancakes.originsbukkit.util.ProbabilityUtils;
+import me.lemonypancakes.originsbukkit.util.ProbabilityUtil;
 
 import java.util.function.BiConsumer;
 
@@ -21,7 +21,7 @@ public class CraftChanceAction<T> extends CraftAction<T> {
             this.failAction = plugin.getLoader().loadAction(dataType, jsonObject, "fail_action");
             setBiConsumer((jsonObject1, temp) -> {
                 if (jsonObject1.has("chance")) {
-                    if (ProbabilityUtils.getChance(jsonObject1.get("chance").getAsFloat())) {
+                    if (ProbabilityUtil.getChance(jsonObject1.get("chance").getAsFloat())) {
                         action.accept(temp);
                     } else {
                         failAction.accept(temp);

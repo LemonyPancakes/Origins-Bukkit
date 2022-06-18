@@ -88,7 +88,7 @@ public class Info {
 
             if (target != null) {
                 String playerName = target.getName();
-                String originIdentifier = BukkitPersistentDataUtils.getPersistentData(
+                String originIdentifier = BukkitPersistentDataUtil.getPersistentData(
                         target,
                         "origins-bukkit:origin",
                         PersistentDataType.STRING);

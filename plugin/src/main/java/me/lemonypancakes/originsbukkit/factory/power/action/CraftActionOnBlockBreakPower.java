@@ -38,7 +38,7 @@ public class CraftActionOnBlockBreakPower extends CraftPower {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    private void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {

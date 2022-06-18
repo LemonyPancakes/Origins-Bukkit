@@ -27,6 +27,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public class CraftLoader implements Loader {
@@ -37,20 +38,16 @@ public class CraftLoader implements Loader {
         this.plugin = plugin;
     }
 
-    public Origin loadOriginFromFile(File originFile, String identifierKey) {
-        return loadOriginFromFile(originFile, new Identifier(identifierKey, FilenameUtils.getBaseName(originFile.getName())));
+    @Override
+    public Origin loadOriginFromFile(Reader reader, File zipFileSource, String identifierValue) {
+        return loadOriginFromFile(reader, new Identifier(FilenameUtils.getBaseName(zipFileSource.getName()), identifierValue));
     }
 
-    public Origin loadOriginFromFile(File originFile) {
-        return loadOriginFromFile(originFile, new Identifier("undefined", FilenameUtils.getBaseName(originFile.getName())));
-    }
-
-    private Origin loadOriginFromFile(File originFile, Identifier identifier) {
+    private Origin loadOriginFromFile(Reader reader, Identifier identifier) {
         Origin origin = new CraftOrigin(identifier);
 
         try {
             Gson gson = new Gson();
-            Reader reader = new FileReader(originFile);
             JsonReader jsonReader = new JsonReader(reader);
             JsonObject jsonObject = gson.fromJson(jsonReader, JsonObject.class);
 
@@ -302,20 +299,16 @@ public class CraftLoader implements Loader {
         return null;
     }
 
-    public Power loadPowerFromFile(File powerFile, String identifierKey) {
-        return loadPowerFromFile(powerFile, new Identifier(identifierKey, FilenameUtils.getBaseName(powerFile.getName())));
+    @Override
+    public Power loadPowerFromFile(Reader reader, File zipFileSource, String identifierValue) {
+        return loadPowerFromFile(reader, new Identifier(FilenameUtils.getBaseName(zipFileSource.getName()), identifierValue));
     }
 
-    public Power loadPowerFromFile(File powerFile) {
-        return loadPowerFromFile(powerFile, new Identifier("undefined", FilenameUtils.getBaseName(powerFile.getName())));
-    }
-
-    private Power loadPowerFromFile(File powerFile, Identifier identifier) {
+    private Power loadPowerFromFile(Reader reader, Identifier identifier) {
         Power power = null;
 
         try {
             Gson gson = new Gson();
-            Reader reader = new FileReader(powerFile);
             JsonReader jsonReader = new JsonReader(reader);
             JsonObject jsonObject = gson.fromJson(jsonReader, JsonObject.class);
 
@@ -634,4 +627,24 @@ public class CraftLoader implements Loader {
 
     @Override
     public void setPlugin(OriginsBukkitPlugin plugin) {}
+
+    @Override
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftLoader)) return false;
+        CraftLoader that = (CraftLoader) itemStack;
+        return Objects.equals(getPlugin(), that.getPlugin());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPlugin());
+    }
+
+    @Override
+    public String toString() {
+        return "CraftLoader{" +
+                "plugin=" + plugin +
+                '}';
+    }
 }

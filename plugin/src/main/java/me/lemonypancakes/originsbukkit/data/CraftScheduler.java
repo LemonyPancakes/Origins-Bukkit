@@ -39,10 +39,10 @@ public class CraftScheduler implements Scheduler {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CraftScheduler)) return false;
-        CraftScheduler that = (CraftScheduler) o;
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftScheduler)) return false;
+        CraftScheduler that = (CraftScheduler) itemStack;
         return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getBukkitTask(), that.getBukkitTask());
     }
 
@@ -53,7 +53,7 @@ public class CraftScheduler implements Scheduler {
 
     @Override
     public String toString() {
-        return "SchedulerContainer{" +
+        return "CraftScheduler{" +
                 "identifier=" + identifier +
                 ", bukkitTask=" + bukkitTask +
                 '}';

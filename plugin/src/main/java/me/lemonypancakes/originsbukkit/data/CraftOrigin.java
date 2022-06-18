@@ -161,10 +161,10 @@ public class CraftOrigin implements Origin {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CraftOrigin)) return false;
-        CraftOrigin that = (CraftOrigin) o;
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftOrigin)) return false;
+        CraftOrigin that = (CraftOrigin) itemStack;
         return Objects.equals(getIdentifier(), that.getIdentifier()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getDisplayName(), that.getDisplayName()) && Arrays.equals(getDescription(), that.getDescription()) && getImpact() == that.getImpact() && Objects.equals(getIcon(), that.getIcon()) && Arrays.equals(getAuthors(), that.getAuthors()) && Objects.equals(getPowers(), that.getPowers()) && Objects.equals(getInventoryGUI(), that.getInventoryGUI());
     }
 
@@ -178,7 +178,7 @@ public class CraftOrigin implements Origin {
 
     @Override
     public String toString() {
-        return "OriginContainer{" +
+        return "CraftOrigin{" +
                 "identifier=" + identifier +
                 ", jsonObject=" + jsonObject +
                 ", displayName='" + displayName + '\'' +

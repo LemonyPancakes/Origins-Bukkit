@@ -18,10 +18,10 @@ public class CraftDataType<T> implements DataType<T> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CraftDataType)) return false;
-        CraftDataType<?> that = (CraftDataType<?>) o;
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftDataType)) return false;
+        CraftDataType<?> that = (CraftDataType<?>) itemStack;
         return Objects.equals(getType(), that.getType());
     }
 

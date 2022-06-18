@@ -6,16 +6,13 @@ import me.lemonypancakes.originsbukkit.wrapper.ConditionAction;
 import me.lemonypancakes.originsbukkit.wrapper.Element;
 
 import java.io.File;
+import java.io.Reader;
 
 public interface Loader extends OriginsBukkitPluginHolder {
 
-    Origin loadOriginFromFile(File originFile, String identifierKey);
+    Origin loadOriginFromFile(Reader reader, File zipFileSource, String identifierValue);
 
-    Origin loadOriginFromFile(File originFile);
-
-    Power loadPowerFromFile(File powerFile, String identifierKey);
-
-    Power loadPowerFromFile(File powerFile);
+    Power loadPowerFromFile(Reader reader, File zipFileSource, String identifierValue);
 
     Tag<?> loadTagFromFile(File tagFile, String identifierKey);
 

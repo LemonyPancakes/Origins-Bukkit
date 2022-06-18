@@ -44,7 +44,7 @@ public class CraftPreventSleepPower extends CraftPower {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    private void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {
@@ -69,7 +69,7 @@ public class CraftPreventSleepPower extends CraftPower {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    private void onPlayerBedEnter(PlayerBedEnterEvent event) {
+    public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {

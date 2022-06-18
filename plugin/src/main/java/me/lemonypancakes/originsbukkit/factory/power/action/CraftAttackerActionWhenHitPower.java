@@ -32,7 +32,7 @@ public class CraftAttackerActionWhenHitPower extends CraftCooldownPower {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    private void onEntityDamage(EntityDamageByEntityEvent event) {
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
         Entity targetEntity = event.getEntity();
 
         if (targetEntity instanceof Player) {

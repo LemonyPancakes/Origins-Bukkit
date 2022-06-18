@@ -4,12 +4,12 @@ import me.lemonypancakes.originsbukkit.DataType;
 
 import java.util.function.Consumer;
 
-public class Test<T> {
+public class Testing<T> {
 
     private final DataType<T> dataType;
     private final Consumer<T> consumer;
 
-    public Test(DataType<T> dataType, Consumer<T> consumer) {
+    public Testing(DataType<T> dataType, Consumer<T> consumer) {
         this.dataType = dataType;
         this.consumer = consumer;
     }

@@ -31,8 +31,8 @@ public class CraftDamageOverTimePower extends CraftPower {
         if (jsonObject.has("damage")) {
             this.damage = jsonObject.get("damage").getAsDouble();
         }
-        if (jsonObject.has("damageEasy")) {
-            this.damageEasy = jsonObject.get("damageEasy").getAsDouble();
+        if (jsonObject.has("damage_easy")) {
+            this.damageEasy = jsonObject.get("damage_easy").getAsDouble();
         }
     }
 
@@ -54,10 +54,12 @@ public class CraftDamageOverTimePower extends CraftPower {
 
                 @Override
                 public void run() {
-                    if (getCondition().test(player) && player.getWorld().getDifficulty() == Difficulty.EASY) {
-                        player.damage(damageEasy);
-                    } else {
-                        player.damage(damage);
+                    if (getCondition().test(player)) {
+                        if (player.getWorld().getDifficulty() == Difficulty.EASY) {
+                            player.damage(damageEasy);
+                        } else {
+                            player.damage(damage);
+                        }
                     }
                 }
             }.runTaskTimer(getPlugin().getJavaPlugin(), onsetDelay, interval);

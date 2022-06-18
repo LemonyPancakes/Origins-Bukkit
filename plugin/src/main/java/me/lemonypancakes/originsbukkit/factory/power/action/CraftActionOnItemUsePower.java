@@ -34,7 +34,7 @@ public class CraftActionOnItemUsePower extends CraftPower {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {

@@ -23,14 +23,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <outputDirectory>D:\Minecraft Server Files (DON'T DELETE)\TEST SERVERS (DON'T DELETE)\TEST SERVER 4 (PLUGIN DEBUGGING - 1.18.2)\plugins</outputDirectory>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

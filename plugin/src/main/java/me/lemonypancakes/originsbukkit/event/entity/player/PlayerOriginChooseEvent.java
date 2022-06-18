@@ -1,4 +1,4 @@
-package me.lemonypancakes.originsbukkit.event.player;
+package me.lemonypancakes.originsbukkit.event.entity.player;
 
 import me.lemonypancakes.originsbukkit.Origin;
 import org.bukkit.entity.Player;

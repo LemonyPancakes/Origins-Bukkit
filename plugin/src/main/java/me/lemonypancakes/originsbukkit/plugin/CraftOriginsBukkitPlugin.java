@@ -25,13 +25,14 @@ import me.lemonypancakes.originsbukkit.listener.entity.EntityPickupItemEventList
 import me.lemonypancakes.originsbukkit.listener.entity.player.PlayerInteractAtEntityEventListener;
 import me.lemonypancakes.originsbukkit.listener.entity.player.PlayerInteractEntityEventListener;
 import me.lemonypancakes.originsbukkit.listener.entity.player.PlayerInteractEventListener;
+import me.lemonypancakes.originsbukkit.listener.entity.player.PlayerSwapHandItemsEventListener;
 import me.lemonypancakes.originsbukkit.listener.inventory.InventoryClickEventListener;
 import me.lemonypancakes.originsbukkit.listener.inventory.InventoryCloseEventListener;
 import me.lemonypancakes.originsbukkit.listener.world.DayAndNightCycleListener;
 import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Config;
 import me.lemonypancakes.originsbukkit.util.Identifier;
-import me.lemonypancakes.originsbukkit.util.StartupUtils;
+import me.lemonypancakes.originsbukkit.util.StartupUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -69,8 +70,8 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
         ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
         ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
         ChatUtil.sendConsoleMessage("&3[Origins-Bukkit]");
-        StartupUtils.checkServerCompatibility(this);
-        StartupUtils.checkServerDependencies(this);
+        StartupUtil.checkServerCompatibility(this);
+        StartupUtil.checkServerDependencies(this);
 
         if (isEnabled()) {
             new BlockBreakEventListener(this);
@@ -78,6 +79,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new PlayerInteractAtEntityEventListener(this);
             new PlayerInteractEntityEventListener(this);
             new PlayerInteractEventListener(this);
+            new PlayerSwapHandItemsEventListener(this);
             new EntityDamageEventListener(this);
             new EntityPickupItemEventListener(this);
             new InventoryClickEventListener(this);
@@ -98,9 +100,9 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new EntityConditions(this);
             new FluidConditions(this);
             new ItemConditions(this);
-            StartupUtils.registerFactories(this);
-            StartupUtils.loadExpansions(this);
-            StartupUtils.registerOriginPacks(this);
+            StartupUtil.registerFactories(this);
+            StartupUtil.loadExpansions(this);
+            StartupUtil.registerOriginPacks(this);
             switch (Config.STORAGE_METHOD.toString()) {
                 case "INTERNAL":
                     this.storage = new BukkitStorage();
@@ -119,8 +121,14 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                 private void onPlayerJoin(PlayerJoinEvent event) {
                     Player player = event.getPlayer();
                     UUID uuid = player.getUniqueId();
+                    OriginPlayer originPlayer = new CraftOriginPlayer(CraftOriginsBukkitPlugin.this, uuid);
 
-                    originPlayers.put(uuid, new CraftOriginPlayer(CraftOriginsBukkitPlugin.this, uuid));
+                    originPlayers.put(uuid, originPlayer);
+                    Origin origin = originPlayer.getOrigin();
+
+                    if (origin != null) {
+                        origin.getPowers().forEach(power -> power.addMember(player));
+                    }
                 }
             }, this);
             Bukkit.getPluginManager().registerEvents(new Listener() {
@@ -136,8 +144,14 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             }, this);
             Bukkit.getOnlinePlayers().forEach(player -> {
                 UUID uuid = player.getUniqueId();
+                OriginPlayer originPlayer = new CraftOriginPlayer(CraftOriginsBukkitPlugin.this, uuid);
 
-                originPlayers.put(uuid, new CraftOriginPlayer(this, uuid));
+                originPlayers.put(uuid, originPlayer);
+                Origin origin = originPlayer.getOrigin();
+
+                if (origin != null) {
+                    origin.getPowers().forEach(power -> power.addMember(player));
+                }
             });
 
             ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");

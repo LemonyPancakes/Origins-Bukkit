@@ -35,7 +35,7 @@ public class CraftSelfActionOnKill extends CraftCooldownPower {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity actorEntity = event.getDamager();
 
         if (actorEntity instanceof Player) {

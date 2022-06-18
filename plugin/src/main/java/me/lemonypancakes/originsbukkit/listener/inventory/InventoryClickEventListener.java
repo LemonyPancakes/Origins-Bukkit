@@ -3,7 +3,7 @@ package me.lemonypancakes.originsbukkit.listener.inventory;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.data.storage.Misc;
-import me.lemonypancakes.originsbukkit.event.player.PlayerOriginChooseEvent;
+import me.lemonypancakes.originsbukkit.event.entity.player.PlayerOriginChooseEvent;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -88,6 +88,7 @@ public class InventoryClickEventListener implements Listener {
                                         if (!playerOriginChooseEvent.isCancelled()) {
 
                                             plugin.getOriginPlayer(player).setOrigin(playerOriginChooseEvent.getOrigin());
+                                            origin.getPowers().forEach(power -> power.addMember(player));
                                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
                                         } else {
                                             player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);

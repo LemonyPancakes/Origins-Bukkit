@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ServerUtils {
+public class ServerUtil {
 
     private static final List<String> SUPPORTED_VERSIONS = new ArrayList<>(
-            Arrays.asList("1.17", "1.17.1", "1.18", "1.18.1", "1.18.2"));
+            Arrays.asList("1.17", "1.17.1", "1.18", "1.18.1", "1.18.2", "1.19"));
 
     public static String getServerSoftware() {
         return Bukkit.getVersion().split("-")[1];
@@ -44,7 +44,6 @@ public class ServerUtils {
             case "PURPUR":
             case "AIRPLANE":
                 return true;
-            case "YATOPIA":
             case "CUSTOM":
             default:
                 return false;
@@ -56,18 +55,11 @@ public class ServerUtils {
             ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
             ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
         } else {
-            if (getServerSoftware().equalsIgnoreCase("YATOPIA")) {
-                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
-                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
-                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Warning! You are using an unstable minecraft server software");
-                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] that might break some plugin features! Use at your own risk.");
-            } else {
-                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
-                ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
-                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Custom Software Detected! You are using a custom server software.");
-                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] There is no assurance of this plugin fully supporting the custom software!");
-                ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Use at your own risk.");
-            }
+            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
+            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
+            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Custom Software Detected! You are using a custom server software.");
+            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] There is no assurance of this plugin fully supporting the custom software!");
+            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Use at your own risk.");
         }
     }
 

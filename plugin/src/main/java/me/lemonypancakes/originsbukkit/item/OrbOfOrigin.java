@@ -18,7 +18,7 @@
 package me.lemonypancakes.originsbukkit.item;
 
 import me.lemonypancakes.originsbukkit.OriginItem;
-import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtils;
+import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtil;
 import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Config;
 import me.lemonypancakes.originsbukkit.util.Identifier;
@@ -54,7 +54,7 @@ public class OrbOfOrigin implements OriginItem {
 
 
         if (itemMeta != null) {
-            BukkitPersistentDataUtils.setPersistentData(
+            BukkitPersistentDataUtil.setPersistentData(
                     itemMeta,
                     "origins-bukkit:custom_item",
                     PersistentDataType.STRING,

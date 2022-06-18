@@ -88,9 +88,6 @@ public class CraftOriginPlayer implements OriginPlayer {
                         Misc.VIEWERS.remove(getUUID());
                         getPlayer().closeInventory();
                     }
-                    if (origin.getPowers() != null) {
-                        origin.getPowers().forEach(power -> power.addMember(getPlayer()));
-                    }
                     plugin.getStorage().setOrigin(getPlayer(), origin.getIdentifier());
                 }
             }
@@ -126,22 +123,23 @@ public class CraftOriginPlayer implements OriginPlayer {
     public void setPlugin(OriginsBukkitPlugin plugin) {}
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CraftOriginPlayer)) return false;
-        CraftOriginPlayer that = (CraftOriginPlayer) o;
-        return Objects.equals(getUUID(), that.getUUID()) && Objects.equals(getSchedulers(), that.getSchedulers()) && Objects.equals(getOrigin(), that.getOrigin());
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftOriginPlayer)) return false;
+        CraftOriginPlayer that = (CraftOriginPlayer) itemStack;
+        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(uuid, that.uuid) && Objects.equals(getSchedulers(), that.getSchedulers()) && Objects.equals(getOrigin(), that.getOrigin());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUUID(), getSchedulers(), getOrigin());
+        return Objects.hash(getPlugin(), uuid, getSchedulers(), getOrigin());
     }
 
     @Override
     public String toString() {
-        return "OriginPlayerContainer{" +
-                "playerUUID=" + uuid +
+        return "CraftOriginPlayer{" +
+                "plugin=" + plugin +
+                ", uuid=" + uuid +
                 ", schedulers=" + schedulers +
                 ", origin=" + origin +
                 '}';

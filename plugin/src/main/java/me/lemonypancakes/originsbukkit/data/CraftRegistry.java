@@ -335,4 +335,31 @@ public class CraftRegistry implements Registry {
 
     @Override
     public void setPlugin(OriginsBukkitPlugin plugin) {}
+
+    @Override
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof CraftRegistry)) return false;
+        CraftRegistry that = (CraftRegistry) itemStack;
+        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(actionFactoryMap, that.actionFactoryMap) && Objects.equals(conditionFactoryMap, that.conditionFactoryMap) && Objects.equals(originMap, that.originMap) && Objects.equals(powerMap, that.powerMap) && Objects.equals(powerFactoryMap, that.powerFactoryMap) && Objects.equals(originItemMap, that.originItemMap) && Objects.equals(getOrigins(), that.getOrigins());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPlugin(), actionFactoryMap, conditionFactoryMap, originMap, powerMap, powerFactoryMap, originItemMap, getOrigins());
+    }
+
+    @Override
+    public String toString() {
+        return "CraftRegistry{" +
+                "plugin=" + plugin +
+                ", actionFactoryMap=" + actionFactoryMap +
+                ", conditionFactoryMap=" + conditionFactoryMap +
+                ", originMap=" + originMap +
+                ", powerMap=" + powerMap +
+                ", powerFactoryMap=" + powerFactoryMap +
+                ", originItemMap=" + originItemMap +
+                ", origins=" + origins +
+                '}';
+    }
 }

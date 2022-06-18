@@ -1,6 +1,4 @@
-package me.lemonypancakes;
-
-import me.lemonypancakes.originsbukkit.Condition;
+package me.lemonypancakes.originsbukkit;
 
 public interface ConditionHolder<T> {
 

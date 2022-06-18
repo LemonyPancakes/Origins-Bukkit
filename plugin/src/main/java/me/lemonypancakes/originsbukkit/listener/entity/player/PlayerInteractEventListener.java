@@ -1,7 +1,7 @@
 package me.lemonypancakes.originsbukkit.listener.entity.player;
 
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
-import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtils;
+import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -50,7 +50,7 @@ public class PlayerInteractEventListener implements Listener {
                     ItemMeta itemMeta = itemStack.getItemMeta();
 
                     if (itemMeta != null) {
-                        String data = BukkitPersistentDataUtils.getPersistentData(itemMeta, "origins-bukkit:custom_item", PersistentDataType.STRING);
+                        String data = BukkitPersistentDataUtil.getPersistentData(itemMeta, "origins-bukkit:custom_item", PersistentDataType.STRING);
 
                         if (data != null) {
                             if (data.equals("origins-bukkit:orb_of_origin")) {
