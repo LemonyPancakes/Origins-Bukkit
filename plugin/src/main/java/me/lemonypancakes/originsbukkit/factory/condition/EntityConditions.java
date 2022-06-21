@@ -224,6 +224,42 @@ public class EntityConditions {
             }
             return false;
         })));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "status_effect"), DataType.ENTITY, new CraftCondition<>(plugin, null, (jsonObject, entity) -> {
+            if (entity != null) {
+                if (entity instanceof LivingEntity) {
+                    LivingEntity livingEntity = (LivingEntity) entity;
+                    PotionEffectType potionEffectType = null;
+                    int duration = 100;
+                    int amplifier = 0;
+                    boolean isAmbient = false;
+                    boolean showParticles = true;
+                    boolean showIcon = true;
+
+                    if (jsonObject.has("effect")) {
+                        potionEffectType = PotionEffectType.getByName(jsonObject.get("effect").getAsString());
+                    }
+                    if (jsonObject.has("duration")) {
+                        duration = jsonObject.get("duration").getAsInt();
+                    }
+                    if (jsonObject.has("amplifier")) {
+                        amplifier = jsonObject.get("amplifier").getAsInt();
+                    }
+                    if (jsonObject.has("is_ambient")) {
+                        isAmbient = jsonObject.get("is_ambient").getAsBoolean();
+                    }
+                    if (jsonObject.has("show_particles")) {
+                        showParticles = jsonObject.get("show_particles").getAsBoolean();
+                    }
+                    if (jsonObject.has("show_icon")) {
+                        showIcon = jsonObject.get("show_icon").getAsBoolean();
+                    }
+                    if (potionEffectType != null) {
+                        return livingEntity.hasPotionEffect(potionEffectType);
+                    }
+                }
+            }
+            return false;
+        })));
         plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "swimming"), DataType.ENTITY, new CraftCondition<>(plugin, null, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {

@@ -20,8 +20,6 @@ public interface Registry extends OriginsBukkitPluginHolder {
 
     void register(OriginItem originItem);
 
-    void register(Tag<?> tag);
-
     <T> void unregisterActionFactory(DataType<T> dataType, Identifier identifier);
 
     <T> void unregisterConditionFactory(DataType<T> dataType, Identifier identifier);
@@ -33,8 +31,6 @@ public interface Registry extends OriginsBukkitPluginHolder {
     void unregisterPowerFactory(Identifier identifier);
 
     void unregisterOriginItem(Identifier identifier);
-
-    void unregisterTag(Identifier identifier);
 
     <T> boolean hasActionFactory(DataType<T> dataType, Identifier identifier);
 
@@ -48,8 +44,6 @@ public interface Registry extends OriginsBukkitPluginHolder {
 
     boolean hasOriginItem(Identifier identifier);
 
-    boolean hasTag(Identifier identifier);
-
     <T> Action.Factory<T> getActionFactory(DataType<T> dataType, Identifier identifier);
 
     <T> Condition.Factory<T> getConditionFactory(DataType<T> dataType, Identifier identifier);
@@ -61,9 +55,6 @@ public interface Registry extends OriginsBukkitPluginHolder {
     Power.Factory getPowerFactory(Identifier identifier);
 
     OriginItem getOriginItem(Identifier identifier);
-
-    @SuppressWarnings("unchecked")
-    <T> Tag<T> getTag(Identifier identifier);
 
     Set<DataType<?>> getActionFactoriesKeySet();
 

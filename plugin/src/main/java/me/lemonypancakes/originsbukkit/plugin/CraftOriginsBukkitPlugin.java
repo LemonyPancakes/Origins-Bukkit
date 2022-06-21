@@ -9,9 +9,9 @@ import me.lemonypancakes.originsbukkit.config.CraftConfigHandler;
 import me.lemonypancakes.originsbukkit.data.CraftLoader;
 import me.lemonypancakes.originsbukkit.data.CraftOriginPlayer;
 import me.lemonypancakes.originsbukkit.data.CraftRegistry;
-import me.lemonypancakes.originsbukkit.data.storage.BukkitStorage;
-import me.lemonypancakes.originsbukkit.data.storage.Misc;
-import me.lemonypancakes.originsbukkit.data.storage.MySQLStorage;
+import me.lemonypancakes.originsbukkit.data.storage.CraftBukkitStorage;
+import me.lemonypancakes.originsbukkit.data.storage.CraftMySQLStorage;
+import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.factory.action.BiEntityActions;
 import me.lemonypancakes.originsbukkit.factory.action.BlockActions;
 import me.lemonypancakes.originsbukkit.factory.action.EntityActions;
@@ -29,10 +29,8 @@ import me.lemonypancakes.originsbukkit.listener.entity.player.PlayerSwapHandItem
 import me.lemonypancakes.originsbukkit.listener.inventory.InventoryClickEventListener;
 import me.lemonypancakes.originsbukkit.listener.inventory.InventoryCloseEventListener;
 import me.lemonypancakes.originsbukkit.listener.world.DayAndNightCycleListener;
-import me.lemonypancakes.originsbukkit.util.ChatUtil;
-import me.lemonypancakes.originsbukkit.util.Config;
-import me.lemonypancakes.originsbukkit.util.Identifier;
-import me.lemonypancakes.originsbukkit.util.StartupUtil;
+import me.lemonypancakes.originsbukkit.metrics.Metrics;
+import me.lemonypancakes.originsbukkit.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -43,6 +41,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -74,6 +73,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
         StartupUtil.checkServerDependencies(this);
 
         if (isEnabled()) {
+            new Metrics(this, 13236);
             new BlockBreakEventListener(this);
             new BlockPlaceEventListener(this);
             new PlayerInteractAtEntityEventListener(this);
@@ -105,10 +105,10 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             StartupUtil.registerOriginPacks(this);
             switch (Config.STORAGE_METHOD.toString()) {
                 case "INTERNAL":
-                    this.storage = new BukkitStorage();
+                    this.storage = new CraftBukkitStorage();
                     break;
                 case "MY_SQL":
-                    this.storage = new MySQLStorage(this);
+                    this.storage = new CraftMySQLStorage(this);
                     break;
                 default:
                     ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Unknown storage method: &e" + Config.STORAGE_METHOD + ".");
@@ -153,6 +153,26 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                     origin.getPowers().forEach(power -> power.addMember(player));
                 }
             });
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        UpdateChecker updateChecker = new UpdateChecker(CraftOriginsBukkitPlugin.this, 97926);
+                        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] Checking for updates...");
+
+                        if (updateChecker.checkForUpdates()) {
+                            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] A new update is available!");
+                            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Running on &c" + getDescription().getVersion() + " &6while latest is &a" + updateChecker.getLatestVersion() + "&6.");
+                            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] &e&n" + updateChecker.getResourceURL());
+                        } else {
+                            ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] No updates found.");
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }.runTaskLaterAsynchronously(this, 8L);
 
             ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
         }

@@ -2,7 +2,7 @@ package me.lemonypancakes.originsbukkit.listener.inventory;
 
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
-import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.event.entity.player.PlayerOriginChooseEvent;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;

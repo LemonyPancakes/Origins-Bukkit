@@ -1,5 +1,6 @@
 package me.lemonypancakes.originsbukkit.factory.condition;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.Condition;
 import me.lemonypancakes.originsbukkit.DataType;
@@ -14,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Waterlogged;
 
+import java.util.Arrays;
 import java.util.function.BiPredicate;
 
 public class BlockConditions {
@@ -37,6 +39,18 @@ public class BlockConditions {
         plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
             if (block != null) {
                 return block.getType() == Material.valueOf(jsonObject.get("block").getAsString());
+            }
+            return false;
+        })));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "match_blocks"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+            if (block != null) {
+                if (jsonObject.has("blocks")) {
+                    Material[] blocks = new Gson().fromJson(jsonObject.get("blocks"), Material[].class);
+
+                    if (blocks != null) {
+                        return Arrays.asList(blocks).contains(block.getType());
+                    }
+                }
             }
             return false;
         })));
@@ -118,12 +132,12 @@ public class BlockConditions {
 
     public static class Adjacent extends CraftCondition<Block> {
 
-        private Condition<Block> condition;
+        private Condition<Block> adjacentCondition;
 
         public Adjacent(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, Block> biPredicate) {
             super(plugin, jsonObject, DataType.BLOCK, biPredicate);
             if (jsonObject != null) {
-                this.condition = plugin.getLoader().loadCondition(DataType.BLOCK, jsonObject);
+                this.adjacentCondition = plugin.getLoader().loadCondition(DataType.BLOCK, jsonObject, "adjacent_condition");
                 setBiPredicate((jsonObject1, block) -> {
                     if (block != null) {
                         return Comparison.parseComparison(jsonObject).compare(count(block), jsonObject);
@@ -140,7 +154,7 @@ public class BlockConditions {
                 if (value.ordinal() >= 6) {
                     break;
                 }
-                if (condition.test(block.getRelative(value))) {
+                if (adjacentCondition.test(block.getRelative(value))) {
                     count++;
                 }
             }
@@ -148,8 +162,13 @@ public class BlockConditions {
         }
 
         @Override
-        public Condition<Block> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+        public Condition<Block> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<Block> dataType) {
             return new Adjacent(plugin, jsonObject, getBiPredicate());
+        }
+
+        @Override
+        public Condition<Block> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
+            return newInstance(plugin, jsonObject, DataType.BLOCK);
         }
     }
 

@@ -68,9 +68,6 @@ public class UpdateChecker {
         String A = this.newVersion.split(" ")[1].split("-")[1];
         String B = plugin.getJavaPlugin().getDescription().getVersion().split(" ")[1].split("-")[1];
 
-        if (newVerson > currentVersion || newVerson >= currentVersion && !Objects.equals(A, B)) {
-            return true;
-        }
-        return false;
+        return newVerson > currentVersion || newVerson >= currentVersion && !Objects.equals(A, B);
     }
 }

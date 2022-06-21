@@ -1,9 +1,9 @@
 name: Origins-Bukkit
-version: '${project.version}'
+version: 'Build 3-ALPHA'
 main: me.lemonypancakes.originsbukkit.plugin.CraftOriginsBukkitPlugin
 softdepend:
   - ProtocolLib
-  - PancakeLibCore
+  - LemonLib
   - PacketWrapper
 api-version: 1.17
 authors: [ LemonyPancakes ]

@@ -88,13 +88,9 @@ public class CraftCondition<T> implements Condition<T> {
             return true;
         }
         if (isInverted()) {
-            return !biPredicate.test(
-                    getJsonObject(),
-                    t);
+            return !biPredicate.test(getJsonObject(), t);
         } else {
-            return biPredicate.test(
-                    getJsonObject(),
-                    t);
+            return biPredicate.test(getJsonObject(), t);
         }
     }
 

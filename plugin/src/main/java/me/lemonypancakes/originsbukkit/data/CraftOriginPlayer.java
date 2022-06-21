@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginPlayer;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
-import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
@@ -18,13 +18,14 @@ public class CraftOriginPlayer implements OriginPlayer {
     private final OriginsBukkitPlugin plugin;
     private final UUID uuid;
     private final Schedulers schedulers;
-    private Origin origin;
     private JsonObject metadata;
+    private Origin origin;
 
     public CraftOriginPlayer(OriginsBukkitPlugin plugin, UUID uuid) {
         this.plugin = plugin;
         this.uuid = uuid;
         this.schedulers = new Schedulers();
+        this.metadata = plugin.getStorage().getMetadata(getPlayer());
 
         if (plugin.getStorage().getOrigin(getPlayer()) != null) {
             Identifier originIdentifier = plugin.getStorage().getOrigin(getPlayer());

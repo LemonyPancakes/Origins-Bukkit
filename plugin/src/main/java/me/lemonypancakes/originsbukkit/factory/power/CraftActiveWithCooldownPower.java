@@ -42,7 +42,7 @@ public class CraftActiveWithCooldownPower extends CraftCooldownPower implements 
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerKeyEvent(PlayerKeyEvent event) {
+    public void onPlayerKey(PlayerKeyEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {

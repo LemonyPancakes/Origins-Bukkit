@@ -6,13 +6,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import me.lemonypancakes.originsbukkit.*;
-import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.Impact;
 import me.lemonypancakes.originsbukkit.wrapper.ConditionAction;
 import me.lemonypancakes.originsbukkit.wrapper.Element;
-import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -20,8 +19,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -39,8 +36,8 @@ public class CraftLoader implements Loader {
     }
 
     @Override
-    public Origin loadOriginFromFile(Reader reader, File zipFileSource, String identifierValue) {
-        return loadOriginFromFile(reader, new Identifier(FilenameUtils.getBaseName(zipFileSource.getName()), identifierValue));
+    public Origin loadOriginFromFile(Reader reader, String identifierKey, String identifierValue) {
+        return loadOriginFromFile(reader, new Identifier(identifierKey, identifierValue));
     }
 
     private Origin loadOriginFromFile(Reader reader, Identifier identifier) {
@@ -300,8 +297,8 @@ public class CraftLoader implements Loader {
     }
 
     @Override
-    public Power loadPowerFromFile(Reader reader, File zipFileSource, String identifierValue) {
-        return loadPowerFromFile(reader, new Identifier(FilenameUtils.getBaseName(zipFileSource.getName()), identifierValue));
+    public Power loadPowerFromFile(Reader reader, String identifierKey, String identifierValue) {
+        return loadPowerFromFile(reader, new Identifier(identifierKey, identifierValue));
     }
 
     private Power loadPowerFromFile(Reader reader, Identifier identifier) {
@@ -339,38 +336,6 @@ public class CraftLoader implements Loader {
             e.printStackTrace();
         }
         return power;
-    }
-
-    public Tag<?> loadTagFromFile(File tagFile, String identifierKey) {
-        return loadTagFromFile(tagFile, new Identifier(identifierKey, FilenameUtils.getBaseName(tagFile.getName())));
-    }
-
-    public Tag<?> loadTagFromFile(File tagFile) {
-        return loadTagFromFile(tagFile, new Identifier("undefined", FilenameUtils.getBaseName(tagFile.getName())));
-    }
-
-    private Tag<?> loadTagFromFile(File tagFile, Identifier identifier) {
-        try {
-            Gson gson = new Gson();
-            Reader reader = new FileReader(tagFile);
-            JsonReader jsonReader = new JsonReader(reader);
-            JsonObject jsonObject = gson.fromJson(jsonReader, JsonObject.class);
-
-            if (jsonObject != null) {
-                if (jsonObject.has("materials")) {
-                    Material[] materials = gson.fromJson(jsonObject.get("materials"), Material[].class);
-
-                    if (materials != null) {
-                        //return new CraftTag<Material>(identifier);
-                    }
-                }
-            }
-            jsonReader.close();
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override

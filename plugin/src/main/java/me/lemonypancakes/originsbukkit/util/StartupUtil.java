@@ -8,8 +8,7 @@ import me.lemonypancakes.originsbukkit.factory.power.action.*;
 import me.lemonypancakes.originsbukkit.factory.power.modify.*;
 import me.lemonypancakes.originsbukkit.factory.power.prevent.*;
 import me.lemonypancakes.originsbukkit.factory.power.regular.*;
-import me.lemonypancakes.originsbukkit.factory.power.temporary.CraftThrowEnderPearlPower;
-import me.lemonypancakes.originsbukkit.factory.power.regular.CraftWaterBreathingPower;
+import me.lemonypancakes.originsbukkit.factory.power.temporary.*;
 import org.apache.commons.io.FilenameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,10 +18,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -46,6 +44,7 @@ public final class StartupUtil {
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:fire_immunity"), new CraftFireImmunityPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:fire_projectile"), new CraftFireProjectilePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:freeze"), new CraftFreezePower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:inventory"), new CraftInventoryPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:invisibility"), new CraftInvisibilityPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:invulnerability"), new CraftInvulnerabilityPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:keep_inventory"), new CraftKeepInventoryPower(plugin)));
@@ -54,6 +53,7 @@ public final class StartupUtil {
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:particle"), new CraftParticlePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_glow"), new CraftSelfGlowPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:swimming"), new CraftSwimmingPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_breathing"), new CraftWaterBreathingPower(plugin)));
 
         //MODIFY
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_break_speed"), new CraftModifyBreakSpeedPower(plugin)));
@@ -71,6 +71,7 @@ public final class StartupUtil {
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_hit"), new CraftActionOnHitPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_item_use"), new CraftActionOnItemUsePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_wake_up"), new CraftActionOnWakeUpPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_over_time"), new CraftActionOverTimePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_when_damage_taken"), new CraftActionWhenDamageTakenPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_when_hit"), new CraftActionWhenHitPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:attacker_action_when_hit"), new CraftAttackerActionWhenHitPower(plugin)));
@@ -81,6 +82,7 @@ public final class StartupUtil {
 
         //PREVENT
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_being_used"), new CraftPreventBeingUsedPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_block_break"), new CraftPreventBlockBreakPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_block_use"), new CraftPreventBlockUsePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_death"), new CraftPreventDeathPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_elytra_flight"), new CraftPreventElytraFlightPower(plugin)));
@@ -88,8 +90,15 @@ public final class StartupUtil {
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_sleep"), new CraftPreventSleepPower(plugin)));
 
         //TEMPORARY
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:aerial_combatant"), new CraftAerialCombatantPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:burning_wrath"), new CraftBurningWrathPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:claustrophobia"), new CraftClaustrophobiaPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_potions"), new CraftDamageFromPotionsPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_snowballs"), new CraftDamageFromSnowballsPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:light_armor"), new CraftLightArmorPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:more_kinetic_damage"), new CraftMoreKineticDamagePower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:no_shield"), new CraftNoShieldPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:throw_ender_pearl"), new CraftThrowEnderPearlPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_breathing"), new CraftWaterBreathingPower(plugin)));
     }
 
     public static void loadExpansions(OriginsBukkitPlugin plugin) {
@@ -120,85 +129,160 @@ public final class StartupUtil {
 
     public static void registerOriginPacks(OriginsBukkitPlugin plugin) {
         String s = File.separator;
-        File file = new File(plugin.getJavaPlugin().getDataFolder().getAbsolutePath() + s + "origins");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        File[] packs = file.listFiles();
+        File serverContainer = new File(plugin.getJavaPlugin().getServer().getWorldContainer().getAbsolutePath());
+        File serverProperties = new File(serverContainer.getAbsolutePath() + s + "server.properties");
 
-        if (packs != null) {
-            for (File pack : packs) {
-                if (pack.getName().endsWith(".zip")) {
-                    try {
-                        ZipFile zipFile = new ZipFile(pack);
-                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        try (InputStream stream = Files.newInputStream(serverProperties.toPath())) {
+            Properties properties = new Properties();
 
-                        while (entries.hasMoreElements()) {
-                            ZipEntry zipEntry = entries.nextElement();
-                            String zipEntryName = zipEntry.getName();
-                            InputStream inputStream = zipFile.getInputStream(zipEntry);
-                            Reader reader = new InputStreamReader(inputStream);
+            properties.load(stream);
+            File defaultWorld = new File(serverContainer.getAbsolutePath() + s + properties.getProperty("level-name"));
+            File datapacksFolder = new File(defaultWorld.getAbsolutePath() + s + "datapacks");
+            InputStream originsBukkitZip = plugin.getJavaPlugin().getResource("datapacks" + s + "origins-bukkit.zip");
 
-                            if (zipEntryName.startsWith("tags/") && zipEntryName.endsWith(".json")) {
-                                plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, pack, FilenameUtils.getBaseName(zipEntryName.replaceFirst("powers/", ""))));
+            if (originsBukkitZip != null) {
+                Files.copy(originsBukkitZip, new File(datapacksFolder.getAbsolutePath() + s + "origins-bukkit.zip").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                originsBukkitZip.close();
+            }
+            File[] packs = datapacksFolder.listFiles();
+
+            if (packs != null) {
+                for (File pack : packs) {
+                    if (pack.isDirectory()) {
+                        File[] dataFolder = new File(pack.getAbsolutePath() + s + "data").listFiles();
+
+                        if (dataFolder != null) {
+                            for (File file : dataFolder) {
+                                if (file.isDirectory()) {
+                                    File[] originOriginFiles = file.listFiles();
+
+                                    if (originOriginFiles != null) {
+                                        for (File originOriginFile : originOriginFiles) {
+                                            if (originOriginFile.isDirectory()) {
+                                                if (originOriginFile.getName().equals("powers")) {
+                                                    File[] powerFiles = originOriginFile.listFiles();
+
+                                                    if (powerFiles != null) {
+                                                        for (File powerFile : powerFiles) {
+                                                            Reader reader = new FileReader(powerFile);
+
+                                                            plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, file.getName(), FilenameUtils.getBaseName(powerFile.getName())));
+                                                            reader.close();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            reader.close();
-                            inputStream.close();
                         }
-                        zipFile.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    } else if (pack.getName().endsWith(".zip")) {
+                        boolean resume = true;
+
+                        for (File file : packs) {
+                            if (file.getName().equals(FilenameUtils.getBaseName(pack.getName()))) {
+                                resume = false;
+                                break;
+                            }
+                        }
+                        if (resume) {
+                            try {
+                                ZipFile zipFile = new ZipFile(pack);
+                                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+                                while (entries.hasMoreElements()) {
+                                    ZipEntry zipEntry = entries.nextElement();
+                                    String zipEntryName = zipEntry.getName();
+                                    InputStream inputStream = zipFile.getInputStream(zipEntry);
+                                    Reader reader = new InputStreamReader(inputStream);
+                                    String[] split = zipEntryName.split(s);
+
+                                    if (split.length >= 3) {
+                                        if (split[0].equals("data") && split[2].equals("powers") && zipEntryName.endsWith(".json")) {
+                                            plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, split[1], FilenameUtils.getBaseName(zipEntryName.replaceFirst("powers" + s, ""))));
+                                        }
+                                    }
+                                    reader.close();
+                                    inputStream.close();
+                                }
+                                zipFile.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
-            }
-            for (File pack : packs) {
-                if (pack.getName().endsWith(".zip")) {
-                    try {
-                        ZipFile zipFile = new ZipFile(pack);
-                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                for (File pack : packs) {
+                    if (pack.isDirectory()) {
+                        File[] dataFolder = new File(pack.getAbsolutePath() + s + "data").listFiles();
 
-                        while (entries.hasMoreElements()) {
-                            ZipEntry zipEntry = entries.nextElement();
-                            String zipEntryName = zipEntry.getName();
-                            InputStream inputStream = zipFile.getInputStream(zipEntry);
-                            Reader reader = new InputStreamReader(inputStream);
+                        if (dataFolder != null) {
+                            for (File file : dataFolder) {
+                                if (file.isDirectory()) {
+                                    File[] originOriginFiles = file.listFiles();
 
-                            if (zipEntryName.startsWith("powers/") && zipEntryName.endsWith(".json")) {
-                                plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, pack, FilenameUtils.getBaseName(zipEntryName.replaceFirst("powers/", ""))));
+                                    if (originOriginFiles != null) {
+                                        for (File originOriginFile : originOriginFiles) {
+                                            if (originOriginFile.isDirectory()) {
+                                                if (originOriginFile.getName().equals("origins")) {
+                                                    File[] originFiles = originOriginFile.listFiles();
+
+                                                    if (originFiles != null) {
+                                                        for (File originFile : originFiles) {
+                                                            Reader reader = new FileReader(originFile);
+
+                                                            plugin.getRegistry().register(plugin.getLoader().loadOriginFromFile(reader, file.getName(), FilenameUtils.getBaseName(originFile.getName())));
+                                                            reader.close();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            reader.close();
-                            inputStream.close();
                         }
-                        zipFile.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                    } else if (pack.getName().endsWith(".zip")) {
+                        boolean resume = true;
+
+                        for (File file : packs) {
+                            if (file.getName().equals(FilenameUtils.getBaseName(pack.getName()))) {
+                                resume = false;
+                                break;
+                            }
+                        }
+                        if (resume) {
+                            try {
+                                ZipFile zipFile = new ZipFile(pack);
+                                Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+                                while (entries.hasMoreElements()) {
+                                    ZipEntry zipEntry = entries.nextElement();
+                                    String zipEntryName = zipEntry.getName();
+                                    InputStream inputStream = zipFile.getInputStream(zipEntry);
+                                    Reader reader = new InputStreamReader(inputStream);
+                                    String[] split = zipEntryName.split(s);
+
+                                    if (split.length >= 3) {
+                                        if (split[0].equals("data") && split[2].equals("origins") && zipEntryName.endsWith(".json")) {
+                                            plugin.getRegistry().register(plugin.getLoader().loadOriginFromFile(reader, split[1], FilenameUtils.getBaseName(zipEntryName.replaceFirst("origins" + s, ""))));
+                                        }
+                                    }
+                                    reader.close();
+                                    inputStream.close();
+                                }
+                                zipFile.close();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
                     }
                 }
+                stream.close();
             }
-            for (File pack : packs) {
-                if (pack.getName().endsWith(".zip")) {
-                    try {
-                        ZipFile zipFile = new ZipFile(pack);
-                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-
-                        while (entries.hasMoreElements()) {
-                            ZipEntry zipEntry = entries.nextElement();
-                            String zipEntryName = zipEntry.getName();
-                            InputStream inputStream = zipFile.getInputStream(zipEntry);
-                            Reader reader = new InputStreamReader(inputStream);
-
-                            if (zipEntryName.startsWith("origins/") && zipEntryName.endsWith(".json")) {
-                                plugin.getRegistry().register(plugin.getLoader().loadOriginFromFile(reader, pack, FilenameUtils.getBaseName(zipEntryName.replaceFirst("origins/", ""))));
-                            }
-                            reader.close();
-                            inputStream.close();
-                        }
-                        zipFile.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         if (plugin.getRegistry().isOriginsEmpty()) {
             Origin origin = new CraftOrigin();
@@ -337,17 +421,17 @@ public final class StartupUtil {
             }
         }
         if (plugin.getJavaPlugin().isEnabled()) {
-            Plugin pancakeLibCore = Bukkit.getServer().getPluginManager().getPlugin("PancakeLibCore");
+            Plugin lemonLib = Bukkit.getServer().getPluginManager().getPlugin("LemonLib");
 
-            if (pancakeLibCore != null) {
-                if (pancakeLibCore.isEnabled()) {
-                    ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] PancakeLibCore found! Hooking...");
+            if (lemonLib != null) {
+                if (lemonLib.isEnabled()) {
+                    ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] LemonLib found! Hooking...");
                 } else {
-                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] PancakeLibCore seems to be disabled. Safely disabling plugin...");
+                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] LemonLib seems to be disabled. Safely disabling plugin...");
                     plugin.disable();
                 }
             } else {
-                ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (PancakeLibCore). Safely disabling plugin...");
+                ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (LemonLib). Safely disabling plugin...");
                 plugin.disable();
             }
         }

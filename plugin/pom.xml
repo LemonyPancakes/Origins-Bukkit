@@ -47,7 +47,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
             </resource>
         </resources>
     </build>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.19-R0.1-SNAPSHOT</version>
             <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
         </dependency>

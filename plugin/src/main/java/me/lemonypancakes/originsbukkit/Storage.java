@@ -1,5 +1,6 @@
 package me.lemonypancakes.originsbukkit;
 
+import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.OfflinePlayer;
 
@@ -12,4 +13,6 @@ public interface Storage {
     boolean hasOriginPlayerData(OfflinePlayer offlinePlayer);
 
     void wipeOriginPlayerData(OfflinePlayer offlinePlayer);
+
+    JsonObject getMetadata(OfflinePlayer offlinePlayer);
 }

@@ -3,7 +3,7 @@ package me.lemonypancakes.originsbukkit.command.maincommand.subcommand;
 import me.lemonypancakes.originsbukkit.Origin;
 import me.lemonypancakes.originsbukkit.OriginPlayer;
 import me.lemonypancakes.originsbukkit.command.maincommand.MainCommand;
-import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.Lang;

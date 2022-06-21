@@ -1,13 +1,12 @@
 package me.lemonypancakes.originsbukkit.data.storage;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Storage;
-import me.lemonypancakes.originsbukkit.util.ChatUtil;
-import me.lemonypancakes.originsbukkit.util.Config;
-import me.lemonypancakes.originsbukkit.util.Identifier;
-import me.lemonypancakes.originsbukkit.util.Pair;
+import me.lemonypancakes.originsbukkit.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -17,6 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.persistence.PersistentDataHolder;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
@@ -26,7 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class MySQLStorage implements Storage, Listener {
+public class CraftMySQLStorage implements Storage, Listener {
 
     private final OriginsBukkitPlugin plugin;
     private final HikariDataSource hikariDataSource;
@@ -39,7 +40,7 @@ public class MySQLStorage implements Storage, Listener {
 
     private static final Map<UUID, Pair<Identifier, Boolean>> CACHE = new HashMap<>();
 
-    public MySQLStorage(OriginsBukkitPlugin plugin) {
+    public CraftMySQLStorage(OriginsBukkitPlugin plugin) {
         this.plugin = plugin;
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setMaximumPoolSize(Config.STORAGE_DATA_POOL_SETTINGS_MAXIMUM_POOL_SIZE.toInt());
@@ -115,6 +116,17 @@ public class MySQLStorage implements Storage, Listener {
             }
         }.runTaskAsynchronously(plugin.getJavaPlugin());
         CACHE.remove(uuid);
+    }
+
+    @Override
+    public JsonObject getMetadata(OfflinePlayer offlinePlayer) {
+        String string = BukkitPersistentDataUtil.getPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING);
+
+        if (string != null) {
+            return new Gson().fromJson(string, JsonObject.class);
+        }
+        BukkitPersistentDataUtil.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING, "{}");
+        return new Gson().fromJson("{}", JsonObject.class);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

@@ -3,7 +3,7 @@ package me.lemonypancakes.originsbukkit.factory.power.regular;
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
-import me.lemonypancakes.originsbukkit.data.CraftPower;
+import me.lemonypancakes.originsbukkit.factory.power.CraftTogglePower;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -12,7 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class CraftElytraFlightPower extends CraftPower {
+public class CraftElytraFlightPower extends CraftTogglePower {
 
     public CraftElytraFlightPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
@@ -21,8 +21,10 @@ public class CraftElytraFlightPower extends CraftPower {
             @Override
             public void run() {
                 getMembers().forEach(player -> {
-                    if (!player.isGliding()) {
-                        player.setGliding(getCondition().test(player));
+                    if (isToggled(player)) {
+                        if (!player.isGliding()) {
+                            player.setGliding(getCondition().test(player));
+                        }
                     }
                 });
             }
@@ -40,7 +42,9 @@ public class CraftElytraFlightPower extends CraftPower {
 
     @Override
     protected void onMemberAdd(Player player) {
-        player.setGliding(getCondition().test(player));
+        if (isToggled(player)) {
+            player.setGliding(getCondition().test(player));
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -51,9 +55,11 @@ public class CraftElytraFlightPower extends CraftPower {
             Player player = (Player) entity;
 
             if (getMembers().contains(player)) {
-                if (getCondition().test(player)) {
-                    if (!event.isGliding()) {
-                        event.setCancelled(true);
+                if (isToggled(player)) {
+                    if (getCondition().test(player)) {
+                        if (!event.isGliding()) {
+                            event.setCancelled(true);
+                        }
                     }
                 }
             }

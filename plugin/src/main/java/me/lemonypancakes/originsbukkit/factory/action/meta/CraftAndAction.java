@@ -16,7 +16,7 @@ public class CraftAndAction<T> extends CraftAction<T> {
     public CraftAndAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType, BiConsumer<JsonObject, T> biConsumer) {
         super(plugin, jsonObject, dataType, biConsumer);
         if (jsonObject != null) {
-            this.actions = plugin.getLoader().loadActions(null, jsonObject.getAsJsonArray("actions"));
+            this.actions = plugin.getLoader().loadActions(dataType, jsonObject.getAsJsonArray("actions"));
             setBiConsumer((jsonObject1, t) -> Arrays.stream(actions).forEach(action -> action.accept(t)));
         }
     }

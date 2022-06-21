@@ -40,9 +40,11 @@ public class CraftActionOnWakeUpPower extends CraftPower {
         if (getMembers().contains(player)) {
             Block block = event.getBed();
 
-            if (getCondition().test(player) && blockCondition.test(block)) {
-                entityAction.accept(player);
-                blockAction.accept(block);
+            if (player.getWorld().getTime() >= 0 && player.getWorld().getTime() <= 13000) {
+                if (getCondition().test(player) && blockCondition.test(block)) {
+                    entityAction.accept(player);
+                    blockAction.accept(block);
+                }
             }
         }
     }

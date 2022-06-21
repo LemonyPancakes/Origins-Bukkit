@@ -5,16 +5,22 @@ import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
 import me.lemonypancakes.originsbukkit.util.Identifier;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.util.Vector;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class CraftModifyFallingPower extends CraftPower {
 
     public CraftModifyFallingPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                getMembers().forEach(player -> player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0, false, false, false)));
+            }
+        }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1200L);
     }
 
     public CraftModifyFallingPower(OriginsBukkitPlugin plugin) {
@@ -26,19 +32,13 @@ public class CraftModifyFallingPower extends CraftPower {
         return new CraftModifyFallingPower(plugin, identifier, jsonObject);
     }
 
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
+    @Override
+    protected void onMemberAdd(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0, false, false, false));
+    }
 
-        if (getMembers().contains(player)) {
-            Location getTo = event.getTo();
-            Location getFrom = event.getFrom();
-
-            if (getTo != null) {
-                if (getTo.getY() < getFrom.getY()) {
-                    player.setVelocity(new Vector(player.getVelocity().getX(), player.getVelocity().getY() * .02, player.getVelocity().getZ()));
-                }
-            }
-        }
+    @Override
+    protected void onMemberRemove(Player player) {
+        player.removePotionEffect(PotionEffectType.SLOW_FALLING);
     }
 }

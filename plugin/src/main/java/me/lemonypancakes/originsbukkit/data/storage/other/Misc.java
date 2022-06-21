@@ -1,4 +1,4 @@
-package me.lemonypancakes.originsbukkit.data.storage;
+package me.lemonypancakes.originsbukkit.data.storage.other;
 
 import org.bukkit.inventory.Inventory;
 

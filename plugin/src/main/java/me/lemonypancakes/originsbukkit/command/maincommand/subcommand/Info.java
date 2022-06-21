@@ -1,7 +1,7 @@
 package me.lemonypancakes.originsbukkit.command.maincommand.subcommand;
 
 import me.lemonypancakes.originsbukkit.command.maincommand.MainCommand;
-import me.lemonypancakes.originsbukkit.data.storage.Misc;
+import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

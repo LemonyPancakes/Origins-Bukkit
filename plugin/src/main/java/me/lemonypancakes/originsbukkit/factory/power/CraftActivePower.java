@@ -43,7 +43,7 @@ public class CraftActivePower extends CraftPower implements Keyed {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onPlayerKeyEvent(PlayerKeyEvent event) {
+    public void onPlayerKey(PlayerKeyEvent event) {
         Player player = event.getPlayer();
 
         if (getMembers().contains(player)) {
