@@ -35,7 +35,7 @@ public class CraftBukkitStorage implements Storage {
 
     @Override
     public boolean hasOriginPlayerData(OfflinePlayer offlinePlayer) {
-        return !BukkitPersistentDataUtil.hasPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), PersistentDataType.STRING);
+        return BukkitPersistentDataUtil.hasPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), PersistentDataType.STRING);
     }
 
     @Override

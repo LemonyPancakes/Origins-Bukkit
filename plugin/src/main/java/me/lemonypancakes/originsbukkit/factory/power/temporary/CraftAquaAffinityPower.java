@@ -1,4 +1,4 @@
-package me.lemonypancakes.originsbukkit.factory.power.modify;
+package me.lemonypancakes.originsbukkit.factory.power.temporary;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -8,8 +8,6 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.gson.JsonObject;
-import me.lemonypancakes.originsbukkit.Condition;
-import me.lemonypancakes.originsbukkit.DataType;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
@@ -26,28 +24,26 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CraftModifyBreakSpeedPower extends CraftPower {
+public class CraftAquaAffinityPower extends CraftPower {
 
     private int modifier = 0;
-    private Condition<Block> blockCondition;
     private final Map<Player, PotionEffect> potionEffectMap = new HashMap<>();
 
-    public CraftModifyBreakSpeedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+    public CraftAquaAffinityPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
         if (jsonObject.has("modifier")) {
             this.modifier = jsonObject.get("modifier").getAsInt();
         }
-        this.blockCondition = plugin.getLoader().loadCondition(DataType.BLOCK, jsonObject, "block_condition");
         registerBlockBreakPacketListener();
     }
 
-    public CraftModifyBreakSpeedPower(OriginsBukkitPlugin plugin) {
+    public CraftAquaAffinityPower(OriginsBukkitPlugin plugin) {
         super(plugin);
     }
 
     @Override
     public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftModifyBreakSpeedPower(plugin, identifier, jsonObject);
+        return new CraftAquaAffinityPower(plugin, identifier, jsonObject);
     }
 
     @Override
@@ -96,11 +92,11 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
                         Material material = block.getType();
 
                         if (getMembers().contains(player)) {
-                            if (getCondition().test(player) && blockCondition.test(block)) {
-                                if (material.isSolid()) {
-                                    if (modifier < 0) {
-                                        if (digType == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {
-                                            Bukkit.getScheduler().runTask(CraftModifyBreakSpeedPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                            if (material.isSolid()) {
+                                if (modifier < 0) {
+                                    if (digType == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {
+                                        Bukkit.getScheduler().runTask(CraftAquaAffinityPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                                            if (player.getEyeLocation().getBlock().getType() == Material.WATER) {
                                                 if (location.getBlock().getType().isSolid()) {
                                                     PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.SLOW_DIGGING);
 
@@ -120,31 +116,33 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
                                                         }
                                                     }
                                                 }
-                                            });
-                                        } else if (digType == EnumWrappers.PlayerDigType.ABORT_DESTROY_BLOCK) {
-                                            Bukkit.getScheduler().runTask(CraftModifyBreakSpeedPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
-                                                player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-                                                if (potionEffectMap.containsKey(player)) {
-                                                    if (potionEffectMap.get(player) != null) {
-                                                        player.addPotionEffect(potionEffectMap.get(player));
-                                                        potionEffectMap.remove(player);
+                                            }
+                                        });
+                                    } else if (digType == EnumWrappers.PlayerDigType.ABORT_DESTROY_BLOCK) {
+                                        Bukkit.getScheduler().runTask(CraftAquaAffinityPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                                            player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
+                                                    if (potionEffectMap.containsKey(player)) {
+                                                        if (potionEffectMap.get(player) != null) {
+                                                            player.addPotionEffect(potionEffectMap.get(player));
+                                                            potionEffectMap.remove(player);
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        } else if (digType == EnumWrappers.PlayerDigType.STOP_DESTROY_BLOCK) {
-                                            Bukkit.getScheduler().runTask(CraftModifyBreakSpeedPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
-                                                player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-                                                if (potionEffectMap.containsKey(player)) {
-                                                    if (potionEffectMap.get(player) != null) {
-                                                        player.addPotionEffect(potionEffectMap.get(player));
-                                                        potionEffectMap.remove(player);
+                                        });
+                                    } else if (digType == EnumWrappers.PlayerDigType.STOP_DESTROY_BLOCK) {
+                                        Bukkit.getScheduler().runTask(CraftAquaAffinityPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                                                    player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
+                                                    if (potionEffectMap.containsKey(player)) {
+                                                        if (potionEffectMap.get(player) != null) {
+                                                            player.addPotionEffect(potionEffectMap.get(player));
+                                                            potionEffectMap.remove(player);
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        }
-                                    } else {
-                                        if (digType == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {
-                                            Bukkit.getScheduler().runTask(CraftModifyBreakSpeedPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                                                });
+                                    }
+                                } else {
+                                    if (digType == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {
+                                        Bukkit.getScheduler().runTask(CraftAquaAffinityPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                                            if (player.getEyeLocation().getBlock().getType() == Material.WATER) {
                                                 if (location.getBlock().getType().isSolid()) {
                                                     PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.FAST_DIGGING);
 
@@ -154,15 +152,7 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
                                                             player.removePotionEffect(PotionEffectType.FAST_DIGGING);
                                                         }
                                                     }
-                                                    player.addPotionEffect(
-                                                            new PotionEffect(
-                                                                    PotionEffectType.FAST_DIGGING,
-                                                                    Integer.MAX_VALUE,
-                                                                    modifier - 1,
-                                                                    false,
-                                                                    false
-                                                            )
-                                                    );
+                                                    player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, modifier - 1, false, false));
                                                 } else {
                                                     PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.FAST_DIGGING);
 
@@ -172,28 +162,28 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
                                                         }
                                                     }
                                                 }
-                                            });
-                                        } else if (digType == EnumWrappers.PlayerDigType.ABORT_DESTROY_BLOCK) {
-                                            Bukkit.getScheduler().runTask(CraftModifyBreakSpeedPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
-                                                player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-                                                if (potionEffectMap.containsKey(player)) {
-                                                    if (potionEffectMap.get(player) != null) {
-                                                        player.addPotionEffect(potionEffectMap.get(player));
-                                                        potionEffectMap.remove(player);
+                                            }
+                                        });
+                                    } else if (digType == EnumWrappers.PlayerDigType.ABORT_DESTROY_BLOCK) {
+                                        Bukkit.getScheduler().runTask(CraftAquaAffinityPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                                                    player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+                                                    if (potionEffectMap.containsKey(player)) {
+                                                        if (potionEffectMap.get(player) != null) {
+                                                            player.addPotionEffect(potionEffectMap.get(player));
+                                                            potionEffectMap.remove(player);
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        } else if (digType == EnumWrappers.PlayerDigType.STOP_DESTROY_BLOCK) {
-                                            Bukkit.getScheduler().runTask(CraftModifyBreakSpeedPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
-                                                player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-                                                if (potionEffectMap.containsKey(player)) {
-                                                    if (potionEffectMap.get(player) != null) {
-                                                        player.addPotionEffect(potionEffectMap.get(player));
-                                                        potionEffectMap.remove(player);
+                                                });
+                                    } else if (digType == EnumWrappers.PlayerDigType.STOP_DESTROY_BLOCK) {
+                                        Bukkit.getScheduler().runTask(CraftAquaAffinityPower.this.getPlugin().getJavaPlugin(), bukkitTask -> {
+                                                    player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+                                                    if (potionEffectMap.containsKey(player)) {
+                                                        if (potionEffectMap.get(player) != null) {
+                                                            player.addPotionEffect(potionEffectMap.get(player));
+                                                            potionEffectMap.remove(player);
+                                                        }
                                                     }
-                                                }
-                                            });
-                                        }
+                                                });
                                     }
                                 }
                             }

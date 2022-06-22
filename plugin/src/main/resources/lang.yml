@@ -7,8 +7,26 @@
 #               |___/
 # Origins-Bukkit by LemonyPancakes
 # Language File (lang.yml)
-# Version 2
+# Version 3
 ##
+
+gui:
+  header_text: "&0Choose your origin."
+  header_no_origin_text: "&0No origins here. :("
+  dummy_origin:
+    title: "&fDummy Origin"
+    description:
+      - "&7This appears when there"
+      - "&7is no origin available."
+  impact_text:
+    none: "&fImpact: &7None"
+    low: "&fImpact: &aLow"
+    medium: "&fImpact: &eMedium"
+    high: "&fImpact: &cHigh"
+  icon_text:
+    previous_page: "&6Previous Page"
+    quit_game: "&cQuit Game"
+    next_page: "&6Next Page"
 
 command:
   main_command_usage: '/origins <subcommand>'

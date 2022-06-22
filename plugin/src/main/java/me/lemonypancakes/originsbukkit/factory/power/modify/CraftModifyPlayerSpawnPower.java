@@ -50,7 +50,7 @@ public class CraftModifyPlayerSpawnPower extends CraftPower {
 
     @Override
     protected void onMemberAdd(Player player) {
-        if (getPlugin().getStorage().hasOriginPlayerData(player)) {
+        if (!getPlugin().getStorage().hasOriginPlayerData(player)) {
             player.teleport(generateLocation());
         }
     }

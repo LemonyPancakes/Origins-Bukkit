@@ -91,6 +91,7 @@ public final class StartupUtil {
 
         //TEMPORARY
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:aerial_combatant"), new CraftAerialCombatantPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:aqua_affinity"), new CraftAquaAffinityPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:burning_wrath"), new CraftBurningWrathPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:claustrophobia"), new CraftClaustrophobiaPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_potions"), new CraftDamageFromPotionsPower(plugin)));
@@ -98,7 +99,9 @@ public final class StartupUtil {
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:light_armor"), new CraftLightArmorPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:more_kinetic_damage"), new CraftMoreKineticDamagePower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:no_shield"), new CraftNoShieldPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:swim_speed"), new CraftSwimSpeedPower(plugin)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:throw_ender_pearl"), new CraftThrowEnderPearlPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_vision"), new CraftWaterVisionPower(plugin)));
     }
 
     public static void loadExpansions(OriginsBukkitPlugin plugin) {
@@ -291,12 +294,12 @@ public final class StartupUtil {
             origin.setIcon(new ItemStack(Material.STONE));
             origin.setImpact(Impact.NONE);
             origin.setAuthors(new String[]{"LemonyPancakes"});
-            origin.setDisplayName(ChatUtil.format("&fDummy Origin"));
-            origin.setDescription(ChatUtil.formatList(new String[]{"", "&7This appears when there", "&7is no origin available."}));
+            origin.setDisplayName(Lang.GUI_DUMMY_ORIGIN_TITLE.toString());
+            origin.setDescription(Lang.GUI_DUMMY_ORIGIN_DESCRIPTION.toStringArray());
             origin.setIdentifier(Identifier.fromString("origins-bukkit:dummy_origin"));
             origin.setPowers(emptyPower);
 
-            Inventory inventory = Bukkit.createInventory(null, 54, ChatUtil.format("&0No origins here. :("));
+            Inventory inventory = Bukkit.createInventory(null, 54, Lang.GUI_HEADER_TEXT_NO_ORIGIN.toString());
             ItemStack itemStack = new ItemStack(origin.getIcon());
             itemStack.setAmount(1);
             ItemMeta itemMeta = itemStack.getItemMeta();

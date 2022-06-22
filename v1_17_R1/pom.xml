@@ -5,7 +5,7 @@
     <parent>
         <artifactId>originsbukkit</artifactId>
         <groupId>me.lemonypancakes.originsbukkit</groupId>
-        <version>Build 3-ALPHA</version>
+        <version>Build 3-BETA</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

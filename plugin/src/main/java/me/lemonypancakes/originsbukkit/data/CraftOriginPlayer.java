@@ -6,6 +6,7 @@ import me.lemonypancakes.originsbukkit.OriginPlayer;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.Config;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -45,10 +46,26 @@ public class CraftOriginPlayer implements OriginPlayer {
                 ChatUtil.sendPlayerMessage(getPlayer(), "&cYour origin (&e\"" + originIdentifier + "\"&c) doesn't exist so we pruned your player data.");
             }
         } else {
+            if (!plugin.getStorage().hasOriginPlayerData(getPlayer())) {
+                String starterOriginString = Config.STARTER_ORIGIN.toString();
+
+                if (!starterOriginString.isEmpty()) {
+                    Identifier starterOriginIdentifier = Identifier.fromString(starterOriginString);
+
+                    if (starterOriginIdentifier != null) {
+                        Origin starterOrigin = plugin.getRegistry().getOrigin(starterOriginIdentifier);
+
+                        if (starterOrigin != null) {
+                            setOrigin(starterOrigin);
+                            return;
+                        }
+                    }
+                }
+            }
             Bukkit.getScheduler().runTaskLater(plugin.getJavaPlugin(), bukkitTask -> {
                 Misc.VIEWERS.put(getPlayer().getUniqueId(), 0);
                 getPlayer().openInventory(Misc.GUIS.get(0));
-                }, 20L);
+            }, 20L);
         }
     }
 

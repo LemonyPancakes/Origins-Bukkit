@@ -7,7 +7,7 @@
 #               |___/
 # Origins-Bukkit by LemonyPancakes
 # Config File (config.yml)
-# Version 2
+# Version 3
 ##
 
 storage:
@@ -38,6 +38,8 @@ storage:
       maximum_lifetime: 1800000
       keepalive_time: 0
       connection_timeout: 5000
+
+starter_origin: ""
 
 custom_item:
   orb_of_origin:

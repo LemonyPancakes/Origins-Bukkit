@@ -11,6 +11,7 @@ import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -42,11 +43,11 @@ public class CraftWaterBreathingPower extends CraftPower {
             @Override
             public void run() {
                 getMembers().forEach(player -> {
-                    Location location = player.getEyeLocation();
-                    Block block = location.getBlock();
-                    Material material = block.getType();
+                    Location eyeLocation = player.getEyeLocation();
+                    Block eyeBlock = eyeLocation.getBlock();
+                    Material eyeBlockMaterial = eyeBlock.getType();
 
-                    if (material == Material.WATER) {
+                    if (eyeBlockMaterial == Material.WATER || eyeBlock.getBlockData() instanceof Waterlogged && ((Waterlogged) eyeBlock.getBlockData()).isWaterlogged()) {
                         player.setRemainingAir(Math.min((player.getRemainingAir() + 5), 303));
                     } else {
                         player.setRemainingAir(Math.max((player.getRemainingAir() - 5), -27));

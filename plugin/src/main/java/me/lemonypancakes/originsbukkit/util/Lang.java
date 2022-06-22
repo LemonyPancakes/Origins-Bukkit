@@ -20,6 +20,17 @@ package me.lemonypancakes.originsbukkit.util;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public enum Lang {
+    GUI_HEADER_TEXT("gui.header_text", "&0Choose your origin."),
+    GUI_HEADER_TEXT_NO_ORIGIN("gui.header_no_origin_text", "&0No origins here. :("),
+    GUI_DUMMY_ORIGIN_TITLE("gui.dummy_origin.title", "&fDummy Origin"),
+    GUI_DUMMY_ORIGIN_DESCRIPTION("gui.dummy_origin.description", "&7This appears when there", "&7is no origin available."),
+    GUI_IMPACT_TEXT_NONE("gui.impact_text.none", "&fImpact: &7None"),
+    GUI_IMPACT_TEXT_LOW("gui.impact_text.low", "&fImpact: &aLow"),
+    GUI_IMPACT_TEXT_MEDIUM("gui.impact_text.medium", "&fImpact: &eMedium"),
+    GUI_IMPACT_TEXT_HIGH("gui.impact_text.high", "&fImpact: &cHigh"),
+    GUI_ICON_TEXT_PREVIOUS_PAGE("gui.icon_text.previous_page", "&6Previous Page"),
+    GUI_ICON_TEXT_QUIT_GAME("gui.icon_text.quit_game", "&cQuit Game"),
+    GUI_ICON_TEXT_NEXT_PAGE("gui.icon_text.next_page", "&6Next Page"),
     COMMAND_NO_PERMISSION("command.no_permission", "&cI'm sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is in error."),
     COMMAND_NOT_ENOUGH_ARGUMENTS("command.not_enough_arguments", "&cNot Enough Arguments. Usage: &e{command_usage}"),
     COMMAND_TOO_MANY_ARGUMENTS("command.too_many_arguments", "&cToo many arguments. Usage: &e{command_usage}"),

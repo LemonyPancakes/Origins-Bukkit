@@ -95,7 +95,7 @@ public class CraftMySQLStorage implements Storage, Listener {
 
     @Override
     public boolean hasOriginPlayerData(OfflinePlayer offlinePlayer) {
-        return CACHE.containsKey(offlinePlayer.getUniqueId()) && CACHE.get(offlinePlayer.getUniqueId()) != null && CACHE.get(offlinePlayer.getUniqueId()).getRight() != null && CACHE.get(offlinePlayer.getUniqueId()).getRight();
+        return CACHE.containsKey(offlinePlayer.getUniqueId()) && CACHE.get(offlinePlayer.getUniqueId()) != null && CACHE.get(offlinePlayer.getUniqueId()).getRight() != null && !CACHE.get(offlinePlayer.getUniqueId()).getRight();
     }
 
     @Override

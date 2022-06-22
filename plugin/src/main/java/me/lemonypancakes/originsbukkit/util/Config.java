@@ -35,6 +35,7 @@ public enum Config {
     STORAGE_DATA_POOL_SETTINGS_MAXIMUM_LIFETIME("storage.data.pool_settings.maximum_lifetime", 1800000),
     STORAGE_DATA_POOL_SETTINGS_KEEPALIVE_TIME("storage.data.pool_settings.keepalive_time", 0),
     STORAGE_DATA_POOL_SETTINGS_CONNECTION_TIMEOUT("storage.data.pool_settings.connection_timeout", 5000),
+    STARTER_ORIGIN("starter_origin", ""),
     CUSTOM_ITEM_ORB_OF_ORIGIN_MATERIAL("custom_item.orb_of_origin.material", Material.MAGMA_CREAM),
     CUSTOM_ITEM_ORB_OF_ORIGIN_CUSTOM_MODEL_DATA("custom_item.orb_of_origin.custom_model_data"),
     CUSTOM_ITEM_ORB_OF_ORIGIN_DISPLAY_NAME("custom_item.orb_of_origin.display_name", "&bOrb of Origin"),

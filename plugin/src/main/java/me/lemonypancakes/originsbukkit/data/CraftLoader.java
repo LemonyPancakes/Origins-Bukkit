@@ -10,6 +10,7 @@ import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
 import me.lemonypancakes.originsbukkit.util.ChatUtil;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.Impact;
+import me.lemonypancakes.originsbukkit.util.Lang;
 import me.lemonypancakes.originsbukkit.wrapper.ConditionAction;
 import me.lemonypancakes.originsbukkit.wrapper.Element;
 import org.bukkit.Bukkit;
@@ -177,7 +178,7 @@ public class CraftLoader implements Loader {
                     origin.setPowers(originPowers);
                 }
             }
-            Inventory inventory = Bukkit.createInventory(null, 54, ChatUtil.format("&0Choose your origin."));
+            Inventory inventory = Bukkit.createInventory(null, 54, Lang.GUI_HEADER_TEXT.toString());
             Inventory originInfo = Bukkit.createInventory(null, 54, ChatUtil.format("&0Origin info."));
             ItemStack itemStack = new ItemStack(origin.getIcon());
             itemStack.setAmount(1);
@@ -196,7 +197,7 @@ public class CraftLoader implements Loader {
                     ItemStack none = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta noneMeta = none.getItemMeta();
                     if (noneMeta != null) {
-                        noneMeta.setDisplayName(ChatUtil.format("&fImpact: &7None"));
+                        noneMeta.setDisplayName(Lang.GUI_IMPACT_TEXT_NONE.toString());
                         none.setItemMeta(noneMeta);
                     }
                     inventory.setItem(6, none);
@@ -210,13 +211,13 @@ public class CraftLoader implements Loader {
                     ItemStack low = new ItemStack(Material.LIME_CONCRETE, 1);
                     ItemMeta lowMeta = low.getItemMeta();
                     if (lowMeta != null) {
-                        lowMeta.setDisplayName(ChatUtil.format("&fImpact: &aLow"));
+                        lowMeta.setDisplayName(Lang.GUI_IMPACT_TEXT_LOW.toString());
                         low.setItemMeta(lowMeta);
                     }
                     ItemStack low1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta lowMeta1 = low1.getItemMeta();
                     if (lowMeta1 != null) {
-                        lowMeta1.setDisplayName(ChatUtil.format("&fImpact: &aLow"));
+                        lowMeta1.setDisplayName(Lang.GUI_IMPACT_TEXT_LOW.toString());
                         low1.setItemMeta(lowMeta);
                     }
                     inventory.setItem(6, low);
@@ -230,13 +231,13 @@ public class CraftLoader implements Loader {
                     ItemStack medium = new ItemStack(Material.YELLOW_CONCRETE, 1);
                     ItemMeta mediumMeta = medium.getItemMeta();
                     if (mediumMeta != null) {
-                        mediumMeta.setDisplayName(ChatUtil.format("&fImpact: &eMedium"));
+                        mediumMeta.setDisplayName(Lang.GUI_IMPACT_TEXT_MEDIUM.toString());
                         medium.setItemMeta(mediumMeta);
                     }
                     ItemStack medium1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta mediumMeta1 = medium1.getItemMeta();
                     if (mediumMeta1 != null) {
-                        mediumMeta1.setDisplayName(ChatUtil.format("&fImpact: &eMedium"));
+                        mediumMeta1.setDisplayName(Lang.GUI_IMPACT_TEXT_MEDIUM.toString());
                         medium1.setItemMeta(mediumMeta);
                     }
                     inventory.setItem(6, medium);
@@ -250,7 +251,7 @@ public class CraftLoader implements Loader {
                     ItemStack high = new ItemStack(Material.RED_CONCRETE, 1);
                     ItemMeta highMeta = high.getItemMeta();
                     if (highMeta != null) {
-                        highMeta.setDisplayName(ChatUtil.format("&fImpact: &cHigh"));
+                        highMeta.setDisplayName(Lang.GUI_IMPACT_TEXT_HIGH.toString());
                         high.setItemMeta(highMeta);
                     }
                     inventory.setItem(6, high);
@@ -265,21 +266,21 @@ public class CraftLoader implements Loader {
             ItemStack previous = new ItemStack(Material.ARROW, 1);
             ItemMeta previousMeta = previous.getItemMeta();
             if (previousMeta != null) {
-                previousMeta.setDisplayName(ChatUtil.format("&6Previous Page"));
+                previousMeta.setDisplayName(Lang.GUI_ICON_TEXT_PREVIOUS_PAGE.toString());
                 previous.setItemMeta(previousMeta);
             }
 
             ItemStack close = new ItemStack(Material.BARRIER, 1);
             ItemMeta closeMeta = close.getItemMeta();
             if (closeMeta != null) {
-                closeMeta.setDisplayName(ChatUtil.format("&cQuit Game"));
+                closeMeta.setDisplayName(Lang.GUI_ICON_TEXT_QUIT_GAME.toString());
                 close.setItemMeta(closeMeta);
             }
 
             ItemStack next = new ItemStack(Material.ARROW, 1);
             ItemMeta nextMeta = next.getItemMeta();
             if (nextMeta != null) {
-                nextMeta.setDisplayName(ChatUtil.format("&6Next Page"));
+                nextMeta.setDisplayName(Lang.GUI_ICON_TEXT_NEXT_PAGE.toString());
                 next.setItemMeta(nextMeta);
             }
 
