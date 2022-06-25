@@ -5,7 +5,7 @@ import me.lemonypancakes.originsbukkit.Action;
 import me.lemonypancakes.originsbukkit.DataType;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.data.CraftAction;
-import me.lemonypancakes.originsbukkit.util.ProbabilityUtil;
+import me.lemonypancakes.originsbukkit.util.ProbabilityUtils;
 import me.lemonypancakes.originsbukkit.wrapper.Element;
 
 import java.util.Arrays;
@@ -23,17 +23,12 @@ public class CraftChoiceAction<T> extends CraftAction<T> {
             Arrays.stream(elements).forEach(element -> totalWeight = totalWeight + element.getWeight());
             setBiConsumer((jsonObject1, temp) -> {
                 for (Element<T> element : elements) {
-                    if (ProbabilityUtil.getChance((float) (element.getWeight() / totalWeight))) {
+                    if (ProbabilityUtils.getChance((float) (element.getWeight() / totalWeight))) {
                         element.getAction().accept(temp);
                         break;
                     }
                 }
             });
         }
-    }
-
-    @Override
-    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftChoiceAction<>(plugin, jsonObject, dataType, getBiConsumer());
     }
 }

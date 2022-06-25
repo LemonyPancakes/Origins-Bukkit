@@ -53,13 +53,4 @@ public class CraftParticlePower extends CraftPower {
             }
         }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, frequency);
     }
-
-    public CraftParticlePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftParticlePower(plugin, identifier, jsonObject);
-    }
 }

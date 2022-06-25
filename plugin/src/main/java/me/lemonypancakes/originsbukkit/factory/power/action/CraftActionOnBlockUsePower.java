@@ -36,15 +36,6 @@ public class CraftActionOnBlockUsePower extends CraftInteractionPower {
         }
     }
 
-    public CraftActionOnBlockUsePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOnBlockUsePower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();

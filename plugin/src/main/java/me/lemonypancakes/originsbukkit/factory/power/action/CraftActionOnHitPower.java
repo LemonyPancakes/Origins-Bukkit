@@ -25,15 +25,6 @@ public class CraftActionOnHitPower extends CraftCooldownPower {
         this.biEntityCondition = plugin.getLoader().loadCondition(DataType.BI_ENTITY, jsonObject, "bientity_condition");
     }
 
-    public CraftActionOnHitPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOnHitPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity actorEntity = event.getDamager();

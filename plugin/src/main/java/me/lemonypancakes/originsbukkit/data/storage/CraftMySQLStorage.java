@@ -120,12 +120,12 @@ public class CraftMySQLStorage implements Storage, Listener {
 
     @Override
     public JsonObject getMetadata(OfflinePlayer offlinePlayer) {
-        String string = BukkitPersistentDataUtil.getPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING);
+        String string = BukkitPersistentDataUtils.getPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING);
 
         if (string != null) {
             return new Gson().fromJson(string, JsonObject.class);
         }
-        BukkitPersistentDataUtil.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING, "{}");
+        BukkitPersistentDataUtils.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING, "{}");
         return new Gson().fromJson("{}", JsonObject.class);
     }
 
@@ -152,11 +152,11 @@ public class CraftMySQLStorage implements Storage, Listener {
     private void onPluginDisable(PluginDisableEvent event) {
         if (event.getPlugin() == this.plugin) {
             if (!Bukkit.getOnlinePlayers().isEmpty()) {
-                ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Pushing cached player data into database.");
+                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Pushing cached player data into database.");
                 Bukkit.getOnlinePlayers().forEach(this::saveData);
-                ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Finalizing data.");
+                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Finalizing data.");
             }
-            ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Closing database connection.");
+            ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Closing database connection.");
             hikariDataSource.close();
         }
     }

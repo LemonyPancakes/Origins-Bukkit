@@ -36,15 +36,6 @@ public class CraftDamageOverTimePower extends CraftPower {
         }
     }
 
-    public CraftDamageOverTimePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftDamageOverTimePower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         OriginPlayer originPlayer = getPlugin().getOriginPlayer(player);

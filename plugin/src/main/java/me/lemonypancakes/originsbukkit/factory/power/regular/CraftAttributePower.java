@@ -37,15 +37,6 @@ public class CraftAttributePower extends CraftPower {
         }
     }
 
-    public CraftAttributePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftAttributePower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         AttributeInstance attributeInstance = player.getAttribute(modifier.getAttribute());

@@ -25,15 +25,6 @@ public class CraftActionOnBeingUsedPower extends CraftInteractionPower {
         this.biEntityCondition = plugin.getLoader().loadCondition(DataType.BI_ENTITY, jsonObject, "bientity_condition");
     }
 
-    public CraftActionOnBeingUsedPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOnBeingUsedPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Entity entity = event.getRightClicked();

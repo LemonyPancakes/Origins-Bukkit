@@ -48,15 +48,6 @@ public class CraftCooldownPower extends CraftPower {
         }
     }
 
-    public CraftCooldownPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftCooldownPower(plugin, identifier, jsonObject);
-    }
-
     public boolean canUse(Player player) {
         return getTimeLeftInTicks(player) <= 0;
     }

@@ -17,15 +17,6 @@ public class CraftMoreKineticDamagePower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftMoreKineticDamagePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftMoreKineticDamagePower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();

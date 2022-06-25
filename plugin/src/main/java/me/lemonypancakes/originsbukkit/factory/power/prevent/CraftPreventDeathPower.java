@@ -22,15 +22,6 @@ public class CraftPreventDeathPower extends CraftPower {
         this.entityAction = plugin.getLoader().loadAction(DataType.ENTITY, jsonObject, "entity_action");
     }
 
-    public CraftPreventDeathPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftPreventDeathPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();

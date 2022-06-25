@@ -26,15 +26,6 @@ public class CraftSelfGlowPower extends CraftPower {
         }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, 1L);
     }
 
-    public CraftSelfGlowPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftSelfGlowPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         player.setGlowing(getCondition().test(player));

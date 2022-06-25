@@ -21,15 +21,6 @@ public class CraftInvisibilityPower extends CraftPower {
         }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, 1L);
     }
 
-    public CraftInvisibilityPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftInvisibilityPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberRemove(Player player) {
         player.setInvisible(false);

@@ -28,15 +28,6 @@ public class CraftActionOnBlockBreakPower extends CraftPower {
         }
     }
 
-    public CraftActionOnBlockBreakPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOnBlockBreakPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();

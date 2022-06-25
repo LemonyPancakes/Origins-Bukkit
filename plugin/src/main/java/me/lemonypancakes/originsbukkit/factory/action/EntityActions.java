@@ -27,14 +27,14 @@ import java.util.function.BiConsumer;
 public class EntityActions {
 
     public EntityActions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ENTITY, new CraftAndAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.ENTITY, new CraftChanceAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.ENTITY, new CraftChoiceAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.ENTITY, new CraftDelayAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.ENTITY, new CraftIfElseAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.ENTITY, new CraftIfElseListAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.ENTITY, new CraftNothingAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAndAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftChanceAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftChoiceAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftDelayAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftIfElseAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftIfElseListAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftNothingAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 Vector vector = entity.getVelocity();
                 float x = 0;
@@ -42,17 +42,17 @@ public class EntityActions {
                 float z = 0;
                 boolean setVelocity = false;
 
-                if (jsonObject.has("x")) {
-                    x = jsonObject.get("x").getAsFloat();
+                if (jsonObject1.has("x")) {
+                    x = jsonObject1.get("x").getAsFloat();
                 }
-                if (jsonObject.has("y")) {
-                    y = jsonObject.get("y").getAsFloat();
+                if (jsonObject1.has("y")) {
+                    y = jsonObject1.get("y").getAsFloat();
                 }
-                if (jsonObject.has("z")) {
-                    z = jsonObject.get("z").getAsFloat();
+                if (jsonObject1.has("z")) {
+                    z = jsonObject1.get("z").getAsFloat();
                 }
-                if (jsonObject.has("set_velocity")) {
-                    setVelocity = jsonObject.get("set_velocity").getAsBoolean();
+                if (jsonObject1.has("set_velocity")) {
+                    setVelocity = jsonObject1.get("set_velocity").getAsBoolean();
                 }
                 if (setVelocity) {
                     entity.setVelocity(new Vector(x, y, z));
@@ -61,31 +61,31 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_xp"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_xp"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
                     int points = 0;
                     int levels = 0;
 
-                    if (jsonObject.has("points")) {
-                        points = jsonObject.get("points").getAsInt();
+                    if (jsonObject1.has("points")) {
+                        points = jsonObject1.get("points").getAsInt();
                     }
-                    if (jsonObject.has("levels")) {
-                        levels = jsonObject.get("levels").getAsInt();
+                    if (jsonObject1.has("levels")) {
+                        levels = jsonObject1.get("levels").getAsInt();
                     }
                     player.setTotalExperience(player.getTotalExperience() + points);
                     player.setLevel(player.getLevel() + levels);
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "apply_effect"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "apply_effect"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
 
-                    if (jsonObject.has("effect")) {
-                        JsonObject effectJsonObject = jsonObject.getAsJsonObject("effect");
+                    if (jsonObject1.has("effect")) {
+                        JsonObject effectJsonObject = jsonObject1.getAsJsonObject("effect");
                         PotionEffectType potionEffectType = null;
                         int duration = 100;
                         int amplifier = 0;
@@ -115,8 +115,8 @@ public class EntityActions {
                             livingEntity.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier, isAmbient, showParticles, showIcon));
                         }
                     }
-                    if (jsonObject.has("effects")) {
-                        JsonObject[] jsonObjects = new Gson().fromJson(jsonObject.get("effects"), JsonObject[].class);
+                    if (jsonObject1.has("effects")) {
+                        JsonObject[] jsonObjects = new Gson().fromJson(jsonObject1.get("effects"), JsonObject[].class);
 
                         Arrays.stream(jsonObjects).forEach(effectJsonObject -> {
                             PotionEffectType potionEffectType = null;
@@ -152,16 +152,16 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "area_of_effect"), DataType.ENTITY, new CraftAction<>(plugin, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block_action_at"), DataType.ENTITY, new CraftAction<>(plugin, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "clear_effect"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "area_of_effect"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block_action_at"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "clear_effect"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
                     PotionEffectType potionEffectType = null;
 
-                    if (jsonObject.has("effect")) {
-                        potionEffectType = PotionEffectType.getByName(jsonObject.get("effect").getAsString());
+                    if (jsonObject1.has("effect")) {
+                        potionEffectType = PotionEffectType.getByName(jsonObject1.get("effect").getAsString());
                     }
                     if (potionEffectType != null) {
                         livingEntity.removePotionEffect(potionEffectType);
@@ -169,7 +169,7 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "crafting_table"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "crafting_table"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 if (entity instanceof HumanEntity) {
                     HumanEntity humanEntity = (HumanEntity) entity;
@@ -178,12 +178,12 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "dismount"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "dismount"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 entity.leaveVehicle();
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "ender_chest"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "ender_chest"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 if (entity instanceof HumanEntity) {
                     HumanEntity humanEntity = (HumanEntity) entity;
@@ -192,37 +192,37 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "equipped_item_action"), DataType.ENTITY, new EquippedItemAction(plugin, null, DataType.ENTITY, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "execute_command"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "equipped_item_action"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new EquippedItemAction(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "execute_command"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 String command = null;
 
-                if (jsonObject.has("command")) {
-                    command = jsonObject.get("command").getAsString();
+                if (jsonObject1.has("command")) {
+                    command = jsonObject1.get("command").getAsString();
                 }
                 if (command != null) {
                     Bukkit.dispatchCommand(entity, command);
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "explode"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "explode"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
 
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "extinguish"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "extinguish"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 entity.setFireTicks(0);
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "give"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "give"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
                     ItemStack stack = null;
 
-                    if (jsonObject.has("stack")) {
-                        stack = new ItemStackWrapper(jsonObject.getAsJsonObject("stack")).getItemStack();
+                    if (jsonObject1.has("stack")) {
+                        stack = new ItemStackWrapper(jsonObject1.getAsJsonObject("stack")).getItemStack();
                     }
                     if (stack != null) {
                         player.getInventory().addItem(stack);
@@ -230,14 +230,14 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "play_sound"), DataType.ENTITY, new CraftAction<>(plugin, null, (jsonObject, entity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "play_sound"), DataType.ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, entity) -> {
             if (entity != null) {
                 Sound sound = null;
                 float volume = 1;
                 float pitch = 1;
 
-                if (jsonObject.has("sound")) {
-                    sound = Sound.valueOf(jsonObject.get("sound").getAsString());
+                if (jsonObject1.has("sound")) {
+                    sound = Sound.valueOf(jsonObject1.get("sound").getAsString());
                 }
                 if (sound != null) {
                     entity.getWorld().playSound(entity.getLocation(), sound, volume, pitch);
@@ -267,11 +267,6 @@ public class EntityActions {
                     }
                 });
             }
-        }
-
-        @Override
-        public Action<Entity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<Entity> dataType) {
-            return new EquippedItemAction(plugin, jsonObject, dataType, getBiConsumer());
         }
     }
 }

@@ -66,14 +66,4 @@ public class CraftWaterBreathingPower extends CraftPower {
             }
         }.runTaskTimer(plugin.getJavaPlugin(), 0L, 20L);
     }
-
-    public CraftWaterBreathingPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftWaterBreathingPower(plugin, identifier, jsonObject);
-    }
-
 }

@@ -5,7 +5,6 @@ import me.lemonypancakes.originsbukkit.Action;
 import me.lemonypancakes.originsbukkit.DataType;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 
-import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class CraftAction<T> implements Action<T> {
@@ -20,10 +19,6 @@ public class CraftAction<T> implements Action<T> {
         this.jsonObject = jsonObject;
         this.dataType = dataType;
         this.biConsumer = biConsumer;
-    }
-
-    public CraftAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiConsumer<JsonObject, T> biConsumer) {
-        this(plugin, jsonObject, null, biConsumer);
     }
 
     @Override
@@ -55,16 +50,6 @@ public class CraftAction<T> implements Action<T> {
     }
 
     @Override
-    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftAction<>(plugin, jsonObject, dataType, biConsumer);
-    }
-
-    @Override
-    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-        return newInstance(plugin, jsonObject, null);
-    }
-
-    @Override
     public void accept(T t) {
         if (biConsumer != null) {
             biConsumer.accept(jsonObject, t);
@@ -78,27 +63,4 @@ public class CraftAction<T> implements Action<T> {
 
     @Override
     public void setPlugin(OriginsBukkitPlugin plugin) {}
-
-    @Override
-    public boolean equals(Object itemStack) {
-        if (this == itemStack) return true;
-        if (!(itemStack instanceof CraftAction)) return false;
-        CraftAction<?> that = (CraftAction<?>) itemStack;
-        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getJsonObject(), that.getJsonObject()) && Objects.equals(getDataType(), that.getDataType()) && Objects.equals(getBiConsumer(), that.getBiConsumer());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getPlugin(), getJsonObject(), getDataType(), getBiConsumer());
-    }
-
-    @Override
-    public String toString() {
-        return "CraftAction{" +
-                "plugin=" + plugin +
-                ", jsonObject=" + jsonObject +
-                ", dataType=" + dataType +
-                ", biConsumer=" + biConsumer +
-                '}';
-    }
 }

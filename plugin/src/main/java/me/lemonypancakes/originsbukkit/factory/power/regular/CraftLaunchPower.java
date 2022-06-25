@@ -25,15 +25,6 @@ public class CraftLaunchPower extends CraftActiveWithCooldownPower {
         }
     }
 
-    public CraftLaunchPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftLaunchPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onUse(Player player, Key key) {
         if (key == Key.PRIMARY) {

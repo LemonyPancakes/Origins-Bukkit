@@ -18,8 +18,8 @@
 package me.lemonypancakes.originsbukkit.item;
 
 import me.lemonypancakes.originsbukkit.OriginItem;
-import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtil;
-import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtils;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import me.lemonypancakes.originsbukkit.util.Config;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Material;
@@ -54,7 +54,7 @@ public class OrbOfOrigin implements OriginItem {
 
 
         if (itemMeta != null) {
-            BukkitPersistentDataUtil.setPersistentData(
+            BukkitPersistentDataUtils.setPersistentData(
                     itemMeta,
                     "origins-bukkit:custom_item",
                     PersistentDataType.STRING,
@@ -64,7 +64,7 @@ public class OrbOfOrigin implements OriginItem {
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             itemMeta.setUnbreakable(true);
             itemMeta.addEnchant(Enchantment.DURABILITY, 1, true);
-            itemMeta.setDisplayName(ChatUtil.format(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_DISPLAY_NAME.toString()));
+            itemMeta.setDisplayName(ChatUtils.format(Config.CUSTOM_ITEM_ORB_OF_ORIGIN_DISPLAY_NAME.toString()));
             itemStack.setItemMeta(itemMeta);
         }
 

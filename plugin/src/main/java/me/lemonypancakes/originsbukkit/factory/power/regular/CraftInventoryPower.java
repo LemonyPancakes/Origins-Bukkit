@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.factory.power.CraftActivePower;
-import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtil;
+import me.lemonypancakes.originsbukkit.util.BukkitPersistentDataUtils;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.Key;
 import org.bukkit.Bukkit;
@@ -45,15 +45,6 @@ public class CraftInventoryPower extends CraftActivePower {
         }
     }
 
-    public CraftInventoryPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftInventoryPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberRemove(Player player) {
         if (players.contains(player)) {
@@ -87,7 +78,7 @@ public class CraftInventoryPower extends CraftActivePower {
 
     public void storeItems(List<ItemStack> items, Player player) {
         if (items.size() == 0) {
-            BukkitPersistentDataUtil.setPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING, "");
+            BukkitPersistentDataUtils.setPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING, "");
         } else {
             try{
                 ByteArrayOutputStream io = new ByteArrayOutputStream();
@@ -103,7 +94,7 @@ public class CraftInventoryPower extends CraftActivePower {
                 byte[] rawData = io.toByteArray();
                 String encodedData = Base64.getEncoder().encodeToString(rawData);
 
-                BukkitPersistentDataUtil.setPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING, encodedData);
+                BukkitPersistentDataUtils.setPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING, encodedData);
                 os.close();
             } catch (IOException e) {
                 System.out.println(e);
@@ -114,7 +105,7 @@ public class CraftInventoryPower extends CraftActivePower {
 
     public ArrayList<ItemStack> getItems(Player player) {
         ArrayList<ItemStack> items = new ArrayList<>();
-        String encodedItems = BukkitPersistentDataUtil.getPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING);
+        String encodedItems = BukkitPersistentDataUtils.getPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING);
 
         if (encodedItems != null) {
             if (!encodedItems.isEmpty()) {

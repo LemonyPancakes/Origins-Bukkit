@@ -22,15 +22,6 @@ public class CraftPreventElytraFlightPower extends CraftPower {
         this.entityAction = plugin.getLoader().loadAction(DataType.ENTITY, jsonObject, "entity_action");
     }
 
-    public CraftPreventElytraFlightPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftPreventElytraFlightPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityToggleGlide(EntityToggleGlideEvent event) {
         Entity entity = event.getEntity();

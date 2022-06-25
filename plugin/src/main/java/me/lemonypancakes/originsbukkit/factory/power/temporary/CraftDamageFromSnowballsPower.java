@@ -18,15 +18,6 @@ public class CraftDamageFromSnowballsPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftDamageFromSnowballsPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftDamageFromSnowballsPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity targetEntity = event.getEntity();

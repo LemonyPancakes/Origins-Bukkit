@@ -21,31 +21,31 @@ import java.util.function.BiPredicate;
 public class BlockConditions {
 
     public BlockConditions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BLOCK, new CraftAndCondition<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.BLOCK, new CraftOrCondition<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "adjacent"), DataType.BLOCK, new Adjacent(plugin, null, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attachable"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAndCondition<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftOrCondition<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "adjacent"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new Adjacent(plugin1, jsonObject, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attachable"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return block.getType().isSolid();
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "blast_resistance"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "blast_resistance"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return Comparison.parseComparison(jsonObject).compare(block.getType().getBlastResistance(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
-                return block.getType() == Material.valueOf(jsonObject.get("block").getAsString());
+                return block.getType() == Material.valueOf(jsonObject1.get("block").getAsString());
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "match_blocks"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "match_blocks"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
-                if (jsonObject.has("blocks")) {
-                    Material[] blocks = new Gson().fromJson(jsonObject.get("blocks"), Material[].class);
+                if (jsonObject1.has("blocks")) {
+                    Material[] blocks = new Gson().fromJson(jsonObject1.get("blocks"), Material[].class);
 
                     if (blocks != null) {
                         return Arrays.asList(blocks).contains(block.getType());
@@ -54,38 +54,38 @@ public class BlockConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "exposed_to_sky"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "exposed_to_sky"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return block.getLightFromSky() >= 15;
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fluid"), DataType.BLOCK, new Fluid(plugin, null, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "hardness"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fluid"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new Fluid(plugin, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "hardness"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return Comparison.parseComparison(jsonObject).compare(block.getType().getHardness(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "height"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "height"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return Comparison.parseComparison(jsonObject).compare(block.getY(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "light_blocking"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "light_blocking"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return block.getType().isOccluding();
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "light_level"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "light_level"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 String lightType = null;
                 byte toCompare = 0;
 
-                if (jsonObject.has("light_type")) {
-                    lightType = jsonObject.get("light_type").getAsString();
+                if (jsonObject1.has("light_type")) {
+                    lightType = jsonObject1.get("light_type").getAsString();
                 }
                 if (lightType != null) {
                     switch (lightType.toLowerCase()) {
@@ -99,35 +99,35 @@ public class BlockConditions {
                 } else {
                     toCompare = (byte) Math.max(block.getLightFromSky(), block.getLightFromBlocks());
                 }
-                return Comparison.parseComparison(jsonObject).compare(toCompare, jsonObject);
+                return Comparison.parseComparison(jsonObject1).compare(toCompare, jsonObject1);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "movement_blocking"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "movement_blocking"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return block.getType().isSolid();
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "replaceable"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "replaceable"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return block.isLiquid();
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "slipperiness"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "slipperiness"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
-                return Comparison.parseComparison(jsonObject).compare(block.getType().getSlipperiness(), jsonObject);
+                return Comparison.parseComparison(jsonObject1).compare(block.getType().getSlipperiness(), jsonObject1);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "water_loggable"), DataType.BLOCK, new CraftCondition<>(plugin, null, (jsonObject, block) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "water_loggable"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, block) -> {
             if (block != null) {
                 return block.getBlockData() instanceof Waterlogged;
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "offset"), DataType.BLOCK, new Meta.Offset(plugin, null, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "offset"), DataType.BLOCK, (plugin1, jsonObject) -> (dataType) -> () -> new Meta.Offset(plugin1, jsonObject, null)));
     }
 
     public static class Adjacent extends CraftCondition<Block> {
@@ -160,16 +160,6 @@ public class BlockConditions {
             }
             return count;
         }
-
-        @Override
-        public Condition<Block> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<Block> dataType) {
-            return new Adjacent(plugin, jsonObject, getBiPredicate());
-        }
-
-        @Override
-        public Condition<Block> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-            return newInstance(plugin, jsonObject, DataType.BLOCK);
-        }
     }
 
     public static class Fluid extends CraftCondition<Block> {
@@ -187,11 +177,6 @@ public class BlockConditions {
                     return false;
                 });
             }
-        }
-
-        @Override
-        public Condition<Block> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-            return new Fluid(plugin, jsonObject, getBiPredicate());
         }
     }
 
@@ -211,25 +196,20 @@ public class BlockConditions {
                             int y = 0;
                             int z = 0;
 
-                            if (jsonObject.has("x")) {
-                                x = jsonObject.get("x").getAsInt();
+                            if (jsonObject1.has("x")) {
+                                x = jsonObject1.get("x").getAsInt();
                             }
-                            if (jsonObject.has("y")) {
-                                y = jsonObject.get("y").getAsInt();
+                            if (jsonObject1.has("y")) {
+                                y = jsonObject1.get("y").getAsInt();
                             }
-                            if (jsonObject.has("z")) {
-                                z = jsonObject.get("z").getAsInt();
+                            if (jsonObject1.has("z")) {
+                                z = jsonObject1.get("z").getAsInt();
                             }
                             return condition.test(block.getLocation().add(x, y, z).getBlock());
                         }
                         return false;
                     });
                 }
-            }
-
-            @Override
-            public Condition<Block> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-                return new Offset(plugin, jsonObject, getBiPredicate());
             }
         }
     }

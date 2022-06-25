@@ -18,15 +18,6 @@ public class CraftTogglePower extends CraftActivePower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftTogglePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftTogglePower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onUse(Player player, Key key) {
         if (players.contains(player)) {

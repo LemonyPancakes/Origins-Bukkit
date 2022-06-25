@@ -16,14 +16,14 @@ import java.util.function.BiConsumer;
 public class BiEntityActions {
 
     public BiEntityActions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, new CraftAndAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.BI_ENTITY, new CraftChanceAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.BI_ENTITY, new CraftChoiceAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.BI_ENTITY, new CraftDelayAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.BI_ENTITY, new CraftIfElseAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.BI_ENTITY, new CraftIfElseListAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.BI_ENTITY, new CraftNothingAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAndAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftChanceAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftChoiceAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftDelayAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftIfElseAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftIfElseListAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftNothingAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -35,17 +35,17 @@ public class BiEntityActions {
                     float z = 0;
                     boolean setVelocity = false;
 
-                    if (jsonObject.has("x")) {
-                        x = jsonObject.get("x").getAsFloat();
+                    if (jsonObject1.has("x")) {
+                        x = jsonObject1.get("x").getAsFloat();
                     }
-                    if (jsonObject.has("y")) {
-                        y = jsonObject.get("y").getAsFloat();
+                    if (jsonObject1.has("y")) {
+                        y = jsonObject1.get("y").getAsFloat();
                     }
-                    if (jsonObject.has("z")) {
-                        z = jsonObject.get("z").getAsFloat();
+                    if (jsonObject1.has("z")) {
+                        z = jsonObject1.get("z").getAsFloat();
                     }
-                    if (jsonObject.has("set_velocity")) {
-                        setVelocity = jsonObject.get("set_velocity").getAsBoolean();
+                    if (jsonObject1.has("set_velocity")) {
+                        setVelocity = jsonObject1.get("set_velocity").getAsBoolean();
                     }
                     if (setVelocity) {
                         target.setVelocity(new Vector(x, y, z));
@@ -55,7 +55,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "damage"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "damage"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -64,14 +64,14 @@ public class BiEntityActions {
                     Damageable damageable = (Damageable) target;
                     double amount = 0;
 
-                    if (jsonObject.has("amount")) {
-                        amount = jsonObject.get("amount").getAsDouble();
+                    if (jsonObject1.has("amount")) {
+                        amount = jsonObject1.get("amount").getAsDouble();
                     }
                     damageable.damage(amount);
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "mount"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "mount"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -81,7 +81,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "set_in_love"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "set_in_love"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -91,15 +91,15 @@ public class BiEntityActions {
                         Animals animals = (Animals) target;
                         int duration = 600;
 
-                        if (jsonObject.has("duration")) {
-                            duration = jsonObject.get("duration").getAsInt();
+                        if (jsonObject1.has("duration")) {
+                            duration = jsonObject1.get("duration").getAsInt();
                         }
                         animals.setLoveModeTicks(duration);
                     }
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "tame"), DataType.BI_ENTITY, new CraftAction<>(plugin, null, (jsonObject, biEntity) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "tame"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -118,9 +118,9 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_action"), DataType.BI_ENTITY, new Meta.ActorAction(plugin, null, DataType.BI_ENTITY, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, new Meta.Invert(plugin, null, DataType.BI_ENTITY, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_action"), DataType.BI_ENTITY, new Meta.TargetAction(plugin, null, DataType.BI_ENTITY, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_action"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new Meta.ActorAction(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new Meta.Invert(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_action"), DataType.BI_ENTITY, (plugin1, jsonObject) -> (dataType) -> () -> new Meta.TargetAction(plugin1, jsonObject, dataType, null)));
     }
 
     public static class Meta {
@@ -136,11 +136,6 @@ public class BiEntityActions {
                     setBiConsumer((jsonObject1, biEntity) -> action.accept(biEntity.getActor()));
                 }
             }
-
-            @Override
-            public Action<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType) {
-                return new ActorAction(plugin, jsonObject, dataType, getBiConsumer());
-            }
         }
 
         public static class Invert extends CraftAction<BiEntity> {
@@ -154,11 +149,6 @@ public class BiEntityActions {
                     setBiConsumer((jsonObject1, biEntity) -> action.accept(new BiEntity(biEntity.getTarget(), biEntity.getActor())));
                 }
             }
-
-            @Override
-            public Action<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType) {
-                return new Invert(plugin, jsonObject, dataType, getBiConsumer());
-            }
         }
 
         public static class TargetAction extends CraftAction<BiEntity> {
@@ -171,11 +161,6 @@ public class BiEntityActions {
                     this.action = plugin.getLoader().loadAction(DataType.ENTITY, jsonObject);
                     setBiConsumer((jsonObject1, biEntity) -> action.accept(biEntity.getTarget()));
                 }
-            }
-
-            @Override
-            public Action<BiEntity> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<BiEntity> dataType) {
-                return new TargetAction(plugin, jsonObject, dataType, getBiConsumer());
             }
         }
     }

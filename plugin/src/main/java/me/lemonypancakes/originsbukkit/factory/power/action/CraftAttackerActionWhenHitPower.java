@@ -22,15 +22,6 @@ public class CraftAttackerActionWhenHitPower extends CraftCooldownPower {
         this.damageCondition = plugin.getLoader().loadCondition(DataType.DAMAGE, jsonObject, "damage_conition");
     }
 
-    public CraftAttackerActionWhenHitPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftAttackerActionWhenHitPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamage(EntityDamageByEntityEvent event) {
         Entity targetEntity = event.getEntity();

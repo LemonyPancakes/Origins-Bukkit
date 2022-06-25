@@ -31,17 +31,17 @@ public class Info {
             Player player = (Player) commandSender;
 
             if (!player.hasPermission(Permissions.INFO_SELF.toString()) && !player.hasPermission(Permissions.INFO_OTHERS.toString())) {
-                ChatUtil.sendCommandSenderMessage(
+                ChatUtils.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtil.Type.ERROR,
+                        ChatUtils.Type.ERROR,
                         Lang.COMMAND_NO_PERMISSION.toString()
                 );
                 return;
             }
         } else {
-            ChatUtil.sendCommandSenderMessage(
+            ChatUtils.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtil.Type.ERROR,
+                    ChatUtils.Type.ERROR,
                     Lang.SUBCOMMAND_INFO_PLAYERS_ONLY.toString()
             );
             return;
@@ -56,18 +56,18 @@ public class Info {
                 if (inventory != null) {
                     player.openInventory(inventory);
                 } else {
-                    ChatUtil.sendCommandSenderMessage(
+                    ChatUtils.sendCommandSenderMessage(
                             commandSender,
-                            ChatUtil.Type.ERROR,
+                            ChatUtils.Type.ERROR,
                             Lang.SUBCOMMAND_INFO_CANNOT_FIND_DATA.toString()
                                     .replace("{player}", commandSender.getName()
                                     )
                     );
                 }
             } else {
-                ChatUtil.sendCommandSenderMessage(
+                ChatUtils.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtil.Type.ERROR,
+                        ChatUtils.Type.ERROR,
                         Lang.SUBCOMMAND_INFO_CANNOT_FIND_DATA.toString()
                                 .replace("{player}", commandSender.getName()
                                 )
@@ -77,9 +77,9 @@ public class Info {
             Player player = (Player) commandSender;
 
             if (!player.hasPermission(Permissions.INFO_OTHERS.toString())) {
-                ChatUtil.sendCommandSenderMessage(
+                ChatUtils.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtil.Type.ERROR,
+                        ChatUtils.Type.ERROR,
                         Lang.COMMAND_NO_PERMISSION.toString()
                 );
                 return;
@@ -88,7 +88,7 @@ public class Info {
 
             if (target != null) {
                 String playerName = target.getName();
-                String originIdentifier = BukkitPersistentDataUtil.getPersistentData(
+                String originIdentifier = BukkitPersistentDataUtils.getPersistentData(
                         target,
                         "origins-bukkit:origin",
                         PersistentDataType.STRING);
@@ -99,36 +99,36 @@ public class Info {
                     if (inventory != null) {
                         player.openInventory(inventory);
                     } else {
-                        ChatUtil.sendCommandSenderMessage(
+                        ChatUtils.sendCommandSenderMessage(
                                 commandSender,
-                                ChatUtil.Type.ERROR,
+                                ChatUtils.Type.ERROR,
                                 Lang.SUBCOMMAND_INFO_CANNOT_FIND_DATA.toString()
                                         .replace("{player}", target.getName()
                                         )
                         );
                     }
                 } else {
-                    ChatUtil.sendCommandSenderMessage(
+                    ChatUtils.sendCommandSenderMessage(
                             commandSender,
-                            ChatUtil.Type.ERROR,
+                            ChatUtils.Type.ERROR,
                             Lang.SUBCOMMAND_INFO_CANNOT_FIND_DATA.toString()
                                     .replace("{player}", target.getName()
                                     )
                     );
                 }
             } else {
-                ChatUtil.sendCommandSenderMessage(
+                ChatUtils.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtil.Type.ERROR,
+                        ChatUtils.Type.ERROR,
                         Lang.COMMAND_PLAYER_NOT_FOUND.toString()
                                 .replace("{player}", args[1]
                                 )
                 );
             }
         } else {
-            ChatUtil.sendCommandSenderMessage(
+            ChatUtils.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtil.Type.ERROR,
+                    ChatUtils.Type.ERROR,
                     Lang.COMMAND_TOO_MANY_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_INFO_USAGE.toString()
                             )

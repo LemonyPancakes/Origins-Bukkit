@@ -24,15 +24,6 @@ public class CraftActionOnItemUsePower extends CraftPower {
         this.itemCondition = plugin.getLoader().loadCondition(DataType.ITEM_STACK, jsonObject, "item_condition");
     }
 
-    public CraftActionOnItemUsePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOnItemUsePower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();

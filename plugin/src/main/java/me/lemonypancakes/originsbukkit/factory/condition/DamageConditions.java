@@ -20,16 +20,16 @@ import java.util.function.BiPredicate;
 public class DamageConditions {
 
     public DamageConditions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.DAMAGE, new CraftAndCondition<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.DAMAGE, new CraftOrCondition<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "amount"), DataType.DAMAGE, new CraftCondition<>(plugin, null, (jsonObject, damage) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.DAMAGE, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAndCondition<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.DAMAGE, (plugin1, jsonObject) -> (dataType) -> () -> new CraftOrCondition<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "amount"), DataType.DAMAGE, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, damage) -> {
             if (damage != null) {
                 return Comparison.parseComparison(jsonObject).compare(damage.getAmount(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attacker"), DataType.DAMAGE, new Attacker(plugin, null, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fire"), DataType.DAMAGE, new CraftCondition<>(plugin, null, (jsonObject, damage) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attacker"), DataType.DAMAGE, (plugin1, jsonObject) -> (dataType) -> () -> new Attacker(plugin, jsonObject, null)));
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fire"), DataType.DAMAGE, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, damage) -> {
             if (damage != null) {
                 EntityDamageEvent.DamageCause damageCause = damage.getDamageCause();
 
@@ -39,9 +39,9 @@ public class DamageConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "name"), DataType.DAMAGE, new CraftCondition<>(plugin, null, (jsonObject, damage) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "name"), DataType.DAMAGE, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, damage) -> {
             if (damage != null) {
-                EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.valueOf(jsonObject.get("name").getAsString());
+                EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.valueOf(jsonObject1.get("name").getAsString());
 
                 if (damage.getDamageCause() != null) {
                     return damage.getDamageCause() == damageCause;
@@ -49,18 +49,18 @@ public class DamageConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "projectile"), DataType.DAMAGE, new CraftCondition<>(plugin, null, (jsonObject, damage) -> {
+        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "projectile"), DataType.DAMAGE, (plugin1, jsonObject) -> (dataType) -> () -> new CraftCondition<>(plugin1, jsonObject, dataType, (jsonObject1, damage) -> {
             if (damage != null) {
                 Entity damager = damage.getEntity();
 
                 if (damager != null) {
                     if (damager instanceof Projectile) {
-                        if (!jsonObject.has("projectile")) {
+                        if (!jsonObject1.has("projectile")) {
                             return true;
                         }
                         Projectile projectile = (Projectile) damager;
 
-                        return projectile.getType() == EntityType.valueOf(jsonObject.get("projectile").getAsString());
+                        return projectile.getType() == EntityType.valueOf(jsonObject1.get("projectile").getAsString());
                     }
                 }
             }
@@ -90,11 +90,6 @@ public class DamageConditions {
                     return false;
                 }));
             }
-        }
-
-        @Override
-        public Condition<Damage> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-            return new Attacker(plugin, jsonObject, getBiPredicate());
         }
     }
 }

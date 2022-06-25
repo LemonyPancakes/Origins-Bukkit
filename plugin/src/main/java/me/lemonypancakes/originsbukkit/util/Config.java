@@ -63,11 +63,11 @@ public enum Config {
 
     @Override
     public String toString() {
-        return ChatUtil.format(CONFIG.getString(this.Path, (String) this.defaultValue));
+        return ChatUtils.format(CONFIG.getString(this.Path, (String) this.defaultValue));
     }
 
     public String[] toStringArray() {
-        return ChatUtil.formatList(CONFIG.getStringList(this.Path).toArray(new String[0]));
+        return ChatUtils.formatList(CONFIG.getStringList(this.Path).toArray(new String[0]));
     }
 
     public boolean toBoolean() {

@@ -22,15 +22,6 @@ public class CraftDamageFromPotionsPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftDamageFromPotionsPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftDamageFromPotionsPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();

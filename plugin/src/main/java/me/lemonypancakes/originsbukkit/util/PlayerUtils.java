@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-public class PlayerUtil {
+public class PlayerUtils {
 
     public static void heal(Player player, double amount) {
         AttributeInstance attributeInstance = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);

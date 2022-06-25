@@ -31,15 +31,6 @@ public class CraftCreativeFlightPower extends CraftPower {
         }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1L);
     }
 
-    public CraftCreativeFlightPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftCreativeFlightPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberRemove(Player player) {
         player.setAllowFlight(false);

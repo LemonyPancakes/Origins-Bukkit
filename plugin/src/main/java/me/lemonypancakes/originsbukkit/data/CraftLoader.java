@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import me.lemonypancakes.originsbukkit.*;
 import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
-import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.Impact;
 import me.lemonypancakes.originsbukkit.util.Lang;
@@ -54,14 +54,14 @@ public class CraftLoader implements Loader {
                 String displayName = jsonObject.get("display_name").getAsString();
 
                 if (displayName != null) {
-                    origin.setDisplayName(ChatUtil.format(displayName));
+                    origin.setDisplayName(ChatUtils.format(displayName));
                 }
             }
             if (jsonObject.has("description")) {
                 String[] description = gson.fromJson(jsonObject.get("description"), String[].class);
 
                 if (description != null) {
-                    origin.setDescription(ChatUtil.formatList(description));
+                    origin.setDescription(ChatUtils.formatList(description));
                 }
             }
             if (jsonObject.has("impact")) {
@@ -109,15 +109,15 @@ public class CraftLoader implements Loader {
                                     String originIconDisplayName = originIconMeta.get("display_name").getAsString();
 
                                     if (originIconDisplayName != null) {
-                                        itemMeta.setDisplayName(ChatUtil.format(originIconDisplayName));
+                                        itemMeta.setDisplayName(ChatUtils.format(originIconDisplayName));
                                     } else {
                                         if (origin.getDisplayName() != null) {
-                                            itemMeta.setDisplayName(ChatUtil.format(origin.getDisplayName()));
+                                            itemMeta.setDisplayName(ChatUtils.format(origin.getDisplayName()));
                                         }
                                     }
                                 } else {
                                     if (origin.getDisplayName() != null) {
-                                        itemMeta.setDisplayName(ChatUtil.format(origin.getDisplayName()));
+                                        itemMeta.setDisplayName(ChatUtils.format(origin.getDisplayName()));
                                     }
                                 }
                                 if (originIconMeta.has("description")) {
@@ -143,7 +143,7 @@ public class CraftLoader implements Loader {
                             }
                         } else {
                             if (origin.getDisplayName() != null) {
-                                itemMeta.setDisplayName(ChatUtil.format(origin.getDisplayName()));
+                                itemMeta.setDisplayName(ChatUtils.format(origin.getDisplayName()));
                             }
                             if (origin.getDescription() != null) {
                                 itemMeta.setLore(Arrays.asList(origin.getDescription()));
@@ -179,7 +179,7 @@ public class CraftLoader implements Loader {
                 }
             }
             Inventory inventory = Bukkit.createInventory(null, 54, Lang.GUI_HEADER_TEXT.toString());
-            Inventory originInfo = Bukkit.createInventory(null, 54, ChatUtil.format("&0Origin info."));
+            Inventory originInfo = Bukkit.createInventory(null, 54, ChatUtils.format("&0Origin info."));
             ItemStack itemStack = new ItemStack(origin.getIcon());
             itemStack.setAmount(1);
             ItemMeta itemMeta = itemStack.getItemMeta();
@@ -321,7 +321,7 @@ public class CraftLoader implements Loader {
                             Power.Factory factory = plugin.getRegistry().getPowerFactory(powerFactoryIdentifier);
 
                             if (factory != null) {
-                                power = factory.newInstance(plugin, identifier, jsonObject);
+                                power = factory.create(plugin, identifier, jsonObject);
                             }
                         }
                     }
@@ -357,7 +357,7 @@ public class CraftLoader implements Loader {
                     if (plugin.getRegistry().hasActionFactory(dataType, actionTypeIdentifier)) {
                         Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
 
-                        return factory.newInstance(plugin, actionJsonObject, dataType);
+                        return factory.create(plugin, actionJsonObject, dataType);
                     }
                 }
             }
@@ -383,7 +383,7 @@ public class CraftLoader implements Loader {
 
                     if (plugin.getRegistry().hasActionFactory(dataType, actionTypeIdentifier)) {
                         Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
-                        Action<T> action = factory.newInstance(plugin, actionJsonObject, dataType);
+                        Action<T> action = factory.create(plugin, actionJsonObject, dataType);
 
                         actions.add(action);
                     }
@@ -406,7 +406,7 @@ public class CraftLoader implements Loader {
 
                 if (plugin.getRegistry().hasActionFactory(dataType, actionTypeIdentifier)) {
                     Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
-                    Action<T> action = factory.newInstance(plugin, actionJsonObject, dataType);
+                    Action<T> action = factory.create(plugin, actionJsonObject, dataType);
 
                     actions.add(action);
                 }
@@ -433,7 +433,7 @@ public class CraftLoader implements Loader {
                     if (plugin.getRegistry().hasConditionFactory(dataType, conditionTypeIdentifier)) {
                         Condition.Factory<T> factory = plugin.getRegistry().getConditionFactory(dataType, conditionTypeIdentifier);
 
-                        return factory.newInstance(plugin, conditionJsonObject, dataType);
+                        return factory.create(plugin, conditionJsonObject, dataType);
                     }
                 }
             }
@@ -459,7 +459,7 @@ public class CraftLoader implements Loader {
 
                     if (plugin.getRegistry().hasActionFactory(dataType, conditionTypeIdentifier)) {
                         Condition.Factory<T> factory = plugin.getRegistry().getConditionFactory(dataType, conditionTypeIdentifier);
-                        Condition<T> condition = factory.newInstance(plugin, conditionJsonObject, dataType);
+                        Condition<T> condition = factory.create(plugin, conditionJsonObject, dataType);
 
                         conditions.add(condition);
                     }
@@ -482,7 +482,7 @@ public class CraftLoader implements Loader {
 
                 if (plugin.getRegistry().hasConditionFactory(dataType, conditionTypeIdentifier)) {
                     Condition.Factory<T> factory = plugin.getRegistry().getConditionFactory(dataType, conditionTypeIdentifier);
-                    Condition<T> condition = factory.newInstance(plugin, jsonObject, dataType);
+                    Condition<T> condition = factory.create(plugin, jsonObject, dataType);
 
                     conditions.add(condition);
                 }
@@ -559,7 +559,7 @@ public class CraftLoader implements Loader {
 
                         if (plugin.getRegistry().hasConditionFactory(dataType, actionTypeIdentifier)) {
                             Action.Factory<T> factory = plugin.getRegistry().getActionFactory(dataType, actionTypeIdentifier);
-                            Action<T> action = factory.newInstance(plugin, jsonObject, dataType);
+                            Action<T> action = factory.create(plugin, jsonObject, dataType);
 
                             elements.add(new Element<>(action, actionJsonObject.get("weight").getAsInt()));
                         }

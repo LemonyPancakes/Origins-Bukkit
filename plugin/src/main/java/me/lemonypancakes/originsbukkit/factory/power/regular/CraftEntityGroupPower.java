@@ -5,7 +5,7 @@ import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
 import me.lemonypancakes.originsbukkit.util.Identifier;
-import me.lemonypancakes.originsbukkit.util.PlayerUtil;
+import me.lemonypancakes.originsbukkit.util.PlayerUtils;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -46,15 +46,6 @@ public class CraftEntityGroupPower extends CraftPower {
                 }
             }
         }
-    }
-
-    public CraftEntityGroupPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftEntityGroupPower(plugin, identifier, jsonObject);
     }
 
     private class Undead implements Listener {
@@ -141,7 +132,7 @@ public class CraftEntityGroupPower extends CraftPower {
 
                     if (event.getCause() == magic) {
                         event.setCancelled(true);
-                        PlayerUtil.heal(player, event.getDamage());
+                        PlayerUtils.heal(player, event.getDamage());
                     } else if (event.getCause() == poison) {
                         event.setCancelled(true);
                     }

@@ -20,9 +20,4 @@ public class CraftAndAction<T> extends CraftAction<T> {
             setBiConsumer((jsonObject1, t) -> Arrays.stream(actions).forEach(action -> action.accept(t)));
         }
     }
-
-    @Override
-    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftAndAction<>(plugin, jsonObject, dataType, getBiConsumer());
-    }
 }

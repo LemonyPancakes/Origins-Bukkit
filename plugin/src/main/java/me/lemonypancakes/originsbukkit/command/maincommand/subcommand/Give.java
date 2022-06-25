@@ -1,7 +1,7 @@
 package me.lemonypancakes.originsbukkit.command.maincommand.subcommand;
 
 import me.lemonypancakes.originsbukkit.command.maincommand.MainCommand;
-import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import me.lemonypancakes.originsbukkit.util.Lang;
 import me.lemonypancakes.originsbukkit.util.Permissions;
@@ -33,18 +33,18 @@ public class Give {
             Player player = (Player) commandSender;
 
             if (!player.hasPermission(Permissions.GIVE.toString())) {
-                ChatUtil.sendCommandSenderMessage(
+                ChatUtils.sendCommandSenderMessage(
                         commandSender,
-                        ChatUtil.Type.ERROR,
+                        ChatUtils.Type.ERROR,
                         Lang.COMMAND_NO_PERMISSION.toString()
                 );
                 return;
             }
         }
         if (args.length < 3) {
-            ChatUtil.sendCommandSenderMessage(
+            ChatUtils.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtil.Type.ERROR,
+                    ChatUtils.Type.ERROR,
                     Lang.COMMAND_NOT_ENOUGH_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_GIVE_USAGE.toString()
                             )
@@ -63,9 +63,9 @@ public class Give {
                             amount = 1;
                         }
                     } catch (NumberFormatException exception) {
-                        ChatUtil.sendCommandSenderMessage(
+                        ChatUtils.sendCommandSenderMessage(
                                 commandSender,
-                                ChatUtil.Type.ERROR,
+                                ChatUtils.Type.ERROR,
                                 Lang.SUBCOMMAND_GIVE_INVALID_AMOUNT.toString()
                                         .replace("{amount}", args[3]
                                         )
@@ -95,9 +95,9 @@ public class Give {
 
                             target.getInventory().addItem(itemStack);
                         } else {
-                            ChatUtil.sendCommandSenderMessage(
+                            ChatUtils.sendCommandSenderMessage(
                                     commandSender,
-                                    ChatUtil.Type.ERROR,
+                                    ChatUtils.Type.ERROR,
                                     Lang.SUBCOMMAND_GIVE_CANNOT_FIND_ITEM.toString()
                                             .replace("{item}", args[2]
                                             )
@@ -121,9 +121,9 @@ public class Give {
                             amount = 1;
                         }
                     } catch (NumberFormatException exception) {
-                        ChatUtil.sendCommandSenderMessage(
+                        ChatUtils.sendCommandSenderMessage(
                                 commandSender,
-                                ChatUtil.Type.ERROR,
+                                ChatUtils.Type.ERROR,
                                 Lang.SUBCOMMAND_GIVE_INVALID_AMOUNT.toString()
                                         .replace("{amount}", args[3]
                                         )
@@ -152,9 +152,9 @@ public class Give {
                             ItemMeta itemMeta = itemStack.getItemMeta();
 
                             if (itemMeta != null) {
-                                ChatUtil.sendCommandSenderMessage(
+                                ChatUtils.sendCommandSenderMessage(
                                         commandSender,
-                                        ChatUtil.Type.SUCCESS,
+                                        ChatUtils.Type.SUCCESS,
                                         Lang.SUBCOMMAND_GIVE_SUCCESS.toString()
                                                 .replace("{player}", target.getName())
                                                 .replace("{item}", itemStack.getItemMeta().getDisplayName())
@@ -162,9 +162,9 @@ public class Give {
                                                 )
                                 );
                             } else {
-                                ChatUtil.sendCommandSenderMessage(
+                                ChatUtils.sendCommandSenderMessage(
                                         commandSender,
-                                        ChatUtil.Type.SUCCESS,
+                                        ChatUtils.Type.SUCCESS,
                                         Lang.SUBCOMMAND_GIVE_SUCCESS.toString()
                                                 .replace("{player}", target.getName())
                                                 .replace("{item}", "null")
@@ -174,9 +174,9 @@ public class Give {
                             }
                             target.getInventory().addItem(itemStack);
                         } else {
-                            ChatUtil.sendCommandSenderMessage(
+                            ChatUtils.sendCommandSenderMessage(
                                     commandSender,
-                                    ChatUtil.Type.ERROR,
+                                    ChatUtils.Type.ERROR,
                                     Lang.SUBCOMMAND_GIVE_CANNOT_FIND_ITEM.toString()
                                             .replace("{item}", args[2]
                                             )
@@ -184,9 +184,9 @@ public class Give {
                         }
                     }
                 } else {
-                    ChatUtil.sendCommandSenderMessage(
+                    ChatUtils.sendCommandSenderMessage(
                             commandSender,
-                            ChatUtil.Type.ERROR,
+                            ChatUtils.Type.ERROR,
                             Lang.COMMAND_PLAYER_NOT_FOUND.toString()
                                     .replace("{player}", args[1]
                                     )
@@ -194,9 +194,9 @@ public class Give {
                 }
             }
         } else {
-            ChatUtil.sendCommandSenderMessage(
+            ChatUtils.sendCommandSenderMessage(
                     commandSender,
-                    ChatUtil.Type.ERROR,
+                    ChatUtils.Type.ERROR,
                     Lang.COMMAND_TOO_MANY_ARGUMENTS.toString()
                             .replace("{command_usage}", Lang.SUBCOMMAND_GIVE_USAGE.toString()
                             )

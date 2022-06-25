@@ -18,15 +18,6 @@ public class CraftKeepInventoryPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftKeepInventoryPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftKeepInventoryPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();

@@ -17,15 +17,6 @@ public class CraftDisableRegenPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftDisableRegenPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftDisableRegenPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityRegainHealth(EntityRegainHealthEvent event) {
         Entity entity = event.getEntity();

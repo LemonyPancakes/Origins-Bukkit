@@ -8,7 +8,7 @@ import me.lemonypancakes.originsbukkit.Scheduler;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
 import me.lemonypancakes.originsbukkit.data.CraftScheduler;
 import me.lemonypancakes.originsbukkit.util.Identifier;
-import me.lemonypancakes.originsbukkit.util.PlayerUtil;
+import me.lemonypancakes.originsbukkit.util.PlayerUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -32,15 +32,6 @@ public class CraftExhaustPower extends CraftPower {
         }
     }
 
-    public CraftExhaustPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftExhaustPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         OriginPlayer originPlayer = getPlugin().getOriginPlayer(player);
@@ -51,7 +42,7 @@ public class CraftExhaustPower extends CraftPower {
                 @Override
                 public void run() {
                     if (getCondition().test(player)) {
-                        PlayerUtil.exhaust(player, exhaustion);
+                        PlayerUtils.exhaust(player, exhaustion);
                     }
                 }
             }.runTaskTimer(getPlugin().getJavaPlugin(), onsetDelay, interval);

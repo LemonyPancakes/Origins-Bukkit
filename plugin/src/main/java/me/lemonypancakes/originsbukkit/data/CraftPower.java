@@ -31,10 +31,6 @@ public class CraftPower implements Power, Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
     }
 
-    public CraftPower(OriginsBukkitPlugin plugin) {
-        this.plugin = plugin;
-    }
-
     @Override
     public Identifier getIdentifier() {
         return identifier;
@@ -97,13 +93,6 @@ public class CraftPower implements Power, Listener {
             return getCondition().test(player);
         }
         return false;
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin,
-                             Identifier identifier,
-                             JsonObject jsonObject) {
-        return new CraftPower(plugin, identifier, jsonObject);
     }
 
     @Override

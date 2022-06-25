@@ -5,7 +5,7 @@
     <parent>
         <artifactId>originsbukkit</artifactId>
         <groupId>me.lemonypancakes.originsbukkit</groupId>
-        <version>Build 3-BETA</version>
+        <version>Build 3-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -47,7 +47,17 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>datapacks/*</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
                 <filtering>false</filtering>
+                <includes>
+                    <include>datapacks/*</include>
+                </includes>
             </resource>
         </resources>
     </build>
@@ -105,19 +115,16 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>4.0.3</version>
-            <scope>compile</scope>
+            <version>5.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.comphenix.packetwrapper</groupId>
             <artifactId>PacketWrapper</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

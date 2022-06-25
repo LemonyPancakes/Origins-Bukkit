@@ -41,15 +41,6 @@ public class CraftModifyBreakSpeedPower extends CraftPower {
         registerBlockBreakPacketListener();
     }
 
-    public CraftModifyBreakSpeedPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftModifyBreakSpeedPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberRemove(Player player) {
         if (modifier < 0) {

@@ -39,15 +39,6 @@ public class CraftModifyPlayerSpawnPower extends CraftPower {
         }
     }
 
-    public CraftModifyPlayerSpawnPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftModifyPlayerSpawnPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         if (!getPlugin().getStorage().hasOriginPlayerData(player)) {

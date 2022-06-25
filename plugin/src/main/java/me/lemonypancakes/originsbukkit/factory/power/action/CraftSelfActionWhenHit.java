@@ -22,15 +22,6 @@ public class CraftSelfActionWhenHit extends CraftCooldownPower {
         this.damageCondition = plugin.getLoader().loadCondition(DataType.DAMAGE, jsonObject, "damage_condition");
     }
 
-    public CraftSelfActionWhenHit(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftSelfActionWhenHit(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity targetEntity = event.getEntity();

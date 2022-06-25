@@ -3,8 +3,7 @@ package me.lemonypancakes.originsbukkit;
 import com.google.gson.JsonObject;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 public interface Action<T> extends Consumer<T>, DataTypeHolder<T>, JsonObjectHolder, OriginsBukkitPluginHolder {
 
@@ -12,28 +11,20 @@ public interface Action<T> extends Consumer<T>, DataTypeHolder<T>, JsonObjectHol
 
     void setBiConsumer(BiConsumer<JsonObject, T> biConsumer);
 
-    Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType);
-
-    Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject);
-
     final class Factory<T> implements Identifiable, DataTypeHolder<T> {
 
         private Identifier identifier;
         private DataType<T> dataType;
-        private Action<T> action;
+        private BiFunction<OriginsBukkitPlugin, JsonObject, Function<DataType<T>, Supplier<Action<T>>>> biFunction;
 
-        public Factory(Identifier identifier, DataType<T> dataType, Action<T> action) {
+        public Factory(Identifier identifier, DataType<T> dataType, BiFunction<OriginsBukkitPlugin, JsonObject, Function<DataType<T>, Supplier<Action<T>>>> biFunction) {
             this.identifier = identifier;
             this.dataType = dataType;
-            this.action = action;
+            this.biFunction = biFunction;
         }
 
-        public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-            return action.newInstance(plugin, jsonObject, dataType);
-        }
-
-        public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-            return action.newInstance(plugin, jsonObject, dataType);
+        public Action<T> create(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
+            return biFunction.apply(plugin, jsonObject).apply(dataType).get();
         }
 
         @Override
@@ -56,12 +47,12 @@ public interface Action<T> extends Consumer<T>, DataTypeHolder<T>, JsonObjectHol
             this.dataType = dataType;
         }
 
-        public Action<T> getAction() {
-            return action;
+        public BiFunction<OriginsBukkitPlugin, JsonObject, Function<DataType<T>, Supplier<Action<T>>>> getBiFunction() {
+            return biFunction;
         }
 
-        public void setAction(Action<T> action) {
-            this.action = action;
+        public void setBiFunction(BiFunction<OriginsBukkitPlugin, JsonObject, Function<DataType<T>, Supplier<Action<T>>>> biFunction) {
+            this.biFunction = biFunction;
         }
     }
 }

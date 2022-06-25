@@ -6,7 +6,7 @@ import me.lemonypancakes.originsbukkit.DataType;
 import me.lemonypancakes.originsbukkit.OriginsBukkitPlugin;
 import me.lemonypancakes.originsbukkit.Power;
 import me.lemonypancakes.originsbukkit.data.CraftPower;
-import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -35,15 +35,6 @@ public class CraftPreventSleepPower extends CraftPower {
         }
     }
 
-    public CraftPreventSleepPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftPreventSleepPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -61,7 +52,7 @@ public class CraftPreventSleepPower extends CraftPower {
                         if (Tag.BEDS.isTagged(material)) {
                             if (getCondition().test(player) && blockCondition.test(block)) {
                                 event.setCancelled(true);
-                                ChatUtil.sendPlayerMessage(player, message);
+                                ChatUtils.sendPlayerMessage(player, message);
                             }
                         }
                     }
@@ -77,7 +68,7 @@ public class CraftPreventSleepPower extends CraftPower {
         if (getMembers().contains(player)) {
             if (getCondition().test(player) && blockCondition.test(event.getBed())) {
                 event.setCancelled(true);
-                ChatUtil.sendPlayerMessage(player, message);
+                ChatUtils.sendPlayerMessage(player, message);
             }
         }
     }

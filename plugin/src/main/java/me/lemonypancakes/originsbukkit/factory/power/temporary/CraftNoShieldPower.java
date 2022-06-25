@@ -23,15 +23,6 @@ public class CraftNoShieldPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftNoShieldPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftNoShieldPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();

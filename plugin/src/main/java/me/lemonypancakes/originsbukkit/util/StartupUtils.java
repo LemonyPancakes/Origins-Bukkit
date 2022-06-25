@@ -24,84 +24,84 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public final class StartupUtil {
+public final class StartupUtils {
 
     public static void registerFactories(OriginsBukkitPlugin plugin) {
 
         //REGULAR
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:attribute"), new CraftAttributePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:burn"), new CraftBurnPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:climbing"), new CraftClimbingPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:conditioned_restrict_armor"), new CraftConditionedRestrictArmorPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:creative_flight"), new CraftCreativeFlightPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_over_time"), new CraftDamageOverTimePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:disable_regen"), new CraftDisableRegenPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:effect_immunity"), new CraftEffectImmunityPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:elytra_flight"), new CraftElytraFlightPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:entity_glow"), new CraftEntityGlowPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:entity_group"), new CraftEntityGroupPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:exhaust"), new CraftExhaustPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:fire_immunity"), new CraftFireImmunityPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:fire_projectile"), new CraftFireProjectilePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:freeze"), new CraftFreezePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:inventory"), new CraftInventoryPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:invisibility"), new CraftInvisibilityPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:invulnerability"), new CraftInvulnerabilityPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:keep_inventory"), new CraftKeepInventoryPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:launch"), new CraftLaunchPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:multiple"), new CraftMultiplePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:particle"), new CraftParticlePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_glow"), new CraftSelfGlowPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:swimming"), new CraftSwimmingPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_breathing"), new CraftWaterBreathingPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:attribute"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftAttributePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:burn"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftBurnPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:climbing"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftClimbingPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:conditioned_restrict_armor"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftConditionedRestrictArmorPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:creative_flight"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftCreativeFlightPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_over_time"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftDamageOverTimePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:disable_regen"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftDisableRegenPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:effect_immunity"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftEffectImmunityPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:elytra_flight"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftElytraFlightPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:entity_glow"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftEntityGlowPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:entity_group"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftEntityGroupPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:exhaust"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftExhaustPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:fire_immunity"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftFireImmunityPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:fire_projectile"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftFireProjectilePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:freeze"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftFreezePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:inventory"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftInventoryPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:invisibility"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftInvisibilityPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:invulnerability"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftInvulnerabilityPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:keep_inventory"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftKeepInventoryPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:launch"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftLaunchPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:multiple"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftMultiplePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:particle"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftParticlePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_glow"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftSelfGlowPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:swimming"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftSwimmingPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_breathing"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftWaterBreathingPower(plugin1, identifier, jsonObject)));
 
         //MODIFY
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_break_speed"), new CraftModifyBreakSpeedPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_damage_dealt"), new CraftModifyDamageDealtPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_damage_taken"), new CraftModifyDamageTakenPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_falling"), new CraftModifyFallingPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_harvest"), new CraftModifyHarvestPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_player_spawn"), new CraftModifyPlayerSpawnPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_break_speed"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftModifyBreakSpeedPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_damage_dealt"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftModifyDamageDealtPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_damage_taken"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftModifyDamageTakenPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_falling"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftModifyFallingPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_harvest"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftModifyHarvestPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:modify_player_spawn"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftModifyPlayerSpawnPower(plugin1, identifier, jsonObject)));
 
         //ACTION
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_being_used"), new CraftActionOnBeingUsedPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_block_break"), new CraftActionOnBlockBreakPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_block_use"), new CraftActionOnBlockUsePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_entity_use"), new CraftActionOnEntityUsePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_hit"), new CraftActionOnHitPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_item_use"), new CraftActionOnItemUsePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_wake_up"), new CraftActionOnWakeUpPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_over_time"), new CraftActionOverTimePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_when_damage_taken"), new CraftActionWhenDamageTakenPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_when_hit"), new CraftActionWhenHitPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:attacker_action_when_hit"), new CraftAttackerActionWhenHitPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_action_on_hit"), new CraftSelfActionOnHitPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_action_on_kill"), new CraftSelfActionOnKill(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_action_when_hit"), new CraftSelfActionWhenHit(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:target_action_on_hit"), new CraftTargetActionOnHit(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_being_used"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOnBeingUsedPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_block_break"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOnBlockBreakPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_block_use"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOnBlockUsePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_entity_use"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOnEntityUsePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_hit"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOnHitPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_item_use"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOnItemUsePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_on_wake_up"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOnWakeUpPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_over_time"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionOverTimePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_when_damage_taken"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionWhenDamageTakenPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:action_when_hit"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftActionWhenHitPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:attacker_action_when_hit"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftAttackerActionWhenHitPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_action_on_hit"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftSelfActionOnHitPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_action_on_kill"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftSelfActionOnKill(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:self_action_when_hit"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftSelfActionWhenHit(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:target_action_on_hit"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftTargetActionOnHit(plugin1, identifier, jsonObject)));
 
         //PREVENT
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_being_used"), new CraftPreventBeingUsedPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_block_break"), new CraftPreventBlockBreakPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_block_use"), new CraftPreventBlockUsePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_death"), new CraftPreventDeathPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_elytra_flight"), new CraftPreventElytraFlightPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_item_use"), new CraftPreventItemUsePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_sleep"), new CraftPreventSleepPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_being_used"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftPreventBeingUsedPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_block_break"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftPreventBlockBreakPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_block_use"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftPreventBlockUsePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_death"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftPreventDeathPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_elytra_flight"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftPreventElytraFlightPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_item_use"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftPreventItemUsePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:prevent_sleep"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftPreventSleepPower(plugin1, identifier, jsonObject)));
 
         //TEMPORARY
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:aerial_combatant"), new CraftAerialCombatantPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:aqua_affinity"), new CraftAquaAffinityPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:burning_wrath"), new CraftBurningWrathPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:claustrophobia"), new CraftClaustrophobiaPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_potions"), new CraftDamageFromPotionsPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_snowballs"), new CraftDamageFromSnowballsPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:light_armor"), new CraftLightArmorPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:more_kinetic_damage"), new CraftMoreKineticDamagePower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:no_shield"), new CraftNoShieldPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:swim_speed"), new CraftSwimSpeedPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:throw_ender_pearl"), new CraftThrowEnderPearlPower(plugin)));
-        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_vision"), new CraftWaterVisionPower(plugin)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:aerial_combatant"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftAerialCombatantPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:aqua_affinity"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftAquaAffinityPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:burning_wrath"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftBurningWrathPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:claustrophobia"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftClaustrophobiaPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_potions"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftDamageFromPotionsPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_snowballs"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftDamageFromSnowballsPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:light_armor"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftLightArmorPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:more_kinetic_damage"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftMoreKineticDamagePower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:no_shield"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftNoShieldPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:swim_speed"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftSwimSpeedPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:throw_ender_pearl"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftThrowEnderPearlPower(plugin1, identifier, jsonObject)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:water_vision"), (plugin1, identifier) -> (jsonObject) -> () -> new CraftWaterVisionPower(plugin1, identifier, jsonObject)));
     }
 
     public static void loadExpansions(OriginsBukkitPlugin plugin) {
@@ -122,8 +122,8 @@ public final class StartupUtil {
                 if (!aPlugin.isEnabled()) {
                     Bukkit.getPluginManager().enablePlugin(aPlugin);
                 } else {
-                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Duplicate expansion " + javaPlugin.getName() + ".");
-                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Please try restarting the server.");
+                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Duplicate expansion " + javaPlugin.getName() + ".");
+                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Please try restarting the server.");
                     plugin.disable();
                 }
             }
@@ -316,7 +316,7 @@ public final class StartupUtil {
                     ItemStack none = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta noneMeta = none.getItemMeta();
                     if (noneMeta != null) {
-                        noneMeta.setDisplayName(ChatUtil.format("&fImpact: &7None"));
+                        noneMeta.setDisplayName(ChatUtils.format("&fImpact: &7None"));
                         none.setItemMeta(noneMeta);
                     }
                     inventory.setItem(6, none);
@@ -327,13 +327,13 @@ public final class StartupUtil {
                     ItemStack low = new ItemStack(Material.LIME_CONCRETE, 1);
                     ItemMeta lowMeta = low.getItemMeta();
                     if (lowMeta != null) {
-                        lowMeta.setDisplayName(ChatUtil.format("&fImpact: &aLow"));
+                        lowMeta.setDisplayName(ChatUtils.format("&fImpact: &aLow"));
                         low.setItemMeta(lowMeta);
                     }
                     ItemStack low1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta lowMeta1 = low1.getItemMeta();
                     if (lowMeta1 != null) {
-                        lowMeta1.setDisplayName(ChatUtil.format("&fImpact: &aLow"));
+                        lowMeta1.setDisplayName(ChatUtils.format("&fImpact: &aLow"));
                         low1.setItemMeta(lowMeta);
                     }
                     inventory.setItem(6, low);
@@ -344,13 +344,13 @@ public final class StartupUtil {
                     ItemStack medium = new ItemStack(Material.YELLOW_CONCRETE, 1);
                     ItemMeta mediumMeta = medium.getItemMeta();
                     if (mediumMeta != null) {
-                        mediumMeta.setDisplayName(ChatUtil.format("&fImpact: &eMedium"));
+                        mediumMeta.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
                         medium.setItemMeta(mediumMeta);
                     }
                     ItemStack medium1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
                     ItemMeta mediumMeta1 = medium1.getItemMeta();
                     if (mediumMeta1 != null) {
-                        mediumMeta1.setDisplayName(ChatUtil.format("&fImpact: &eMedium"));
+                        mediumMeta1.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
                         medium1.setItemMeta(mediumMeta);
                     }
                     inventory.setItem(6, medium);
@@ -361,7 +361,7 @@ public final class StartupUtil {
                     ItemStack high = new ItemStack(Material.RED_CONCRETE, 1);
                     ItemMeta highMeta = high.getItemMeta();
                     if (highMeta != null) {
-                        highMeta.setDisplayName(ChatUtil.format("&fImpact: &cHigh"));
+                        highMeta.setDisplayName(ChatUtils.format("&fImpact: &cHigh"));
                         high.setItemMeta(highMeta);
                     }
                     inventory.setItem(6, high);
@@ -372,21 +372,21 @@ public final class StartupUtil {
             ItemStack previous = new ItemStack(Material.ARROW, 1);
             ItemMeta previousMeta = previous.getItemMeta();
             if (previousMeta != null) {
-                previousMeta.setDisplayName(ChatUtil.format("&6Previous Page"));
+                previousMeta.setDisplayName(ChatUtils.format("&6Previous Page"));
                 previous.setItemMeta(previousMeta);
             }
 
             ItemStack close = new ItemStack(Material.BARRIER, 1);
             ItemMeta closeMeta = close.getItemMeta();
             if (closeMeta != null) {
-                closeMeta.setDisplayName(ChatUtil.format("&cQuit Game"));
+                closeMeta.setDisplayName(ChatUtils.format("&cQuit Game"));
                 close.setItemMeta(closeMeta);
             }
 
             ItemStack next = new ItemStack(Material.ARROW, 1);
             ItemMeta nextMeta = next.getItemMeta();
             if (nextMeta != null) {
-                nextMeta.setDisplayName(ChatUtil.format("&6Next Page"));
+                nextMeta.setDisplayName(ChatUtils.format("&6Next Page"));
                 next.setItemMeta(nextMeta);
             }
 
@@ -400,26 +400,26 @@ public final class StartupUtil {
     }
 
     public static void checkServerCompatibility(OriginsBukkitPlugin plugin) {
-        ServerUtil.checkServerSoftwareCompatibility(plugin);
-        ServerUtil.checkServerVersionCompatibility(plugin);
+        ServerUtils.checkServerSoftwareCompatibility(plugin);
+        ServerUtils.checkServerVersionCompatibility(plugin);
     }
 
     public static void checkServerDependencies(OriginsBukkitPlugin plugin) {
         if (plugin.getJavaPlugin().isEnabled()) {
-            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] Checking dependencies...");
+            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] Checking dependencies...");
         }
         if (plugin.getJavaPlugin().isEnabled()) {
             Plugin protocolLib = Bukkit.getServer().getPluginManager().getPlugin("ProtocolLib");
 
             if (protocolLib != null) {
                 if (protocolLib.isEnabled()) {
-                    ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] ProtocolLib found! Hooking...");
+                    ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] ProtocolLib found! Hooking...");
                 } else {
-                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] ProtocolLib seems to be disabled. Safely disabling plugin...");
+                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] ProtocolLib seems to be disabled. Safely disabling plugin...");
                     plugin.disable();
                 }
             } else {
-                ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (ProtocolLib). Safely disabling plugin...");
+                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (ProtocolLib). Safely disabling plugin...");
                 plugin.disable();
             }
         }
@@ -428,13 +428,13 @@ public final class StartupUtil {
 
             if (lemonLib != null) {
                 if (lemonLib.isEnabled()) {
-                    ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] LemonLib found! Hooking...");
+                    ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] LemonLib found! Hooking...");
                 } else {
-                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] LemonLib seems to be disabled. Safely disabling plugin...");
+                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] LemonLib seems to be disabled. Safely disabling plugin...");
                     plugin.disable();
                 }
             } else {
-                ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (LemonLib). Safely disabling plugin...");
+                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Dependency not found (LemonLib). Safely disabling plugin...");
                 plugin.disable();
             }
         }

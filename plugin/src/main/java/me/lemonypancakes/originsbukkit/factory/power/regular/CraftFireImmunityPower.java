@@ -17,15 +17,6 @@ public class CraftFireImmunityPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftFireImmunityPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftFireImmunityPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();

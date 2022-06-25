@@ -52,15 +52,6 @@ public class CraftActionOverTimePower extends CraftPower {
         }.runTaskTimer(plugin.getJavaPlugin(), 0L, interval);
     }
 
-    public CraftActionOverTimePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOverTimePower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberRemove(Player player) {
         active.remove(player);

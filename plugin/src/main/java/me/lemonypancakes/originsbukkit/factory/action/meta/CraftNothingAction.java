@@ -13,9 +13,4 @@ public class CraftNothingAction<T> extends CraftAction<T> {
     public CraftNothingAction(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType, BiConsumer<JsonObject, T> biConsumer) {
         super(plugin, jsonObject, dataType, biConsumer);
     }
-
-    @Override
-    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftNothingAction<>(plugin, jsonObject, dataType, getBiConsumer());
-    }
 }

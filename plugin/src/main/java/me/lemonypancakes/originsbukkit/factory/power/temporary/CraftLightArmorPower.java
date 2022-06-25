@@ -24,15 +24,6 @@ public class CraftLightArmorPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftLightArmorPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftLightArmorPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onArmorEquip(ArmorEquipEvent event) {
         Player player = event.getPlayer();

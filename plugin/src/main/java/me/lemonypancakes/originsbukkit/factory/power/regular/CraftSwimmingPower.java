@@ -29,15 +29,6 @@ public class CraftSwimmingPower extends CraftPower {
         }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, 1L);
     }
 
-    public CraftSwimmingPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftSwimmingPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         player.setGliding(getCondition().test(player));

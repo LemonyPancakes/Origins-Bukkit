@@ -32,13 +32,4 @@ public class CraftClimbingPower extends CraftTogglePower {
             }
         }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1L);
     }
-
-    public CraftClimbingPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftClimbingPower(plugin, identifier, jsonObject);
-    }
 }

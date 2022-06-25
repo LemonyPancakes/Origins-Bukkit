@@ -37,15 +37,6 @@ public class CraftWaterVisionPower extends CraftPower {
         }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1L);
     }
 
-    public CraftWaterVisionPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftWaterVisionPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberRemove(Player player) {
         player.removePotionEffect(PotionEffectType.NIGHT_VISION);

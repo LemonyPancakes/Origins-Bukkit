@@ -11,13 +11,4 @@ public class CraftMultiplePower extends CraftPower {
     public CraftMultiplePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
     }
-
-    public CraftMultiplePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftMultiplePower(plugin, identifier, jsonObject);
-    }
 }

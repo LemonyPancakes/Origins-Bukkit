@@ -31,15 +31,6 @@ public class CraftElytraFlightPower extends CraftTogglePower {
         }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, 1L);
     }
 
-    public CraftElytraFlightPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftElytraFlightPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         if (isToggled(player)) {

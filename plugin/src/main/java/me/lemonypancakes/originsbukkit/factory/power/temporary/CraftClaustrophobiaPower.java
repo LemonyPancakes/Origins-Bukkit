@@ -42,13 +42,4 @@ public class CraftClaustrophobiaPower extends CraftPower {
             }
         }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1L);
     }
-
-    public CraftClaustrophobiaPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftClaustrophobiaPower(plugin, identifier, jsonObject);
-    }
 }

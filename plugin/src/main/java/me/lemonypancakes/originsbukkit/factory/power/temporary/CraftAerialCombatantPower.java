@@ -17,15 +17,6 @@ public class CraftAerialCombatantPower extends CraftPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftAerialCombatantPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftAerialCombatantPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity actorEntity = event.getDamager();

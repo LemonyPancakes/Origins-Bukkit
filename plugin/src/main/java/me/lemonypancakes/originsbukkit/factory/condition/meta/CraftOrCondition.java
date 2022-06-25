@@ -20,9 +20,4 @@ public class CraftOrCondition<T> extends CraftCondition<T> {
             setBiPredicate(((jsonObject1, temp) -> Arrays.stream(conditions).anyMatch(condition -> condition.test(temp))));
         }
     }
-
-    @Override
-    public Condition<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftOrCondition<>(plugin, jsonObject, dataType, getBiPredicate());
-    }
 }

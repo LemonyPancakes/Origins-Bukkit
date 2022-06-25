@@ -2,7 +2,7 @@ package me.lemonypancakes.originsbukkit.data;
 
 import me.lemonypancakes.originsbukkit.*;
 import me.lemonypancakes.originsbukkit.data.storage.other.Misc;
-import me.lemonypancakes.originsbukkit.util.ChatUtil;
+import me.lemonypancakes.originsbukkit.util.ChatUtils;
 import me.lemonypancakes.originsbukkit.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
@@ -79,7 +79,7 @@ public class CraftRegistry implements Registry {
                 Misc.ORIGINS_AS_STRING.add(origin.getIdentifier().toString());
             }
         } else {
-            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "An origin with the identifier '" + origin.getIdentifier() + "' already exists.");
+            ChatUtils.sendConsoleMessage(ChatUtils.Type.WARNING, "An origin with the identifier '" + origin.getIdentifier() + "' already exists.");
         }
     }
 
@@ -90,7 +90,7 @@ public class CraftRegistry implements Registry {
         if (!powerMap.containsKey(identifier)) {
             powerMap.put(identifier, power);
         } else {
-            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "A power with the identifier '" + power.getIdentifier() + "' already exists.");
+            ChatUtils.sendConsoleMessage(ChatUtils.Type.WARNING, "A power with the identifier '" + power.getIdentifier() + "' already exists.");
         }
     }
 
@@ -101,7 +101,7 @@ public class CraftRegistry implements Registry {
         if (!powerFactoryMap.containsKey(identifier)) {
             powerFactoryMap.put(identifier, factory);
         } else {
-            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "A power factory with the identifier '" + factory.getIdentifier() + "' already exists.");
+            ChatUtils.sendConsoleMessage(ChatUtils.Type.WARNING, "A power factory with the identifier '" + factory.getIdentifier() + "' already exists.");
         }
     }
 
@@ -115,7 +115,7 @@ public class CraftRegistry implements Registry {
             }
             originItemMap.put(identifier, originItem);
         } else {
-            ChatUtil.sendConsoleMessage(ChatUtil.Type.WARNING, "An origin item with the identifier '" + originItem.getIdentifier() + "' already exists.");
+            ChatUtils.sendConsoleMessage(ChatUtils.Type.WARNING, "An origin item with the identifier '" + originItem.getIdentifier() + "' already exists.");
         }
     }
 

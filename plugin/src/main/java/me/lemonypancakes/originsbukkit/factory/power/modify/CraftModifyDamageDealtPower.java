@@ -31,15 +31,6 @@ public class CraftModifyDamageDealtPower extends CraftPower {
         this.targetAction = plugin.getLoader().loadAction(DataType.ENTITY, jsonObject, "target_action");
     }
 
-    public CraftModifyDamageDealtPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftModifyDamageDealtPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         Entity actorEntity = event.getDamager();

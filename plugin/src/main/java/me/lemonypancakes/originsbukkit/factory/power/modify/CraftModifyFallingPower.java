@@ -23,15 +23,6 @@ public class CraftModifyFallingPower extends CraftPower {
         }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1200L);
     }
 
-    public CraftModifyFallingPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftModifyFallingPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberAdd(Player player) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0, false, false, false));

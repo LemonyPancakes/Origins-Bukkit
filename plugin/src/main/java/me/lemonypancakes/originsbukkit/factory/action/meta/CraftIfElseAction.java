@@ -30,9 +30,4 @@ public class CraftIfElseAction<T> extends CraftAction<T> {
             });
         }
     }
-
-    @Override
-    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftIfElseAction<>(plugin, jsonObject, dataType, getBiConsumer());
-    }
 }

@@ -30,9 +30,4 @@ public class CraftDelayAction<T> extends CraftAction<T> {
             }.runTaskLater(plugin.getJavaPlugin(), ticks));
         }
     }
-
-    @Override
-    public Action<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftDelayAction<>(plugin, jsonObject, dataType, getBiConsumer());
-    }
 }

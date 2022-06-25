@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ServerUtil {
+public class ServerUtils {
 
     private static final List<String> SUPPORTED_VERSIONS = new ArrayList<>(
             Arrays.asList("1.17", "1.17.1", "1.18", "1.18.1", "1.18.2", "1.19"));
@@ -52,14 +52,14 @@ public class ServerUtil {
 
     public static void checkServerSoftwareCompatibility(OriginsBukkitPlugin plugin) {
         if (isServerSoftwareSafe()) {
-            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
-            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
+            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
+            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
         } else {
-            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
-            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
-            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Custom Software Detected! You are using a custom server software.");
-            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] There is no assurance of this plugin fully supporting the custom software!");
-            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Use at your own risk.");
+            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3Server running &6" + getServerSoftware() + " &3version &6" + Bukkit.getVersion());
+            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &3(Implementing API version &6" + Bukkit.getVersion() + "&3)");
+            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Custom Software Detected! You are using a custom server software.");
+            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] There is no assurance of this plugin fully supporting the custom software!");
+            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Use at your own risk.");
         }
     }
 
@@ -69,10 +69,10 @@ public class ServerUtil {
 
     public static void checkServerVersionCompatibility(OriginsBukkitPlugin plugin) {
         if (SUPPORTED_VERSIONS.contains(getServerVersion())) {
-            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit]");
-            ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &dSupported Server Version Detected. Initializing!");
+            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit]");
+            ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &dSupported Server Version Detected. Initializing!");
         } else {
-            ChatUtil.sendConsoleMessage("&4[Origins-Bukkit] Unsupported Server Version Detected! Safely disabling plugin...");
+            ChatUtils.sendConsoleMessage("&4[Origins-Bukkit] Unsupported Server Version Detected! Safely disabling plugin...");
             plugin.disable();
         }
     }

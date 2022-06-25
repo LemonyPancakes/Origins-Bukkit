@@ -37,15 +37,6 @@ public class CraftAquaAffinityPower extends CraftPower {
         registerBlockBreakPacketListener();
     }
 
-    public CraftAquaAffinityPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftAquaAffinityPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onMemberRemove(Player player) {
         if (modifier < 0) {

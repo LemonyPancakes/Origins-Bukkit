@@ -62,15 +62,15 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
     public void onEnable() {
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &4   ___       _       _                 ____        _    _    _ _");
-        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &c  / _ \\ _ __(_) __ _(_)_ __  ___      | __ ) _   _| | _| | _(_) |_");
-        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &6 | | | | '__| |/ _` | | '_ \\/ __|_____|  _ \\| | | | |/ / |/ / | __|");
-        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &e | |_| | |  | | (_| | | | | \\__ \\_____| |_) | |_| |   <|   <| | |_");
-        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
-        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
-        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit]");
-        StartupUtil.checkServerCompatibility(this);
-        StartupUtil.checkServerDependencies(this);
+        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &4   ___       _       _                 ____        _    _    _ _");
+        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &c  / _ \\ _ __(_) __ _(_)_ __  ___      | __ ) _   _| | _| | _(_) |_");
+        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &6 | | | | '__| |/ _` | | '_ \\/ __|_____|  _ \\| | | | |/ / |/ / | __|");
+        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &e | |_| | |  | | (_| | | | | \\__ \\_____| |_) | |_| |   <|   <| | |_");
+        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &a  \\___/|_|  |_|\\__, |_|_| |_|___/     |____/ \\__,_|_|\\_\\_|\\_\\_|\\__|");
+        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] &b               |___/");
+        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit]");
+        StartupUtils.checkServerCompatibility(this);
+        StartupUtils.checkServerDependencies(this);
 
         if (isEnabled()) {
             new Metrics(this, 13236);
@@ -100,9 +100,9 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new EntityConditions(this);
             new FluidConditions(this);
             new ItemConditions(this);
-            StartupUtil.registerFactories(this);
-            StartupUtil.loadExpansions(this);
-            StartupUtil.registerOriginPacks(this);
+            StartupUtils.registerFactories(this);
+            StartupUtils.loadExpansions(this);
+            StartupUtils.registerOriginPacks(this);
             switch (Config.STORAGE_METHOD.toString()) {
                 case "INTERNAL":
                     this.storage = new CraftBukkitStorage();
@@ -111,7 +111,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                     this.storage = new CraftMySQLStorage(this);
                     break;
                 default:
-                    ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Unknown storage method: &e" + Config.STORAGE_METHOD + ".");
+                    ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Unknown storage method: &e" + Config.STORAGE_METHOD + ".");
                     disable();
                     break;
             }
@@ -159,14 +159,14 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                 public void run() {
                     try {
                         UpdateChecker updateChecker = new UpdateChecker(CraftOriginsBukkitPlugin.this, 97926);
-                        ChatUtil.sendConsoleMessage("&3[Origins-Bukkit] Checking for updates...");
+                        ChatUtils.sendConsoleMessage("&3[Origins-Bukkit] Checking for updates...");
 
                         if (updateChecker.checkForUpdates()) {
-                            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] A new update is available!");
-                            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] Running on &c" + getDescription().getVersion() + " &6while latest is &a" + updateChecker.getLatestVersion() + "&6.");
-                            ChatUtil.sendConsoleMessage("&6[Origins-Bukkit] &e&n" + updateChecker.getResourceURL());
+                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] A new update is available!");
+                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] Running on &c" + getDescription().getVersion() + " &6while latest is &a" + updateChecker.getLatestVersion() + "&6.");
+                            ChatUtils.sendConsoleMessage("&6[Origins-Bukkit] &e&n" + updateChecker.getResourceURL());
                         } else {
-                            ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] No updates found.");
+                            ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] No updates found.");
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -174,7 +174,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                 }
             }.runTaskLaterAsynchronously(this, 8L);
 
-            ChatUtil.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
+            ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
         }
     }
 
@@ -198,7 +198,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
         originPlayers.values().forEach(OriginPlayer::unlistenAndDestroy);
         expansions.forEach(plugin -> Bukkit.getPluginManager().disablePlugin(plugin));
 
-        ChatUtil.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
+        ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
     }
 
     @Override

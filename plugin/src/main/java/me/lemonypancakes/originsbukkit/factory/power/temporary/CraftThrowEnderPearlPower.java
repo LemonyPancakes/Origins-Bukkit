@@ -15,15 +15,6 @@ public class CraftThrowEnderPearlPower extends CraftActiveWithCooldownPower {
         super(plugin, identifier, jsonObject);
     }
 
-    public CraftThrowEnderPearlPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftThrowEnderPearlPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     protected void onUse(Player player, Key key) {
         player.launchProjectile(EnderPearl.class);

@@ -24,15 +24,6 @@ public class CraftActionOnWakeUpPower extends CraftPower {
         this.blockCondition = plugin.getLoader().loadCondition(DataType.BLOCK, jsonObject, "block_condition");
     }
 
-    public CraftActionOnWakeUpPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActionOnWakeUpPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();

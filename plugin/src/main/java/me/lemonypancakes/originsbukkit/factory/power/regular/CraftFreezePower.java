@@ -25,13 +25,4 @@ public class CraftFreezePower extends CraftPower {
             }
         }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, 1L);
     }
-
-    public CraftFreezePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftFreezePower(plugin, identifier, jsonObject);
-    }
 }

@@ -13,21 +13,21 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class ItemActions {
 
     public ItemActions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ITEM_STACK, new CraftAndAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.ITEM_STACK, new CraftChanceAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.ITEM_STACK, new CraftChoiceAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.ITEM_STACK, new CraftDelayAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.ITEM_STACK, new CraftIfElseAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.ITEM_STACK, new CraftIfElseListAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.ITEM_STACK, new CraftNothingAction<>(plugin, null, null, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "consume"), DataType.ITEM_STACK, new CraftAction<>(plugin, null, (jsonObject, itemStack) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAndAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftChanceAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftChoiceAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftDelayAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftIfElseAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftIfElseListAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftNothingAction<>(plugin1, jsonObject, dataType, null)));
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "consume"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, itemStack) -> {
             if (itemStack != null) {
-                if (jsonObject.has("amount")) {
-                    itemStack.setAmount(itemStack.getAmount() - jsonObject.get("amount").getAsInt());
+                if (jsonObject1.has("amount")) {
+                    itemStack.setAmount(itemStack.getAmount() - jsonObject1.get("amount").getAsInt());
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "damage"), DataType.ITEM_STACK, new CraftAction<>(plugin, null, (jsonObject, itemStack) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "damage"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, itemStack) -> {
             if (itemStack != null) {
                 ItemMeta itemMeta = itemStack.getItemMeta();
 
@@ -37,11 +37,11 @@ public class ItemActions {
                         boolean ignoreUnbreaking = false;
                         int amount = 0;
 
-                        if (jsonObject.has("ignore_unbreaking")) {
-                            ignoreUnbreaking = jsonObject.get("ignore_unbreaking").getAsBoolean();
+                        if (jsonObject1.has("ignore_unbreaking")) {
+                            ignoreUnbreaking = jsonObject1.get("ignore_unbreaking").getAsBoolean();
                         }
-                        if (jsonObject.has("amount")) {
-                            amount = jsonObject.get("amount").getAsInt();
+                        if (jsonObject1.has("amount")) {
+                            amount = jsonObject1.get("amount").getAsInt();
                         }
                         if (ignoreUnbreaking) {
                             if (itemStack.containsEnchantment(Enchantment.DURABILITY)) {
@@ -58,7 +58,7 @@ public class ItemActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "modify"), DataType.ITEM_STACK, new CraftAction<>(plugin, null, (jsonObject, itemStack) -> {
+        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "modify"), DataType.ITEM_STACK, (plugin1, jsonObject) -> (dataType) -> () -> new CraftAction<>(plugin1, jsonObject, dataType, (jsonObject1, itemStack) -> {
             if (itemStack != null) {
 
             }

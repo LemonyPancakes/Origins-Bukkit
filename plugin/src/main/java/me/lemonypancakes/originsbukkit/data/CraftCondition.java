@@ -30,10 +30,6 @@ public class CraftCondition<T> implements Condition<T> {
         this.biPredicate = biPredicate;
     }
 
-    public CraftCondition(OriginsBukkitPlugin plugin, JsonObject jsonObject, BiPredicate<JsonObject, T> biPredicate) {
-        this(plugin, jsonObject, null, biPredicate);
-    }
-
     @Override
     public JsonObject getJsonObject() {
         return jsonObject;
@@ -73,24 +69,14 @@ public class CraftCondition<T> implements Condition<T> {
     }
 
     @Override
-    public Condition<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject, DataType<T> dataType) {
-        return new CraftCondition<>(plugin, jsonObject, dataType, biPredicate);
-    }
-
-    @Override
-    public Condition<T> newInstance(OriginsBukkitPlugin plugin, JsonObject jsonObject) {
-        return newInstance(plugin, jsonObject, null);
-    }
-
-    @Override
     public boolean test(T t) {
         if (biPredicate == null) {
             return true;
         }
         if (isInverted()) {
-            return !biPredicate.test(getJsonObject(), t);
+            return !biPredicate.test(jsonObject, t);
         } else {
-            return biPredicate.test(getJsonObject(), t);
+            return biPredicate.test(jsonObject, t);
         }
     }
 

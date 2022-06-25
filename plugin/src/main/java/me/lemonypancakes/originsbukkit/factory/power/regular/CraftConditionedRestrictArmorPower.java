@@ -28,15 +28,6 @@ public class CraftConditionedRestrictArmorPower extends CraftPower {
         this.feet = plugin.getLoader().loadCondition(DataType.ITEM_STACK, jsonObject, "feet");
     }
 
-    public CraftConditionedRestrictArmorPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftConditionedRestrictArmorPower(plugin, identifier, jsonObject);
-    }
-
     @EventHandler(priority = EventPriority.LOW)
     public void onArmorEquipEvent(ArmorEquipEvent event) {
         Player player = event.getPlayer();

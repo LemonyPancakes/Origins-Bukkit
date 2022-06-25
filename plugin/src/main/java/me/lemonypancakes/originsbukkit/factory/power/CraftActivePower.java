@@ -23,15 +23,6 @@ public class CraftActivePower extends CraftPower implements Keyed {
         }
     }
 
-    public CraftActivePower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActivePower(plugin, identifier, jsonObject);
-    }
-
     @Override
     public Key getKey() {
         return key;

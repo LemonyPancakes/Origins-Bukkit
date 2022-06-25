@@ -22,7 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public final class ChatUtil {
+public final class ChatUtils {
 
     public static String format(String format) {
         return ChatColor.translateAlternateColorCodes('&', format);

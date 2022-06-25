@@ -1,5 +1,5 @@
 name: Origins-Bukkit
-version: 'Build 3-BETA'
+version: '${project.version}'
 main: me.lemonypancakes.originsbukkit.plugin.CraftOriginsBukkitPlugin
 softdepend:
   - ProtocolLib

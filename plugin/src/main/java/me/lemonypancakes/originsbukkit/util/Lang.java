@@ -81,11 +81,11 @@ public enum Lang {
 
     @Override
     public String toString() {
-        return ChatUtil.format(LANG.getString(this.Path, (String) this.defaultValue));
+        return ChatUtils.format(LANG.getString(this.Path, (String) this.defaultValue));
     }
 
     public String[] toStringArray() {
-        return ChatUtil.formatList(LANG.getStringList(this.Path).toArray(new String[0]));
+        return ChatUtils.formatList(LANG.getStringList(this.Path).toArray(new String[0]));
     }
 
     public boolean toBoolean() {

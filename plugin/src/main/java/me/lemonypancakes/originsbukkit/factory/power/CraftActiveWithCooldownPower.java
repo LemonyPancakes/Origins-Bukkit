@@ -22,15 +22,6 @@ public class CraftActiveWithCooldownPower extends CraftCooldownPower implements 
         }
     }
 
-    public CraftActiveWithCooldownPower(OriginsBukkitPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftActiveWithCooldownPower(plugin, identifier, jsonObject);
-    }
-
     @Override
     public Key getKey() {
         return key;

@@ -6,6 +6,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface Power extends Identifiable, JsonObjectHolder, ConditionHolder<Entity>, OriginsBukkitPluginHolder {
 
@@ -19,20 +22,18 @@ public interface Power extends Identifiable, JsonObjectHolder, ConditionHolder<E
 
     boolean isActive(Player player);
 
-    Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject);
-
     final class Factory implements Identifiable {
 
         private Identifier identifier;
-        private Power power;
+        private BiFunction<OriginsBukkitPlugin, Identifier, Function<JsonObject, Supplier<Power>>> biFunction;
 
-        public Factory(Identifier identifier, Power power) {
+        public Factory(Identifier identifier, BiFunction<OriginsBukkitPlugin, Identifier, Function<JsonObject, Supplier<Power>>> biFunction) {
             this.identifier = identifier;
-            this.power = power;
+            this.biFunction = biFunction;
         }
 
-        public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-            return power.newInstance(plugin, identifier, jsonObject);
+        public Power create(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
+            return biFunction.apply(plugin, identifier).apply(jsonObject).get();
         }
 
         @Override
@@ -45,12 +46,12 @@ public interface Power extends Identifiable, JsonObjectHolder, ConditionHolder<E
             this.identifier = identifier;
         }
 
-        public Power getPower() {
-            return power;
+        public BiFunction<OriginsBukkitPlugin, Identifier, Function<JsonObject, Supplier<Power>>> getBiFunction() {
+            return biFunction;
         }
 
-        public void setPower(Power power) {
-            this.power = power;
+        public void setBiFunction(BiFunction<OriginsBukkitPlugin, Identifier, Function<JsonObject, Supplier<Power>>> biFunction) {
+            this.biFunction = biFunction;
         }
     }
 }

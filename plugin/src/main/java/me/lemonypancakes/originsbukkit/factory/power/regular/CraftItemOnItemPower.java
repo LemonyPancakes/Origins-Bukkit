@@ -11,9 +11,4 @@ public class CraftItemOnItemPower extends CraftPower {
     public CraftItemOnItemPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
     }
-
-    @Override
-    public Power newInstance(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
-        return new CraftItemOnItemPower(plugin, identifier, jsonObject);
-    }
 }
