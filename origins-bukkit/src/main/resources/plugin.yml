@@ -1,0 +1,14 @@
+name: Origins-Bukkit
+version: '${project.version}'
+main: me.lemonypancakes.bukkit.origins.plugin.CraftOriginsBukkitPlugin
+softdepend:
+  - ProtocolLib
+  - LemonCommonLib
+  - PacketWrapper
+api-version: 1.17
+authors: [ LemonyPancakes ]
+description: Origins for Bukkit and forks of Bukkit.
+commands:
+  origins:
+    description: Origins main command.
+    usage: /<command>
