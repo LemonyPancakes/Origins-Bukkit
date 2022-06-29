@@ -1,6 +1,6 @@
 /*
  * Origins-Bukkit - Origins for Bukkit and forks of Bukkit.
- * Copyright (C) 2021 LemonyPancakes
+ * Copyright (C) 2022 LemonyPancakes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,14 +24,13 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Objects;
 
 public class UpdateChecker {
 
     private final OriginsBukkitPlugin plugin;
     private final int projectID;
-    private URL checkURL;
-    private String newVersion = "";
+    private URL url;
+    private String newVersion;
 
     public UpdateChecker(OriginsBukkitPlugin plugin, int projectID){
         this.plugin = plugin;
@@ -39,9 +38,8 @@ public class UpdateChecker {
         this.projectID = projectID;
 
         try {
-            this.checkURL = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
-        } catch (MalformedURLException ignored) {
-        }
+            this.url = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + projectID);
+        } catch (MalformedURLException ignored) {}
     }
 
     public int getProjectID() {
@@ -61,13 +59,30 @@ public class UpdateChecker {
     }
 
     public boolean checkForUpdates() throws Exception {
-        URLConnection con = checkURL.openConnection();
-        this.newVersion = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
-        int newVerson = Integer.parseInt(this.newVersion.split(" ")[1].split("-")[0]);
-        int currentVersion = Integer.parseInt(plugin.getJavaPlugin().getDescription().getVersion().split(" ")[1].split("-")[0]);
-        String A = this.newVersion.split(" ")[1].split("-")[1];
-        String B = plugin.getJavaPlugin().getDescription().getVersion().split(" ")[1].split("-")[1];
+        URLConnection connection = url.openConnection();
+        this.newVersion = new BufferedReader(new InputStreamReader(connection.getInputStream())).readLine();
+        String currentVersion = plugin.getJavaPlugin().getDescription().getVersion();
 
-        return newVerson > currentVersion || newVerson >= currentVersion && !Objects.equals(A, B);
+        if (newVersion != null) {
+            if (newVersion.contains(".") && currentVersion.contains(".")) {
+                String[] newVersionStringArray = newVersion.split("\\.");
+                String[] currentVersionStringArray = currentVersion.split("\\.");
+
+                if (newVersionStringArray[0] != null && currentVersionStringArray[0] != null) {
+                    if (Integer.parseInt(newVersionStringArray[0]) > Integer.parseInt(currentVersionStringArray[0])) {
+                        return true;
+                    }
+                }
+                if (newVersionStringArray[1] != null && currentVersionStringArray[1] != null) {
+                    if (Integer.parseInt(newVersionStringArray[1]) > Integer.parseInt(currentVersionStringArray[1])) {
+                        return true;
+                    }
+                }
+                if (newVersionStringArray[2] != null && currentVersionStringArray[2] != null) {
+                    return Integer.parseInt(newVersionStringArray[2]) > Integer.parseInt(currentVersionStringArray[2]);
+                }
+            }
+        }
+        return false;
     }
 }
