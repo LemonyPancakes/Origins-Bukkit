@@ -21,7 +21,11 @@ import com.google.gson.JsonObject;
 import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.data.CraftPower;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,5 +51,22 @@ public class CraftModifyFallingPower extends CraftPower {
     @Override
     protected void onMemberRemove(Player player) {
         player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityPotionEffect(EntityPotionEffectEvent event) {
+        Entity entity = event.getEntity();
+
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+
+            if (getMembers().contains(player)) {
+                PotionEffect oldPotionEffect = event.getOldEffect();
+
+                if (oldPotionEffect != null && oldPotionEffect.getType().equals(PotionEffectType.SLOW_FALLING)) {
+                    event.setCancelled(true);
+                }
+            }
+        }
     }
 }
