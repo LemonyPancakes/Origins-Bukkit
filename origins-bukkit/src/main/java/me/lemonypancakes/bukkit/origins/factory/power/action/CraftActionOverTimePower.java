@@ -33,10 +33,10 @@ import java.util.Set;
 public class CraftActionOverTimePower extends CraftPower {
 
     private int interval = 20;
-    private Action<Entity> entityAction;
-    private Action<Entity> risingAction;
-    private Action<Entity> fallingAction;
-    private Set<Player> active = new HashSet<>();
+    private final Action<Entity> entityAction;
+    private final Action<Entity> risingAction;
+    private final Action<Entity> fallingAction;
+    private final Set<Player> active = new HashSet<>();
 
     public CraftActionOverTimePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

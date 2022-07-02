@@ -43,9 +43,7 @@ public class CraftLaunchPower extends CraftActiveWithCooldownPower {
 
     @Override
     protected void onUse(Player player, Key key) {
-        if (key == Key.PRIMARY) {
-            player.setVelocity(new Vector(0, speed, 0));
-            player.getWorld().playSound(player.getLocation(), sound, 1f, 0f);
-        }
+        player.setVelocity(new Vector(0, speed, 0));
+        player.getWorld().playSound(player.getLocation(), sound, 1f, 0f);
     }
 }

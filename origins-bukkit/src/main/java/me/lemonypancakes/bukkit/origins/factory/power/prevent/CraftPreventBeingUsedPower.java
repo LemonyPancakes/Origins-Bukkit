@@ -39,13 +39,13 @@ import java.util.Arrays;
 
 public class CraftPreventBeingUsedPower extends CraftPower {
 
-    private Action<BiEntity> biEntityAction;
-    private Condition<BiEntity> biEntityCondition;
-    private Condition<ItemStack> itemCondition;
+    private final Action<BiEntity> biEntityAction;
+    private final Condition<BiEntity> biEntityCondition;
+    private final Condition<ItemStack> itemCondition;
     private EquipmentSlot[] hands;
-    private ItemStack resultStack;
-    private Action<ItemStack> heldItemAction;
-    private Action<ItemStack> resultItemAction;
+    private final ItemStack resultStack;
+    private final Action<ItemStack> heldItemAction;
+    private final Action<ItemStack> resultItemAction;
 
     public CraftPreventBeingUsedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

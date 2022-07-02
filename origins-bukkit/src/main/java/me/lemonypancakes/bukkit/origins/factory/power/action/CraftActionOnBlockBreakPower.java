@@ -33,9 +33,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class CraftActionOnBlockBreakPower extends CraftPower {
 
-    private Action<Entity> entityAction;
-    private Action<Block> blockAction;
-    private Condition<Block> blockCondition;
+    private final Action<Entity> entityAction;
+    private final Action<Block> blockAction;
+    private final Condition<Block> blockCondition;
     private boolean onlyWhenHarvested = true;
 
     public CraftActionOnBlockBreakPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {

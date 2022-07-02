@@ -31,7 +31,7 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 
 public class CraftPreventElytraFlightPower extends CraftPower {
 
-    private Action<Entity> entityAction;
+    private final Action<Entity> entityAction;
 
     public CraftPreventElytraFlightPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

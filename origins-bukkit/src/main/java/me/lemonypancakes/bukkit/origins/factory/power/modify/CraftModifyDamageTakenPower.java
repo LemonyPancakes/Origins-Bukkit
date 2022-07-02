@@ -34,11 +34,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class CraftModifyDamageTakenPower extends CraftPower {
 
-    private Condition<BiEntity> biEntityCondition;
-    private Condition<Damage> damageCondition;
-    private Action<BiEntity> biEntityAction;
-    private Action<Entity> selfAction;
-    private Action<Entity> attackerAction;
+    private final Condition<BiEntity> biEntityCondition;
+    private final Condition<Damage> damageCondition;
+    private final Action<BiEntity> biEntityAction;
+    private final Action<Entity> selfAction;
+    private final Action<Entity> attackerAction;
 
     public CraftModifyDamageTakenPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

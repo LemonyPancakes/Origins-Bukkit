@@ -36,7 +36,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CraftPreventSleepPower extends CraftPower {
 
-    private Condition<Block> blockCondition;
+    private final Condition<Block> blockCondition;
     private String message;
     private boolean setSpawnPoint;
 

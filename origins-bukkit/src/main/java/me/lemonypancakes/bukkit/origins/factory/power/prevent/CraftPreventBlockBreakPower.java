@@ -31,7 +31,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class CraftPreventBlockBreakPower extends CraftPower {
 
-    private Condition<Block> blockCondition;
+    private final Condition<Block> blockCondition;
 
     public CraftPreventBlockBreakPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

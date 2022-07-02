@@ -45,7 +45,7 @@ import java.util.Map;
 public class CraftModifyBreakSpeedPower extends CraftPower {
 
     private int modifier = 0;
-    private Condition<Block> blockCondition;
+    private final Condition<Block> blockCondition;
     private final Map<Player, PotionEffect> potionEffectMap = new HashMap<>();
 
     public CraftModifyBreakSpeedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {

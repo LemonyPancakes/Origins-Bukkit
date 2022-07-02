@@ -33,8 +33,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class CraftAttackerActionWhenHitPower extends CraftCooldownPower {
 
-    private Action<Entity> entityAction;
-    private Condition<Damage> damageCondition;
+    private final Action<Entity> entityAction;
+    private final Condition<Damage> damageCondition;
 
     public CraftAttackerActionWhenHitPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

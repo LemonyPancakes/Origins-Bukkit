@@ -33,9 +33,9 @@ import org.bukkit.event.player.PlayerBedLeaveEvent;
 
 public class CraftActionOnWakeUpPower extends CraftPower {
 
-    private Action<Entity> entityAction;
-    private Action<Block> blockAction;
-    private Condition<Block> blockCondition;
+    private final Action<Entity> entityAction;
+    private final Action<Block> blockAction;
+    private final Condition<Block> blockCondition;
 
     public CraftActionOnWakeUpPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

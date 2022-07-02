@@ -19,11 +19,10 @@ package me.lemonypancakes.bukkit.origins.factory.power;
 
 import com.google.common.base.Strings;
 import com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.common.actionbarapi.ActionBarAPI;
 import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.data.CraftPower;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -51,16 +50,16 @@ public class CraftCooldownPower extends CraftPower {
 
                 @Override
                 public void run() {
-                    for (Map.Entry<Player, Integer> map : timeLeft.entrySet()) {
-                        Player player = map.getKey();
+                    for (Map.Entry<Player, Integer> entry : timeLeft.entrySet()) {
+                        Player player = entry.getKey();
 
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getProgressBar(getTimeLeftInTicks(player), cooldown, 64, '|', ChatColor.RED, ChatColor.GREEN)));
+                        ActionBarAPI.sendMessage(player, getProgressBar(getTimeLeftInTicks(player), cooldown, 64, '|', ChatColor.RED, ChatColor.GREEN));
                         if (canUse(player)) {
                             timeLeft.remove(player);
                         }
                     }
                 }
-            }.runTaskTimer(plugin.getJavaPlugin(), 0L, 1L);
+            }.runTaskTimerAsynchronously(plugin.getJavaPlugin(), 0L, 1L);
         }
     }
 
@@ -77,6 +76,10 @@ public class CraftCooldownPower extends CraftPower {
 
     public void setCooldown(Player player) {
         timeLeft.put(player, millisecondsToTicks(System.currentTimeMillis()));
+    }
+
+    public int getCooldown() {
+        return cooldown;
     }
 
     public boolean isHudRender() {

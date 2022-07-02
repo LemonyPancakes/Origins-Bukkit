@@ -114,6 +114,7 @@ public final class StartupUtils {
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_potions"), (p) -> (i) -> (j) -> () -> new CraftDamageFromPotionsPower(p, i, j)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:damage_from_snowballs"), (p) -> (i) -> (j) -> () -> new CraftDamageFromSnowballsPower(p, i, j)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:light_armor"), (p) -> (i) -> (j) -> () -> new CraftLightArmorPower(p, i, j)));
+        plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:master_of_webs"), (p) -> (i) -> (j) -> () -> new CraftMasterOfWebsPower(p, i, j)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:more_kinetic_damage"), (p) -> (i) -> (j) -> () -> new CraftMoreKineticDamagePower(p, i, j)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:no_shield"), (p) -> (i) -> (j) -> () -> new CraftNoShieldPower(p, i, j)));
         plugin.getRegistry().register(new Power.Factory(Identifier.fromString("origins-bukkit:swim_speed"), (p) -> (i) -> (j) -> () -> new CraftSwimSpeedPower(p, i, j)));

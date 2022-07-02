@@ -92,16 +92,20 @@ public class CraftPower implements Power {
 
     @Override
     public void addMember(Player player) {
-        members.add(player);
-        onMemberAdd(player);
+        if (!members.contains(player)) {
+            members.add(player);
+            onMemberAdd(player);
+        }
     }
 
     protected void onMemberAdd(Player player) {}
 
     @Override
     public void removeMember(Player player) {
-        members.remove(player);
-        onMemberRemove(player);
+        if (members.contains(player)) {
+            members.remove(player);
+            onMemberRemove(player);
+        }
     }
 
     protected void onMemberRemove(Player player) {}

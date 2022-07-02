@@ -31,10 +31,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class CraftConditionedRestrictArmorPower extends CraftPower {
 
-    private Condition<ItemStack> head;
-    private Condition<ItemStack> chest;
-    private Condition<ItemStack> legs;
-    private Condition<ItemStack> feet;
+    private final Condition<ItemStack> head;
+    private final Condition<ItemStack> chest;
+    private final Condition<ItemStack> legs;
+    private final Condition<ItemStack> feet;
 
     public CraftConditionedRestrictArmorPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

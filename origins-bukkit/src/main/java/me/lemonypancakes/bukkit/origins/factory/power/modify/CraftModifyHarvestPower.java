@@ -31,7 +31,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 public class CraftModifyHarvestPower extends CraftPower {
 
-    private Condition<Block> blockCondition;
+    private final Condition<Block> blockCondition;
     private boolean allow = true;
 
     public CraftModifyHarvestPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {

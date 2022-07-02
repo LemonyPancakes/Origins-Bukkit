@@ -33,8 +33,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class CraftPreventDeathPower extends CraftPower {
 
-    private Condition<Damage> damageCondition;
-    private Action<Entity> entityAction;
+    private final Condition<Damage> damageCondition;
+    private final Action<Entity> entityAction;
 
     public CraftPreventDeathPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

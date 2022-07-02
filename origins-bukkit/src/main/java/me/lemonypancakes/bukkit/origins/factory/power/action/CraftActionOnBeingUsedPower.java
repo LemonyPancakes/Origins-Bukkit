@@ -36,8 +36,8 @@ import java.util.Arrays;
 
 public class CraftActionOnBeingUsedPower extends CraftInteractionPower {
 
-    private Action<BiEntity> biEntityAction;
-    private Condition<BiEntity> biEntityCondition;
+    private final Action<BiEntity> biEntityAction;
+    private final Condition<BiEntity> biEntityCondition;
 
     public CraftActionOnBeingUsedPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

@@ -34,6 +34,7 @@ import me.lemonypancakes.bukkit.origins.factory.action.BlockActions;
 import me.lemonypancakes.bukkit.origins.factory.action.EntityActions;
 import me.lemonypancakes.bukkit.origins.factory.action.ItemActions;
 import me.lemonypancakes.bukkit.origins.factory.condition.*;
+import me.lemonypancakes.bukkit.origins.item.ArachnidCobweb;
 import me.lemonypancakes.bukkit.origins.item.OrbOfOrigin;
 import me.lemonypancakes.bukkit.origins.listener.block.BlockBreakEventListener;
 import me.lemonypancakes.bukkit.origins.listener.block.BlockPlaceEventListener;
@@ -106,6 +107,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new MainCommand(this);
             new CraftConfigHandler(this);
             registry.register(new OrbOfOrigin());
+            registry.register(new ArachnidCobweb());
             new BiEntityActions(this);
             new BlockActions(this);
             new EntityActions(this);

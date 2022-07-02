@@ -32,7 +32,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class CraftPreventItemUsePower extends CraftPower {
 
-    private Condition<ItemStack> itemCondition;
+    private final Condition<ItemStack> itemCondition;
 
     public CraftPreventItemUsePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

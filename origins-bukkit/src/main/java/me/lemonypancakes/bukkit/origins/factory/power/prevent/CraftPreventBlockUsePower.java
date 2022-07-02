@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class CraftPreventBlockUsePower extends CraftPower {
 
-    private Condition<Block> blockCondition;
+    private final Condition<Block> blockCondition;
 
     public CraftPreventBlockUsePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);

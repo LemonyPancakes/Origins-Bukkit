@@ -37,9 +37,9 @@ import java.util.Arrays;
 
 public class CraftActionOnBlockUsePower extends CraftInteractionPower {
 
-    private me.lemonypancakes.bukkit.origins.Action<Entity> entityAction;
-    private me.lemonypancakes.bukkit.origins.Action<Block> blockAction;
-    private Condition<Block> blockCondition;
+    private final me.lemonypancakes.bukkit.origins.Action<Entity> entityAction;
+    private final me.lemonypancakes.bukkit.origins.Action<Block> blockAction;
+    private final Condition<Block> blockCondition;
     private BlockFace[] directions;
 
     public CraftActionOnBlockUsePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {

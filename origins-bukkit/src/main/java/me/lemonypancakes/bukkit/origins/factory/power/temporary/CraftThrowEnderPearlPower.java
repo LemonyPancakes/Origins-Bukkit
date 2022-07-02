@@ -22,10 +22,19 @@ import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.factory.power.CraftActiveWithCooldownPower;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import me.lemonypancakes.bukkit.origins.util.Key;
+import org.bukkit.Location;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerTeleportEvent;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CraftThrowEnderPearlPower extends CraftActiveWithCooldownPower {
+
+    private final Set<Player> players = new HashSet<>();
 
     public CraftThrowEnderPearlPower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
@@ -34,5 +43,30 @@ public class CraftThrowEnderPearlPower extends CraftActiveWithCooldownPower {
     @Override
     protected void onUse(Player player, Key key) {
         player.launchProjectile(EnderPearl.class);
+        players.add(player);
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+
+        if (getMembers().contains(player)) {
+            if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
+                if (players.contains(player)) {
+                    players.remove(player);
+                    event.setCancelled(true);
+                    Location getToLocation = event.getTo();
+
+                    if (getToLocation != null) {
+                        player.teleport(getToLocation);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onMemberRemove(Player player) {
+        players.remove(player);
     }
 }

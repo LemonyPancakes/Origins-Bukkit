@@ -33,9 +33,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class CraftActionOnItemUsePower extends CraftPower {
 
-    private Action<Entity> entityAction;
-    private Action<ItemStack> itemAction;
-    private Condition<ItemStack> itemCondition;
+    private final Action<Entity> entityAction;
+    private final Action<ItemStack> itemAction;
+    private final Condition<ItemStack> itemCondition;
 
     public CraftActionOnItemUsePower(OriginsBukkitPlugin plugin, Identifier identifier, JsonObject jsonObject) {
         super(plugin, identifier, jsonObject);
