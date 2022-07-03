@@ -28,7 +28,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/SwagPancakes/Origins-Bukkit">
+  <a href="https://github.com/lemonypancakes/origins-bukkit">
     <img src="images/Origins-Bukkit.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -37,14 +37,14 @@
   <p align="center">
     Origins for Bukkit and forks of Bukkit.
     <br />
-    <a href="https://swagpancakes.github.io/Origins-Bukkit/"><strong>Explore the docs »</strong></a>
+    Download at <a href="https://dev.bukkit.org/projects/origins-bukkit"><strong>BukkitDev</strong></a> or <a href="https://www.spigotmc.org/resources/origins-bukkit-1-17-1-19.97926/"><strong>SpigotMC</strong></a>
     <br />
     <br />
-    <a href="https://github.com/SwagPancakes/Origins-Bukkit">View Demo</a>
+    <a href="https://github.com/lemonypancakes/origins-bukkit">View Demo</a>
     ·
-    <a href="https://github.com/SwagPancakes/Origins-Bukkit/issues">Report Bug</a>
+    <a href="https://github.com/lemonypancakes/origins-bukkit/issues">Report Bug</a>
     ·
-    <a href="https://github.com/SwagPancakes/Origins-Bukkit/issues">Request Feature</a>
+    <a href="https://github.com/lemonypancakes/origins-bukkit/issues">Request Feature</a>
   </p>
 </div>
 
@@ -63,15 +63,10 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#compiling">Compiling</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -95,52 +90,16 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-### Installation
+### Compiling
 
-1. Download the latest .jar at [https://www.spigotmc.org/resources/origins-bukkit-1-17-1-17-1.97926/](https://www.spigotmc.org/resources/origins-bukkit-1-17-1-17-1.97926/)
-2. Drag and drop the .jar into your plugins folder
-3. Start the server
+###### Prerequisites: [JDK-17](https://jdk.java.net/) or newer, [BuildTools](https://www.spigotmc.org/wiki/buildtools/) and [Maven](https://maven.apache.org).
 
-### Developer API
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-SOON
-
-_For more examples, please refer to the [Documentation](https://swagpancakes.github.io/Origins-Bukkit/)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-SOON
-
-See the [open issues](https://github.com/SwagPancakes/Origins-Bukkit/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+1. Install Spigot into your local repository first by running BuildTools with
+    - `java -jar BuildTools.jar --rev 1.17.1 --remapped`
+    - `java -jar BuildTools.jar --rev 1.18.1 --remapped`
+    - `java -jar BuildTools.jar --rev 1.18.2 --remapped`
+    - `java -jar BuildTools.jar --rev 1.19 --remapped`
+2. In the root directory of this project run `mvn clean install`. You can find the plugin jar at origins-bukkit-compile/target/Origins-Bukkit ${project.version}.jar.
 
 
 
@@ -153,27 +112,18 @@ Distributed under the GPL-3.0 License. See `LICENSE.txt` for more information.
 
 
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-SOON
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/SwagPancakes/Origins-Bukkit.svg?style=for-the-badge
-[contributors-url]: https://github.com/SwagPancakes/Origins-Bukkit/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/SwagPancakes/Origins-Bukkit.svg?style=for-the-badge
-[forks-url]: https://github.com/SwagPancakes/Origins-Bukkit/network/members
-[stars-shield]: https://img.shields.io/github/stars/SwagPancakes/Origins-Bukkit.svg?style=for-the-badge
-[stars-url]: https://github.com/SwagPancakes/Origins-Bukkit/stargazers
-[issues-shield]: https://img.shields.io/github/issues/SwagPancakes/Origins-Bukkit.svg?style=for-the-badge
-[issues-url]: https://github.com/SwagPancakes/Origins-Bukkit/issues
-[license-shield]: https://img.shields.io/github/license/SwagPancakes/Origins-Bukkit.svg?style=for-the-badge
-[license-url]: https://github.com/SwagPancakes/Origins-Bukkit/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/lemonypancakes/origins-bukkit.svg?style=for-the-badge
+[contributors-url]: https://github.com/lemonypancakes/origins-bukkit/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/lemonypancakes/origins-bukkit.svg?style=for-the-badge
+[forks-url]: https://github.com/lemonypancakes/origins-bukkit/network/members
+[stars-shield]: https://img.shields.io/github/stars/lemonypancakes/origins-bukkit.svg?style=for-the-badge
+[stars-url]: https://github.com/lemonypancakes/origins-bukkit/stargazers
+[issues-shield]: https://img.shields.io/github/issues/lemonypancakes/origins-bukkit.svg?style=for-the-badge
+[issues-url]: https://github.com/lemonypancakes/origins-bukkit/issues
+[license-shield]: https://img.shields.io/github/license/lemonypancakes/origins-bukkit.svg?style=for-the-badge
+[license-url]: https://github.com/lemonypancakes/origins-bukkit/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/Origins-Bukkit.png
