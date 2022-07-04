@@ -105,12 +105,10 @@ public class InventoryClickEventListener implements Listener {
                                         if (!playerOriginChooseEvent.isCancelled()) {
                                             PlayerOriginSetEvent playerOriginSetEvent = plugin.getOriginPlayer(player).setOrigin(playerOriginChooseEvent.getOrigin());
 
-                                            if (playerOriginSetEvent != null) {
-                                                if (!playerOriginSetEvent.isCancelled()) {
-                                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
-                                                } else {
-                                                    player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);
-                                                }
+                                            if (!playerOriginSetEvent.isCancelled()) {
+                                                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
+                                            } else {
+                                                player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);
                                             }
                                         } else {
                                             player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);

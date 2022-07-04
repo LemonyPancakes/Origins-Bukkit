@@ -68,6 +68,7 @@ public class CraftOriginPlayer implements OriginPlayer {
     public PlayerOriginSetEvent setOrigin(Origin origin) {
         PlayerOriginSetEvent playerOriginSetEvent = new PlayerOriginSetEvent(player, this.origin, origin);
 
+        Bukkit.getPluginManager().callEvent(playerOriginSetEvent);
         if (!playerOriginSetEvent.isCancelled()) {
             origin = playerOriginSetEvent.getNewOrigin();
 
@@ -78,9 +79,6 @@ public class CraftOriginPlayer implements OriginPlayer {
                     this.origin = null;
                     Misc.VIEWERS.put(player.getUniqueId(), 0);
                     player.openInventory(Misc.GUIS.get(0));
-                    Bukkit.getPluginManager().callEvent(playerOriginSetEvent);
-
-                    return playerOriginSetEvent;
                 }
             } else {
                 if (!origin.getIdentifier().toString().equals("origins-bukkit:dummy_origin")) {
@@ -97,14 +95,11 @@ public class CraftOriginPlayer implements OriginPlayer {
                             origin.getPowers().forEach(power -> power.addMember(player));
                         }
                         plugin.getStorage().setOrigin(player, origin.getIdentifier());
-                        Bukkit.getPluginManager().callEvent(playerOriginSetEvent);
-
-                        return playerOriginSetEvent;
                     }
                 }
             }
         }
-        return null;
+        return playerOriginSetEvent;
     }
 
     @Override
