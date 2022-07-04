@@ -51,7 +51,7 @@ public class CraftSelfActionOnHitPower extends CraftCooldownPower {
         if (actorEntity instanceof Player) {
             Player actorPlayer = (Player) actorEntity;
 
-            if (getMembers().contains(actorPlayer)) {
+            if (hasMember(actorPlayer)) {
                 Entity targetEntity = event.getEntity();
 
                 if (getCondition().test(actorPlayer) && damageCondition.test(new Damage(event.getFinalDamage(), actorPlayer, event.getCause())) && targetCondition.test(targetEntity)) {

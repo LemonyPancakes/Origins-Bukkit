@@ -48,7 +48,7 @@ public class CraftMasterOfWebsPower extends CraftCooldownPower {
         if (actorEntity instanceof Player) {
             Player actorPlayer = (Player) event.getDamager();
 
-            if (getMembers().contains(actorPlayer)) {
+            if (hasMember(actorPlayer)) {
                 if (canUse(actorPlayer)) {
                     Entity targetEntity = event.getEntity();
                     Location targetEntityLocation = targetEntity.getLocation();
@@ -77,7 +77,7 @@ public class CraftMasterOfWebsPower extends CraftCooldownPower {
         if (humanEntity instanceof Player) {
             Player player = (Player) humanEntity;
 
-            if (!getMembers().contains(player)) {
+            if (!hasMember(player)) {
                 Recipe recipe = event.getRecipe();
                 OriginItem arachnidCobwebOriginItem = getPlugin().getRegistry().getOriginItem(new Identifier(Identifier.ORIGINS_BUKKIT, "arachnid_cobweb"));
 

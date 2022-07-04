@@ -49,7 +49,7 @@ public class CraftActionOnEntityUsePower extends CraftInteractionPower {
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             Entity entity = event.getRightClicked();
             BiEntity biEntity = new BiEntity(player, entity);
             ItemStack heldItem = player.getItemInUse();

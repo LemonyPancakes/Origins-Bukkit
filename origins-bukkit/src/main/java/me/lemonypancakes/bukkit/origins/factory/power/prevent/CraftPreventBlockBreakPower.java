@@ -42,7 +42,7 @@ public class CraftPreventBlockBreakPower extends CraftPower {
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             Block block = event.getBlock();
 
             if (getCondition().test(player) && blockCondition.test(block)) {

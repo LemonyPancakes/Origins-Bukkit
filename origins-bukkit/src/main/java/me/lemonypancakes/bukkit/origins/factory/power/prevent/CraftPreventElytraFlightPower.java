@@ -45,7 +45,7 @@ public class CraftPreventElytraFlightPower extends CraftPower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 if (event.isGliding()) {
                     if (getCondition().test(player)) {
                         event.setCancelled(true);

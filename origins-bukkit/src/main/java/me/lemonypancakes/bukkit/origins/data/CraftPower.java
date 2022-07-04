@@ -117,7 +117,7 @@ public class CraftPower implements Power {
 
     @Override
     public boolean isActive(Player player) {
-        if (getMembers().contains(player)) {
+        if (members.contains(player)) {
             return getCondition().test(player);
         }
         return false;

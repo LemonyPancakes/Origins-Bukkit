@@ -40,7 +40,7 @@ public class CraftMoreKineticDamagePower extends CraftPower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 EntityDamageEvent.DamageCause damageCause = event.getCause();
 
                 if (damageCause == EntityDamageEvent.DamageCause.FALL || damageCause == EntityDamageEvent.DamageCause.FLY_INTO_WALL) {

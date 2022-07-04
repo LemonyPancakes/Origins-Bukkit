@@ -40,7 +40,7 @@ public class CraftAerialCombatantPower extends CraftPower {
         if (actorEntity instanceof Player) {
             Player actorPlayer = (Player) actorEntity;
 
-            if (getMembers().contains(actorPlayer)) {
+            if (hasMember(actorPlayer)) {
                 double baseDamage = event.getDamage();
 
                 if (actorPlayer.isGliding()) {

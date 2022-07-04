@@ -22,6 +22,7 @@ import me.lemonypancakes.bukkit.origins.Origin;
 import me.lemonypancakes.bukkit.origins.OriginPlayer;
 import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.data.storage.other.Misc;
+import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginSetEvent;
 import me.lemonypancakes.bukkit.origins.util.ChatUtils;
 import me.lemonypancakes.bukkit.origins.util.Config;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
@@ -42,7 +43,7 @@ public class CraftOriginPlayer implements OriginPlayer {
         this.plugin = plugin;
         this.player = player;
         this.schedulers = new Schedulers();
-        this.metadata = plugin.getStorage().getMetadata(getPlayer());
+        this.metadata = plugin.getStorage().getMetadata(player);
     }
 
     @Override
@@ -64,33 +65,46 @@ public class CraftOriginPlayer implements OriginPlayer {
     }
 
     @Override
-    public void setOrigin(Origin origin) {
-        if (origin == null) {
-            if (this.origin != null) {
-                unlistenAndDestroy();
-                plugin.getStorage().setOrigin(getPlayer(), null);
-                this.origin = null;
-                Misc.VIEWERS.put(player.getUniqueId(), 0);
-                getPlayer().openInventory(Misc.GUIS.get(0));
-            }
-        } else {
-            if (!origin.getIdentifier().toString().equals("origins-bukkit:dummy_origin")) {
-                if (plugin.getRegistry().hasOrigin(origin.getIdentifier())) {
-                    if (this.origin != null) {
-                        unlistenAndDestroy();
+    public PlayerOriginSetEvent setOrigin(Origin origin) {
+        PlayerOriginSetEvent playerOriginSetEvent = new PlayerOriginSetEvent(player, this.origin, origin);
+
+        if (!playerOriginSetEvent.isCancelled()) {
+            origin = playerOriginSetEvent.getNewOrigin();
+
+            if (origin == null) {
+                if (this.origin != null) {
+                    unlistenAndDestroy();
+                    plugin.getStorage().setOrigin(player, null);
+                    this.origin = null;
+                    Misc.VIEWERS.put(player.getUniqueId(), 0);
+                    player.openInventory(Misc.GUIS.get(0));
+                    Bukkit.getPluginManager().callEvent(playerOriginSetEvent);
+
+                    return playerOriginSetEvent;
+                }
+            } else {
+                if (!origin.getIdentifier().toString().equals("origins-bukkit:dummy_origin")) {
+                    if (plugin.getRegistry().hasOrigin(origin.getIdentifier())) {
+                        if (this.origin != null) {
+                            unlistenAndDestroy();
+                        }
+                        this.origin = origin;
+                        if (Misc.VIEWERS.containsKey(player.getUniqueId())) {
+                            Misc.VIEWERS.remove(player.getUniqueId());
+                            player.closeInventory();
+                        }
+                        if (origin.getPowers() != null) {
+                            origin.getPowers().forEach(power -> power.addMember(player));
+                        }
+                        plugin.getStorage().setOrigin(player, origin.getIdentifier());
+                        Bukkit.getPluginManager().callEvent(playerOriginSetEvent);
+
+                        return playerOriginSetEvent;
                     }
-                    this.origin = origin;
-                    if (Misc.VIEWERS.containsKey(player.getUniqueId())) {
-                        Misc.VIEWERS.remove(player.getUniqueId());
-                        getPlayer().closeInventory();
-                    }
-                    if (origin.getPowers() != null) {
-                        origin.getPowers().forEach(power -> power.addMember(getPlayer()));
-                    }
-                    plugin.getStorage().setOrigin(getPlayer(), origin.getIdentifier());
                 }
             }
         }
+        return null;
     }
 
     @Override
@@ -102,7 +116,7 @@ public class CraftOriginPlayer implements OriginPlayer {
     public void unlisten() {
         if (getOrigin() != null) {
             if (getOrigin().getPowers() != null) {
-                getOrigin().getPowers().forEach(power -> power.removeMember(getPlayer()));
+                getOrigin().getPowers().forEach(power -> power.removeMember(player));
             }
         }
     }
@@ -115,8 +129,8 @@ public class CraftOriginPlayer implements OriginPlayer {
 
     @Override
     public void refresh() {
-        if (plugin.getStorage().getOrigin(getPlayer()) != null) {
-            Identifier originIdentifier = plugin.getStorage().getOrigin(getPlayer());
+        if (plugin.getStorage().getOrigin(player) != null) {
+            Identifier originIdentifier = plugin.getStorage().getOrigin(player);
 
             if (plugin.getRegistry().hasOrigin(originIdentifier)) {
                 Origin origin = plugin.getRegistry().getOrigin(originIdentifier);
@@ -125,15 +139,15 @@ public class CraftOriginPlayer implements OriginPlayer {
                     setOrigin(origin);
                 }
             } else {
-                plugin.getStorage().setOrigin(getPlayer(), null);
+                plugin.getStorage().setOrigin(player, null);
                 Bukkit.getScheduler().runTaskLater(plugin.getJavaPlugin(), bukkitTask -> {
-                    Misc.VIEWERS.put(getPlayer().getUniqueId(), 0);
-                    getPlayer().openInventory(Misc.GUIS.get(0));
+                    Misc.VIEWERS.put(player.getUniqueId(), 0);
+                    player.openInventory(Misc.GUIS.get(0));
                 }, 20L);
-                ChatUtils.sendPlayerMessage(getPlayer(), "&cYour origin (&e\"" + originIdentifier + "\"&c) doesn't exist so we pruned your player data.");
+                ChatUtils.sendPlayerMessage(player, "&cYour origin (&e\"" + originIdentifier + "\"&c) doesn't exist so we pruned your player data.");
             }
         } else {
-            if (!plugin.getStorage().hasOriginPlayerData(getPlayer())) {
+            if (!plugin.getStorage().hasOriginPlayerData(player)) {
                 String starterOriginString = Config.STARTER_ORIGIN.toString();
 
                 if (!starterOriginString.isEmpty()) {
@@ -150,8 +164,8 @@ public class CraftOriginPlayer implements OriginPlayer {
                 }
             }
             Bukkit.getScheduler().runTaskLater(plugin.getJavaPlugin(), bukkitTask -> {
-                Misc.VIEWERS.put(getPlayer().getUniqueId(), 0);
-                getPlayer().openInventory(Misc.GUIS.get(0));
+                Misc.VIEWERS.put(player.getUniqueId(), 0);
+                player.openInventory(Misc.GUIS.get(0));
             }, 20L);
         }
     }
@@ -166,12 +180,12 @@ public class CraftOriginPlayer implements OriginPlayer {
         if (this == itemStack) return true;
         if (!(itemStack instanceof CraftOriginPlayer)) return false;
         CraftOriginPlayer that = (CraftOriginPlayer) itemStack;
-        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(getPlayer(), that.getPlayer()) && Objects.equals(getSchedulers(), that.getSchedulers()) && Objects.equals(getMetadata(), that.getMetadata()) && Objects.equals(getOrigin(), that.getOrigin());
+        return Objects.equals(getPlugin(), that.getPlugin()) && Objects.equals(player, that.player) && Objects.equals(getSchedulers(), that.getSchedulers()) && Objects.equals(getMetadata(), that.getMetadata()) && Objects.equals(getOrigin(), that.getOrigin());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPlugin(), getPlayer(), getSchedulers(), getMetadata(), getOrigin());
+        return Objects.hash(getPlugin(), player, getSchedulers(), getMetadata(), getOrigin());
     }
 
     @Override

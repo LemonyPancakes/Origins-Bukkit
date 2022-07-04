@@ -50,7 +50,7 @@ public class CraftThrowEnderPearlPower extends CraftActiveWithCooldownPower {
     public void onPlayerTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL) {
                 if (players.contains(player)) {
                     players.remove(player);

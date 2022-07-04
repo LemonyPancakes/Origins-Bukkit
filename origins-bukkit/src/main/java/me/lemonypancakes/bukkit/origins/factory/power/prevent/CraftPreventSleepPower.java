@@ -55,7 +55,7 @@ public class CraftPreventSleepPower extends CraftPower {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             Action action = event.getAction();
 
             if (action == Action.RIGHT_CLICK_BLOCK) {
@@ -81,7 +81,7 @@ public class CraftPreventSleepPower extends CraftPower {
     public void onPlayerBedEnter(PlayerBedEnterEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             if (getCondition().test(player) && blockCondition.test(event.getBed())) {
                 event.setCancelled(true);
                 ChatUtils.sendPlayerMessage(player, message);

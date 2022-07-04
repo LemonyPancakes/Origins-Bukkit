@@ -42,7 +42,7 @@ public class CraftDamageFromPotionsPower extends CraftPower {
     private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             ItemStack itemStack = event.getItem();
             Material material = itemStack.getType();
 
@@ -60,7 +60,7 @@ public class CraftDamageFromPotionsPower extends CraftPower {
             if (livingEntity instanceof Player) {
                 Player player = (Player) livingEntity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     player.damage(2);
                 }
             }

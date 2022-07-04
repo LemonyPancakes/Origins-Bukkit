@@ -57,7 +57,7 @@ public class CraftSwimmingPower extends CraftPower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 if (getCondition().test(player)) {
                     if (!event.isGliding()) {
                         event.setCancelled(true);

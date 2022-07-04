@@ -49,7 +49,7 @@ public class CraftActionWhenDamageTakenPower extends CraftCooldownPower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 if (getCondition().test(player) && damageCondition.test(new Damage(event.getFinalDamage(), null, event.getCause()))) {
                     if (!canUse(player)) {
                         return;

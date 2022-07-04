@@ -48,7 +48,7 @@ public class CraftConditionedRestrictArmorPower extends CraftPower {
     public void onArmorEquipEvent(ArmorEquipEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             if (getCondition().test(player)) {
                 switch (event.getType()) {
                     case HELMET:

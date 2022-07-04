@@ -56,7 +56,7 @@ public class CraftActionOnBlockUsePower extends CraftInteractionPower {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             Action action = event.getAction();
 
             if (action == Action.RIGHT_CLICK_BLOCK) {

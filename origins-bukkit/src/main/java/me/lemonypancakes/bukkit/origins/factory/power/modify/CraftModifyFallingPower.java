@@ -60,7 +60,7 @@ public class CraftModifyFallingPower extends CraftPower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 PotionEffect oldPotionEffect = event.getOldEffect();
 
                 if (oldPotionEffect != null && oldPotionEffect.getType().equals(PotionEffectType.SLOW_FALLING)) {

@@ -48,7 +48,7 @@ public class CraftActionOnWakeUpPower extends CraftPower {
     public void onPlayerBedLeave(PlayerBedLeaveEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             Block block = event.getBed();
 
             if (player.getWorld().getTime() >= 0 && player.getWorld().getTime() <= 13000) {

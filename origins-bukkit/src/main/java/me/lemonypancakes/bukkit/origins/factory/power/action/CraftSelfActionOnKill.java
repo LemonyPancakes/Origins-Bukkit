@@ -52,7 +52,7 @@ public class CraftSelfActionOnKill extends CraftCooldownPower {
         if (actorEntity instanceof Player) {
             Player actorPlayer = (Player) actorEntity;
 
-            if (getMembers().contains(actorPlayer)) {
+            if (hasMember(actorPlayer)) {
                 Entity targetEntity = event.getEntity();
 
                 if (targetEntity instanceof Damageable) {

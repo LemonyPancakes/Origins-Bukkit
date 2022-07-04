@@ -40,7 +40,7 @@ public class CraftDisableRegenPower extends CraftPower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 if (getCondition().test(player)) {
                     EntityRegainHealthEvent.RegainReason regainReason = event.getRegainReason();
 

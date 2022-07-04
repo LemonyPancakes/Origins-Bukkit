@@ -61,7 +61,7 @@ public class CraftElytraFlightPower extends CraftTogglePower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 if (isToggled(player)) {
                     if (getCondition().test(player)) {
                         if (!event.isGliding()) {

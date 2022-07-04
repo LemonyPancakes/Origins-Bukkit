@@ -98,7 +98,7 @@ public class CraftAquaAffinityPower extends CraftPower {
                         Block block = location.getBlock();
                         Material material = block.getType();
 
-                        if (getMembers().contains(player)) {
+                        if (hasMember(player)) {
                             if (material.isSolid()) {
                                 if (modifier < 0) {
                                     if (digType == EnumWrappers.PlayerDigType.START_DESTROY_BLOCK) {

@@ -58,7 +58,7 @@ public class CraftModifyDamageDealtPower extends CraftPower {
         if (actorEntity instanceof Player) {
             Player actorPlayer = (Player) actorEntity;
 
-            if (getMembers().contains(actorPlayer)) {
+            if (hasMember(actorPlayer)) {
                 Entity targetEntity = event.getEntity();
                 BiEntity biEntity = new BiEntity(actorPlayer, targetEntity);
 

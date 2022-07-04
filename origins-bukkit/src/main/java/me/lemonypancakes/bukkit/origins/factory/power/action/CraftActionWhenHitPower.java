@@ -52,7 +52,7 @@ public class CraftActionWhenHitPower extends CraftCooldownPower {
         if (targetEntity instanceof Player) {
             Player targetPlayer = (Player) targetEntity;
 
-            if (getMembers().contains(targetPlayer)) {
+            if (hasMember(targetPlayer)) {
                 Entity actorEntity = event.getDamager();
                 BiEntity biEntity = new BiEntity(actorEntity, targetPlayer);
 

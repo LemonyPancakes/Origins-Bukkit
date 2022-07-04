@@ -21,6 +21,7 @@ import me.lemonypancakes.bukkit.origins.Origin;
 import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.data.storage.other.Misc;
 import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginChooseEvent;
+import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginSetEvent;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -98,13 +99,19 @@ public class InventoryClickEventListener implements Listener {
                                     Origin origin = plugin.getRegistry().getOrigin(identifier);
 
                                     if (origin != null) {
-                                        PlayerOriginChooseEvent playerOriginChooseEvent
-                                                = new PlayerOriginChooseEvent(player, origin);
+                                        PlayerOriginChooseEvent playerOriginChooseEvent = new PlayerOriginChooseEvent(player, origin);
 
                                         Bukkit.getPluginManager().callEvent(playerOriginChooseEvent);
                                         if (!playerOriginChooseEvent.isCancelled()) {
-                                            plugin.getOriginPlayer(player).setOrigin(playerOriginChooseEvent.getOrigin());
-                                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
+                                            PlayerOriginSetEvent playerOriginSetEvent = plugin.getOriginPlayer(player).setOrigin(playerOriginChooseEvent.getOrigin());
+
+                                            if (playerOriginSetEvent != null) {
+                                                if (!playerOriginSetEvent.isCancelled()) {
+                                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
+                                                } else {
+                                                    player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);
+                                                }
+                                            }
                                         } else {
                                             player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);
                                         }
@@ -118,7 +125,6 @@ public class InventoryClickEventListener implements Listener {
                 }
             }
         }
-
         if (originInfoGuis.containsValue(event.getInventory())) {
             event.setCancelled(true);
             player.playSound(player.getLocation(), Sound.ITEM_CHORUS_FRUIT_TELEPORT, 1f, 0);

@@ -112,7 +112,7 @@ public class CraftEntityGroupPower extends CraftPower {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     Entity damager = event.getDamager();
 
                     if (damager instanceof LivingEntity) {
@@ -142,7 +142,7 @@ public class CraftEntityGroupPower extends CraftPower {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     EntityDamageEvent.DamageCause magic = EntityDamageEvent.DamageCause.MAGIC;
                     EntityDamageEvent.DamageCause poison = EntityDamageEvent.DamageCause.POISON;
 
@@ -163,7 +163,7 @@ public class CraftEntityGroupPower extends CraftPower {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     EntityRegainHealthEvent.RegainReason magic = EntityRegainHealthEvent.RegainReason.MAGIC;
                     EntityRegainHealthEvent.RegainReason magicRegen = EntityRegainHealthEvent.RegainReason.MAGIC_REGEN;
 
@@ -184,7 +184,7 @@ public class CraftEntityGroupPower extends CraftPower {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     PotionEffect potionEffect = event.getNewEffect();
 
                     if (potionEffect != null) {
@@ -213,7 +213,7 @@ public class CraftEntityGroupPower extends CraftPower {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     Entity damager = event.getDamager();
 
                     if (damager instanceof LivingEntity) {
@@ -252,7 +252,7 @@ public class CraftEntityGroupPower extends CraftPower {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     Entity damager = event.getDamager();
 
                     if (damager instanceof LivingEntity) {
@@ -290,7 +290,7 @@ public class CraftEntityGroupPower extends CraftPower {
             if (entity instanceof Player) {
                 Player player = (Player) entity;
 
-                if (getMembers().contains(player)) {
+                if (hasMember(player)) {
                     Entity damager = event.getDamager();
 
                     if (damager.getType() == EntityType.EVOKER_FANGS) {
@@ -310,7 +310,7 @@ public class CraftEntityGroupPower extends CraftPower {
                 if (target instanceof Player) {
                     Player player = (Player) target;
 
-                    if (getMembers().contains(player)) {
+                    if (hasMember(player)) {
                         event.setCancelled(true);
                     }
                 }

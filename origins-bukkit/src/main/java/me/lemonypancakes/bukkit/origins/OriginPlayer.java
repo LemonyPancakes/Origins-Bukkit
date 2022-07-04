@@ -18,6 +18,7 @@
 package me.lemonypancakes.bukkit.origins;
 
 import me.lemonypancakes.bukkit.origins.data.CraftOriginPlayer;
+import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginSetEvent;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public interface OriginPlayer extends OriginsBukkitPluginHolder, Metadatable {
 
     Origin getOrigin();
 
-    void setOrigin(Origin origin);
+    PlayerOriginSetEvent setOrigin(Origin origin);
 
     Schedulers getSchedulers();
 

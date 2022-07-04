@@ -49,7 +49,7 @@ public class CraftPreventDeathPower extends CraftPower {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (getMembers().contains(player)) {
+            if (hasMember(player)) {
                 if (player.getHealth() - event.getFinalDamage() <= 0) {
                     if (getCondition().test(player) && damageCondition.test(new Damage(event.getFinalDamage(), null, event.getCause()))) {
                         event.setCancelled(true);

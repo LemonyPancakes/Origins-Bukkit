@@ -66,7 +66,7 @@ public class CraftModifyPlayerSpawnPower extends CraftPower {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             if (player.getBedSpawnLocation() == null) {
                 event.setRespawnLocation(generateLocation());
             }

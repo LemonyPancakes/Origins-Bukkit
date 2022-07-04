@@ -38,8 +38,8 @@ public class CraftKeepInventoryPower extends CraftPower {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (getMembers().contains(player)) {
-            if (getMembers().contains(player)) {
+        if (hasMember(player)) {
+            if (hasMember(player)) {
                 event.getDrops().clear();
                 event.setKeepInventory(true);
             }

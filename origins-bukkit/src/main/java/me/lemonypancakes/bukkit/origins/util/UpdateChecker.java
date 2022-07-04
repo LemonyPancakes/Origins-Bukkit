@@ -67,20 +67,16 @@ public class UpdateChecker {
             if (newVersion.contains(".") && currentVersion.contains(".")) {
                 String[] newVersionStringArray = newVersion.split("\\.");
                 String[] currentVersionStringArray = currentVersion.split("\\.");
+                String newVersionString = "";
+                String currentVersionString = "";
 
-                if (newVersionStringArray[0] != null && currentVersionStringArray[0] != null) {
-                    if (Integer.parseInt(newVersionStringArray[0]) > Integer.parseInt(currentVersionStringArray[0])) {
-                        return true;
-                    }
+                for (String string : newVersionStringArray) {
+                    newVersionString = newVersionString.concat(string);
                 }
-                if (newVersionStringArray[1] != null && currentVersionStringArray[1] != null) {
-                    if (Integer.parseInt(newVersionStringArray[1]) > Integer.parseInt(currentVersionStringArray[1])) {
-                        return true;
-                    }
+                for (String string : currentVersionStringArray) {
+                    currentVersionString = currentVersionString.concat(string);
                 }
-                if (newVersionStringArray[2] != null && currentVersionStringArray[2] != null) {
-                    return Integer.parseInt(newVersionStringArray[2]) > Integer.parseInt(currentVersionStringArray[2]);
-                }
+                return Integer.parseInt(newVersionString) > Integer.parseInt(currentVersionString);
             }
         }
         return false;

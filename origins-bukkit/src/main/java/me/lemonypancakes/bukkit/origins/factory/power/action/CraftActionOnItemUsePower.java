@@ -48,7 +48,7 @@ public class CraftActionOnItemUsePower extends CraftPower {
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             ItemStack itemStack = event.getItem();
 
             if (getCondition().test(player) && itemCondition.test(itemStack)) {

@@ -44,7 +44,7 @@ public class CraftLightArmorPower extends CraftPower {
     public void onArmorEquip(ArmorEquipEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             ItemStack newArmorPiece = event.getNewArmorPiece();
 
             if (newArmorPiece != null) {

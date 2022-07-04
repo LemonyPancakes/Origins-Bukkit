@@ -52,7 +52,7 @@ public class CraftActionOnBlockBreakPower extends CraftPower {
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
-        if (getMembers().contains(player)) {
+        if (hasMember(player)) {
             Block block = event.getBlock();
 
             if (onlyWhenHarvested) {
