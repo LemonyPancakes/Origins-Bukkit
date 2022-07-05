@@ -159,10 +159,12 @@ public final class StartupUtils {
             properties.load(stream);
             File defaultWorld = new File(serverContainer.getAbsolutePath() + s + properties.getProperty("level-name"));
             File datapacksFolder = new File(defaultWorld.getAbsolutePath() + s + "datapacks");
-            InputStream originsBukkitZip = plugin.getJavaPlugin().getResource("datapacks" + s + "origins-bukkit.zip");
+            InputStream originsBukkitZip = plugin.getJavaPlugin().getResource("datapacks/origins-bukkit.zip");
 
             if (originsBukkitZip != null) {
-                Files.copy(originsBukkitZip, new File(datapacksFolder.getAbsolutePath() + s + "origins-bukkit.zip").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    Files.copy(originsBukkitZip, new File(datapacksFolder.getAbsolutePath() + s + "origins-bukkit.zip").toPath(), StandardCopyOption.REPLACE_EXISTING);
+                } catch (Exception ignored) {}
                 originsBukkitZip.close();
             }
             File[] packs = datapacksFolder.listFiles();
@@ -217,11 +219,11 @@ public final class StartupUtils {
                                     String zipEntryName = zipEntry.getName();
                                     InputStream inputStream = zipFile.getInputStream(zipEntry);
                                     Reader reader = new InputStreamReader(inputStream);
-                                    String[] split = zipEntryName.split(s);
+                                    String[] split = zipEntryName.split("/");
 
                                     if (split.length >= 3) {
                                         if (split[0].equals("data") && split[2].equals("powers") && zipEntryName.endsWith(".json")) {
-                                            plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, split[1], FilenameUtils.getBaseName(zipEntryName.replaceFirst("powers" + s, ""))));
+                                            plugin.getRegistry().register(plugin.getLoader().loadPowerFromFile(reader, split[1], FilenameUtils.getBaseName(zipEntryName.replaceFirst("powers/", ""))));
                                         }
                                     }
                                     reader.close();
@@ -283,11 +285,11 @@ public final class StartupUtils {
                                     String zipEntryName = zipEntry.getName();
                                     InputStream inputStream = zipFile.getInputStream(zipEntry);
                                     Reader reader = new InputStreamReader(inputStream);
-                                    String[] split = zipEntryName.split(s);
+                                    String[] split = zipEntryName.split("/");
 
                                     if (split.length >= 3) {
                                         if (split[0].equals("data") && split[2].equals("origins") && zipEntryName.endsWith(".json")) {
-                                            plugin.getRegistry().register(plugin.getLoader().loadOriginFromFile(reader, split[1], FilenameUtils.getBaseName(zipEntryName.replaceFirst("origins" + s, ""))));
+                                            plugin.getRegistry().register(plugin.getLoader().loadOriginFromFile(reader, split[1], FilenameUtils.getBaseName(zipEntryName.replaceFirst("origins/", ""))));
                                         }
                                     }
                                     reader.close();
