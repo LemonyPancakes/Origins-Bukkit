@@ -17,7 +17,6 @@
  */
 package me.lemonypancakes.bukkit.origins.item;
 
-import me.lemonypancakes.bukkit.origins.OriginItem;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
 import me.lemonypancakes.bukkit.origins.util.ChatUtils;
 import me.lemonypancakes.bukkit.origins.util.Config;

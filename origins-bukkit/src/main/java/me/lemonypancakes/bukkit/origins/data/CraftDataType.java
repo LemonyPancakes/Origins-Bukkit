@@ -17,8 +17,6 @@
  */
 package me.lemonypancakes.bukkit.origins.data;
 
-import me.lemonypancakes.bukkit.origins.DataType;
-
 import java.util.Objects;
 
 public class CraftDataType<T> implements DataType<T> {
@@ -39,12 +37,12 @@ public class CraftDataType<T> implements DataType<T> {
         if (this == itemStack) return true;
         if (!(itemStack instanceof CraftDataType)) return false;
         CraftDataType<?> that = (CraftDataType<?>) itemStack;
-        return Objects.equals(getType(), that.getType());
+        return Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getType());
+        return Objects.hash(type);
     }
 
     @Override

@@ -17,11 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.condition;
 
-import com.google.gson.Gson;
-import me.lemonypancakes.bukkit.origins.Condition;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftCondition;
+import me.lemonypancakes.bukkit.common.com.google.gson.Gson;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.CraftCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftAndCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftOrCondition;
 import me.lemonypancakes.bukkit.origins.util.Comparison;
@@ -35,26 +35,26 @@ import java.util.Arrays;
 public class ItemConditions {
 
     public ItemConditions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "amount"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "amount"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
                 return Comparison.parseComparison(jsonObject).compare(itemStack.getAmount(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "armor_value"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "armor_value"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "empty"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "empty"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
                 return itemStack.getType().isAir();
             }
             return true;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "enchantment"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "enchantment"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
                 if (jsonObject.has("enchantment")) {
                     NamespacedKey namespacedKey = NamespacedKey.fromString(jsonObject.get("enchantment").getAsString());
@@ -70,25 +70,25 @@ public class ItemConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fireproof"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fireproof"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
                 return !itemStack.getType().isFlammable() || !itemStack.getType().isBurnable();
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "food"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "food"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
                 return itemStack.getType().isEdible();
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "harvest_level"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "harvest_level"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "ingredient"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "ingredient"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
                 Material item = null;
                 Material[] items = null;
@@ -103,19 +103,19 @@ public class ItemConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "meat"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "meat"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nbt"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nbt"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "smeltable"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "smeltable"), DataType.ITEM_STACK, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, itemStack) -> {
             if (itemStack != null) {
                 return itemStack.getType().isFuel();
             }

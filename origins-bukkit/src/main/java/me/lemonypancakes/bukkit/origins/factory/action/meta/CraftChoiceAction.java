@@ -17,10 +17,10 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.action.meta;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftAction;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.CraftAction;
 import me.lemonypancakes.bukkit.origins.util.ProbabilityUtils;
 import me.lemonypancakes.bukkit.origins.wrapper.Element;
 

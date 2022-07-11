@@ -20,15 +20,13 @@ package me.lemonypancakes.bukkit.origins.plugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.lemonypancakes.armorequipevent.ArmorListener;
-import me.lemonypancakes.bukkit.origins.*;
-import me.lemonypancakes.bukkit.origins.command.maincommand.MainCommand;
-import me.lemonypancakes.bukkit.origins.config.CraftConfigHandler;
-import me.lemonypancakes.bukkit.origins.data.CraftLoader;
-import me.lemonypancakes.bukkit.origins.data.CraftOriginPlayer;
-import me.lemonypancakes.bukkit.origins.data.CraftRegistry;
+import me.lemonypancakes.bukkit.origins.OriginsBukkit;
+import me.lemonypancakes.bukkit.origins.config.ConfigHandler;
 import me.lemonypancakes.bukkit.origins.data.storage.CraftBukkitStorage;
 import me.lemonypancakes.bukkit.origins.data.storage.CraftMySQLStorage;
-import me.lemonypancakes.bukkit.origins.data.storage.other.Misc;
+import me.lemonypancakes.bukkit.origins.data.storage.Storage;
+import me.lemonypancakes.bukkit.origins.entity.player.CraftOriginPlayer;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
 import me.lemonypancakes.bukkit.origins.factory.action.BiEntityActions;
 import me.lemonypancakes.bukkit.origins.factory.action.BlockActions;
 import me.lemonypancakes.bukkit.origins.factory.action.EntityActions;
@@ -47,16 +45,25 @@ import me.lemonypancakes.bukkit.origins.listener.entity.player.PlayerSwapHandIte
 import me.lemonypancakes.bukkit.origins.listener.inventory.InventoryClickEventListener;
 import me.lemonypancakes.bukkit.origins.listener.inventory.InventoryCloseEventListener;
 import me.lemonypancakes.bukkit.origins.listener.world.DayAndNightCycleListener;
+import me.lemonypancakes.bukkit.origins.loader.CraftLoader;
+import me.lemonypancakes.bukkit.origins.loader.Loader;
+import me.lemonypancakes.bukkit.origins.menu.Menu;
 import me.lemonypancakes.bukkit.origins.metrics.Metrics;
+import me.lemonypancakes.bukkit.origins.registry.CraftRegistry;
+import me.lemonypancakes.bukkit.origins.registry.Registry;
 import me.lemonypancakes.bukkit.origins.util.*;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -104,10 +111,9 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new InventoryCloseEventListener(this);
             new DayAndNightCycleListener(this);
             new ArmorListener(this);
-            new MainCommand(this);
-            new CraftConfigHandler(this);
-            registry.register(new OrbOfOrigin());
-            registry.register(new ArachnidCobweb());
+            new ConfigHandler(this);
+            registry.registerOriginItem(new OrbOfOrigin());
+            registry.registerOriginItem(new ArachnidCobweb());
             new BiEntityActions(this);
             new BlockActions(this);
             new EntityActions(this);
@@ -143,18 +149,24 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                     OriginPlayer originPlayer = new CraftOriginPlayer(CraftOriginsBukkitPlugin.this, player);
 
                     originPlayers.put(uuid, originPlayer);
+                    removeModifiers(player);
                     originPlayer.refresh();
                 }
             }, this);
             Bukkit.getPluginManager().registerEvents(new Listener() {
 
-                @EventHandler(priority = EventPriority.LOWEST)
+                @EventHandler(priority = EventPriority.HIGHEST)
                 public void onPlayerQuit(PlayerQuitEvent event) {
                     Player player = event.getPlayer();
                     UUID uuid = player.getUniqueId();
+                    OriginPlayer originPlayer = originPlayers.get(uuid);
 
-                    originPlayers.get(uuid).unlistenAndDestroy();
-                    originPlayers.remove(uuid);
+                    if (originPlayer != null) {
+                        originPlayer.getPowers().forEach((power, powerSources) -> power.forceRemoveMember(player));
+                        originPlayer.getSchedulers().destroy();
+                        removeModifiers(player);
+                        originPlayers.remove(uuid);
+                    }
                 }
             }, this);
             Bukkit.getOnlinePlayers().forEach(player -> {
@@ -162,6 +174,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                 OriginPlayer originPlayer = new CraftOriginPlayer(CraftOriginsBukkitPlugin.this, player);
 
                 originPlayers.put(uuid, originPlayer);
+                removeModifiers(player);
                 originPlayer.refresh();
             });
             new BukkitRunnable() {
@@ -183,7 +196,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                         throw new RuntimeException(e);
                     }
                 }
-            }.runTaskLaterAsynchronously(this, 40L);
+            }.runTaskTimerAsynchronously(this, 60L, 216000L);
 
             ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
         }
@@ -191,23 +204,24 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
 
     @Override
     public void onDisable() {
+        for (int i = 0; i < registry.getRegisteredOriginItemsKeySet().size(); i++) {
+            Bukkit.removeRecipe(((Identifier) registry.getRegisteredOriginItemsKeySet().toArray()[i]).toNameSpacedKey());
+        }
+        expansions.forEach(plugin -> Bukkit.getPluginManager().disablePlugin(plugin));
+        originPlayers.values().forEach(originPlayer -> {
+            originPlayer.getPowers().forEach((power, powerSources) -> power.forceRemoveMember(originPlayer.getPlayer()));
+            originPlayer.getSchedulers().destroy();
+        });
         Bukkit.getOnlinePlayers().forEach(player -> {
-            if (Misc.VIEWERS.containsKey(player.getUniqueId())) {
+            InventoryView inventoryView = player.getOpenInventory();
+            Inventory inventory = inventoryView.getTopInventory();
+            InventoryHolder inventoryHolder = inventory.getHolder();
+
+            if (inventoryHolder instanceof Menu) {
                 player.closeInventory();
             }
+            removeModifiers(player);
         });
-        Misc.ORIGINS_INFO_GUI.forEach((key, value) -> {
-            for (int i = 0; i < value.getViewers().size(); i++) {
-                HumanEntity humanEntity = value.getViewers().get(i);
-
-                humanEntity.closeInventory();
-            }
-        });
-        for (int i = 0; i < registry.getOriginItemsKeySet().size(); i++) {
-            Bukkit.removeRecipe(((Identifier) registry.getOriginItemsKeySet().toArray()[i]).toNameSpacedKey());
-        }
-        originPlayers.values().forEach(OriginPlayer::unlistenAndDestroy);
-        expansions.forEach(plugin -> Bukkit.getPluginManager().disablePlugin(plugin));
 
         ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
     }
@@ -265,5 +279,15 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
     @Override
     public void disable() {
         setEnabled(false);
+    }
+
+    private void removeModifiers(Player player) {
+        Arrays.stream(Attribute.values()).forEach(attribute -> {
+            AttributeInstance attributeInstance = player.getAttribute(attribute);
+
+            if (attributeInstance != null) {
+                attributeInstance.getModifiers().forEach(attributeInstance::removeModifier);
+            }
+        });
     }
 }

@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.wrapper;
 
-import com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 

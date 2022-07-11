@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.listener.world;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.event.world.WorldDayAndNightCycleEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;

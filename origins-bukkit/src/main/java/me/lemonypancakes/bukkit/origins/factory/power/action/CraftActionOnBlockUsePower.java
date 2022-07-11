@@ -17,11 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power.action;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Condition;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.common.com.google.gson.Gson;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.factory.power.CraftInteractionPower;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.block.Block;
@@ -37,8 +37,8 @@ import java.util.Arrays;
 
 public class CraftActionOnBlockUsePower extends CraftInteractionPower {
 
-    private final me.lemonypancakes.bukkit.origins.Action<Entity> entityAction;
-    private final me.lemonypancakes.bukkit.origins.Action<Block> blockAction;
+    private final me.lemonypancakes.bukkit.origins.entity.player.power.action.Action<Entity> entityAction;
+    private final me.lemonypancakes.bukkit.origins.entity.player.power.action.Action<Block> blockAction;
     private final Condition<Block> blockCondition;
     private BlockFace[] directions;
 

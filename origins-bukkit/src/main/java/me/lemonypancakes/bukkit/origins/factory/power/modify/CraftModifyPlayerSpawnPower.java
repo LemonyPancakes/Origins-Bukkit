@@ -17,9 +17,10 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power.modify;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftPower;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.CraftPower;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
@@ -57,8 +58,12 @@ public class CraftModifyPlayerSpawnPower extends CraftPower {
 
     @Override
     protected void onMemberAdd(Player player) {
-        if (!getPlugin().getStorage().hasOriginPlayerData(player)) {
-            player.teleport(generateLocation());
+        OriginPlayer originPlayer = getPlugin().getOriginPlayer(player);
+
+        if (originPlayer != null) {
+            if (!originPlayer.hasOriginBefore()) {
+                player.teleport(generateLocation());
+            }
         }
     }
 

@@ -17,11 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power.prevent;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Condition;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftPower;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.CraftPower;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

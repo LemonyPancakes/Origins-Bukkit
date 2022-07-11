@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.wrapper;
 
-import me.lemonypancakes.bukkit.origins.Action;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.Action;
 
 public class Element<T> {
 

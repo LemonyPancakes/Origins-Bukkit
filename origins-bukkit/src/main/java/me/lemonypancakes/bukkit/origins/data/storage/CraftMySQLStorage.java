@@ -17,13 +17,13 @@
  */
 package me.lemonypancakes.bukkit.origins.data.storage;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.Storage;
-import me.lemonypancakes.bukkit.origins.util.*;
+import me.lemonypancakes.bukkit.common.com.zaxxer.hikari.HikariConfig;
+import me.lemonypancakes.bukkit.common.com.zaxxer.hikari.HikariDataSource;
+import me.lemonypancakes.bukkit.origins.data.serialization.StorageSerializable;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.util.ChatUtils;
+import me.lemonypancakes.bukkit.origins.util.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -33,29 +33,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.persistence.PersistentDataHolder;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
 
 public class CraftMySQLStorage implements Storage, Listener {
 
     private final OriginsBukkitPlugin plugin;
     private final HikariDataSource hikariDataSource;
 
-    private static final String tablePrefix = "originsBukkit_";
+    private static final String tablePrefix = Config.STORAGE_DATA_TABLE_PREFIX.toString();
 
-    private static final String INSERT = "INSERT INTO " + tablePrefix + "originPlayers" + " (UUID, name, origin) VALUES (?,?,?) ON DUPLICATE KEY UPDATE name=?, origin=?";
+    private static final String INSERT = "INSERT INTO " + tablePrefix + "originPlayers" + " (UUID, name, origin, power, metadata, hasOriginBefore) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=?, origin=?, power=?, metadata=?, hasOriginBefore=?";
     private static final String SELECT = "SELECT * FROM " + tablePrefix + "originPlayers" + " WHERE UUID=?";
     private static final String DELETE = "DELETE FROM " + tablePrefix + "originPlayers" + " WHERE UUID=?";
 
-    private static final Map<UUID, Pair<Identifier, Boolean>> CACHE = new HashMap<>();
+    private final Set<UUID> saving = new HashSet<>();
+    private final Map<UUID, Map<String, Object>> data = new HashMap<>();
 
     public CraftMySQLStorage(OriginsBukkitPlugin plugin) {
         this.plugin = plugin;
@@ -74,11 +69,7 @@ public class CraftMySQLStorage implements Storage, Listener {
         this.hikariDataSource.addDataSourceProperty("password", getPassword());
         setupTable();
         Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
-        try {
-            CompletableFuture.runAsync(() -> Bukkit.getOnlinePlayers().forEach(player -> loadData(player, null))).get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        Bukkit.getOnlinePlayers().forEach(player -> loadData(player, null));
     }
 
     @Override
@@ -89,97 +80,58 @@ public class CraftMySQLStorage implements Storage, Listener {
     @Override
     public void setPlugin(OriginsBukkitPlugin plugin) {}
 
-    @Override
-    public Identifier getOrigin(OfflinePlayer offlinePlayer) {
-        UUID uuid = offlinePlayer.getUniqueId();
 
-        if (CACHE.containsKey(uuid)) {
-            return CACHE.get(uuid).getLeft();
-        }
-        return null;
+    @Override
+    public Map<String, Object> getData(OfflinePlayer offlinePlayer) {
+        return data.get(offlinePlayer.getUniqueId());
     }
 
     @Override
-    public void setOrigin(OfflinePlayer offlinePlayer, Identifier identifier) {
-        UUID uuid = offlinePlayer.getUniqueId();
-
-        if (identifier == null) {
-            CACHE.get(uuid).setLeft(null);
-            CACHE.get(uuid).setRight(false);
-        } else {
-            CACHE.get(uuid).setLeft(identifier);
-        }
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                saveData(offlinePlayer);
-            }
-        }.runTaskAsynchronously(plugin.getJavaPlugin());
-    }
-
-    @Override
-    public boolean hasOriginPlayerData(OfflinePlayer offlinePlayer) {
-        return CACHE.containsKey(offlinePlayer.getUniqueId()) && CACHE.get(offlinePlayer.getUniqueId()) != null && CACHE.get(offlinePlayer.getUniqueId()).getRight() != null && !CACHE.get(offlinePlayer.getUniqueId()).getRight();
-    }
-
-    @Override
-    public void wipeOriginPlayerData(OfflinePlayer offlinePlayer) {
-        UUID uuid = offlinePlayer.getUniqueId();
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                try (Connection connection = hikariDataSource.getConnection();
-                     PreparedStatement delete = connection.prepareStatement(DELETE)) {
-                    delete.setString(1, uuid.toString());
-                    delete.execute();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.runTaskAsynchronously(plugin.getJavaPlugin());
-        CACHE.remove(uuid);
-    }
-
-    @Override
-    public JsonObject getMetadata(OfflinePlayer offlinePlayer) {
-        String string = BukkitPersistentDataUtils.getPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING);
-
-        if (string != null) {
-            return new Gson().fromJson(string, JsonObject.class);
-        }
-        BukkitPersistentDataUtils.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING, "{}");
-        return new Gson().fromJson("{}", JsonObject.class);
+    public void saveData(OfflinePlayer offlinePlayer, StorageSerializable storageSerializable) {
+        saveData(offlinePlayer, storageSerializable.serialize());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
-        loadData(Bukkit.getOfflinePlayer(event.getUniqueId()), event);
+        if (saving.contains(event.getUniqueId())) {
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
+            event.setKickMessage("Not yet finished saving your data. Please try again later.");
+        } else {
+            loadData(Bukkit.getOfflinePlayer(event.getUniqueId()), event);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        OriginPlayer originPlayer = plugin.getOriginPlayer(player);
 
-        new BukkitRunnable() {
+        saving.add(player.getUniqueId());
+        if (originPlayer != null) {
+            new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                saveData(player);
-            }
-        }.runTaskAsynchronously(plugin.getJavaPlugin());
-        CACHE.remove(player.getUniqueId());
+                @Override
+                public void run() {
+                    saveData(player, originPlayer.serialize());
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            saving.remove(player.getUniqueId());
+                            data.remove(player.getUniqueId());
+                        }
+                    }.runTask(plugin.getJavaPlugin());
+                }
+            }.runTaskAsynchronously(plugin.getJavaPlugin());
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onPluginDisable(PluginDisableEvent event) {
-        if (event.getPlugin() == this.plugin) {
+        if (event.getPlugin() == plugin) {
             if (!Bukkit.getOnlinePlayers().isEmpty()) {
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Pushing cached player data into database.");
-                Bukkit.getOnlinePlayers().forEach(this::saveData);
-                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Finalizing data.");
+                ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Pushing player data into database.");
+                Bukkit.getOnlinePlayers().forEach(player -> saveData(player, plugin.getOriginPlayer(player)));
             }
             ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Closing database connection.");
             hikariDataSource.close();
@@ -190,62 +142,63 @@ public class CraftMySQLStorage implements Storage, Listener {
         UUID uuid = offlinePlayer.getUniqueId();
 
         try (Connection connection = hikariDataSource.getConnection();
+             Statement statement = connection.createStatement();
              PreparedStatement select = connection.prepareStatement(SELECT)) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + getTablePrefix() + "originPlayers(UUID varchar(36), name VARCHAR(16), origin longtext, power longtext, metadata longtext, hasOriginBefore int(1), PRIMARY KEY (UUID))");
             select.setString(1, uuid.toString());
             ResultSet result = select.executeQuery();
+            Map<String, Object> map = new LinkedHashMap<>();
+
             if (result.next()) {
-                String string = result.getString("origin");
-
-                if (string != null) {
-                    if (string.contains(":")) {
-                        Identifier identifier = Identifier.fromString(string);
-
-                        if (identifier != null) {
-                            CACHE.put(uuid, new Pair<>(identifier, false));
-                        }
-                    } else {
-                        CACHE.put(uuid, new Pair<>(null, false));
-                    }
-                } else {
-                    CACHE.put(uuid, new Pair<>(null, false));
-                }
-            } else {
-                CACHE.put(uuid, new Pair<>(null, true));
+                map.put("origin", result.getString("origin"));
+                map.put("power", result.getString("power"));
+                map.put("metadata", result.getString("metadata"));
+                map.put("hasOriginBefore", result.getInt("hasOriginBefore") > 0);
             }
+            data.put(uuid, map);
             result.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            if (offlinePlayer instanceof Player) {
-                ((Player) offlinePlayer).kickPlayer(null);
-            } else {
+            if (event != null) {
                 event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
+                event.setKickMessage("An error occurred while loading your origin data.");
+            } else {
+                if (offlinePlayer instanceof Player) {
+                    ((Player) offlinePlayer).kickPlayer(null);
+                }
             }
         }
     }
 
-    private void saveData(OfflinePlayer offlinePlayer) {
+    private void saveData(OfflinePlayer offlinePlayer, Map<String, Object> data) {
         UUID uuid = offlinePlayer.getUniqueId();
         String name = offlinePlayer.getName();
 
-        if (CACHE.containsKey(uuid)) {
-            try (Connection connection = hikariDataSource.getConnection();
-                 PreparedStatement insert = connection.prepareStatement(INSERT)){
-                insert.setString(1, uuid.toString());
-                insert.setString(2, name);
-                insert.setString(3, String.valueOf(CACHE.get(uuid).getLeft()));
-                insert.setString(4, name);
-                insert.setString(5, String.valueOf(CACHE.get(uuid).getLeft()));
-                insert.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try (Connection connection = hikariDataSource.getConnection();
+             Statement statement = connection.createStatement();
+             PreparedStatement insert = connection.prepareStatement(INSERT)) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + getTablePrefix() + "originPlayers(UUID varchar(36), name VARCHAR(16), origin longtext, power longtext, metadata longtext, hasOriginBefore int(1), PRIMARY KEY (UUID))");
+            insert.setString(1, uuid.toString());
+            insert.setString(2, name);
+            insert.setString(3, (String) data.get("origin"));
+            insert.setString(4, (String) data.get("power"));
+            insert.setString(5, (String) data.get("metadata"));
+            insert.setInt(6, (boolean) data.get("hasOriginBefore") ? 1 : 0);
+            insert.setString(7, name);
+            insert.setString(8, (String) data.get("origin"));
+            insert.setString(9, (String) data.get("power"));
+            insert.setString(10, (String) data.get("metadata"));
+            insert.setInt(11, (boolean) data.get("hasOriginBefore") ? 1 : 0);
+            insert.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     private void setupTable() {
         try (Connection connection = hikariDataSource.getConnection();
-            Statement statement = connection.createStatement()){
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + getTablePrefix() + "originPlayers(UUID varchar(36), name VARCHAR(16), origin varchar(256), PRIMARY KEY (UUID))");
+            Statement statement = connection.createStatement()) {
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS " + getTablePrefix() + "originPlayers(UUID varchar(36), name VARCHAR(16), origin longtext, power longtext, metadata longtext, hasOriginBefore int(1), PRIMARY KEY (UUID))");
         } catch (SQLException e) {
             e.printStackTrace();
         }

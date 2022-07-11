@@ -17,7 +17,6 @@
  */
 package me.lemonypancakes.bukkit.origins.item;
 
-import me.lemonypancakes.bukkit.origins.OriginItem;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

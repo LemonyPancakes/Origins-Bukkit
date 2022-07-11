@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.armorequipevent;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

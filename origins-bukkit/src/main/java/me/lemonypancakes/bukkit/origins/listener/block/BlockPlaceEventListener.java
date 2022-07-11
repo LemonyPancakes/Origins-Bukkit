@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.listener.block;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +39,7 @@ public class BlockPlaceEventListener implements Listener {
         Player player = event.getPlayer();
 
         if (plugin.getOriginPlayer(player) != null) {
-            if (plugin.getOriginPlayer(player).getOrigin() == null) {
+            if (plugin.getOriginPlayer(player) == null) {
                 event.setCancelled(true);
             }
         } else {

@@ -17,10 +17,13 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.condition;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.*;
-import me.lemonypancakes.bukkit.origins.data.CraftCondition;
+import me.lemonypancakes.bukkit.common.com.google.gson.Gson;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.CraftCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftAndCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftOrCondition;
 import me.lemonypancakes.bukkit.origins.util.Comparison;
@@ -44,9 +47,9 @@ import java.util.function.BiPredicate;
 public class EntityConditions {
 
     public EntityConditions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "advancement"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "advancement"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -63,7 +66,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "air"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "air"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
@@ -73,7 +76,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attribute"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attribute"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Attributable) {
                     Attributable attributable = (Attributable) entity;
@@ -86,7 +89,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block_collision"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block_collision"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 double offsetX = 0;
                 double offsetY = 0;
@@ -115,26 +118,26 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "daytime"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "daytime"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 return entity.getWorld().getTime() > 0 && entity.getWorld().getTime() < 13000;
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "entity_type"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "entity_type"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 return entity.getType() == EntityType.valueOf(jsonObject.get("entity_type").getAsString());
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "exists"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> entity != null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fall_distance"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "exists"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> entity != null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fall_distance"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 return Comparison.parseComparison(jsonObject).compare(entity.getFallDistance(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fall_flying"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fall_flying"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
@@ -144,7 +147,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "food_level"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "food_level"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof HumanEntity) {
                     HumanEntity humanEntity = (HumanEntity) entity;
@@ -154,7 +157,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "gamemode"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "gamemode"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -170,7 +173,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "health"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "health"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Damageable) {
                     Damageable damageable = (Damageable) entity;
@@ -180,8 +183,8 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "in_block_anywhere"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftInBlockAnywhereAction(p, j, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invisible"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "in_block_anywhere"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftInBlockAnywhereAction(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invisible"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
@@ -191,13 +194,13 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "living"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "living"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 return entity instanceof LivingEntity;
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -209,11 +212,11 @@ public class EntityConditions {
                             OriginPlayer originPlayer = plugin.getOriginPlayer(player);
 
                             if (originPlayer != null) {
-                                Origin origin = originPlayer.getOrigin();
+                                /*Origin origin = originPlayer.getOrigin();
 
                                 if (origin != null) {
                                     return origin.getIdentifier().equals(identifier);
-                                }
+                                }*/
                             }
                         }
                     }
@@ -221,7 +224,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "sneaking"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "sneaking"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -231,7 +234,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "sprinting"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "sprinting"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -241,7 +244,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "status_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "status_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
@@ -277,7 +280,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "swimming"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "swimming"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
@@ -287,7 +290,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "tamed"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "tamed"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Tameable) {
                     Tameable tameable = (Tameable) entity;
@@ -297,13 +300,13 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "time_of_day"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "time_of_day"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 return Comparison.parseComparison(jsonObject).compare(entity.getWorld().getTime(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "xp_levels"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "xp_levels"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -313,7 +316,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "xp_points"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "xp_points"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -323,7 +326,7 @@ public class EntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "in_water"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "in_water"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 return entity.isInWater() || entity.getLocation().getBlock().getType() == Material.WATER_CAULDRON;
             }

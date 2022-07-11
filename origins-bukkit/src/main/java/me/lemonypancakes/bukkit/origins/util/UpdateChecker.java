@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.util;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

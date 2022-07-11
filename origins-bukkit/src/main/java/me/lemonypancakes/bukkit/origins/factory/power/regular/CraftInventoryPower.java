@@ -17,8 +17,8 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power.regular;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.factory.power.CraftActivePower;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
@@ -102,8 +102,8 @@ public class CraftInventoryPower extends CraftActivePower {
 
                 os.writeInt(items.size());
 
-                for (int i = 0; i < items.size(); i++){
-                    os.writeObject(items.get(i));
+                for (ItemStack itemStack : items) {
+                    os.writeObject(itemStack);
                 }
 
                 os.flush();
@@ -113,14 +113,14 @@ public class CraftInventoryPower extends CraftActivePower {
                 BukkitPersistentDataUtils.setPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING, encodedData);
                 os.close();
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
 
     }
 
-    public ArrayList<ItemStack> getItems(Player player) {
-        ArrayList<ItemStack> items = new ArrayList<>();
+    public List<ItemStack> getItems(Player player) {
+        List<ItemStack> items = new ArrayList<>();
         String encodedItems = BukkitPersistentDataUtils.getPersistentData(player, new Identifier(Identifier.ORIGINS_BUKKIT, metadataIdentifierValue), PersistentDataType.STRING);
 
         if (encodedItems != null) {
@@ -128,7 +128,6 @@ public class CraftInventoryPower extends CraftActivePower {
                 byte[] rawData = Base64.getDecoder().decode(encodedItems);
 
                 try{
-
                     ByteArrayInputStream io = new ByteArrayInputStream(rawData);
                     BukkitObjectInputStream in = new BukkitObjectInputStream(io);
 
@@ -137,11 +136,9 @@ public class CraftInventoryPower extends CraftActivePower {
                     for (int i = 0; i < itemsCount; i++){
                         items.add((ItemStack) in.readObject());
                     }
-
                     in.close();
-
-                } catch (IOException | ClassNotFoundException ex) {
-                    System.out.println(ex);
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
 
             }

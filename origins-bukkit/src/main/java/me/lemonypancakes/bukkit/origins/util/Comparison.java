@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.util;
 
-import com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
 
 import java.util.NoSuchElementException;
 

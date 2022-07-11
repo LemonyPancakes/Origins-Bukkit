@@ -17,7 +17,8 @@
  */
 package me.lemonypancakes.bukkit.origins.listener.entity.player;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -31,6 +32,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.Objects;
 
 public class PlayerInteractEventListener implements Listener {
 
@@ -46,7 +49,7 @@ public class PlayerInteractEventListener implements Listener {
         Player player = event.getPlayer();
 
         if (plugin.getOriginPlayer(player) != null) {
-            if (plugin.getOriginPlayer(player).getOrigin() == null) {
+            if (plugin.getOriginPlayer(player) == null) {
                 event.setCancelled(true);
             }
         } else {
@@ -58,22 +61,24 @@ public class PlayerInteractEventListener implements Listener {
     private void onOrbOfOriginInteract(PlayerInteractEvent event) {
         if (event.useItemInHand() != Event.Result.DENY) {
             Player player = event.getPlayer();
-            Action action = event.getAction();
+            OriginPlayer originPlayer = plugin.getOriginPlayer(player);
 
-            if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-                ItemStack itemStack = event.getItem();
+            if (originPlayer != null) {
+                Action action = event.getAction();
 
-                if (itemStack != null) {
-                    ItemMeta itemMeta = itemStack.getItemMeta();
+                if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+                    ItemStack itemStack = event.getItem();
 
-                    if (itemMeta != null) {
-                        String data = BukkitPersistentDataUtils.getPersistentData(itemMeta, "origins-bukkit:custom_item", PersistentDataType.STRING);
+                    if (itemStack != null) {
+                        ItemMeta itemMeta = itemStack.getItemMeta();
 
-                        if (data != null) {
-                            if (data.equals("origins-bukkit:orb_of_origin")) {
-                                if (plugin.getOriginPlayer(player) != null) {
-                                    if (plugin.getOriginPlayer(player).getOrigin() != null) {
-                                        plugin.getOriginPlayer(player).setOrigin(null);
+                        if (itemMeta != null) {
+                            String data = BukkitPersistentDataUtils.getPersistentData(itemMeta, "origins-bukkit:custom_item", PersistentDataType.STRING);
+
+                            if (data != null) {
+                                if (data.equals("origins-bukkit:orb_of_origin")) {
+                                    if (originPlayer.getOrigins().values().stream().anyMatch(Objects::nonNull)) {
+                                        originPlayer.getOrigins().forEach((originLayer, origin) -> originPlayer.setOrigin(originLayer, null));
                                         itemStack.setAmount(itemStack.getAmount() - 1);
                                         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 1f, 0);
                                     }

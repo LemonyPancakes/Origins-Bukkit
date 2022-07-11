@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.util;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;

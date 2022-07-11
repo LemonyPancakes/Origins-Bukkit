@@ -17,15 +17,15 @@
  */
 package me.lemonypancakes.bukkit.origins.data.storage;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.Storage;
+import me.lemonypancakes.bukkit.origins.data.serialization.StorageSerializable;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
-import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class CraftBukkitStorage implements Storage {
 
@@ -44,45 +44,37 @@ public class CraftBukkitStorage implements Storage {
     public void setPlugin(OriginsBukkitPlugin plugin) {}
 
     @Override
-    public Identifier getOrigin(OfflinePlayer offlinePlayer) {
-        String string = BukkitPersistentDataUtils.getPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), PersistentDataType.STRING);
+    public Map<String, Object> getData(OfflinePlayer offlinePlayer) {
+        if (offlinePlayer instanceof PersistentDataHolder) {
+            Map<String, Object> data = new LinkedHashMap<>();
+            PersistentDataHolder persistentDataHolder = (PersistentDataHolder) offlinePlayer;
 
-        if (string != null) {
-            if (string.contains(":")) {
-                return Identifier.fromString(string);
+            data.put("origin", BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:origin", PersistentDataType.STRING));
+            data.put("power", BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:power", PersistentDataType.STRING));
+            data.put("metadata", BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:metadata", PersistentDataType.STRING));
+            Integer integer = BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:hasOriginBefore", PersistentDataType.INTEGER);
+            boolean hasOriginBefore = false;
+
+            if (integer != null) {
+                hasOriginBefore = integer > 0;
             }
-            BukkitPersistentDataUtils.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), PersistentDataType.STRING, "null");
+            data.put("hasOriginBefore", hasOriginBefore);
+
+            return data;
         }
         return null;
     }
 
     @Override
-    public void setOrigin(OfflinePlayer offlinePlayer, Identifier identifier) {
-        if (identifier == null) {
-            BukkitPersistentDataUtils.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), PersistentDataType.STRING, "null");
-            return;
+    public void saveData(OfflinePlayer offlinePlayer, StorageSerializable storageSerializable) {
+        if (offlinePlayer instanceof PersistentDataHolder) {
+            PersistentDataHolder persistentDataHolder = (PersistentDataHolder) offlinePlayer;
+            Map<String, Object> data = storageSerializable.serialize();
+
+            BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:origin", PersistentDataType.STRING, (String) data.get("origin"));
+            BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:power", PersistentDataType.STRING, (String) data.get("power"));
+            BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:metadata", PersistentDataType.STRING, (String) data.get("metadata"));
+            BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:hasOriginBefore", PersistentDataType.INTEGER, (boolean) data.get("hasOriginBefore") ? 1 : 0);
         }
-        BukkitPersistentDataUtils.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), PersistentDataType.STRING, identifier.toString());
-    }
-
-    @Override
-    public boolean hasOriginPlayerData(OfflinePlayer offlinePlayer) {
-        return BukkitPersistentDataUtils.hasPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"), PersistentDataType.STRING);
-    }
-
-    @Override
-    public void wipeOriginPlayerData(OfflinePlayer offlinePlayer) {
-        BukkitPersistentDataUtils.removePersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "origin"));
-    }
-
-    @Override
-    public JsonObject getMetadata(OfflinePlayer offlinePlayer) {
-        String string = BukkitPersistentDataUtils.getPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING);
-
-        if (string != null) {
-            return new Gson().fromJson(string, JsonObject.class);
-        }
-        BukkitPersistentDataUtils.setPersistentData((PersistentDataHolder) offlinePlayer, new Identifier(Identifier.ORIGINS_BUKKIT, "metadata"), PersistentDataType.STRING, "{}");
-        return new Gson().fromJson("{}", JsonObject.class);
     }
 }

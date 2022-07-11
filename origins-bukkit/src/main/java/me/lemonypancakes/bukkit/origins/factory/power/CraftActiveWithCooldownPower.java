@@ -17,9 +17,9 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Keyed;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.KeyHandler;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerKeyEvent;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import me.lemonypancakes.bukkit.origins.util.Key;
@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-public class CraftActiveWithCooldownPower extends CraftCooldownPower implements Keyed {
+public class CraftActiveWithCooldownPower extends CraftCooldownPower implements KeyHandler {
 
     private Key key;
 

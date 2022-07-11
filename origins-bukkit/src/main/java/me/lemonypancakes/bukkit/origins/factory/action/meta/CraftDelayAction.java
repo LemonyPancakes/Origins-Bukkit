@@ -17,11 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.action.meta;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Action;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftAction;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.Action;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.CraftAction;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.function.BiConsumer;

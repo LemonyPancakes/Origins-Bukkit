@@ -17,11 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.condition;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Condition;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftCondition;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.CraftCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftAndCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftOrCondition;
 import me.lemonypancakes.bukkit.origins.util.Comparison;
@@ -37,16 +37,16 @@ import java.util.function.BiPredicate;
 public class DamageConditions {
 
     public DamageConditions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "amount"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "amount"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
             if (damage != null) {
                 return Comparison.parseComparison(jsonObject).compare(damage.getAmount(), jsonObject);
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attacker"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new Attacker(p, j, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fire"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attacker"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new Attacker(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "fire"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
             if (damage != null) {
                 EntityDamageEvent.DamageCause damageCause = damage.getDamageCause();
 
@@ -56,7 +56,7 @@ public class DamageConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "name"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "name"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
             if (damage != null) {
                 EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.valueOf(jsonObject.get("name").getAsString());
 
@@ -66,7 +66,7 @@ public class DamageConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "projectile"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "projectile"), DataType.DAMAGE, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, damage) -> {
             if (damage != null) {
                 Entity damager = damage.getEntity();
 

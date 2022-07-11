@@ -17,9 +17,9 @@
  */
 package me.lemonypancakes.bukkit.origins.wrapper;
 
-import me.lemonypancakes.bukkit.origins.Action;
-import me.lemonypancakes.bukkit.origins.Condition;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.Action;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 
 public class ConditionAction<T> {
 

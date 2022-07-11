@@ -17,12 +17,12 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.action;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Action;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftAction;
+import me.lemonypancakes.bukkit.common.com.google.gson.Gson;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.Action;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.CraftAction;
 import me.lemonypancakes.bukkit.origins.factory.action.meta.*;
 import me.lemonypancakes.bukkit.origins.util.EquipmentSlot;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
@@ -44,14 +44,14 @@ import java.util.function.BiConsumer;
 public class EntityActions {
 
     public EntityActions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftChanceAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftChoiceAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftDelayAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseListAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftNothingAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftChanceAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftChoiceAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftDelayAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseListAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftNothingAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 Vector vector = entity.getVelocity();
                 float x = 0;
@@ -78,7 +78,7 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_xp"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_xp"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -96,7 +96,7 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "apply_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "apply_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
@@ -169,9 +169,9 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "area_of_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block_action_at"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "clear_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "area_of_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "block_action_at"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "clear_effect"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof LivingEntity) {
                     LivingEntity livingEntity = (LivingEntity) entity;
@@ -186,7 +186,7 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "crafting_table"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "crafting_table"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof HumanEntity) {
                     HumanEntity humanEntity = (HumanEntity) entity;
@@ -195,12 +195,12 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "dismount"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "dismount"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 entity.leaveVehicle();
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "ender_chest"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "ender_chest"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof HumanEntity) {
                     HumanEntity humanEntity = (HumanEntity) entity;
@@ -209,8 +209,8 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "equipped_item_action"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new EquippedItemAction(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "execute_command"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "equipped_item_action"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new EquippedItemAction(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "execute_command"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 String command = null;
 
@@ -222,17 +222,17 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "explode"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "explode"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
 
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "extinguish"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "extinguish"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 entity.setFireTicks(0);
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "give"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "give"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 if (entity instanceof Player) {
                     Player player = (Player) entity;
@@ -247,7 +247,7 @@ public class EntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "play_sound"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "play_sound"), DataType.ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, entity) -> {
             if (entity != null) {
                 Sound sound = null;
                 float volume = 1;

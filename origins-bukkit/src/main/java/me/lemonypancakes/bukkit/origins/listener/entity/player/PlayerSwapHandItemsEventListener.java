@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.listener.entity.player;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerKeyEvent;
 import me.lemonypancakes.bukkit.origins.util.Key;
 import org.bukkit.Bukkit;

@@ -17,7 +17,7 @@
  */
 package me.lemonypancakes.bukkit.origins.listener.entity;
 
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -43,7 +43,7 @@ public class EntityDamageEventListener implements Listener {
             Player player = (Player) entity;
 
             if (plugin.getOriginPlayer(player) != null) {
-                if (plugin.getOriginPlayer(player).getOrigin() == null) {
+                if (plugin.getOriginPlayer(player) == null) {
                     event.setCancelled(true);
                 }
             } else {

@@ -17,8 +17,8 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import me.lemonypancakes.bukkit.origins.util.Key;
 import org.bukkit.entity.Player;

@@ -17,12 +17,12 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power.regular;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.OriginPlayer;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.Scheduler;
-import me.lemonypancakes.bukkit.origins.data.CraftPower;
-import me.lemonypancakes.bukkit.origins.data.CraftScheduler;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.scheduler.Scheduler;
+import me.lemonypancakes.bukkit.origins.entity.player.power.CraftPower;
+import me.lemonypancakes.bukkit.origins.scheduler.CraftScheduler;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

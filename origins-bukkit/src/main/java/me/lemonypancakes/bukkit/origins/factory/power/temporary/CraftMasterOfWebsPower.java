@@ -17,10 +17,10 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.power.temporary;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.OriginItem;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
 import me.lemonypancakes.bukkit.origins.factory.power.CraftCooldownPower;
+import me.lemonypancakes.bukkit.origins.item.OriginItem;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -79,7 +79,7 @@ public class CraftMasterOfWebsPower extends CraftCooldownPower {
 
             if (!hasMember(player)) {
                 Recipe recipe = event.getRecipe();
-                OriginItem arachnidCobwebOriginItem = getPlugin().getRegistry().getOriginItem(new Identifier(Identifier.ORIGINS_BUKKIT, "arachnid_cobweb"));
+                OriginItem arachnidCobwebOriginItem = getPlugin().getRegistry().getRegisteredOriginItem(new Identifier(Identifier.ORIGINS_BUKKIT, "arachnid_cobweb"));
 
                 if (arachnidCobwebOriginItem != null) {
                     Recipe arachnidCobwebOriginItemRecipe = arachnidCobwebOriginItem.getRecipe();

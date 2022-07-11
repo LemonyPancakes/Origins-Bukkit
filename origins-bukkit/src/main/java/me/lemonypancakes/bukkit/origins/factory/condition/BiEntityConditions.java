@@ -17,11 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.condition;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Condition;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftCondition;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.condition.CraftCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftAndCondition;
 import me.lemonypancakes.bukkit.origins.factory.condition.meta.CraftOrCondition;
 import me.lemonypancakes.bukkit.origins.util.Comparison;
@@ -36,9 +36,9 @@ import java.util.function.BiPredicate;
 public class BiEntityConditions {
 
     public BiEntityConditions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attack_target"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "or"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftOrCondition<>(p, j, d, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attack_target"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -54,8 +54,8 @@ public class BiEntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attacker"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> false)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "can_see"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "attacker"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> false)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "can_see"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -73,7 +73,7 @@ public class BiEntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "distance"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "distance"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -84,7 +84,7 @@ public class BiEntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "owner"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "owner"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -103,25 +103,25 @@ public class BiEntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "relative_rotation"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "relative_rotation"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding_recursive"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding_recursive"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding_root"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding_root"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
 
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "riding"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftCondition<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -132,12 +132,12 @@ public class BiEntityConditions {
             }
             return false;
         })));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_condition"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.ActorCondition(p, j, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "both"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Both(p, j, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "either"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Either(p, j, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Invert(p, j, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_condition"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.TargetCondition(p, j, null)));
-        plugin.getRegistry().register(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "undirected"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Undirected(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_condition"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.ActorCondition(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "both"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Both(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "either"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Either(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Invert(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_condition"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.TargetCondition(p, j, null)));
+        plugin.getRegistry().registerConditionFactory(new Condition.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "undirected"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Undirected(p, j, null)));
     }
 
     public static class Meta {

@@ -68,16 +68,16 @@ public final class Identifier {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Identifier)) return false;
-        Identifier that = (Identifier) o;
-        return Objects.equals(getKey(), that.getKey()) && Objects.equals(getValue(), that.getValue());
+    public boolean equals(Object itemStack) {
+        if (this == itemStack) return true;
+        if (!(itemStack instanceof Identifier)) return false;
+        Identifier that = (Identifier) itemStack;
+        return Objects.equals(key, that.key) && Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getKey(), getValue());
+        return Objects.hash(key, value);
     }
 
     @Override

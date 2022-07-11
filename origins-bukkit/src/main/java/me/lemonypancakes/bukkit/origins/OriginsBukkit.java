@@ -17,6 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins;
 
+import me.lemonypancakes.bukkit.origins.data.storage.Storage;
+import me.lemonypancakes.bukkit.origins.loader.Loader;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.registry.Registry;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;

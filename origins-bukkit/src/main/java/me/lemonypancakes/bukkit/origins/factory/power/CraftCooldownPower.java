@@ -18,10 +18,10 @@
 package me.lemonypancakes.bukkit.origins.factory.power;
 
 import com.google.common.base.Strings;
-import com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
 import me.lemonypancakes.bukkit.common.actionbarapi.ActionBarAPI;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftPower;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.CraftPower;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -17,11 +17,11 @@
  */
 package me.lemonypancakes.bukkit.origins.factory.action;
 
-import com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.Action;
-import me.lemonypancakes.bukkit.origins.DataType;
-import me.lemonypancakes.bukkit.origins.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.data.CraftAction;
+import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.Action;
+import me.lemonypancakes.bukkit.origins.data.DataType;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
+import me.lemonypancakes.bukkit.origins.entity.player.power.action.CraftAction;
 import me.lemonypancakes.bukkit.origins.factory.action.meta.*;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import me.lemonypancakes.bukkit.origins.wrapper.BiEntity;
@@ -33,14 +33,14 @@ import java.util.function.BiConsumer;
 public class BiEntityActions {
 
     public BiEntityActions(OriginsBukkitPlugin plugin) {
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftChanceAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftChoiceAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftDelayAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseListAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftNothingAction<>(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "and"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAndAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "chance"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftChanceAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "choice"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftChoiceAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "delay"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftDelayAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "if_else_list"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftIfElseListAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "nothing"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftNothingAction<>(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "add_velocity"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -72,7 +72,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "damage"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "damage"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -88,7 +88,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "mount"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "mount"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -98,7 +98,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "set_in_love"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "set_in_love"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -116,7 +116,7 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "tame"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "tame"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new CraftAction<>(p, j, d, (jsonObject, biEntity) -> {
             if (biEntity != null) {
                 Entity actor = biEntity.getActor();
                 Entity target = biEntity.getTarget();
@@ -135,9 +135,9 @@ public class BiEntityActions {
                 }
             }
         })));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_action"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.ActorAction(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Invert(p, j, d, null)));
-        plugin.getRegistry().register(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_action"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.TargetAction(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "actor_action"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.ActorAction(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "invert"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.Invert(p, j, d, null)));
+        plugin.getRegistry().registerActionFactory(new Action.Factory<>(new Identifier(Identifier.ORIGINS_BUKKIT, "target_action"), DataType.BI_ENTITY, (p) -> (j) -> (d) -> () -> new Meta.TargetAction(p, j, d, null)));
     }
 
     public static class Meta {

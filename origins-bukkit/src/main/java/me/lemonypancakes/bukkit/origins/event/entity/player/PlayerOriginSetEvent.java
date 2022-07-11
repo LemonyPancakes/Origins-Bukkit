@@ -17,7 +17,8 @@
  */
 package me.lemonypancakes.bukkit.origins.event.entity.player;
 
-import me.lemonypancakes.bukkit.origins.Origin;
+import me.lemonypancakes.bukkit.origins.origin.Origin;
+import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -29,12 +30,14 @@ public class PlayerOriginSetEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
+    private final OriginLayer originLayer;
     private final Origin oldOrigin;
     private Origin newOrigin;
     private boolean isCancelled;
 
-    public PlayerOriginSetEvent(Player player, Origin oldOrigin, Origin newOrigin) {
+    public PlayerOriginSetEvent(Player player, OriginLayer originLayer, Origin oldOrigin, Origin newOrigin) {
         this.player = player;
+        this.originLayer = originLayer;
         this.oldOrigin = oldOrigin;
         this.newOrigin = newOrigin;
         this.isCancelled = false;
@@ -52,6 +55,10 @@ public class PlayerOriginSetEvent extends Event implements Cancellable {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+    public OriginLayer getOriginLayer() {
+        return originLayer;
     }
 
     public Origin getOldOrigin() {
