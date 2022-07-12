@@ -36,6 +36,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -120,7 +121,13 @@ public class CraftOriginPlayer implements OriginPlayer {
                             hasOriginBefore = true;
                         }
                     }
-                    compute();
+                    new BukkitRunnable() {
+
+                        @Override
+                        public void run () {
+                            compute();
+                        }
+                    }.runTask(plugin.getJavaPlugin());
                 }
             }
             return playerOriginSetEvent;
