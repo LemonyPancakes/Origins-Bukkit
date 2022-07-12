@@ -18,21 +18,30 @@
 package me.lemonypancakes.bukkit.origins.data.storage;
 
 import me.lemonypancakes.bukkit.origins.data.serialization.StorageSerializable;
+import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class CraftBukkitStorage implements Storage {
+public class CraftBukkitStorage implements Storage, Listener {
 
     private final OriginsBukkitPlugin plugin;
 
     public CraftBukkitStorage(OriginsBukkitPlugin plugin) {
         this.plugin = plugin;
+        Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
     }
 
     @Override
@@ -75,6 +84,23 @@ public class CraftBukkitStorage implements Storage {
             BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:power", PersistentDataType.STRING, (String) data.get("power"));
             BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:metadata", PersistentDataType.STRING, (String) data.get("metadata"));
             BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:hasOriginBefore", PersistentDataType.INTEGER, (boolean) data.get("hasOriginBefore") ? 1 : 0);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPluginDisable(PluginDisableEvent event) {
+        if (event.getPlugin() == plugin) {
+            Bukkit.getOnlinePlayers().forEach(player -> saveData(player, plugin.getOriginPlayer(player)));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+        if (originPlayer != null) {
+            saveData(player, originPlayer);
         }
     }
 }

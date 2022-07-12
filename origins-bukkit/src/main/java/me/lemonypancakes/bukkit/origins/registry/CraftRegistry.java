@@ -18,12 +18,12 @@
 package me.lemonypancakes.bukkit.origins.registry;
 
 import me.lemonypancakes.bukkit.origins.data.DataType;
-import me.lemonypancakes.bukkit.origins.item.OriginItem;
-import me.lemonypancakes.bukkit.origins.origin.Origin;
-import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
 import me.lemonypancakes.bukkit.origins.entity.player.power.action.Action;
 import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
+import me.lemonypancakes.bukkit.origins.item.OriginItem;
+import me.lemonypancakes.bukkit.origins.origin.Origin;
+import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.ChatUtils;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
@@ -208,7 +208,7 @@ public class CraftRegistry implements Registry {
 
             if (originItem != null) {
                 if (originItem.getRecipe() != null) {
-                    Bukkit.removeRecipe(identifier.toNameSpacedKey());
+                    Bukkit.removeRecipe(identifier.toNamespacedKey());
                 }
                 registeredOriginItems.remove(identifier);
             }
@@ -277,7 +277,7 @@ public class CraftRegistry implements Registry {
 
     @Override
     public Set<Identifier> getRegisteredOriginLayersKeySet() {
-        return null;
+        return registeredOriginLayers.keySet();
     }
 
     @Override

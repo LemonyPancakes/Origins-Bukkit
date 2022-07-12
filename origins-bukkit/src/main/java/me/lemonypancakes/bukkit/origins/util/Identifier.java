@@ -48,7 +48,7 @@ public final class Identifier {
         return value;
     }
 
-    public NamespacedKey toNameSpacedKey() {
+    public NamespacedKey toNamespacedKey() {
         return NamespacedKey.fromString(toString());
     }
 

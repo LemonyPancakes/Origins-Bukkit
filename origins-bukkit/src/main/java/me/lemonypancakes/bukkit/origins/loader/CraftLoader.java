@@ -23,30 +23,23 @@ import me.lemonypancakes.bukkit.common.com.google.gson.JsonElement;
 import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
 import me.lemonypancakes.bukkit.common.com.google.gson.stream.JsonReader;
 import me.lemonypancakes.bukkit.origins.data.DataType;
-import me.lemonypancakes.bukkit.origins.origin.CraftOrigin;
-import me.lemonypancakes.bukkit.origins.origin.Origin;
-import me.lemonypancakes.bukkit.origins.origin.layer.CraftOriginLayer;
-import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
 import me.lemonypancakes.bukkit.origins.entity.player.power.action.Action;
 import me.lemonypancakes.bukkit.origins.entity.player.power.action.CraftAction;
 import me.lemonypancakes.bukkit.origins.entity.player.power.condition.Condition;
 import me.lemonypancakes.bukkit.origins.entity.player.power.condition.CraftCondition;
+import me.lemonypancakes.bukkit.origins.origin.CraftOrigin;
+import me.lemonypancakes.bukkit.origins.origin.Origin;
+import me.lemonypancakes.bukkit.origins.origin.layer.CraftOriginLayer;
+import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.util.ChatUtils;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
-import me.lemonypancakes.bukkit.origins.util.Impact;
 import me.lemonypancakes.bukkit.origins.wrapper.ConditionAction;
 import me.lemonypancakes.bukkit.origins.wrapper.Element;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,137 +74,10 @@ public class CraftLoader implements Loader {
             Gson gson = new Gson();
             JsonReader jsonReader = new JsonReader(reader);
             JsonObject jsonObject = gson.fromJson(jsonReader, JsonObject.class);
-            Origin origin = new CraftOrigin(plugin, identifier, jsonObject);
 
-            if (jsonObject.has("display_name")) {
-                String displayName = jsonObject.get("display_name").getAsString();
-
-                if (displayName != null) {
-                    origin.setName(ChatUtils.format(displayName));
-                }
-            }
-            if (jsonObject.has("description")) {
-                String[] description = gson.fromJson(jsonObject.get("description"), String[].class);
-
-                if (description != null) {
-                    origin.setDescription(ChatUtils.formatList(description));
-                }
-            }
-            if (jsonObject.has("impact")) {
-                Impact impact = gson.fromJson(jsonObject.get("impact"), Impact.class);
-
-                if (impact != null) {
-                    origin.setImpact(impact);
-                }
-            }
-            if (jsonObject.has("icon")) {
-                JsonObject originIconSection = jsonObject.getAsJsonObject("icon");
-
-                if (originIconSection != null) {
-                    ItemStack originIcon = new ItemStack(Material.STONE);
-
-                    if (originIconSection.has("material")) {
-                        Material material = gson.fromJson(originIconSection.get("material"), Material.class);
-
-                        if (material != null) {
-                            originIcon.setType(material);
-                        }
-                    }
-                    if (originIconSection.has("amount")) {
-                        int amount = originIconSection.get("amount").getAsInt();
-
-                        originIcon.setAmount(amount);
-                    } else {
-                        originIcon.setAmount(1);
-                    }
-                    ItemMeta itemMeta = originIcon.getItemMeta();
-
-                    if (itemMeta != null) {
-                        if (originIconSection.has("meta")) {
-                            JsonObject originIconMeta = originIconSection.getAsJsonObject("meta");
-
-                            if (originIconMeta != null) {
-                                if (originIconMeta.has("item_flags")) {
-                                    ItemFlag[] itemFlags = gson.fromJson(originIconMeta.get("item_flags"), ItemFlag[].class);
-
-                                    if (itemFlags != null) {
-                                        itemMeta.addItemFlags(itemFlags);
-                                    }
-                                }
-                                if (originIconMeta.has("display_name")) {
-                                    String originIconDisplayName = originIconMeta.get("display_name").getAsString();
-
-                                    if (originIconDisplayName != null) {
-                                        itemMeta.setDisplayName(ChatUtils.format(originIconDisplayName));
-                                    } else {
-                                        if (origin.getName() != null) {
-                                            itemMeta.setDisplayName(ChatUtils.format(origin.getName()));
-                                        }
-                                    }
-                                } else {
-                                    if (origin.getName() != null) {
-                                        itemMeta.setDisplayName(ChatUtils.format(origin.getName()));
-                                    }
-                                }
-                                if (originIconMeta.has("description")) {
-                                    String[] originIconDescription = gson.fromJson(originIconMeta.get("description"), String[].class);
-
-                                    if (originIconDescription != null) {
-                                        itemMeta.setLore(Arrays.asList(originIconDescription));
-                                    } else {
-                                        if (origin.getDescription() != null) {
-                                            itemMeta.setLore(Arrays.asList(origin.getDescription()));
-                                        }
-                                    }
-                                } else {
-                                    if (origin.getDescription() != null) {
-                                        itemMeta.setLore(Arrays.asList(origin.getDescription()));
-                                    }
-                                }
-                                if (originIconMeta.has("custom_model_data")) {
-                                    int customModelData = originIconMeta.get("custom_model_data").getAsInt();
-
-                                    itemMeta.setCustomModelData(customModelData);
-                                }
-                            }
-                        } else {
-                            if (origin.getName() != null) {
-                                itemMeta.setDisplayName(ChatUtils.format(origin.getName()));
-                            }
-                            if (origin.getDescription() != null) {
-                                itemMeta.setLore(Arrays.asList(origin.getDescription()));
-                            }
-                        }
-                    }
-                    origin.setIcon(originIcon);
-                }
-            }
-            if (jsonObject.has("authors")) {
-                String[] authors = gson.fromJson(jsonObject.get("authors"), String[].class);
-
-                if (authors != null) {
-                    origin.setAuthors(authors);
-                }
-            }
-            if (jsonObject.has("powers")) {
-                String[] powers = gson.fromJson(jsonObject.get("powers"), String[].class);
-
-                if (powers != null) {
-                    for (String power : powers) {
-                        String key = power.split(":")[0];
-                        String value = power.split(":")[1];
-                        Identifier powerIdentifier = new Identifier(key, value);
-                        Power power0 = plugin.getRegistry().getRegisteredPower(powerIdentifier);
-
-                        if (power0 != null) {
-                            origin.addPower(power0);
-                        }
-                    }
-                }
-            }
             jsonReader.close();
             reader.close();
-            return origin;
+            return new CraftOrigin(plugin, identifier, jsonObject);
         } catch (IOException e) {
             e.printStackTrace();
         }

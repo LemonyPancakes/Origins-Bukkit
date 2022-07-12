@@ -17,12 +17,16 @@
  */
 package me.lemonypancakes.bukkit.origins.origin;
 
+import me.lemonypancakes.bukkit.common.com.google.gson.Gson;
 import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import me.lemonypancakes.bukkit.origins.util.Impact;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -81,6 +85,136 @@ public class CraftOrigin implements Origin {
     public void setJsonObject(JsonObject jsonObject) {
         if (this.jsonObject == null) {
             this.jsonObject = jsonObject;
+            if (jsonObject != null) {
+                Gson gson = new Gson();
+
+                if (jsonObject.has("name")) {
+                    String name = jsonObject.get("name").getAsString();
+
+                    if (name != null) {
+                        setName(name);
+                    }
+                }
+                if (jsonObject.has("description")) {
+                    String[] description = gson.fromJson(jsonObject.get("description"), String[].class);
+
+                    if (description != null) {
+                        setDescription(description);
+                    }
+                }
+                if (jsonObject.has("impact")) {
+                    Impact impact = gson.fromJson(jsonObject.get("impact"), Impact.class);
+
+                    if (impact != null) {
+                        setImpact(impact);
+                    }
+                }
+                if (jsonObject.has("icon")) {
+                    JsonObject originIconSection = jsonObject.getAsJsonObject("icon");
+
+                    if (originIconSection != null) {
+                        ItemStack originIcon = new ItemStack(Material.STONE);
+
+                        if (originIconSection.has("material")) {
+                            Material material = gson.fromJson(originIconSection.get("material"), Material.class);
+
+                            if (material != null) {
+                                originIcon.setType(material);
+                            }
+                        }
+                        if (originIconSection.has("amount")) {
+                            int amount = originIconSection.get("amount").getAsInt();
+
+                            originIcon.setAmount(amount);
+                        } else {
+                            originIcon.setAmount(1);
+                        }
+                        ItemMeta itemMeta = originIcon.getItemMeta();
+
+                        if (itemMeta != null) {
+                            if (originIconSection.has("meta")) {
+                                JsonObject originIconMeta = originIconSection.getAsJsonObject("meta");
+
+                                if (originIconMeta != null) {
+                                    if (originIconMeta.has("item_flags")) {
+                                        ItemFlag[] itemFlags = gson.fromJson(originIconMeta.get("item_flags"), ItemFlag[].class);
+
+                                        if (itemFlags != null) {
+                                            itemMeta.addItemFlags(itemFlags);
+                                        }
+                                    }
+                                    if (originIconMeta.has("display_name")) {
+                                        String originIconDisplayName = originIconMeta.get("display_name").getAsString();
+
+                                        if (originIconDisplayName != null) {
+                                            itemMeta.setDisplayName(originIconDisplayName);
+                                        } else {
+                                            if (getName() != null) {
+                                                itemMeta.setDisplayName(getName());
+                                            }
+                                        }
+                                    } else {
+                                        if (getName() != null) {
+                                            itemMeta.setDisplayName(getName());
+                                        }
+                                    }
+                                    if (originIconMeta.has("description")) {
+                                        String[] originIconDescription = gson.fromJson(originIconMeta.get("description"), String[].class);
+
+                                        if (originIconDescription != null) {
+                                            itemMeta.setLore(Arrays.asList(originIconDescription));
+                                        } else {
+                                            if (getDescription() != null) {
+                                                itemMeta.setLore(Arrays.asList(getDescription()));
+                                            }
+                                        }
+                                    } else {
+                                        if (getDescription() != null) {
+                                            itemMeta.setLore(Arrays.asList(getDescription()));
+                                        }
+                                    }
+                                    if (originIconMeta.has("custom_model_data")) {
+                                        int customModelData = originIconMeta.get("custom_model_data").getAsInt();
+
+                                        itemMeta.setCustomModelData(customModelData);
+                                    }
+                                }
+                            } else {
+                                if (getName() != null) {
+                                    itemMeta.setDisplayName(getName());
+                                }
+                                if (getDescription() != null) {
+                                    itemMeta.setLore(Arrays.asList(getDescription()));
+                                }
+                            }
+                        }
+                        setIcon(originIcon);
+                    }
+                }
+                if (jsonObject.has("authors")) {
+                    String[] authors = gson.fromJson(jsonObject.get("authors"), String[].class);
+
+                    if (authors != null) {
+                        setAuthors(authors);
+                    }
+                }
+                if (jsonObject.has("powers")) {
+                    String[] powers = gson.fromJson(jsonObject.get("powers"), String[].class);
+
+                    if (powers != null) {
+                        for (String power : powers) {
+                            String key = power.split(":")[0];
+                            String value = power.split(":")[1];
+                            Identifier powerIdentifier = new Identifier(key, value);
+                            Power power0 = plugin.getRegistry().getRegisteredPower(powerIdentifier);
+
+                            if (power0 != null) {
+                                addPower(power0);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

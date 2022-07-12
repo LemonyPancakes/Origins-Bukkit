@@ -7,62 +7,6 @@
 #               |___/
 # Origins-Bukkit by LemonyPancakes
 # Language File (lang.yml)
-# Version 3
+# Version 4
+# IS BEING REWRITTEN
 ##
-
-gui:
-  header_text: "&0Choose your origin."
-  header_no_origin_text: "&0No origins here. :("
-  dummy_origin:
-    title: "&fDummy Origin"
-    description:
-      - "&7This appears when there"
-      - "&7is no origin available."
-  impact_text:
-    none: "&fImpact: &7None"
-    low: "&fImpact: &aLow"
-    medium: "&fImpact: &eMedium"
-    high: "&fImpact: &cHigh"
-  icon_text:
-    previous_page: "&6Previous Page"
-    quit_game: "&cQuit Game"
-    next_page: "&6Next Page"
-
-command:
-  main_command_usage: '/origins <subcommand>'
-  no_permission: '&cI''m sorry, but you do not have permission to perform this command. Please contact the server administrators if you believe that this is in error.'
-  not_enough_arguments: '&cNot Enough Arguments. Usage: &e{command_usage}'
-  too_many_arguments: '&cToo many arguments. Usage: &e{command_usage}'
-  player_not_found: '&cPlayer {player} not found. Player must be online to do this.'
-
-subcommand:
-  help:
-    usage: '/origins help'
-    description: 'Displays a help message.'
-    header: |-
-      &aAvailable Commands:
-      &r
-    syntax: '&e{subcommand_usage} &8- &7{subcommand_description}'
-    footer: ''
-  update:
-    usage: '/origins update <player> <new_origin>'
-    description: 'Changes the player''s origin.'
-    origin_change: '&aSuccessfully changed {player}''s origin to (&e"{new_origin}"&a).'
-    cannot_find_origin: '&cCannot find the origin (&e"{new_origin}"&c).'
-    no_changes: '&cNothing changed. {player}''s origin is already (&e"{new_origin}"&c).'
-  prune:
-    usage: '/origins prune <player>'
-    description: 'Deletes the player''s origin data.'
-    prune_success: '&aSuccessfully pruned {player}''s data.'
-    cannot_find_data: '&cCannot find {player}''s data.'
-  give:
-    usage: '/origins give <player> <item> (amount)'
-    description: 'Gives the player origins items.'
-    give_success: '&aGave {amount} [{item}&a] to {player}.'
-    cannot_find_item: '&cUnknown item ''{item}'''
-    invalid_amount: '&c{amount} is not an integer.'
-  info:
-    usage: '/origins info (player)'
-    description: 'Displays info about the player''s origin.'
-    cannot_find_data: '&cCannot find {player}''s data.'
-    players_only: '&cOnly players can execute this command.'

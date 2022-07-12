@@ -21,6 +21,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.lemonypancakes.armorequipevent.ArmorListener;
 import me.lemonypancakes.bukkit.origins.OriginsBukkit;
+import me.lemonypancakes.bukkit.origins.command.MainCommand;
 import me.lemonypancakes.bukkit.origins.config.ConfigHandler;
 import me.lemonypancakes.bukkit.origins.data.storage.CraftBukkitStorage;
 import me.lemonypancakes.bukkit.origins.data.storage.CraftMySQLStorage;
@@ -112,6 +113,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new DayAndNightCycleListener(this);
             new ArmorListener(this);
             new ConfigHandler(this);
+            new MainCommand(this);
             registry.registerOriginItem(new OrbOfOrigin());
             registry.registerOriginItem(new ArachnidCobweb());
             new BiEntityActions(this);
@@ -205,7 +207,7 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
     @Override
     public void onDisable() {
         for (int i = 0; i < registry.getRegisteredOriginItemsKeySet().size(); i++) {
-            Bukkit.removeRecipe(((Identifier) registry.getRegisteredOriginItemsKeySet().toArray()[i]).toNameSpacedKey());
+            Bukkit.removeRecipe(((Identifier) registry.getRegisteredOriginItemsKeySet().toArray()[i]).toNamespacedKey());
         }
         expansions.forEach(plugin -> Bukkit.getPluginManager().disablePlugin(plugin));
         originPlayers.values().forEach(originPlayer -> {
@@ -287,6 +289,9 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
 
             if (attributeInstance != null) {
                 attributeInstance.getModifiers().forEach(attributeInstance::removeModifier);
+                if (attribute == Attribute.GENERIC_MAX_HEALTH) {
+                    player.setHealthScale(attributeInstance.getValue());
+                }
             }
         });
     }

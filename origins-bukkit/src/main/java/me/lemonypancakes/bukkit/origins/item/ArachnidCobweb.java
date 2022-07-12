@@ -31,7 +31,7 @@ public class ArachnidCobweb implements OriginItem {
 
     public ArachnidCobweb() {
         itemStack = new ItemStack(Material.COBWEB);
-        ShapelessRecipe shapelessRecipe = new ShapelessRecipe(identifier.toNameSpacedKey(), itemStack);
+        ShapelessRecipe shapelessRecipe = new ShapelessRecipe(identifier.toNamespacedKey(), itemStack);
 
         shapelessRecipe.addIngredient(2, Material.STRING);
         recipe = shapelessRecipe;

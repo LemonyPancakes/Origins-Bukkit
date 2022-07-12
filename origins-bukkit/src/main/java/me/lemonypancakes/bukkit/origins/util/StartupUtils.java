@@ -18,20 +18,19 @@
 package me.lemonypancakes.bukkit.origins.util;
 
 import me.lemonypancakes.bukkit.common.org.apache.commons.io.FilenameUtils;
-import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
-import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
 import me.lemonypancakes.bukkit.origins.factory.power.action.*;
 import me.lemonypancakes.bukkit.origins.factory.power.modify.*;
 import me.lemonypancakes.bukkit.origins.factory.power.prevent.*;
 import me.lemonypancakes.bukkit.origins.factory.power.regular.*;
 import me.lemonypancakes.bukkit.origins.factory.power.temporary.*;
+import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -154,14 +153,8 @@ public final class StartupUtils {
             properties.load(stream);
             File defaultWorld = new File(serverContainer.getAbsolutePath() + s + properties.getProperty("level-name"));
             File datapacksFolder = new File(defaultWorld.getAbsolutePath() + s + "datapacks");
-            InputStream originsBukkitZip = plugin.getJavaPlugin().getResource("datapacks/origins-bukkit.zip");
 
-            if (originsBukkitZip != null) {
-                try {
-                    Files.copy(originsBukkitZip, new File(datapacksFolder.getAbsolutePath() + s + "origins-bukkit.zip").toPath(), StandardCopyOption.REPLACE_EXISTING);
-                } catch (Exception ignored) {}
-                originsBukkitZip.close();
-            }
+            FileUtils.exportDataPack(plugin.getJavaPlugin(), "datapacks/origins-bukkit.zip", "origins-bukkit.zip");
             File[] packs = datapacksFolder.listFiles();
 
             if (packs != null) {

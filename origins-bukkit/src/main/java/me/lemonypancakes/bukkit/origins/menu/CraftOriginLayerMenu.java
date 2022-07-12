@@ -17,10 +17,10 @@
  */
 package me.lemonypancakes.bukkit.origins.menu;
 
-import me.lemonypancakes.bukkit.origins.origin.Origin;
-import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
+import me.lemonypancakes.bukkit.origins.origin.Origin;
+import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.registry.Registry;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
@@ -140,10 +140,13 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
                                         }
                                     }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, 2L);*/
                                     originPlayer.setOrigin(originLayer, originFromOriginButton);
+                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
                                     exemptions.add(player);
                                     player.closeInventory();
                                     exemptions.remove(player);
                                 }
+                            } else if (isAQuitGameButton(itemStack)) {
+                                player.kickPlayer(null);
                             } else {
                                 boolean success = turnPage(player, inventory, itemStack);
                                 Location location = player.getLocation();
@@ -355,6 +358,28 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
         return getOriginFromOriginButton(itemStack) != null;
     }
 
+    private void setAsAQuitGameButton(ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        if (itemMeta != null) {
+            BukkitPersistentDataUtils.setPersistentData(itemMeta, "origins-bukkit:origin_layer_menu", PersistentDataType.STRING, "origins-bukkit:quit_game");
+            itemStack.setItemMeta(itemMeta);
+        }
+    }
+
+    private boolean isAQuitGameButton(ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        if (itemMeta != null) {
+            String string = BukkitPersistentDataUtils.getPersistentData(itemMeta, "origins-bukkit:origin_layer_menu", PersistentDataType.STRING);
+
+            if (string != null) {
+                return string.equals("origins-bukkit:quit_game");
+            }
+        }
+        return false;
+    }
+
     private Origin getOriginFromOriginButton(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
 
@@ -403,6 +428,7 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
         }
 
         setAsAPreviousPageButton(previous);
+        setAsAQuitGameButton(close);
         setAsANextPageButton(next);
         inventory.setItem(46, previous);
         inventory.setItem(49, close);
@@ -455,7 +481,7 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
                 ItemMeta itemMeta = itemStack.getItemMeta();
 
                 if (itemMeta != null) {
-                    List<String> lore = new ArrayList<>();
+                    List<String> lore = new ArrayList<>(Arrays.asList(origin.getDescription()));
 
                     lore.add("§f§n" + powerName);
                     lore.addAll(Arrays.asList(powerDescription));
