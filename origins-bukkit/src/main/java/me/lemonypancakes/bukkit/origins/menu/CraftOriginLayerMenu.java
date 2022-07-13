@@ -19,6 +19,7 @@ package me.lemonypancakes.bukkit.origins.menu;
 
 import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
+import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginChooseEvent;
 import me.lemonypancakes.bukkit.origins.origin.Origin;
 import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
@@ -99,21 +100,35 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
                         ItemStack itemStack = event.getCurrentItem();
 
                         if (itemStack != null) {
+                            Location location = player.getLocation();
+
                             if (isAOriginButton(itemStack)) {
                                 Origin originFromOriginButton = getOriginFromOriginButton(itemStack);
 
                                 if (originFromOriginButton != null) {
-                                    originPlayer.setOrigin(originLayer, originFromOriginButton);
-                                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
-                                    exemptions.add(player);
-                                    player.closeInventory();
-                                    exemptions.remove(player);
+                                    PlayerOriginChooseEvent playerOriginChooseEvent = new PlayerOriginChooseEvent(player, originLayer, originFromOriginButton);
+
+                                    Bukkit.getPluginManager().callEvent(playerOriginChooseEvent);
+                                    if (!playerOriginChooseEvent.isCancelled()) {
+                                        Origin origin = playerOriginChooseEvent.getOrigin();
+
+                                        if (originLayer.hasOrigin(origin)) {
+                                            originPlayer.setOrigin(originLayer, origin);
+                                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
+                                            exemptions.add(player);
+                                            player.closeInventory();
+                                            exemptions.remove(player);
+                                        } else {
+                                            player.playSound(location, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 2f, 0f);
+                                        }
+                                    } else {
+                                        player.playSound(location, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 2f, 0f);
+                                    }
                                 }
                             } else if (isAQuitGameButton(itemStack)) {
                                 player.kickPlayer(null);
                             } else {
                                 boolean success = turnPage(player, inventory, itemStack);
-                                Location location = player.getLocation();
 
                                 if (success) {
                                     player.playSound(location, Sound.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 2f, 1f);
