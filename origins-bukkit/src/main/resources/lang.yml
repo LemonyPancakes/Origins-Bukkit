@@ -8,5 +8,33 @@
 # Origins-Bukkit by LemonyPancakes
 # Language File (lang.yml)
 # Version 4
-# IS BEING REWRITTEN
 ##
+
+command:
+  invalid_identifier: "Invalid identifier: %identifier%"
+  origin:
+    unknown_origin_layer: "Unknown origin layer: %origin_layer%"
+    unknown_origin: "Unknown origin: %origin%"
+    prune:
+      success: "Successfully pruned %player%'s origin in origin layer %origin_layer%."
+      no_origin: "&cPlayer %player% has no origin in origin layer %origin_layer%."
+    set:
+      success: "Successfully set %player%'s origin in origin layer %origin_layer% to %new_origin%."
+      already_had: "&cPlayer %player% already had the origin %new_origin% in origin layer %origin_layer%."
+    item:
+      unknown_origin_item: "Unknown origin item: %origin_item%"
+      give: "Gave %amount% [%origin_item%&r] to %player%."
+    power:
+      unknown_power: "Unknown power: %power%"
+      add:
+        success: "Successfully added the power %power% to %player% from power source %power_source%."
+        already_had: "&cPlayer %player% already had the power %power% from power source %power_source%."
+      remove:
+        success: "Successfully removed the power %power% from %player% from power source %power_source%."
+        no_power: "&cPlayer %player% did not have the power %power% from power source %power_source%."
+      remove-all:
+        success: "Successfully removed all of %player%'s powers from power source %power_source%."
+        no_power: "&cPlayer %player% does not have powers from power source %power_source%."
+      clear:
+        success: "Successfully removed all of %player%'s powers."
+        no_power: "&cPlayer %player% does not have powers."

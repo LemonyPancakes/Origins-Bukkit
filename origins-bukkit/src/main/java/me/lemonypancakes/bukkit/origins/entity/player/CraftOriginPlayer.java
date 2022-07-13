@@ -23,6 +23,7 @@ import me.lemonypancakes.bukkit.common.com.google.gson.JsonParser;
 import me.lemonypancakes.bukkit.origins.data.storage.Storage;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
 import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginSetEvent;
+import me.lemonypancakes.bukkit.origins.menu.CraftOriginLayerMenu;
 import me.lemonypancakes.bukkit.origins.menu.Menu;
 import me.lemonypancakes.bukkit.origins.origin.Origin;
 import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
@@ -133,6 +134,11 @@ public class CraftOriginPlayer implements OriginPlayer {
             return playerOriginSetEvent;
         }
         return null;
+    }
+
+    @Override
+    public Set<PowerSource> getPowerSources(Power power) {
+        return Collections.unmodifiableSet(new HashSet<>(powers.get(power) != null ? powers.get(power) : new HashSet<>()));
     }
 
     @Override
@@ -335,9 +341,21 @@ public class CraftOriginPlayer implements OriginPlayer {
                             InventoryHolder inventoryHolder = topInventory.getHolder();
 
                             if (inventoryHolder != null) {
-                                if (inventoryHolder != menu) {
-                                    menu.open(player);
+                                if (inventoryHolder instanceof CraftOriginLayerMenu) {
+                                    CraftOriginLayerMenu craftOriginLayerMenu = (CraftOriginLayerMenu) inventoryHolder;
+
+                                    craftOriginLayerMenu.addExemption(player);
+                                    if (craftOriginLayerMenu != menu) {
+                                        menu.open(player);
+                                        craftOriginLayerMenu.removeExemption(player);
+                                    }
+                                } else {
+                                    if (inventoryHolder != menu) {
+                                        menu.open(player);
+                                    }
                                 }
+                            } else {
+                                menu.open(player);
                             }
                             break;
                         }

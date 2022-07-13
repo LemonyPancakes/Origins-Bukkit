@@ -45,6 +45,8 @@ public interface OriginPlayer extends OriginsBukkitPluginHolder, Metadatable, St
 
     PlayerOriginSetEvent setOrigin(OriginLayer originLayer, Origin newOrigin);
 
+    Set<PowerSource> getPowerSources(Power power);
+
     Map<Power, Set<PowerSource>> getPowers();
 
     void addPower(Power power, PowerSource powerSource);

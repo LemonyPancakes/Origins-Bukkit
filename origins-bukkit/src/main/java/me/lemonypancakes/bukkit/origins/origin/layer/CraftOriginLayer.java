@@ -19,10 +19,10 @@ package me.lemonypancakes.bukkit.origins.origin.layer;
 
 import me.lemonypancakes.bukkit.common.com.google.gson.Gson;
 import me.lemonypancakes.bukkit.common.com.google.gson.JsonObject;
-import me.lemonypancakes.bukkit.origins.origin.Origin;
-import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.menu.CraftOriginLayerMenu;
 import me.lemonypancakes.bukkit.origins.menu.Menu;
+import me.lemonypancakes.bukkit.origins.origin.Origin;
+import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
 import me.lemonypancakes.bukkit.origins.wrapper.GUITitle;
 
@@ -154,14 +154,14 @@ public class CraftOriginLayer implements OriginLayer {
     public void addOrigin(Origin origin) {
         if (!origins.contains(origin)) {
             origins.add(origin);
-            origins.sort(Comparator.comparingInt(Origin::getOrder));
+            origins.sort(Comparator.comparingInt(Origin::getOrder).thenComparing(Origin::getImpact));
         }
     }
 
     @Override
     public void removeOrigin(Origin origin) {
         origins.remove(origin);
-        origins.sort(Comparator.comparingInt(Origin::getOrder));
+        origins.sort(Comparator.comparingInt(Origin::getOrder).thenComparing(Origin::getImpact));
     }
 
     @Override

@@ -24,13 +24,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class CraftPaginatedMenu extends CraftMenu {
 
     protected final List<Inventory> pages = new LinkedList<>();
+    protected final Set<Player> exemptions = new HashSet<>();
 
     public CraftPaginatedMenu(OriginsBukkitPlugin plugin) {
         super(plugin);
@@ -43,6 +47,25 @@ public class CraftPaginatedMenu extends CraftMenu {
         if (inventory != null) {
             player.openInventory(inventory);
         }
+    }
+
+    public void addExemption(Player player) {
+        exemptions.add(player);
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                exemptions.remove(player);
+            }
+        }.runTaskLater(getPlugin().getJavaPlugin(), 20L);
+    }
+
+    public void removeExemption(Player player) {
+        exemptions.remove(player);
+    }
+
+    public boolean isExempted(Player player) {
+        return exemptions.contains(player);
     }
 
     protected void setAsAPreviousPageButton(ItemStack itemStack) {

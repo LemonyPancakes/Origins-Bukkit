@@ -21,15 +21,22 @@ import me.lemonypancakes.bukkit.common.dev.jorel.commandapi.CommandAPICommand;
 import me.lemonypancakes.bukkit.common.dev.jorel.commandapi.arguments.*;
 import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
+import me.lemonypancakes.bukkit.origins.item.OriginItem;
 import me.lemonypancakes.bukkit.origins.origin.Origin;
 import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
+import me.lemonypancakes.bukkit.origins.util.Lang;
 import me.lemonypancakes.bukkit.origins.util.PowerSource;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainCommand {
 
@@ -42,15 +49,24 @@ public class MainCommand {
                 .withSubcommand(new CommandAPICommand("prune")
                         .withPermission("bukkit.origins.command.origin.prune")
                         .withArguments(new EntitySelectorArgument<Collection<Player>>("players", EntitySelector.MANY_PLAYERS))
+                        .withArguments(originLayerArgument("origin_layer"))
                         .executes(((commandSender, objects) -> {
                             @SuppressWarnings("unchecked")
                             Collection<Player> players = (Collection<Player>) objects[0];
+                            OriginLayer originLayer = (OriginLayer) objects[1];
 
                             players.forEach(player -> {
                                 OriginPlayer originPlayer = plugin.getOriginPlayer(player);
 
                                 if (originPlayer != null) {
-                                    originPlayer.getOrigins().forEach(((originLayer, origin) -> originPlayer.setOrigin(originLayer, null)));
+                                    Origin origin = originPlayer.getOrigin(originLayer);
+
+                                    if (origin != null) {
+                                        originPlayer.setOrigin(originLayer, null);
+                                        commandSender.sendMessage(Lang.COMMAND_ORIGIN_PRUNE_SUCCESS.toString().replace("%player%", player.getName()).replace("%origin_layer%", originLayer.getIdentifier().toString()));
+                                    } else {
+                                        commandSender.sendMessage(Lang.COMMAND_ORIGIN_PRUNE_NO_ORIGIN.toString().replace("%player%", player.getName()).replace("%origin_layer%", originLayer.getIdentifier().toString()));
+                                    }
                                 }
                             });
                         })))
@@ -69,10 +85,41 @@ public class MainCommand {
                                 OriginPlayer originPlayer = plugin.getOriginPlayer(player);
 
                                 if (originPlayer != null) {
-                                    originPlayer.setOrigin(originLayer, origin);
+                                    if (originPlayer.getOrigin(originLayer) != origin) {
+                                        originPlayer.setOrigin(originLayer, origin);
+                                        commandSender.sendMessage(Lang.COMMAND_ORIGIN_SET_SUCCESS.toString().replace("%player%", player.getName()).replace("%origin_layer%", originLayer.getIdentifier().toString()).replace("%new_origin%", origin.getIdentifier().toString()));
+                                    } else {
+                                        commandSender.sendMessage(Lang.COMMAND_ORIGIN_SET_ALREADY_HAD.toString().replace("%player%", player.getName()).replace("%origin_layer%", originLayer.getIdentifier().toString()).replace("%new_origin%", origin.getIdentifier().toString()));
+                                    }
                                 }
                             });
                         }))
+                .withSubcommand(new CommandAPICommand("item")
+                        .withPermission("bukkit.origins.command.origin.item")
+                        .withSubcommand(new CommandAPICommand("give")
+                                .withPermission("bukkit.origins.command.origin.item.give")
+                                .withArguments(new EntitySelectorArgument<Collection<Player>>("players", EntitySelector.MANY_PLAYERS))
+                                .withArguments(originItemArgument("origin_item"))
+                                .withArguments(new IntegerArgument("amount"))
+                                .executes((commandSender, objects) -> {
+                                    @SuppressWarnings("unchecked")
+                                    Collection<Player> players = (Collection<Player>) objects[0];
+                                    OriginItem originItem = (OriginItem) objects[1];
+                                    int amount = (int) objects[2];
+                                    ItemStack itemStack = originItem.getItemStack();
+
+                                    if (itemStack != null) {
+                                        itemStack = itemStack.clone();
+
+                                        itemStack.setAmount(amount);
+                                        ItemStack finalItemStack = itemStack;
+
+                                        players.forEach(player -> {
+                                            player.getInventory().addItem(finalItemStack);
+                                            commandSender.sendMessage(Lang.COMMAND_ORIGIN_ITEM_GIVE.toString().replace("%player%", player.getName()).replace("%origin_item%", finalItemStack.getItemMeta() != null ? finalItemStack.getItemMeta().getDisplayName() : "").replace("%amount%", String.valueOf(amount)));
+                                        });
+                                    }
+                                })))
                 .register();
         new CommandAPICommand("power")
                 .withPermission("bukkit.origins.command.power")
@@ -91,7 +138,18 @@ public class MainCommand {
                                 OriginPlayer originPlayer = plugin.getOriginPlayer(player);
 
                                 if (originPlayer != null) {
-                                    originPlayer.addPower(power, new PowerSource(Identifier.fromString(namespacedKey.toString())));
+                                    Set<PowerSource> powerSources = originPlayer.getPowerSources(power);
+
+                                    if (powerSources != null) {
+                                        PowerSource powerSource = new PowerSource(Identifier.fromString(namespacedKey.toString()));
+
+                                        if (!powerSources.contains(powerSource)) {
+                                            originPlayer.addPower(power, powerSource);
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_ADD_SUCCESS.toString().replace("%player%", player.getName()).replace("%power%", power.getIdentifier().toString()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                        } else {
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_ADD_HAD_ALREADY.toString().replace("%player%", player.getName()).replace("%power%", power.getIdentifier().toString()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                        }
+                                    }
                                 }
                             });
                         }))
@@ -110,7 +168,79 @@ public class MainCommand {
                                 OriginPlayer originPlayer = plugin.getOriginPlayer(player);
 
                                 if (originPlayer != null) {
-                                    originPlayer.removePower(power, new PowerSource(Identifier.fromString(namespacedKey.toString())));
+                                    Set<PowerSource> powerSources = originPlayer.getPowerSources(power);
+
+                                    if (powerSources != null) {
+                                        PowerSource powerSource = new PowerSource(Identifier.fromString(namespacedKey.toString()));
+
+                                        if (powerSources.contains(powerSource)) {
+                                            originPlayer.removePower(power, powerSource);
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_REMOVE_SUCCESS.toString().replace("%player%", player.getName()).replace("%power%", power.getIdentifier().toString()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                        } else {
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_REMOVE_NO_POWER.toString().replace("%player%", player.getName()).replace("%power%", power.getIdentifier().toString()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                        }
+                                    }
+                                }
+                            });
+                        }))
+                .withSubcommand(new CommandAPICommand("remove-all")
+                        .withPermission("bukkit.origins.command.power.remove-all")
+                        .withArguments(new EntitySelectorArgument<Collection<Player>>("players", EntitySelector.MANY_PLAYERS))
+                        .withArguments(new NamespacedKeyArgument("power_source"))
+                        .executes((commandSender, objects) -> {
+                            @SuppressWarnings("unchecked")
+                            Collection<Player> players = (Collection<Player>) objects[0];
+                            NamespacedKey namespacedKey = (NamespacedKey) objects[1];
+
+                            players.forEach(player -> {
+                                OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                                if (originPlayer != null) {
+                                    PowerSource powerSource = new PowerSource(Identifier.fromString(namespacedKey.toString()));
+                                    List<Power> powers = originPlayer.getPowers().keySet().stream().filter(power -> originPlayer.getPowerSources(power).contains(powerSource)).collect(Collectors.toList());
+
+                                    if (!powers.isEmpty()) {
+                                        powers.forEach(power -> {
+                                            originPlayer.removePower(power, powerSource);
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_REMOVE_SUCCESS.toString().replace("%player%", player.getName()).replace("%power%", power.getIdentifier().toString()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                        });
+                                        commandSender.sendMessage(Lang.COMMAND_POWER_REMOVE_ALL_SUCCESS.toString().replace("%player%", player.getName()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                    } else {
+                                        commandSender.sendMessage(Lang.COMMAND_POWER_REMOVE_ALL_NO_POWER.toString().replace("%player%", player.getName()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                    }
+                                }
+                            });
+                        }))
+                .withSubcommand(new CommandAPICommand("clear")
+                        .withPermission("bukkit.origins.command.power.clear")
+                        .withArguments(new EntitySelectorArgument<Collection<Player>>("players", EntitySelector.MANY_PLAYERS))
+                        .executes((commandSender, objects) -> {
+                            @SuppressWarnings("unchecked")
+                            Collection<Player> players = (Collection<Player>) objects[0];
+
+                            players.forEach(player -> {
+                                OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                                if (originPlayer != null) {
+                                    Map<Power, Set<PowerSource>> powers = originPlayer.getPowers();
+
+                                    if (powers != null) {
+                                        if (!powers.isEmpty()) {
+                                            powers.forEach((power, powerSources) -> {
+                                                if (powerSources != null) {
+                                                    powerSources.forEach(powerSource -> {
+                                                        originPlayer.removePower(power, powerSource);
+                                                        commandSender.sendMessage(Lang.COMMAND_POWER_REMOVE_SUCCESS.toString().replace("%player%", player.getName()).replace("%power%", power.getIdentifier().toString()).replace("%power_source%", powerSource.getIdentifier().toString()));
+                                                    });
+                                                }
+                                                commandSender.sendMessage(Lang.COMMAND_POWER_CLEAR_SUCCESS.toString().replace("%player%", player.getName()));
+                                            });
+                                        } else {
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_CLEAR_NO_POWER.toString().replace("%player%", player.getName()));
+                                        }
+                                    } else {
+                                        commandSender.sendMessage(Lang.COMMAND_POWER_CLEAR_NO_POWER.toString().replace("%player%", player.getName()));
+                                    }
                                 }
                             });
                         }))
@@ -130,13 +260,13 @@ public class MainCommand {
                     if (originLayer != null) {
                         return originLayer;
                     } else {
-                        throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Unknown origin layer: ").appendArgInput());
+                        throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_ORIGIN_UNKNOWN_ORIGIN_LAYER.toString().replace("%origin_layer%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
                     }
                 } else {
-                    throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Invalid identifier: ").appendArgInput());
+                    throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
                 }
             } else {
-                throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Invalid identifier: ").appendArgInput());
+                throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
             }
         }).replaceSuggestions(ArgumentSuggestions.strings(suggestionInfo -> plugin.getRegistry().getRegisteredOriginLayersKeySet().stream().map(Identifier::toString).toArray(String[]::new)));
     }
@@ -154,13 +284,13 @@ public class MainCommand {
                     if (origin != null) {
                         return origin;
                     } else {
-                        throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Unknown origin: ").appendArgInput());
+                        throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_ORIGIN_UNKNOWN_ORIGIN.toString().replace("%origin%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
                     }
                 } else {
-                    throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Invalid identifier: ").appendArgInput());
+                    throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
                 }
             } else {
-                throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Invalid identifier: ").appendArgInput());
+                throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
             }
         }).replaceSuggestions(ArgumentSuggestions.strings(suggestionInfo -> ((OriginLayer) suggestionInfo.previousArgs()[1]).getOrigins().stream().map(origin -> origin.getIdentifier().toString()).toArray(String[]::new)));
     }
@@ -178,14 +308,38 @@ public class MainCommand {
                     if (power != null) {
                         return power;
                     } else {
-                        throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Unknown power: ").appendArgInput());
+                        throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_POWER_UNKNOWN_POWER.toString().replace("%power%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
                     }
                 } else {
-                    throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Invalid identifier: ").appendArgInput());
+                    throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
                 }
             } else {
-                throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder("Invalid identifier: ").appendArgInput());
+                throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
             }
         }).replaceSuggestions(ArgumentSuggestions.strings(suggestionInfo -> plugin.getRegistry().getRegisteredPowersKeySet().stream().map(Identifier::toString).toArray(String[]::new)));
+    }
+
+    public Argument<OriginItem> originItemArgument(String nodeName) {
+        return new CustomArgument<>(new NamespacedKeyArgument(nodeName), customArgumentInfo -> {
+            String string = customArgumentInfo.input();
+
+            if (string.contains(":")) {
+                Identifier identifier = Identifier.fromString(string);
+
+                if (identifier != null) {
+                    OriginItem originItem = plugin.getRegistry().getRegisteredOriginItem(identifier);
+
+                    if (originItem != null) {
+                        return originItem;
+                    } else {
+                        throw new CustomArgument.CustomArgumentException(Lang.COMMAND_ORIGIN_ITEM_UNKNOWN_ORIGIN_ITEM.toString().replace("%origin_item%", new CustomArgument.MessageBuilder().appendArgInput().toString()));
+                    }
+                } else {
+                    throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
+                }
+            } else {
+                throw new CustomArgument.CustomArgumentException(new CustomArgument.MessageBuilder(Lang.COMMAND_INVALID_IDENTIFIER.toString().replace("%identifier%", new CustomArgument.MessageBuilder().appendArgInput().toString())));
+            }
+        }).replaceSuggestions(ArgumentSuggestions.strings(suggestionInfo -> plugin.getRegistry().getRegisteredOriginItemsKeySet().stream().map(Identifier::toString).toArray(String[]::new)));
     }
 }

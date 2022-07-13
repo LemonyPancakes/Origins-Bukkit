@@ -24,8 +24,8 @@ import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.registry.Registry;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
+import me.lemonypancakes.bukkit.origins.util.ChatUtils;
 import me.lemonypancakes.bukkit.origins.util.Identifier;
-import me.lemonypancakes.bukkit.origins.util.Lang;
 import me.lemonypancakes.bukkit.origins.wrapper.GUITitle;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,13 +41,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CraftOriginLayerMenu extends CraftPaginatedMenu {
 
     private final OriginLayer originLayer;
     private final List<Inventory> originsPages = new LinkedList<>();
-    private final Set<Player> exemptions = new HashSet<>();
 
     public CraftOriginLayerMenu(OriginsBukkitPlugin plugin, OriginLayer originLayer) {
         super(plugin);
@@ -67,10 +69,12 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
 
                     if (powers != null) {
                         powers.forEach(power -> {
-                            Inventory inventory = createPowerInventory(guiTitle, origin, power);
+                            Inventory inventory = createPowerInventory(guiTitle, originInventory, origin, power);
 
                             if (inventory != null) {
-                                pages.add(inventory);
+                                if (inventory != originInventory) {
+                                    pages.add(inventory);
+                                }
                             }
                         });
                     }
@@ -99,46 +103,6 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
                                 Origin originFromOriginButton = getOriginFromOriginButton(itemStack);
 
                                 if (originFromOriginButton != null) {
-                                    /*new BukkitRunnable() {
-                                        final int random = new Random().nextInt(128);
-                                        int counter;
-
-                                        @Override
-                                        public void run() {
-                                            if (!player.isOnline()) {
-                                                cancel();
-                                            }
-                                            InventoryView inventoryView = player.getOpenInventory();
-                                            Inventory topInventory = inventoryView.getTopInventory();
-
-                                            if (pages.contains(topInventory)) {
-                                                if (counter >= random) {
-                                                    ItemStack itemStack = topInventory.getItem(22);
-
-                                                    if (itemStack != null) {
-                                                        Origin origin = getOriginFromOriginButton(itemStack);
-
-                                                        if (origin != null) {
-                                                            originPlayer.setOrigin(originLayer, origin);
-                                                            player.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 2f, 1f);
-                                                            exemptions.add(player);
-                                                            player.closeInventory();
-                                                            exemptions.remove(player);
-                                                            cancel();
-                                                        }
-                                                    }
-                                                } else {
-                                                    boolean isSuccess = nextOrigin(player, topInventory);
-
-                                                    if (!isSuccess) {
-                                                        nextOrigin(player, pages.get(0));
-                                                    }
-                                                    player.playSound(player.getLocation(), Sound.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 2f, 1f);
-                                                }
-                                            }
-                                            counter++;
-                                        }
-                                    }.runTaskTimer(getPlugin().getJavaPlugin(), 0L, 2L);*/
                                     originPlayer.setOrigin(originLayer, originFromOriginButton);
                                     player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
                                     exemptions.add(player);
@@ -409,21 +373,21 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
         ItemMeta previousMeta = previous.getItemMeta();
 
         if (previousMeta != null) {
-            previousMeta.setDisplayName(Lang.GUI_ICON_TEXT_PREVIOUS_PAGE.toString());
+            previousMeta.setDisplayName(ChatUtils.format("&fPrevious Page"));
             previous.setItemMeta(previousMeta);
         }
         ItemStack close = new ItemStack(Material.BARRIER, 1);
         ItemMeta closeMeta = close.getItemMeta();
 
         if (closeMeta != null) {
-            closeMeta.setDisplayName(Lang.GUI_ICON_TEXT_QUIT_GAME.toString());
+            closeMeta.setDisplayName(ChatUtils.format("&cQuit Game"));
             close.setItemMeta(closeMeta);
         }
         ItemStack next = new ItemStack(Material.ARROW, 1);
         ItemMeta nextMeta = next.getItemMeta();
 
         if (nextMeta != null) {
-            nextMeta.setDisplayName(Lang.GUI_ICON_TEXT_NEXT_PAGE.toString());
+            nextMeta.setDisplayName(ChatUtils.format("&fNext Page"));
             next.setItemMeta(nextMeta);
         }
 
@@ -463,34 +427,146 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
         setAsAPreviousOriginButton(previous);
         setAsANextOriginButton(next);
         setAsAOriginButton(origin, itemStack);
-        inventory.setItem(22, itemStack);
+        ItemStack map = new ItemStack(Material.MAP);
+        ItemMeta mapMeta = map.getItemMeta();
+
+        if (mapMeta != null) {
+            mapMeta.setDisplayName(" ");
+            map.setItemMeta(mapMeta);
+        }
+        for (int i = 20; i < 25; i++) {
+            inventory.setItem(i, map);
+        }
+        for (int i = 29; i < 34; i++) {
+            inventory.setItem(i, map);
+        }
+        inventory.setItem(13, itemStack);
         inventory.setItem(48, previous);
         inventory.setItem(50, next);
+        generateImpact(inventory, origin);
         return inventory;
     }
 
-    private Inventory createPowerInventory(GUITitle guiTitle, Origin origin, Power power) {
+    private Inventory createPowerInventory(GUITitle guiTitle, Inventory inventory, Origin origin, Power power) {
         String powerName = power.getName();
         String[] powerDescription = power.getDescription();
 
         if (powerName != null && !powerName.isEmpty() && powerDescription != null && powerDescription.length != 0) {
-            Inventory inventory = createOriginInventory(guiTitle, origin);
-            ItemStack itemStack = inventory.getItem(22);
+            ItemStack itemStack = new ItemStack(Material.FILLED_MAP);
+            ItemMeta itemMeta = itemStack.getItemMeta();
 
-            if (itemStack != null) {
-                ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null) {
+                List<String> lore = new ArrayList<>(Arrays.asList(powerDescription));
 
-                if (itemMeta != null) {
-                    List<String> lore = new ArrayList<>(Arrays.asList(origin.getDescription()));
+                itemMeta.setDisplayName(powerName);
+                itemMeta.setLore(lore);
+                itemStack.setItemMeta(itemMeta);
+            }
+            boolean isFull = false;
 
-                    lore.add("§f§n" + powerName);
-                    lore.addAll(Arrays.asList(powerDescription));
-                    itemMeta.setLore(lore);
-                    itemStack.setItemMeta(itemMeta);
-                    return inventory;
+            for (int i = 29; i < 34; i++) {
+                boolean a = false;
+
+                for (int h = 20; h < 25; h++) {
+                    ItemStack item = inventory.getItem(h);
+
+                    if (item != null) {
+                        if (item.getType() == Material.MAP) {
+                            inventory.setItem(h, itemStack);
+                            a = true;
+                            break;
+                        }
+                    }
+                }
+                if (a) {
+                    break;
+                } else {
+                    ItemStack item = inventory.getItem(i);
+
+                    if (item != null) {
+                        if (item.getType() == Material.MAP) {
+                            inventory.setItem(i, itemStack);
+                            break;
+                        }
+                    }
+                }
+                if (i == 33) {
+                    ItemStack item = inventory.getItem(i);
+
+                    if (item != null) {
+                        if (item.getType() == Material.FILLED_MAP) {
+                            isFull = true;
+                            break;
+                        }
+                    }
                 }
             }
+            if (isFull) {
+                inventory = createPowerInventory(guiTitle, createOriginInventory(guiTitle, origin), origin, power);
+            }
+            return inventory;
         }
         return null;
+    }
+
+    public void generateImpact(Inventory inventory, Origin origin) {
+        switch (origin.getImpact()) {
+            case NONE:
+                ItemStack none = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
+                ItemMeta noneMeta = none.getItemMeta();
+                if (noneMeta != null) {
+                    noneMeta.setDisplayName(ChatUtils.format("&fImpact: &7None"));
+                    none.setItemMeta(noneMeta);
+                }
+                inventory.setItem(6, none);
+                inventory.setItem(7, none);
+                inventory.setItem(8, none);
+                break;
+            case LOW:
+                ItemStack low = new ItemStack(Material.LIME_CONCRETE, 1);
+                ItemMeta lowMeta = low.getItemMeta();
+                if (lowMeta != null) {
+                    lowMeta.setDisplayName(ChatUtils.format("&fImpact: &cLow"));
+                    low.setItemMeta(lowMeta);
+                }
+                ItemStack low1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
+                ItemMeta lowMeta1 = low1.getItemMeta();
+                if (lowMeta1 != null) {
+                    lowMeta1.setDisplayName(ChatUtils.format("&fImpact: &cLow"));
+                    low1.setItemMeta(lowMeta);
+                }
+                inventory.setItem(6, low);
+                inventory.setItem(7, low1);
+                inventory.setItem(8, low1);
+                break;
+            case MEDIUM:
+                ItemStack medium = new ItemStack(Material.YELLOW_CONCRETE, 1);
+                ItemMeta mediumMeta = medium.getItemMeta();
+                if (mediumMeta != null) {
+                    mediumMeta.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
+                    medium.setItemMeta(mediumMeta);
+                }
+                ItemStack medium1 = new ItemStack(Material.LIGHT_GRAY_CONCRETE, 1);
+                ItemMeta mediumMeta1 = medium1.getItemMeta();
+                if (mediumMeta1 != null) {
+                    mediumMeta1.setDisplayName(ChatUtils.format("&fImpact: &eMedium"));
+                    medium1.setItemMeta(mediumMeta);
+                }
+                inventory.setItem(6, medium);
+                inventory.setItem(7, medium);
+                inventory.setItem(8, medium1);
+                break;
+            case HIGH:
+                ItemStack high = new ItemStack(Material.RED_CONCRETE, 1);
+                ItemMeta highMeta = high.getItemMeta();
+                if (highMeta != null) {
+                    highMeta.setDisplayName(ChatUtils.format("&fImpact: &cHigh"));
+                    high.setItemMeta(highMeta);
+                }
+                inventory.setItem(6, high);
+                inventory.setItem(7, high);
+                inventory.setItem(8, high);
+                break;
+        }
     }
 }
