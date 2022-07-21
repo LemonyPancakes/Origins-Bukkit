@@ -24,6 +24,7 @@ import me.lemonypancakes.bukkit.origins.data.storage.Storage;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
 import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginSetEvent;
 import me.lemonypancakes.bukkit.origins.menu.CraftOriginLayerMenu;
+import me.lemonypancakes.bukkit.origins.menu.CraftOriginPlayerInfoMenu;
 import me.lemonypancakes.bukkit.origins.menu.Menu;
 import me.lemonypancakes.bukkit.origins.origin.Origin;
 import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
@@ -46,6 +47,7 @@ public class CraftOriginPlayer implements OriginPlayer {
     private OriginsBukkitPlugin plugin;
     private Player player;
     private final Schedulers schedulers;
+    private final CraftOriginPlayerInfoMenu originPlayerInfoMenu;
     private final Map<OriginLayer, Origin> origins = new LinkedHashMap<>();
     private final Map<Power, Set<PowerSource>> powers = new HashMap<>();
     private JsonObject metadata = new JsonObject();
@@ -55,6 +57,7 @@ public class CraftOriginPlayer implements OriginPlayer {
         setPlugin(plugin);
         setPlayer(player);
         this.schedulers = new Schedulers();
+        this.originPlayerInfoMenu = new CraftOriginPlayerInfoMenu(plugin, this);
     }
 
     @Override
@@ -111,6 +114,7 @@ public class CraftOriginPlayer implements OriginPlayer {
                         }
                     }
                     origins.put(originLayer, newOrigin);
+                    originPlayerInfoMenu.addOrigin(originLayer, newOrigin);
                     if (newOrigin != null) {
                         Origin finalNewOrigin = newOrigin;
                         List<Power> powers = finalNewOrigin.getPowers();
@@ -188,6 +192,26 @@ public class CraftOriginPlayer implements OriginPlayer {
     @Override
     public Schedulers getSchedulers() {
         return schedulers;
+    }
+
+    @Override
+    public boolean openOriginInfoMenu() {
+        return openOriginInfoMenu(player);
+    }
+
+    @Override
+    public boolean openOriginInfoMenu(Player player) {
+        InventoryView inventoryView = player.getOpenInventory();
+        Inventory inventory = inventoryView.getTopInventory();
+        InventoryHolder inventoryHolder = inventory.getHolder();
+
+        if (inventoryHolder != null) {
+            if (inventoryHolder instanceof CraftOriginLayerMenu) {
+                return false;
+            }
+        }
+        originPlayerInfoMenu.open(player);
+        return false;
     }
 
     @Override

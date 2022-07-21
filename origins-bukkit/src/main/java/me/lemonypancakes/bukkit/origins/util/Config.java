@@ -67,7 +67,7 @@ public enum Config {
     }
 
     public String[] toStringArray() {
-        return ChatUtils.formatList(CONFIG.getStringList(this.Path).toArray(new String[0]));
+        return ChatUtils.format(CONFIG.getStringList(this.Path).toArray(new String[0]));
     }
 
     public boolean toBoolean() {

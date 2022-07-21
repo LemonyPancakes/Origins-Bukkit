@@ -19,14 +19,11 @@ package me.lemonypancakes.bukkit.origins.menu;
 
 import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
 import me.lemonypancakes.bukkit.origins.entity.player.power.Power;
-import me.lemonypancakes.bukkit.origins.event.entity.player.PlayerOriginChooseEvent;
 import me.lemonypancakes.bukkit.origins.origin.Origin;
 import me.lemonypancakes.bukkit.origins.origin.layer.OriginLayer;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
-import me.lemonypancakes.bukkit.origins.registry.Registry;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
 import me.lemonypancakes.bukkit.origins.util.ChatUtils;
-import me.lemonypancakes.bukkit.origins.util.Identifier;
 import me.lemonypancakes.bukkit.origins.wrapper.GUITitle;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,54 +32,24 @@ import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class CraftOriginLayerMenu extends CraftPaginatedMenu {
+public class CraftOriginPlayerInfoMenu extends CraftPaginatedMenu {
 
-    protected final OriginLayer originLayer;
+    protected final OriginPlayer originPlayer;
+    protected final Map<OriginLayer, List<Inventory>> origins = new LinkedHashMap<>();
     protected final List<Inventory> originsPages = new LinkedList<>();
 
-    public CraftOriginLayerMenu(OriginsBukkitPlugin plugin, OriginLayer originLayer) {
+    public CraftOriginPlayerInfoMenu(OriginsBukkitPlugin plugin, OriginPlayer originPlayer) {
         super(plugin);
-        this.originLayer = originLayer;
-        List<Origin> origins = originLayer.getOrigins();
-        GUITitle guiTitle = originLayer.getGuiTitle();
-
-        if (origins != null) {
-            origins.forEach(origin -> {
-                if (origin != null) {
-                    Inventory originInventory = createOriginInventory(guiTitle, origin);
-
-                    pages.add(originInventory);
-                    originsPages.add(originInventory);
-                    List<Power> powers = origin.getPowers();
-
-                    if (powers != null) {
-                        powers.forEach(power -> {
-                            Inventory inventory = createPowerInventory(guiTitle, originInventory, origin, power);
-
-                            if (inventory != null) {
-                                if (inventory != originInventory) {
-                                    pages.add(inventory);
-                                }
-                            }
-                        });
-                    }
-                }
-            });
-        }
+        this.originPlayer = originPlayer;
     }
 
     @Override
@@ -92,113 +59,91 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
 
         if (humanEntity instanceof Player) {
             Player player = (Player) humanEntity;
-            OriginPlayer originPlayer = getPlugin().getOriginPlayer(player);
+            Inventory inventory = event.getInventory();
+            ItemStack itemStack = event.getCurrentItem();
 
-            if (originPlayer != null) {
-                if (originLayer != null) {
-                    if (originLayer.isEnabled()) {
-                        Inventory inventory = event.getInventory();
-                        ItemStack itemStack = event.getCurrentItem();
+            if (itemStack != null) {
+                Location location = player.getLocation();
+                boolean success = turnPage(player, inventory, itemStack);
 
-                        if (itemStack != null) {
-                            Location location = player.getLocation();
-
-                            if (isAOriginButton(itemStack)) {
-                                Origin originFromOriginButton = getOriginFromOriginButton(itemStack);
-
-                                if (originFromOriginButton != null) {
-                                    PlayerOriginChooseEvent playerOriginChooseEvent = new PlayerOriginChooseEvent(player, originLayer, originFromOriginButton);
-
-                                    Bukkit.getPluginManager().callEvent(playerOriginChooseEvent);
-                                    if (!playerOriginChooseEvent.isCancelled()) {
-                                        Origin origin = playerOriginChooseEvent.getOrigin();
-
-                                        if (originLayer.hasOrigin(origin)) {
-                                            originPlayer.setOrigin(originLayer, origin);
-                                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1f, 1f);
-                                            exemptions.add(player);
-                                            player.closeInventory();
-                                            exemptions.remove(player);
-                                        } else {
-                                            player.playSound(location, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 2f, 0f);
-                                        }
-                                    } else {
-                                        player.playSound(location, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 2f, 0f);
-                                    }
-                                }
-                            } else if (isAQuitGameButton(itemStack)) {
-                                player.kickPlayer(null);
-                            } else {
-                                boolean success = turnPage(player, inventory, itemStack);
-
-                                if (success) {
-                                    player.playSound(location, Sound.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 2f, 1f);
-                                } else {
-                                    player.playSound(location, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 2f, 0f);
-                                }
-                            }
-                        }
-                    }
+                if (success) {
+                    player.playSound(location, Sound.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON, 2f, 1f);
+                } else {
+                    player.playSound(location, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 2f, 0f);
                 }
             }
         }
     }
 
     @Override
-    public void onInventoryClose(InventoryCloseEvent event) {
-        HumanEntity humanEntity = event.getPlayer();
+    public void open(Player player) {
+        if (!pages.isEmpty()) {
+            Inventory inventory = pages.get(0);
 
-        if (humanEntity instanceof Player) {
-            Player player = (Player) humanEntity;
-            OriginPlayer originPlayer = getPlugin().getOriginPlayer(player);
-
-            if (originPlayer != null) {
-                Origin origin = originPlayer.getOrigin(originLayer);
-
-                if (origin == null) {
-                    Inventory inventory = event.getInventory();
-
-                    if (!exemptions.contains(player)) {
-                        new BukkitRunnable() {
-
-                            @Override
-                            public void run() {
-                                player.openInventory(inventory);
-                            }
-                        }.runTask(getPlugin().getJavaPlugin());
-                    } else {
-                        new BukkitRunnable() {
-
-                            @Override
-                            public void run() {
-                                InventoryView inventoryView = player.getOpenInventory();
-                                Inventory topInventory = inventoryView.getTopInventory();
-
-                                if (!pages.contains(topInventory)) {
-                                    OriginPlayer originPlayer = getPlugin().getOriginPlayer(player);
-
-                                    if (originPlayer != null) {
-                                        Origin origin = originPlayer.getOrigin(originLayer);
-
-                                        if (origin == null) {
-                                            InventoryHolder inventoryHolder = topInventory.getHolder();
-
-                                            if (inventoryHolder != null) {
-                                                if (!(inventoryHolder instanceof CraftOriginLayerMenu)) {
-                                                    player.openInventory(inventory);
-                                                }
-                                            } else {
-                                                player.openInventory(inventory);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }.runTask(getPlugin().getJavaPlugin());
-                    }
-                }
+            if (inventory != null) {
+                player.openInventory(inventory);
             }
         }
+    }
+
+    public void addOrigin(OriginLayer originLayer, Origin origin) {
+        if (originLayer != null) {
+            if (origin != null) {
+                if (origins.get(originLayer) != null) {
+                    removeOrigin(originLayer);
+                }
+                GUITitle guiTitle = originLayer.getGuiTitle();
+                Inventory originInventory = createOriginInventory(guiTitle, origin);
+                List<Inventory> inventories = new LinkedList<>();
+
+                pages.add(originInventory);
+                originsPages.add(originInventory);
+                inventories.add(originInventory);
+                List<Power> powers = origin.getPowers();
+
+                if (powers != null) {
+                    powers.forEach(power -> {
+                        Inventory inventory = createPowerInventory(guiTitle, originInventory, origin, power);
+
+                        if (inventory != null) {
+                            if (inventory != originInventory) {
+                                pages.add(inventory);
+                                inventories.add(inventory);
+                            }
+                        }
+                    });
+                }
+                origins.put(originLayer, inventories);
+            } else {
+                removeOrigin(originLayer);
+            }
+        }
+    }
+
+    public void removeOrigin(OriginLayer originLayer) {
+        List<Inventory> inventories = origins.get(originLayer);
+
+        if (inventories != null) {
+            inventories.forEach(inventory -> {
+                pages.remove(inventory);
+                originsPages.remove(inventory);
+                Bukkit.getOnlinePlayers().forEach(player -> {
+                    InventoryView inventoryView = player.getOpenInventory();
+                    Inventory topInventory = inventoryView.getTopInventory();
+                    InventoryHolder inventoryHolder = topInventory.getHolder();
+
+                    if (inventoryHolder != null) {
+                        if (inventoryHolder instanceof CraftOriginLayerMenu) {
+                            return;
+                        }
+                    }
+                    if (topInventory == inventory) {
+                        player.closeInventory();
+                    }
+                });
+            });
+        }
+        origins.remove(originLayer);
     }
 
     private boolean turnPage(Player player, Inventory inventory, ItemStack itemStack) {
@@ -348,85 +293,14 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
         return false;
     }
 
-    private void setAsAOriginButton(Origin origin, ItemStack itemStack) {
-        if (origin != null && itemStack != null) {
-            ItemMeta itemMeta = itemStack.getItemMeta();
-
-            if (itemMeta != null) {
-                Identifier identifier = origin.getIdentifier();
-
-                if (identifier != null) {
-                    BukkitPersistentDataUtils.setPersistentData(itemMeta, "origins-bukkit:origin_layer_menu_origin_button", PersistentDataType.STRING, identifier.toString());
-                    itemStack.setItemMeta(itemMeta);
-                }
-            }
-        }
-    }
-
-    private boolean isAOriginButton(ItemStack itemStack) {
-        return getOriginFromOriginButton(itemStack) != null;
-    }
-
-    private void setAsAQuitGameButton(ItemStack itemStack) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        if (itemMeta != null) {
-            BukkitPersistentDataUtils.setPersistentData(itemMeta, "origins-bukkit:origin_layer_menu", PersistentDataType.STRING, "origins-bukkit:quit_game");
-            itemStack.setItemMeta(itemMeta);
-        }
-    }
-
-    private boolean isAQuitGameButton(ItemStack itemStack) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        if (itemMeta != null) {
-            String string = BukkitPersistentDataUtils.getPersistentData(itemMeta, "origins-bukkit:origin_layer_menu", PersistentDataType.STRING);
-
-            if (string != null) {
-                return string.equals("origins-bukkit:quit_game");
-            }
-        }
-        return false;
-    }
-
-    private Origin getOriginFromOriginButton(ItemStack itemStack) {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-
-        if (itemMeta != null) {
-            String string = BukkitPersistentDataUtils.getPersistentData(itemMeta, "origins-bukkit:origin_layer_menu_origin_button", PersistentDataType.STRING);
-
-            if (string != null) {
-                if (string.contains(":")) {
-                    Identifier identifier = Identifier.fromString(string);
-
-                    if (identifier != null) {
-                        Registry registry = getPlugin().getRegistry();
-
-                        if (registry != null) {
-                            return registry.getRegisteredOrigin(identifier);
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
     private Inventory createOriginLayerInventory(GUITitle guiTitle) {
-        Inventory inventory = Bukkit.createInventory(this, 54, guiTitle != null && guiTitle.getChooseOrigin() != null ? guiTitle.getChooseOrigin() : "");
+        Inventory inventory = Bukkit.createInventory(this, 54, guiTitle != null && guiTitle.getViewOrigin() != null ? guiTitle.getViewOrigin() : "");
         ItemStack previous = new ItemStack(Material.ARROW, 1);
         ItemMeta previousMeta = previous.getItemMeta();
 
         if (previousMeta != null) {
             previousMeta.setDisplayName(ChatUtils.format("&fPrevious Page"));
             previous.setItemMeta(previousMeta);
-        }
-        ItemStack close = new ItemStack(Material.BARRIER, 1);
-        ItemMeta closeMeta = close.getItemMeta();
-
-        if (closeMeta != null) {
-            closeMeta.setDisplayName(ChatUtils.format("&cQuit Game"));
-            close.setItemMeta(closeMeta);
         }
         ItemStack next = new ItemStack(Material.ARROW, 1);
         ItemMeta nextMeta = next.getItemMeta();
@@ -437,10 +311,8 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
         }
 
         setAsAPreviousPageButton(previous);
-        setAsAQuitGameButton(close);
         setAsANextPageButton(next);
         inventory.setItem(46, previous);
-        inventory.setItem(49, close);
         inventory.setItem(52, next);
         return inventory;
     }
@@ -471,7 +343,6 @@ public class CraftOriginLayerMenu extends CraftPaginatedMenu {
         }
         setAsAPreviousOriginButton(previous);
         setAsANextOriginButton(next);
-        setAsAOriginButton(origin, itemStack);
         ItemStack map = new ItemStack(Material.MAP);
         ItemMeta mapMeta = map.getItemMeta();
 

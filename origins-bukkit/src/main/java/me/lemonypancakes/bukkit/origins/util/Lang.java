@@ -63,7 +63,7 @@ public enum Lang {
     }
 
     public String[] toStringArray() {
-        return ChatUtils.formatList(LANG.getStringList(this.Path).toArray(new String[0]));
+        return ChatUtils.format(LANG.getStringList(this.Path).toArray(new String[0]));
     }
 
     public boolean toBoolean() {

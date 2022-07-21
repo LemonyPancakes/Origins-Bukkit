@@ -120,6 +120,31 @@ public class MainCommand {
                                         });
                                     }
                                 })))
+                .withSubcommand(new CommandAPICommand("info")
+                        .withPermission("bukkit.origins.command.origin.info.self")
+                        .executes((commandSender, objects) -> {
+                            if (commandSender instanceof Player) {
+                                Player player = (Player) commandSender;
+                                OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                                if (originPlayer != null) {
+                                    originPlayer.openOriginInfoMenu();
+                                }
+                            }
+                        }))
+                .withSubcommand(new CommandAPICommand("info")
+                        .withPermission("bukkit.origins.command.origin.info.others")
+                        .withArguments(new PlayerArgument("player"))
+                        .executes((commandSender, objects) -> {
+                            if (commandSender instanceof Player) {
+                                Player player = (Player) objects[0];
+                                OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                                if (originPlayer != null) {
+                                    originPlayer.openOriginInfoMenu((Player) commandSender);
+                                }
+                            }
+                        }))
                 .register();
         new CommandAPICommand("power")
                 .withPermission("bukkit.origins.command.power")

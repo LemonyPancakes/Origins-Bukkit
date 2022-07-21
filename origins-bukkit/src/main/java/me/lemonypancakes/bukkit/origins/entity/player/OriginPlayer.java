@@ -57,6 +57,10 @@ public interface OriginPlayer extends OriginsBukkitPluginHolder, Metadatable, St
 
     Schedulers getSchedulers();
 
+    boolean openOriginInfoMenu();
+
+    boolean openOriginInfoMenu(Player player);
+
     void refresh();
 
     boolean hasOriginBefore();

@@ -24,15 +24,18 @@ import org.bukkit.entity.Player;
 
 public final class ChatUtils {
 
-    public static String format(String format) {
-        return ChatColor.translateAlternateColorCodes('&', format);
+    private ChatUtils() {}
+
+    public static String format(String string) {
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
 
-    public static String[] formatList(String[] format) {
+    public static String[] format(String... strings) {
         String[] result;
-        result = new String[format.length];
-        for (int i = 0; i < format.length; i++) {
-            result[i] = ChatColor.translateAlternateColorCodes('&', format[i]);
+        result = new String[strings.length];
+
+        for (int i = 0; i < strings.length; i++) {
+            result[i] = format(strings[i]);
         }
         return result;
     }
