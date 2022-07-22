@@ -15,46 +15,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package me.lemonypancakes.bukkit.origins.listener.entity;
+package me.lemonypancakes.bukkit.origins.listener.entity.player;
 
 import me.lemonypancakes.bukkit.origins.menu.CraftOriginLayerMenu;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 
-public class EntityDamageEventListener implements Listener {
+public class PlayerMoveEventListener implements Listener {
 
     private final OriginsBukkitPlugin plugin;
 
-    public EntityDamageEventListener(OriginsBukkitPlugin plugin) {
+    public PlayerMoveEventListener(OriginsBukkitPlugin plugin) {
         this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    private void onEntityDamage(EntityDamageEvent event) {
-        Entity entity = event.getEntity();
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        InventoryView inventoryView = player.getOpenInventory();
+        Inventory topInventory = inventoryView.getTopInventory();
+        InventoryHolder inventoryHolder = topInventory.getHolder();
 
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            InventoryView inventoryView = player.getOpenInventory();
-            Inventory topInventory = inventoryView.getTopInventory();
-            InventoryHolder inventoryHolder = topInventory.getHolder();
-
-            if (inventoryHolder != null) {
-                if (!(inventoryHolder instanceof CraftOriginLayerMenu)) {
-                    return;
-                }
+        if (inventoryHolder != null) {
+            if (!(inventoryHolder instanceof CraftOriginLayerMenu)) {
+                return;
             }
-            event.setCancelled(true);
         }
+        event.setCancelled(true);
     }
 }

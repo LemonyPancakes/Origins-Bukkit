@@ -39,10 +39,7 @@ import me.lemonypancakes.bukkit.origins.listener.block.BlockBreakEventListener;
 import me.lemonypancakes.bukkit.origins.listener.block.BlockPlaceEventListener;
 import me.lemonypancakes.bukkit.origins.listener.entity.EntityDamageEventListener;
 import me.lemonypancakes.bukkit.origins.listener.entity.EntityPickupItemEventListener;
-import me.lemonypancakes.bukkit.origins.listener.entity.player.PlayerInteractAtEntityEventListener;
-import me.lemonypancakes.bukkit.origins.listener.entity.player.PlayerInteractEntityEventListener;
-import me.lemonypancakes.bukkit.origins.listener.entity.player.PlayerInteractEventListener;
-import me.lemonypancakes.bukkit.origins.listener.entity.player.PlayerSwapHandItemsEventListener;
+import me.lemonypancakes.bukkit.origins.listener.entity.player.*;
 import me.lemonypancakes.bukkit.origins.listener.inventory.InventoryClickEventListener;
 import me.lemonypancakes.bukkit.origins.listener.inventory.InventoryCloseEventListener;
 import me.lemonypancakes.bukkit.origins.listener.world.DayAndNightCycleListener;
@@ -102,9 +99,12 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             new Metrics(this, 13236);
             new BlockBreakEventListener(this);
             new BlockPlaceEventListener(this);
+            new PlayerDropItemListener(this);
             new PlayerInteractAtEntityEventListener(this);
             new PlayerInteractEntityEventListener(this);
             new PlayerInteractEventListener(this);
+            new PlayerMoveEventListener(this);
+            new PlayerRespawnEventListener(this);
             new PlayerSwapHandItemsEventListener(this);
             new EntityDamageEventListener(this);
             new EntityPickupItemEventListener(this);
@@ -199,7 +199,6 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
                     }
                 }
             }.runTaskTimerAsynchronously(this, 60L, 216000L);
-
             ChatUtils.sendConsoleMessage("&a[Origins-Bukkit] Plugin has been enabled!");
         }
     }
@@ -224,7 +223,6 @@ public final class CraftOriginsBukkitPlugin extends JavaPlugin implements Origin
             }
             removeModifiers(player);
         });
-
         ChatUtils.sendConsoleMessage("&c[Origins-Bukkit] Plugin has been disabled!");
     }
 

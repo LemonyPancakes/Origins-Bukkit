@@ -18,6 +18,7 @@
 package me.lemonypancakes.bukkit.origins.listener.entity.player;
 
 import me.lemonypancakes.bukkit.origins.entity.player.OriginPlayer;
+import me.lemonypancakes.bukkit.origins.menu.CraftOriginLayerMenu;
 import me.lemonypancakes.bukkit.origins.plugin.OriginsBukkitPlugin;
 import me.lemonypancakes.bukkit.origins.util.BukkitPersistentDataUtils;
 import org.bukkit.Bukkit;
@@ -29,6 +30,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -44,17 +48,19 @@ public class PlayerInteractEventListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin.getJavaPlugin());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
+        InventoryView inventoryView = player.getOpenInventory();
+        Inventory topInventory = inventoryView.getTopInventory();
+        InventoryHolder inventoryHolder = topInventory.getHolder();
 
-        if (plugin.getOriginPlayer(player) != null) {
-            if (plugin.getOriginPlayer(player) == null) {
-                event.setCancelled(true);
+        if (inventoryHolder != null) {
+            if (!(inventoryHolder instanceof CraftOriginLayerMenu)) {
+                return;
             }
-        } else {
-            event.setCancelled(true);
         }
+        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.LOW)

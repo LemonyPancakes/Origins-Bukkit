@@ -61,13 +61,8 @@ public class CraftBukkitStorage implements Storage, Listener {
             data.put("origin", BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:origin", PersistentDataType.STRING));
             data.put("power", BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:power", PersistentDataType.STRING));
             data.put("metadata", BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:metadata", PersistentDataType.STRING));
-            Integer integer = BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:hasOriginBefore", PersistentDataType.INTEGER);
-            boolean hasOriginBefore = false;
-
-            if (integer != null) {
-                hasOriginBefore = integer > 0;
-            }
-            data.put("hasOriginBefore", hasOriginBefore);
+            Integer integer = BukkitPersistentDataUtils.getPersistentData(persistentDataHolder, "origins-bukkit:has_origin_before", PersistentDataType.INTEGER);
+            data.put("hasOriginBefore", integer != null && integer > 0);
 
             return data;
         }
@@ -83,7 +78,7 @@ public class CraftBukkitStorage implements Storage, Listener {
             BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:origin", PersistentDataType.STRING, (String) data.get("origin"));
             BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:power", PersistentDataType.STRING, (String) data.get("power"));
             BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:metadata", PersistentDataType.STRING, (String) data.get("metadata"));
-            BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:hasOriginBefore", PersistentDataType.INTEGER, (boolean) data.get("hasOriginBefore") ? 1 : 0);
+            BukkitPersistentDataUtils.setPersistentData(persistentDataHolder, "origins-bukkit:has_origin_before", PersistentDataType.INTEGER, (boolean) data.get("hasOriginBefore") ? 1 : 0);
         }
     }
 
