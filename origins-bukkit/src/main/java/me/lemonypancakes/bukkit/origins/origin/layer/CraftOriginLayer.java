@@ -90,17 +90,6 @@ public class CraftOriginLayer implements OriginLayer {
         if (this.jsonObject == null) {
             this.jsonObject = jsonObject;
             if (jsonObject != null) {
-                if (jsonObject.has("origins")) {
-                    String[] strings = new Gson().fromJson(jsonObject.get("origins"), String[].class);
-
-                    Arrays.stream(strings).forEach(string -> {
-                        Origin origin = plugin.getRegistry().getRegisteredOrigin(Identifier.fromString(string));
-
-                        if (origin != null) {
-                            addOrigin(origin);
-                        }
-                    });
-                }
                 if (jsonObject.has("enabled")) {
                     this.enabled = jsonObject.get("enabled").getAsBoolean();
                 }
@@ -140,7 +129,17 @@ public class CraftOriginLayer implements OriginLayer {
                 if (jsonObject.has("loading_priority")) {
                     this.loadingPriority = jsonObject.get("loading_priority").getAsInt();
                 }
-                this.menu = new CraftOriginLayerMenu(plugin, this);
+                if (jsonObject.has("origins")) {
+                    String[] strings = new Gson().fromJson(jsonObject.get("origins"), String[].class);
+
+                    Arrays.stream(strings).forEach(string -> {
+                        Origin origin = plugin.getRegistry().getRegisteredOrigin(Identifier.fromString(string));
+
+                        if (origin != null) {
+                            addOrigin(origin);
+                        }
+                    });
+                }
             }
         }
     }
@@ -155,6 +154,7 @@ public class CraftOriginLayer implements OriginLayer {
         if (!origins.contains(origin)) {
             origins.add(origin);
             origins.sort(Comparator.comparingInt(Origin::getOrder).thenComparing(Origin::getImpact));
+            this.menu = new CraftOriginLayerMenu(plugin, this);
         }
     }
 
@@ -162,6 +162,7 @@ public class CraftOriginLayer implements OriginLayer {
     public void removeOrigin(Origin origin) {
         origins.remove(origin);
         origins.sort(Comparator.comparingInt(Origin::getOrder).thenComparing(Origin::getImpact));
+        this.menu = new CraftOriginLayerMenu(plugin, this);
     }
 
     @Override
