@@ -32,10 +32,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainCommand {
@@ -268,6 +265,74 @@ public class MainCommand {
                                     }
                                 }
                             });
+                        }))
+                /*.withSubcommand(new CommandAPICommand("info")
+                        .withPermission("bukkit.origins.command.power.info.self")
+                        .executes((commandSender, objects) -> {
+                            if (commandSender instanceof Player) {
+                                Player player = (Player) commandSender;
+                                OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                                if (originPlayer != null) {
+                                    originPlayer.openOriginInfoMenu();
+                                }
+                            }
+                        }))
+                .withSubcommand(new CommandAPICommand("info")
+                        .withPermission("bukkit.origins.command.power.info.others")
+                        .withArguments(new PlayerArgument("player"))
+                        .executes((commandSender, objects) -> {
+                            if (commandSender instanceof Player) {
+                                Player player = (Player) objects[0];
+                                OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                                if (originPlayer != null) {
+                                    originPlayer.openOriginInfoMenu((Player) commandSender);
+                                }
+                            }
+                        }))*/
+                .withSubcommand(new CommandAPICommand("list")
+                        .withPermission("bukkit.origins.command.power.info.self")
+                        .executes((commandSender, objects) -> {
+                            if (commandSender instanceof Player) {
+                                Player player = (Player) commandSender;
+                                OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                                if (originPlayer != null) {
+                                    Map<Power, Set<PowerSource>> powers = originPlayer.getPowers();
+
+                                    if (powers != null) {
+                                        if (!powers.isEmpty()) {
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_LIST_HAS_POWER.toString().replace("%player%", player.getName()).replace("%powers_count%", String.valueOf(powers.keySet().size())).replace("%powers%", Arrays.toString(powers.keySet().stream().map(power -> power.getIdentifier().toString()).distinct().toArray())));
+                                        } else {
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_LIST_NO_POWER.toString().replace("%player%", player.getName()));
+                                        }
+                                    } else {
+                                        commandSender.sendMessage(Lang.COMMAND_POWER_LIST_NO_POWER.toString().replace("%player%", player.getName()));
+                                    }
+                                }
+                            }
+                        }))
+                .withSubcommand(new CommandAPICommand("list")
+                        .withPermission("bukkit.origins.command.power.list.others")
+                        .withArguments(new PlayerArgument("player"))
+                        .executes((commandSender, objects) -> {
+                            Player player = (Player) objects[0];
+                            OriginPlayer originPlayer = plugin.getOriginPlayer(player);
+
+                            if (originPlayer != null) {
+                                Map<Power, Set<PowerSource>> powers = originPlayer.getPowers();
+
+                                if (powers != null) {
+                                    if (!powers.isEmpty()) {
+                                        commandSender.sendMessage(Lang.COMMAND_POWER_LIST_HAS_POWER.toString().replace("%player%", player.getName()).replace("%powers_count%", String.valueOf(powers.keySet().size())).replace("%powers%", Arrays.toString(powers.keySet().stream().map(power -> power.getIdentifier().toString()).distinct().toArray())));
+                                    } else {
+                                        commandSender.sendMessage(Lang.COMMAND_POWER_LIST_NO_POWER.toString().replace("%player%", player.getName()));
+                                    }
+                                } else {
+                                    commandSender.sendMessage(Lang.COMMAND_POWER_LIST_NO_POWER.toString().replace("%player%", player.getName()));
+                                }
+                            }
                         }))
                 .register();
     }

@@ -37,7 +37,9 @@ public enum Lang {
     COMMAND_POWER_REMOVE_ALL_SUCCESS("command.power.remove-all.success", "Successfully removed all of %player%'s powers from power source %power_source%."),
     COMMAND_POWER_REMOVE_ALL_NO_POWER("command.power.remove-all.no_power", "&cPlayer %player% does not have powers from power source %power_source%."),
     COMMAND_POWER_CLEAR_SUCCESS("command.power.clear.success", "Successfully removed all of %player%'s powers."),
-    COMMAND_POWER_CLEAR_NO_POWER("command.power.clear.no_power", "&cPlayer %player% does not have powers.");
+    COMMAND_POWER_CLEAR_NO_POWER("command.power.clear.no_power", "&cPlayer %player% does not have powers."),
+    COMMAND_POWER_LIST_HAS_POWER("command.power.list.has_power", "Player %player% has %powers_count% powers: %powers%."),
+    COMMAND_POWER_LIST_NO_POWER("command.power.list.no_power", "&cPlayer %player% does not have powers.");
 
     private static YamlConfiguration LANG;
     private final String Path;

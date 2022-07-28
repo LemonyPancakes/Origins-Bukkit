@@ -27,7 +27,16 @@ import java.util.List;
 public class ServerUtils {
 
     private static final List<String> SUPPORTED_VERSIONS = new ArrayList<>(
-            Arrays.asList("1.17", "1.17.1", "1.18", "1.18.1", "1.18.2", "1.19"));
+            Arrays.asList(
+                    "1.17",
+                    "1.17.1",
+                    "1.18",
+                    "1.18.1",
+                    "1.18.2",
+                    "1.19",
+                    "1.19.1"
+            )
+    );
 
     public static String getServerSoftware() {
         return Bukkit.getVersion().split("-")[1];
