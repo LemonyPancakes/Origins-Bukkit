@@ -255,8 +255,8 @@ public class MainCommand {
                                                         commandSender.sendMessage(Lang.COMMAND_POWER_REMOVE_SUCCESS.toString().replace("%player%", player.getName()).replace("%power%", power.getIdentifier().toString()).replace("%power_source%", powerSource.getIdentifier().toString()));
                                                     });
                                                 }
-                                                commandSender.sendMessage(Lang.COMMAND_POWER_CLEAR_SUCCESS.toString().replace("%player%", player.getName()));
                                             });
+                                            commandSender.sendMessage(Lang.COMMAND_POWER_CLEAR_SUCCESS.toString().replace("%player%", player.getName()));
                                         } else {
                                             commandSender.sendMessage(Lang.COMMAND_POWER_CLEAR_NO_POWER.toString().replace("%player%", player.getName()));
                                         }
@@ -292,7 +292,7 @@ public class MainCommand {
                             }
                         }))*/
                 .withSubcommand(new CommandAPICommand("list")
-                        .withPermission("bukkit.origins.command.power.info.self")
+                        .withPermission("bukkit.origins.command.power.list.self")
                         .executes((commandSender, objects) -> {
                             if (commandSender instanceof Player) {
                                 Player player = (Player) commandSender;
